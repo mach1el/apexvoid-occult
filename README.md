@@ -1,5 +1,18 @@
 # void-occult
 
+[![HTML5](https://img.shields.io/badge/HTML5-Static_UI-E34F26?style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-Responsive_UI-1572B6?style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/docs/Web/JavaScript)
+[![Python](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Gemini](https://img.shields.io/badge/Gemini-AI_Interpretation-8E75B2?style=flat-square&logo=googlegemini&logoColor=white)](https://ai.google.dev/)
+[![Docker Compose](https://img.shields.io/badge/Docker_Compose-Deployment-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![Nginx](https://img.shields.io/badge/Nginx-Static_Site-009639?style=flat-square&logo=nginx&logoColor=white)](https://nginx.org/)
+[![Netlify](https://img.shields.io/badge/Netlify-Compatible-00C7B7?style=flat-square&logo=netlify&logoColor=white)](https://www.netlify.com/)
+[![Last Commit](https://img.shields.io/github/last-commit/mach1el/void-occult?style=flat-square)](https://github.com/mach1el/void-occult/commits/master)
+[![Repository Size](https://img.shields.io/github/repo-size/mach1el/void-occult?style=flat-square)](https://github.com/mach1el/void-occult)
+[![Open Issues](https://img.shields.io/github/issues/mach1el/void-occult?style=flat-square)](https://github.com/mach1el/void-occult/issues)
+
 A personal static knowledge base for **I-Ching / Liu Yao (六爻)** and **Purple Star / Tử Vi Đẩu Số (紫微斗數)**. No build step required.
 
 ## Contents
