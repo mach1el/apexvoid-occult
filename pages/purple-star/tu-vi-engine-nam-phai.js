@@ -677,7 +677,7 @@
     const m = nominalAge - majorFortunePalace.majorFortune.start + 1; // năm thứ m trong đại vận (1..10)
     if(m <= 1) return G;
     if(m === 2) return fix(G + 6);
-    return fix(G + 6 + (m - 4) * directionSign);
+    return fix(G + 6 + (m - 2) * directionSign);
   }
 
   function assignAnnualFlow(palaces, annualBranch, birthMonth, birthDay, birthLeap, hourIndex, monthAnchorPalaceIndex, annualStem){
