@@ -815,13 +815,14 @@
     
     // Khởi tháng (lưu nguyệt)
     const flowBase = document.getElementById("flowBase") ? document.getElementById("flowBase").value : "tieu-han";
-    let monthAnchorIndex = annualIndex;
+    const annualBranchIndex = cycleBranchToIndex(annual.branch);
+    let monthAnchorIndex = annualBranchIndex;
     if (flowBase === "tieu-han" && smallLimit && smallLimit.palace) {
       monthAnchorIndex = smallLimit.palace.index;
     } else if (flowBase === "dai-van" && luuNienDaiVanIndex != null) {
       monthAnchorIndex = luuNienDaiVanIndex;
     } else if (flowBase === "thai-tue") {
-      monthAnchorIndex = annualIndex;
+      monthAnchorIndex = annualBranchIndex;
     }
     const annualFlow = assignAnnualFlow(palaces, annual.branch, month, day, lunar.leap, hourIndex, monthAnchorIndex, annual.stem);
     if(smallLimit.palace) smallLimit.palace.isAnnualPalace = true;
