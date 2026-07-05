@@ -167,7 +167,7 @@ export function AiChat({ getContext }: AiChatProps) {
         <div className="ai-chat-panel">
           <div className="ai-chat-head">
             <div>
-              <strong>Luận giải Tử Vi · Gemini AI</strong>
+              <strong>Luận giải Tử Vi</strong>
             </div>
             <button
               type="button"

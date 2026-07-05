@@ -688,22 +688,25 @@
     return fix(G + 6 + (m - 4) * directionSign);
   }
 
-  function assignAnnualFlow(palaces, annualBranch, birthMonth, birthDay, birthLeap, hourIndex, monthAnchorIndex, annualStem){
+  function assignAnnualFlow(palaces, annualBranch, birthMonth, birthDay, birthLeap, hourIndex, monthAnchorPalaceIndex, annualStem){
     palaces.forEach(palace => {
       palace.isAnnualPalace = false;
       palace.isTaiTuePalace = false;
       palace.isMonthStart = false;
       palace.flowMonths = [];
     });
-    const annualIndex = cycleBranchToIndex(annualBranch);
+    
+    const annualPalaceIndex = BRANCHES.indexOf(annualBranch);
     const adjustedMonth = adjustedLunarMonth(birthMonth, birthDay, birthLeap);
+    
     // Sao Lưu Đẩu Quân: từ cung Thái Tuế đếm nghịch tới tháng sinh, rồi thuận theo giờ sinh
-    const dauQuanIndex = fix(annualIndex - adjustedMonth + hourIndex + 1);
+    const dauQuanIndex = fix(annualPalaceIndex - adjustedMonth + hourIndex + 1);
     addStar(palaces, dauQuanIndex, "Lưu Đẩu Quân", "annual", "annual");
-    const taiTuePalace = palaces[annualIndex];
+    
+    const taiTuePalace = palaces[annualPalaceIndex];
     taiTuePalace.isTaiTuePalace = true;
     
-    const monthAnchor = (monthAnchorIndex == null) ? annualIndex : fix(monthAnchorIndex);
+    const monthAnchor = (monthAnchorPalaceIndex == null) ? annualPalaceIndex : fix(monthAnchorPalaceIndex);
     const monthStartIndex = fix(monthAnchor - adjustedMonth + hourIndex + 1);
     const monthStartPalace = palaces[monthStartIndex];
     monthStartPalace.isMonthStart = true;
@@ -719,7 +722,7 @@
       palace.flowMonths.push(item);
       return item;
     });
-    return {annualIndex, taiTuePalace, dauQuanIndex, monthStartIndex, monthStartPalace, months, adjustedMonth};
+    return {annualPalaceIndex, taiTuePalace, dauQuanIndex, monthStartIndex, monthStartPalace, months, adjustedMonth};
   }
 
   function getVoidMarkers(yearStem, yearBranch){
@@ -909,17 +912,18 @@
     // Trung Châu: KHÔNG dùng tiểu hạn. Lưu mệnh năm = cung lưu Thái Tuế (chi năm xem).
     // Lưu nguyệt vẫn khởi từ cung Thái Tuế để 12 tháng hiện đầy đủ trên lá số.
     const annualBranchIndex = cycleBranchToIndex(annual.branch);
+    const annualPalaceIndex = BRANCHES.indexOf(annual.branch);
 
     // Lưu niên đại vận (zigzag trong đại vận) — cung vận của năm xem.
     const luuNienDaiVanIndex = getLuuNienDaiVanIndex(majorFortunePalace, null, nominalAge, directionSign);
     if(luuNienDaiVanIndex != null) palaces[luuNienDaiVanIndex].isLuuNienDaiVan = true;
 
     const flowBase = document.getElementById("flowBase") ? document.getElementById("flowBase").value : "thai-tue";
-    let monthAnchorIndex = annualBranchIndex;
+    let monthAnchorPalaceIndex = annualPalaceIndex;
     if (flowBase === "dai-van" && luuNienDaiVanIndex != null) {
-      monthAnchorIndex = luuNienDaiVanIndex;
+      monthAnchorPalaceIndex = luuNienDaiVanIndex;
     } else if (flowBase === "thai-tue" || flowBase === "tieu-han") {
-      monthAnchorIndex = annualBranchIndex;
+      monthAnchorPalaceIndex = annualPalaceIndex;
     }
 
     const annualFlow = assignAnnualFlow(
@@ -929,7 +933,7 @@
       day,
       lunar.leap,
       hourIndex,
-      monthAnchorIndex,
+      monthAnchorPalaceIndex,
       annual.stem
     );
     const taiTuePalace = annualFlow.taiTuePalace;
