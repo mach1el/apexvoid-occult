@@ -97,7 +97,7 @@ export function ChartPage() {
   const [school, setSchool] = useState<School>(initialSchool);
   const [form, setForm] = useState<FormState>({
     solarDate: "21/09/1991",
-    birthHour: "Thân",
+    birthHour: "Dậu",
     gender: "female",
     annualYear: String(new Date().getFullYear()),
     timezone: "7",
