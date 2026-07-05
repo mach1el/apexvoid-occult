@@ -289,6 +289,7 @@ function Palace({
         width={CELL_WIDTH}
         height={CELL_HEIGHT}
         className="compact-palace-bg"
+        pointerEvents="all"
       />
       <text x="9" y="18" className="compact-palace-stem">
         {STEM_ABBREVIATIONS[palace.stem ?? ""] ?? palace.stem} {palace.branch}
@@ -787,6 +788,7 @@ export function CompactChart({
             width={WIDTH - 2}
             height={HEIGHT - 2}
             className="compact-sheet-outline"
+            pointerEvents="none"
           />
         </svg>
       </div>
