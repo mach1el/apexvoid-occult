@@ -26,13 +26,12 @@
 
 @media (min-width: 1360px) {
   .shell {
-    width: min(1800px, 100%);
+    width: 100%;
+    max-width: 1920px;
     margin-inline: auto;
-    grid-template-columns:
-      minmax(720px, 1.15fr)
-      minmax(520px, 0.95fr);
+    grid-template-columns: 740px minmax(420px, 1fr);
     grid-template-rows: auto auto;
-    gap: 12px;
+    gap: 16px;
     align-items: start;
     justify-content: center;
   }

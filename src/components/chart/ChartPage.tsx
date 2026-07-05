@@ -214,18 +214,18 @@ export function ChartPage() {
 
   const copyLabel =
     copyState === "success"
-      ? "Đã chép ✓"
+      ? "✓"
       : copyState === "error"
-        ? "Lỗi sao chép"
-        : "⧉ Sao chép văn bản";
+        ? "⚠"
+        : "⧉ Copy";
   const imageLabel =
     imageState === "working"
-      ? "Đang tạo…"
+      ? "…"
       : imageState === "success"
-        ? "Đã tải ✓"
+        ? "✓"
         : imageState === "error"
-          ? "Lỗi xuất ảnh"
-          : "⛶ Tải ảnh";
+          ? "⚠"
+          : "⛶ Ảnh";
 
   return (
     <>
@@ -390,12 +390,14 @@ export function ChartPage() {
             <div className="chart-panel chart-workspace">
               <div className="panel-head">
                 <h2>Lá số 12 cung</h2>
-                <div className="chart-actions">
+                <div className="chart-actions" style={{ flexWrap: 'nowrap' }}>
                   <button
                     type="button"
                     className="btn-ghost"
                     onClick={copyChart}
                     disabled={!enginesReady}
+                    title="Sao chép văn bản"
+                    aria-label="Sao chép văn bản"
                   >
                     {copyLabel}
                   </button>
@@ -404,14 +406,18 @@ export function ChartPage() {
                     className="btn-ghost"
                     onClick={downloadText}
                     disabled={!enginesReady}
+                    title="Tải file .txt"
+                    aria-label="Tải file .txt"
                   >
-                    ⭳ Tải .txt
+                    ⭳ TXT
                   </button>
                   <button
                     type="button"
                     className="btn-ghost"
                     onClick={downloadImage}
                     disabled={!enginesReady || imageState === "working"}
+                    title="Tải ảnh PNG"
+                    aria-label="Tải ảnh PNG"
                   >
                     {imageLabel}
                   </button>
