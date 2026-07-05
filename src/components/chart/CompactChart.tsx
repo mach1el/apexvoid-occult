@@ -87,6 +87,13 @@ const BRANCH_HAN: Record<string, string> = {
   Hợi: "亥",
 };
 
+/** Địa Chi cố định của tháng âm lịch (Tháng 1 = Dần, Tháng 12 = Sửu) */
+const MONTH_BRANCH: Record<number, string> = {
+  1: "Dần", 2: "Mão", 3: "Thìn", 4: "Tỵ",
+  5: "Ngọ", 6: "Mùi", 7: "Thân", 8: "Dậu",
+  9: "Tuất", 10: "Hợi", 11: "Tý", 12: "Sửu",
+};
+
 const HOUR_RANGES: Record<string, string> = {
   Tý: "23–01",
   Sửu: "01–03",
@@ -367,7 +374,9 @@ function Palace({
       )}
 
       <text x="9" y="239" className="compact-palace-footer">
-        {BRANCH_HAN[palace.branch] || ""} {palace.branch}
+        {flowMonth
+          ? `${BRANCH_HAN[MONTH_BRANCH[flowMonth.month] ?? ""] ?? ""} ${MONTH_BRANCH[flowMonth.month] ?? ""}`
+          : ""}
       </text>
       <text x="90" y="239" textAnchor="middle" className="compact-palace-footer">
         {palace.changSheng || ""}
