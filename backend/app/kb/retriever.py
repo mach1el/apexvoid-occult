@@ -29,11 +29,13 @@ CORE_DOCS = [
 # intent.key -> tài liệu chủ đề (chỉ nạp file tồn tại; thiếu thì bỏ qua êm).
 INTENT_DOCS = {
   "overview": ["tong_quan.md", "vong_thai_tue_tinh_cach.md", "cung_phuc_duc.md"],
-  "wealth":   ["cung_tai_bach.md", "cung_phuc_duc.md"],
+  "wealth":   ["cung_tai_bach.md", "cung_phuc_duc.md",
+               "tai_loc_nguon_tien_chinh_thien.md", "tai_loc_kho_tai_va_hao_tan.md"],
   "career":   ["cung_quan_loc.md", "cung_phu_the.md"],   # Quan Lộc ↔ Phu Thê xung chiếu
-  "love":     ["cung_phu_the.md", "cung_phuc_duc.md"],
+  "love":     ["cung_phu_the.md", "cung_phuc_duc.md",
+               "he_thong_dao_hoa_tinh.md"],
   "fortune":  ["cung_phuc_duc.md", "vong_thai_tue_tinh_cach.md", "tong_quan.md"],
-  "property": ["cung_tai_bach.md", "cung_gia_dao.md"],
+  "property": ["cung_tai_bach.md", "cung_gia_dao.md", "tai_loc_kho_tai_va_hao_tan.md"],
   "parents":  ["cung_gia_dao.md"],
   "siblings": ["cung_gia_dao.md"],
   "children": ["cung_gia_dao.md"],
@@ -43,14 +45,15 @@ INTENT_DOCS = {
 }
 
 # Khi câu hỏi có yếu tố thời điểm (timing=True): nguyên tắc xem hạn chung...
-TIMING_DOCS = ["han_hy_su_sao_luu.md", "vai_tro_luu_thai_tue.md"]
+TIMING_DOCS = ["han_hy_su_sao_luu.md", "vai_tro_luu_thai_tue.md",
+               "tieu_han_va_tang_thoi_gian.md", "luu_sao_va_kich_hoat_cach_cuc.md"]
 # Khi hỏi theo THÁNG (monthly=True): cách luận lưu nguyệt từng tháng.
 MONTHLY_DOCS = ["luu_nguyet_nguyet_han.md"]
 # ...và tài liệu hạn năm theo chủ đề.
 TIMING_BY_INTENT = {
   "wealth":   ["luu_nien_tai_bach.md"],
   "property": ["luu_nien_tai_bach.md"],
-  "love":     ["luu_nien_tinh_cung.md"],
+  "love":     ["luu_nien_tinh_cung.md", "phu_the_ket_hon_va_ung_ky.md"],
 }
 
 
