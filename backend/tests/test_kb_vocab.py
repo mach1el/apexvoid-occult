@@ -3,6 +3,7 @@ import pathlib
 import re
 
 from backend.app.constants import KEY_PHU
+from backend.app.kb.retriever import CORE_DOCS, INTENT_DOCS, TIMING_DOCS, MONTHLY_DOCS, TIMING_BY_INTENT
 
 class TestKBVocab(unittest.TestCase):
     def setUp(self):
@@ -72,6 +73,60 @@ class TestKBVocab(unittest.TestCase):
                         if part in self.all_engine_stars and part not in self.valid_stars:
                             errors.append(f"{fp.name}: Invisible star used: '{part}'")
 
+        # === Test: Formatting ===
+        for fp in self.kb_dir.glob("*.md"):
+            content = fp.read_text(encoding="utf-8")
+            
+            # Format checks only on the newly updated / created docs
+            new_docs = {
+                "cung_tat_ach.md", "cung_phu_mau.md", "cung_huynh_de.md", "cung_tu_tuc.md", 
+                "cung_no_boc.md", "cung_thien_di.md", "cung_tai_bach.md", "cung_phu_the.md", 
+                "tu_hoa_tam_phap.md"
+            }
+            if fp.name in new_docs:
+                # Ensure exactly one H1
+                h1_count = len([line for line in content.split('\n') if line.startswith("# ")])
+                if h1_count != 1:
+                    errors.append(f"{fp.name}: Expected exactly 1 '# ' H1, found {h1_count}")
+                
+                # Ensure KẾT LUẬN CHO AI
+                if "KẾT LUẬN CHO AI" not in content:
+                    errors.append(f"{fp.name}: Missing 'KẾT LUẬN CHO AI'")
+            
+            # Health guardrail
+            if fp.name == "cung_tat_ach.md":
+                blacklist = ["sẽ bị", "mắc bệnh", "tử vong", "chết", "tuổi thọ", "mổ"]
+                lower_content = content.lower()
+                for bad in blacklist:
+                    if bad in lower_content:
+                        errors.append(f"cung_tat_ach.md: Found forbidden medical term '{bad}'")
+                        
+        if errors:
+            self.fail("\n" + "\n".join(errors))
+
+    def test_retriever_coverage(self):
+        # Collect all referenced docs
+        referenced = set(CORE_DOCS + TIMING_DOCS + MONTHLY_DOCS)
+        for docs in INTENT_DOCS.values():
+            referenced.update(docs)
+        for docs in TIMING_BY_INTENT.values():
+            referenced.update(docs)
+            
+        # Collect all actual files
+        actual_files = {fp.name for fp in self.kb_dir.glob("*.md")}
+        
+        errors = []
+        # Dangling
+        for ref in referenced:
+            if ref not in actual_files and ref != "cach_cuc_kinh_dien.md" and ref != "tuan_triet.md": # Some might be dynamic or not implemented yet
+                if ref != "tuan_triet.md" and ref != "cach_cuc_kinh_dien.md": 
+                    errors.append(f"Dangling reference in retriever: {ref}")
+        
+        # Orphan
+        for fp in actual_files:
+            if fp not in referenced and fp not in ["cach_cuc_kinh_dien.md", "tuan_triet.md"]:
+                errors.append(f"Orphan file not used in retriever: {fp}")
+                
         if errors:
             self.fail("\n" + "\n".join(errors))
 

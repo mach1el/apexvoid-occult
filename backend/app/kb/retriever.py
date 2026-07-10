@@ -35,13 +35,13 @@ INTENT_DOCS = {
   "love":     ["cung_phu_the.md", "cung_phuc_duc.md",
                "he_thong_dao_hoa_tinh.md"],
   "fortune":  ["cung_phuc_duc.md", "vong_thai_tue_tinh_cach.md", "tong_quan.md"],
-  "property": ["cung_tai_bach.md", "cung_gia_dao.md", "tai_loc_kho_tai_va_hao_tan.md"],
-  "parents":  ["cung_gia_dao.md"],
-  "siblings": ["cung_gia_dao.md"],
-  "children": ["cung_gia_dao.md"],
-  "friends":  ["cung_gia_dao.md"],
-  "travel":   ["tong_quan.md"],
-  "health":   [],
+  "property": ["cung_tai_bach.md", "cung_tu_tuc.md", "tai_loc_kho_tai_va_hao_tan.md"],
+  "parents":  ["cung_phu_mau.md"],
+  "siblings": ["cung_huynh_de.md"],
+  "children": ["cung_tu_tuc.md"],
+  "friends":  ["cung_no_boc.md"],
+  "travel":   ["cung_thien_di.md", "tong_quan.md"],
+  "health":   ["cung_tat_ach.md"],
 }
 
 # Khi câu hỏi có yếu tố thời điểm (timing=True): nguyên tắc xem hạn chung...
