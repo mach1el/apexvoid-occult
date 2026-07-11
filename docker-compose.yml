@@ -11,6 +11,8 @@ services:
       - "8000"
     env_file:
       - ./backend/.env
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
     volumes:
       - ./backend/app:/app/app          # hot-reload code khi dev
     # Container Docker mặc định không có route IPv6; google-genai (httpx) thử IPv6 trước
@@ -41,7 +43,19 @@ services:
     networks:
       - routing
 
+  mongodb:
+    image: mongo:6.0
+    container_name: apexvoid-occult-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - routing
+
 networks:
   routing:
     name: "${ROUTING_NETWORK:-routing}"
     external: true
+
+volumes:
+  mongodb_data:

@@ -12,6 +12,8 @@ services:
       GEMINI_THINKING_BUDGET: "{{ apexvoid_occult_gemini_thinking_budget }}"
       GEMINI_MAX_OUTPUT_TOKENS: "{{ apexvoid_occult_gemini_max_output_tokens }}"
       ALLOW_ORIGINS: "{{ apexvoid_occult_allow_origins }}"
+      MONGO_URI: "mongodb://mongodb:27017"
+      MONGO_DB: "void_occult"
     # google-genai (httpx) tries IPv6 first; containers have no IPv6 route.
     sysctls:
       - net.ipv6.conf.all.disable_ipv6=1
@@ -35,7 +37,19 @@ services:
     networks:
       - routing
 
+  mongodb:
+    image: mongo:6.0
+    container_name: apexvoid-occult-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - routing
+
 networks:
   routing:
     name: "{{ routing_network | default('routing') }}"
     external: true
+
+volumes:
+  mongodb_data:
