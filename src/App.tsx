@@ -12,6 +12,11 @@ const BasicArticlePage = lazy(
 const AdvancedArticlePage = lazy(
   () => import("./components/articles/AdvancedArticlePage"),
 );
+const BaziPage = lazy(() =>
+  import("./components/bazi/BaziPage").then((module) => ({
+    default: module.BaziPage,
+  })),
+);
 
 function loading(content: ReactNode) {
   return (
@@ -51,6 +56,12 @@ export function App() {
     path === "/pages/i-ching/luc-hao-nang-cao.html"
   ) {
     return loading(<AdvancedArticlePage />);
+  }
+  if (
+    path === "/bat-tu" ||
+    path === "/bazi"
+  ) {
+    return loading(<BaziPage />);
   }
   return <HomePage />;
 }

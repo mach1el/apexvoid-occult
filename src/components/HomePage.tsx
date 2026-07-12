@@ -37,7 +37,14 @@ const features: Feature[] = [
       "Hai trường phái Nam Phái và Trung Châu, Tứ Hóa, đại vận, lưu niên, xuất dữ liệu và luận giải AI qua backend riêng.",
     href: "/tu-vi",
     accent: "jade",
-    wide: true,
+  },
+  {
+    eyebrow: "Công cụ · Bát Tự",
+    han: "八字",
+    title: "Lập Lá Số Bát Tự",
+    description: "An lá số Tứ Trụ, Nạp Âm, Thần Sát, Đại Vận dựa trên tiết khí chuẩn thiên văn học.",
+    href: "/bat-tu",
+    accent: "cinnabar",
   },
 ];
 

@@ -1,23 +1,13 @@
-import { getDayPillar, getHourStem, getMonthStem, Pillar, STEM_POLARITY } from "../calendar/sexagenary";
-import { ConfigOptions, getHourBranch, getTrueSolarTime } from "../calendar/timezone";
+import { getDayPillar, getHourStem, getMonthStem, Pillar, STEM_POLARITY, STEMS, BRANCHES } from "../calendar/sexagenary";
+import { getHourBranch, getTrueSolarTime } from "../calendar/timezone";
 import { findExactTermJd, getMonthBranchAt } from "../calendar/solar-terms";
-import { STEMS, BRANCHES } from "../calendar/sexagenary";
-
-export interface BaziChart {
-  year: Pillar;
-  month: Pillar;
-  day: Pillar;
-  hour: Pillar;
-  gender: "M" | "F";
-  longitude: number;
-  // Giới tính (Âm/Dương Nam/Nữ)
-  isYangGender: boolean; // Dương Nam, Âm Nữ, v.v.
-}
+import { BaziConventions, DEFAULT_CONVENTIONS } from "./conventions";
+import { BaziChart } from "./types";
 
 /**
  * Lấy Can Chi năm, chú ý chuyển năm Bát Tự ở Lập Xuân.
  */
-function getYearPillar(date: Date): { pillar: Pillar, baziYear: number } {
+function getYearPillar(date: Date): { pillar: Pillar, baziYear: number, liChunDate: Date } {
   const currentYear = date.getUTCFullYear();
   // Lập xuân của năm nay
   const liChunJd = findExactTermJd(currentYear, 315);
@@ -30,9 +20,6 @@ function getYearPillar(date: Date): { pillar: Pillar, baziYear: number } {
   }
   
   // Mốc năm Giáp Tý (1984, 1924, ...)
-  // Năm 1984 là Giáp Tý (index 0, 0)
-  // baziYear - 4 để cho năm 1984 - 4 = 1980 (nhằm dời offset cho 1984 chia hết cho 60 hoặc dễ tính modulo)
-  // Thực tế: Giáp (0) ở năm kết thúc bằng 4 (1984, 2024).
   const offset = baziYear - 4;
   let stemIndex = offset % 10;
   if (stemIndex < 0) stemIndex += 10;
@@ -42,25 +29,31 @@ function getYearPillar(date: Date): { pillar: Pillar, baziYear: number } {
   
   return {
     pillar: { stem: STEMS[stemIndex] ?? "", branch: BRANCHES[branchIndex] ?? "" },
-    baziYear
+    baziYear,
+    liChunDate
   };
 }
 
-export function calculateBazi(date: Date, longitude: number, gender: "M" | "F", config?: ConfigOptions): BaziChart {
+export function calculateBaziPillars(
+  date: Date,
+  longitude: number,
+  utcOffsetMinutes: number,
+  gender: "M" | "F",
+  conventions: BaziConventions = DEFAULT_CONVENTIONS
+): Pick<BaziChart, "year" | "month" | "day" | "hour" | "gender" | "longitude" | "utcOffsetMinutes" | "isYangGender" | "metadata"> {
   // 1. Tính True Solar Time
-  // UTC+7 (múi giờ mặc định của VN) thường được dùng trong lá số Tử Vi, nhưng Bát Tự dùng True Solar Time.
-  // Nếu date là UTC Date, thì ta phải cộng timeZone offset, nhưng đợi chút...
-  // date là Date object, getTrueSolarTime đòi hỏi giờ địa phương, nhưng thực tế True Solar Time không phụ thuộc timeZone!
-  // Nó chỉ phụ thuộc vào thời điểm vũ trụ (UTC) và kinh độ.
-  // Tuy nhiên, logic getTrueSolarTime đang nhận date, kinh độ, và timeZoneOffset để điều chỉnh so với giờ chuẩn.
-  // Ta sửa lại cách tính TST chuẩn hơn ở timezone.ts, hoặc đơn giản truyền đúng.
-  // Tạm lấy TST = UTC + kinh độ * 4 phút
-  const tstMs = date.getTime() + longitude * 4 * 60 * 1000;
-  const tst = new Date(tstMs);
+  const tst = getTrueSolarTime(date, longitude, utcOffsetMinutes, conventions);
+  const tstMs = tst.getTime();
+  
+  // Tính eot (phút) để in ra metadata
+  const totalCorrectionMs = tst.getTime() - date.getTime();
+  const equationOfTimeMinutes = (totalCorrectionMs / 60000) - longitude * 4;
   
   // 2. Trụ Năm
-  // Dùng date gốc (UTC) vì Mặt Trời ở Lập Xuân là mốc vũ trụ chung.
-  const { pillar: yearPillar, baziYear } = getYearPillar(date);
+  // Dùng date gốc (UTC) vì Mặt Trời ở Lập Xuân là mốc thiên văn.
+  // Thật ra tiết khí tính bằng TST hay UTC đều như nhau vì Lập Xuân là lúc Mặt Trời ĐẠT kinh độ 315 độ, 
+  // ta chỉ kiểm tra thời điểm UTC của sự kiện đó so với Date(UTC).
+  const { pillar: yearPillar, baziYear, liChunDate } = getYearPillar(date);
   
   // 3. Trụ Tháng
   const monthBranchIndex = getMonthBranchAt(date);
@@ -68,15 +61,11 @@ export function calculateBazi(date: Date, longitude: number, gender: "M" | "F", 
   const monthStemIndex = getMonthStem(yearStemIndex, monthBranchIndex);
   const monthPillar: Pillar = { stem: STEMS[monthStemIndex] ?? "", branch: BRANCHES[monthBranchIndex] ?? "" };
   
-  // 4. Trụ Giờ (Tìm chi giờ và cờ qua ngày dựa trên giờ địa phương - True Solar Time)
-  const { branchIndex: hourBranchIndex, isNextDay } = getHourBranch(tst, config);
+  // 4. Trụ Giờ
+  const { branchIndex: hourBranchIndex, isNextDay } = getHourBranch(tst, conventions);
   
   // 5. Trụ Ngày
-  // Bát Tự dùng JDN để tìm can chi ngày. getDayPillar được thiết kế để nhận JD lúc 12h trưa UTC.
-  // Ta muốn can chi ngày của TST (True Solar Time).
-  // Vì TST đã được biểu diễn dưới dạng ms từ Epoch (ở Greenwich), 
-  // ta chỉ cần lấy (tstMs) chia ra số ngày rồi dò.
-  // JD của TST tại mốc 12h trưa Greenwich:
+  // Tính JDN của True Solar Time lúc 12h trưa Greenwich
   const tstDayJd = (tstMs + (isNextDay ? 86400000 : 0)) / 86400000 + 2440587.5;
   const dayPillar = getDayPillar(tstDayJd + 0.5); 
   
@@ -101,6 +90,12 @@ export function calculateBazi(date: Date, longitude: number, gender: "M" | "F", 
     hour: hourPillar,
     gender,
     longitude,
-    isYangGender
+    utcOffsetMinutes,
+    isYangGender,
+    metadata: {
+      trueSolarTime: tst,
+      liChunDate,
+      equationOfTimeMinutes
+    }
   };
 }
