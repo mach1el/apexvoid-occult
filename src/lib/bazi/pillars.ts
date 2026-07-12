@@ -41,7 +41,7 @@ function getYearPillar(date: Date): { pillar: Pillar, baziYear: number } {
   if (branchIndex < 0) branchIndex += 12;
   
   return {
-    pillar: { stem: STEMS[stemIndex], branch: BRANCHES[branchIndex] },
+    pillar: { stem: STEMS[stemIndex] ?? "", branch: BRANCHES[branchIndex] ?? "" },
     baziYear
   };
 }
@@ -66,7 +66,7 @@ export function calculateBazi(date: Date, longitude: number, gender: "M" | "F", 
   const monthBranchIndex = getMonthBranchAt(date);
   const yearStemIndex = STEMS.indexOf(yearPillar.stem);
   const monthStemIndex = getMonthStem(yearStemIndex, monthBranchIndex);
-  const monthPillar: Pillar = { stem: STEMS[monthStemIndex], branch: BRANCHES[monthBranchIndex] };
+  const monthPillar: Pillar = { stem: STEMS[monthStemIndex] ?? "", branch: BRANCHES[monthBranchIndex] ?? "" };
   
   // 4. Trụ Giờ (Tìm chi giờ và cờ qua ngày dựa trên giờ địa phương - True Solar Time)
   const { branchIndex: hourBranchIndex, isNextDay } = getHourBranch(tst, config);
@@ -83,10 +83,10 @@ export function calculateBazi(date: Date, longitude: number, gender: "M" | "F", 
   // 6. Hoàn thiện Trụ Giờ
   const dayStemIndex = STEMS.indexOf(dayPillar.stem);
   const hourStemIndex = getHourStem(dayStemIndex, hourBranchIndex);
-  const hourPillar: Pillar = { stem: STEMS[hourStemIndex], branch: BRANCHES[hourBranchIndex] };
+  const hourPillar: Pillar = { stem: STEMS[hourStemIndex] ?? "", branch: BRANCHES[hourBranchIndex] ?? "" };
   
   // 7. Âm dương nam nữ
-  const stemPol = STEM_POLARITY[yearPillar.stem];
+  const stemPol = STEM_POLARITY[yearPillar.stem] ?? 1;
   let isYangGender = false;
   if ((stemPol > 0 && gender === "M") || (stemPol < 0 && gender === "F")) {
     isYangGender = true; // Dương nam, Âm nữ

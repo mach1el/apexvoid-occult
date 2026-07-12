@@ -24,8 +24,8 @@ export function getDaYunStartAge(birthTime: Date, isYangGender: boolean): number
   if (offset < 0) offset += 360;
   
   const monthIndex = Math.floor(offset / 30);
-  pastTermLon = majorTerms[monthIndex];
-  nextTermLon = majorTerms[(monthIndex + 1) % 12];
+  pastTermLon = majorTerms[monthIndex] ?? 315;
+  nextTermLon = majorTerms[(monthIndex + 1) % 12] ?? 345;
   
   // Tính JDN của 2 tiết này trong năm sinh (có thể vắt qua năm)
   const currentYear = birthTime.getUTCFullYear();
@@ -69,7 +69,7 @@ export function getDaYun(monthPillar: Pillar, isYangGender: boolean, startAge: n
     const bIdx = (branchIdx + i * step + 120) % 12;
     
     yunList.push({
-      pillar: { stem: STEMS[sIdx], branch: BRANCHES[bIdx] },
+      pillar: { stem: STEMS[sIdx] ?? "", branch: BRANCHES[bIdx] ?? "" },
       ageStart: startAge + (i - 1) * 10,
       ageEnd: startAge + i * 10 - 1
     });

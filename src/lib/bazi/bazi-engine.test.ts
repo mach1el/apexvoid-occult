@@ -19,9 +19,9 @@ describe("Bazi Full Engine", () => {
     // Tàng Can của trụ Năm (Thìn)
     // Thìn chứa: Mậu, Ất, Quý
     expect(chart.hiddenStems.year.length).toBe(3);
-    expect(chart.hiddenStems.year.find(h => h.stem === "Mậu")).toBeDefined();
-    expect(chart.hiddenStems.year.find(h => h.stem === "Ất")).toBeDefined();
-    expect(chart.hiddenStems.year.find(h => h.stem === "Quý")).toBeDefined();
+    expect(chart.hiddenStems.year.some(h => h.stem === "Mậu")).toBe(true);
+    expect(chart.hiddenStems.year.some(h => h.stem === "Ất")).toBe(true);
+    expect(chart.hiddenStems.year.some(h => h.stem === "Quý")).toBe(true);
     
     // Khởi vận (dương nam, đi thuận)
     // Tính tuổi khởi vận (số ngày / 3).
@@ -31,9 +31,9 @@ describe("Bazi Full Engine", () => {
     // Đại vận
     expect(chart.daYun.length).toBe(10);
     // Vận đầu tiên từ tuổi khởi vận
-    expect(chart.daYun[0].ageStart).toBe(chart.startAge);
+    expect(chart.daYun[0]!.ageStart).toBe(chart.startAge);
     // Vận đi thuận từ tháng Bính Dần -> Đinh Mão
-    expect(chart.daYun[0].pillar.stem).toBe("Đinh");
-    expect(chart.daYun[0].pillar.branch).toBe("Mão");
+    expect(chart.daYun[0]!.pillar.stem).toBe("Đinh");
+    expect(chart.daYun[0]!.pillar.branch).toBe("Mão");
   });
 });

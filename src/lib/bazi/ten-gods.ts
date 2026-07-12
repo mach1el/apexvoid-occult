@@ -31,11 +31,11 @@ export function getElementRelation(element1: string, element2: string): string {
  * Tính Thập Thần của một can (targetStem) dựa trên Nhật Chủ (dayMasterStem).
  */
 export function getTenGod(dayMasterStem: string, targetStem: string): string {
-  const dmElement = STEM_ELEMENTS[dayMasterStem];
-  const targetElement = STEM_ELEMENTS[targetStem];
+  const dmElement = STEM_ELEMENTS[dayMasterStem] ?? "";
+  const targetElement = STEM_ELEMENTS[targetStem] ?? "";
   
-  const dmPolarity = STEM_POLARITY[dayMasterStem];
-  const targetPolarity = STEM_POLARITY[targetStem];
+  const dmPolarity = STEM_POLARITY[dayMasterStem] ?? 1;
+  const targetPolarity = STEM_POLARITY[targetStem] ?? 1;
   
   const relation = getElementRelation(dmElement, targetElement);
   const samePolarity = dmPolarity === targetPolarity;
