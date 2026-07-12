@@ -48,8 +48,8 @@ export function getTrueSolarTime(date: Date, longitude: number, timezoneOffset: 
  * Và xác định xem giờ này có được tính là ngày hôm sau hay không.
  */
 export function getHourBranch(solarTime: Date, config: ConfigOptions = DEFAULT_CONFIG): { branchIndex: number, isNextDay: boolean } {
-  const hours = solarTime.getHours();
-  const minutes = solarTime.getMinutes();
+  const hours = solarTime.getUTCHours();
+  const minutes = solarTime.getUTCMinutes();
   const totalMinutes = hours * 60 + minutes;
   
   // Tính theo tổng phút:
