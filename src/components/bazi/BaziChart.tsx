@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BaziFullChart, BaziPillarDetail, DerivedPillarDetail } from "@/lib/bazi/bazi-engine";
 import { LuckPillar } from "@/lib/bazi/luck-pillars";
 import { SymbolicStar } from "@/lib/bazi/symbolic-stars";
@@ -211,6 +212,7 @@ function isLuckPillarActive(pillars: LuckPillar[], index: number, now: Date): bo
 
 export function BaziChart({ chart }: { chart: BaziFullChart }) {
   const now = new Date();
+  const [showLuck, setShowLuck] = useState(true);
 
   // Bát Tự đọc từ phải sang trái
   const pillars: { title: string; detail: BaziPillarDetail; isDayPillar: boolean; key: "year" | "month" | "day" | "hour" }[] = [
@@ -246,39 +248,49 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
 
       {/* Đại Vận */}
       <section>
-        <h2 className="text-xl font-display text-paper mb-4">Đại Vận (10 Năm)</h2>
-        <div className="flex flex-nowrap overflow-x-auto gap-3 pb-2 custom-scrollbar">
-          {chart.luck.pillars.map((lp, i) => {
-            const active = isLuckPillarActive(chart.luck.pillars, i, now);
-            return (
-              <div
-                key={i}
-                data-testid="luck-pillar-tile"
-                className={`min-w-[100px] flex-shrink-0 flex flex-col border rounded overflow-hidden text-center ${
-                  active ? "border-gold ring-1 ring-gold/40 bg-gold/5" : "border-white/10 bg-black/20"
-                }`}
-              >
-                <div className="bg-white/5 py-1 text-xs text-muted border-b border-white/10">
-                  Tuổi {lp.startAgeYear}
-                  {lp.startAgeMonth ? ` ${lp.startAgeMonth} tháng` : ""}
-                </div>
-                <div className="py-3 px-2 flex flex-col gap-1">
-                  <div className="text-[11px] text-muted/70">{lp.tenGod}</div>
-                  <div className={`text-xl font-han font-medium ${getElementColor(lp.pillar.stem)}`}>
-                    {lp.pillar.stem}
-                  </div>
-                  <div className={`text-xl font-han font-medium ${getElementColor(lp.pillar.branch)}`}>
-                    {lp.pillar.branch}
-                  </div>
-                  <div className="text-[11px] text-muted/70">{lp.lifeStage}</div>
-                </div>
-                <div className="bg-white/5 py-1 text-[10px] text-muted/60 border-t border-white/10">
-                  {lp.startDate.getFullYear()}
-                </div>
-              </div>
-            );
-          })}
+        <div className="flex items-center gap-3 mb-4">
+          <h2 className="text-xl font-display text-paper m-0">Đại Vận (10 Năm)</h2>
+          <button 
+            onClick={() => setShowLuck(!showLuck)}
+            className="text-xs text-gold/80 hover:text-gold border border-gold/20 hover:border-gold/50 rounded px-2 py-1 transition-colors bg-gold/5"
+          >
+            {showLuck ? "Thu gọn" : "Hiển thị"}
+          </button>
         </div>
+        
+        {showLuck && (
+          <div className="flex flex-nowrap overflow-x-auto gap-3 pb-2 custom-scrollbar">
+            {chart.luck.pillars.map((lp, i) => {
+              const active = isLuckPillarActive(chart.luck.pillars, i, now);
+              return (
+                <div
+                  key={i}
+                  data-testid="luck-pillar-tile"
+                  className={`min-w-[90px] flex-shrink-0 flex flex-col border rounded overflow-hidden text-center ${
+                    active ? "border-gold ring-1 ring-gold/40 bg-gold/5" : "border-white/10 bg-black/20"
+                  }`}
+                >
+                  <div className="bg-white/5 py-1 px-1 text-[10px] text-muted border-b border-white/10 whitespace-nowrap">
+                    Tuổi {lp.startAgeYear} {lp.startAgeMonth ? `${lp.startAgeMonth}th` : ""}
+                  </div>
+                  <div className="py-2 px-1 flex flex-col gap-0.5">
+                    <div className="text-[10px] text-muted/70">{lp.tenGod}</div>
+                    <div className={`text-lg font-han font-medium ${getElementColor(lp.pillar.stem)}`}>
+                      {lp.pillar.stem}
+                    </div>
+                    <div className={`text-lg font-han font-medium ${getElementColor(lp.pillar.branch)}`}>
+                      {lp.pillar.branch}
+                    </div>
+                    <div className="text-[10px] text-muted/70">{lp.lifeStage}</div>
+                  </div>
+                  <div className="bg-white/5 py-1 text-[10px] text-muted/60 border-t border-white/10">
+                    {lp.startDate.getFullYear()}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       {/* Dụng Thần (Placeholder) */}
