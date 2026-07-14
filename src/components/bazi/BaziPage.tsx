@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { generateBaziChart } from "../../lib/bazi/bazi-engine";
+import { generateBaziChart } from "@/lib/bazi/bazi-engine";
 import {
   DEFAULT_MANUAL_LONGITUDE,
   DEFAULT_PROVINCE_CODE,
@@ -8,7 +8,7 @@ import {
   PROVINCES,
   getProvinceByCode,
   resolveLongitude,
-} from "../../lib/bazi/provinces";
+} from "@/lib/bazi/provinces";
 import { BaziChart as BaziChartComponent } from "./BaziChart";
 
 const BAZI_FORM_STORAGE_KEY = "bazi.form";

@@ -1,6 +1,6 @@
-import { BaziFullChart, BaziPillarDetail, DerivedPillarDetail } from "../../lib/bazi/bazi-engine";
-import { LuckPillar } from "../../lib/bazi/luck-pillars";
-import { SymbolicStar } from "../../lib/bazi/symbolic-stars";
+import { BaziFullChart, BaziPillarDetail, DerivedPillarDetail } from "@/lib/bazi/bazi-engine";
+import { LuckPillar } from "@/lib/bazi/luck-pillars";
+import { SymbolicStar } from "@/lib/bazi/symbolic-stars";
 
 function getElementColor(char: string) {
   const wood = ["Giáp", "Ất", "Dần", "Mão"];

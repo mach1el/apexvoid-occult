@@ -5,11 +5,18 @@ import type {
   ChartPalace,
   MutagenRecord,
   School,
-} from "../types/chart";
+} from "@/types/chart";
+import * as namPhaiEngine from "./engine-nam-phai";
+import * as trungChauEngine from "./engine-trung-chau";
 
 export const SCHOOL_LABEL: Record<School, string> = {
   "nam-phai": "Nam phái",
   "trung-chau": "Trung Châu phái",
+};
+
+const ENGINES: Record<School, ChartEngine> = {
+  "nam-phai": namPhaiEngine,
+  "trung-chau": trungChauEngine,
 };
 
 const PALACE_ORDER = [
@@ -28,7 +35,7 @@ const PALACE_ORDER = [
 ];
 
 export function getEngine(school: School): ChartEngine | undefined {
-  return window.TuViEngines?.[school];
+  return ENGINES[school];
 }
 
 const pad2 = (value: number) => String(value).padStart(2, "0");

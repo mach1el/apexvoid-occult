@@ -6,4 +6,6 @@ pages/purple-star/tu-vi-config.js
 node_modules/
 dist/
 *.tsbuildinfo
+__pycache__/
+*.pyc
 pages/purple-star/*.docx

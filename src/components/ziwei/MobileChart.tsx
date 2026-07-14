@@ -4,12 +4,12 @@ import type {
   ChartPalace,
   ChartStar,
   School,
-} from "../../types/chart";
-import { getEngine, SCHOOL_LABEL } from "../../lib/chart";
+} from "@/types/chart";
+import { getEngine, SCHOOL_LABEL } from "@/lib/ziwei/chart";
 import {
   compareNatalBeforeAnnual,
   isBeneficStar,
-} from "../../lib/star-classification";
+} from "@/lib/ziwei/star-classification";
 
 interface MobileChartProps {
   data: ChartData | null;

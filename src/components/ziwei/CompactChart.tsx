@@ -5,13 +5,13 @@ import {
   type KeyboardEvent,
   type RefObject,
 } from "react";
-import { getEngine, SCHOOL_LABEL } from "../../lib/chart";
+import { getEngine, SCHOOL_LABEL } from "@/lib/ziwei/chart";
 import compactChartCss from "./compact-chart.css?raw";
 import {
   compareNatalBeforeAnnual,
   isAnnualStar,
   isBeneficStar,
-} from "../../lib/star-classification";
+} from "@/lib/ziwei/star-classification";
 import type {
   ChartData,
   ChartPhiFlow,
@@ -19,7 +19,7 @@ import type {
   ChartStar,
   ChartVoidMarker,
   School,
-} from "../../types/chart";
+} from "@/types/chart";
 
 interface CompactChartProps {
   data: ChartData | null;

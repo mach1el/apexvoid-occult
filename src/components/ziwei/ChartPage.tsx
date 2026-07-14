@@ -7,15 +7,15 @@ import {
   useState,
 } from "react";
 import { toBlob } from "html-to-image";
-import chartCss from "../../../pages/purple-star/tu-vi-nam-phai.css?raw";
+import chartCss from "@/styles/tu-vi.css?raw";
 import compactChartCss from "./compact-chart.css?raw";
 import mobileChartCss from "./mobile-chart.css?raw";
 import {
   buildChartText,
   getEngine,
   serializeChart,
-} from "../../lib/chart";
-import type { ChartData, School } from "../../types/chart";
+} from "@/lib/ziwei/chart";
+import type { BirthInput, ChartData, School } from "@/types/chart";
 import { AiChat } from "./AiChat";
 import { CompactChart } from "./CompactChart";
 import { MobileChart } from "./MobileChart";
@@ -83,6 +83,17 @@ function initialSchool(): School {
   return saved === "trung-chau" ? saved : "nam-phai";
 }
 
+function buildBirthInput(form: FormState): BirthInput {
+  return {
+    solarDate: form.solarDate,
+    birthHour: form.birthHour,
+    gender: form.gender,
+    timezone: form.timezone,
+    annualYear: form.annualYear,
+    flowBase: form.flowBase,
+  };
+}
+
 function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
@@ -107,7 +118,6 @@ export function ChartPage() {
     showPhi: false,
     showAnnual: true,
   });
-  const [enginesReady, setEnginesReady] = useState(false);
   const [chartData, setChartData] = useState<ChartData | null>(null);
   const [mobileMode, setMobileMode] = useState<MobileChartMode>("compact");
   const [copyState, setCopyState] = useState<Notice>("idle");
@@ -116,27 +126,12 @@ export function ChartPage() {
 
   useEffect(() => {
     document.title = "Lá Số Tử Vi · Void Occult";
-    let active = true;
-    Promise.all([
-      import("../../../pages/purple-star/tu-vi-engine-nam-phai.js"),
-      import("../../../pages/purple-star/tu-vi-engine-trung-chau.js"),
-    ])
-      .then(() => {
-        if (active) setEnginesReady(true);
-      })
-      .catch((error: unknown) => {
-        console.error("Không thể nạp engine Tử Vi", error);
-      });
-    return () => {
-      active = false;
-    };
   }, []);
 
   useEffect(() => {
-    if (!enginesReady) return;
     const engine = getEngine(school);
-    setChartData(engine?.calculate() ?? null);
-  }, [enginesReady, form, school]);
+    setChartData(engine?.calculate(buildBirthInput(form)) ?? null);
+  }, [form, school]);
 
   const context = useCallback(() => {
     const data = getEngine(school)?.getData() ?? null;
@@ -406,7 +401,6 @@ export function ChartPage() {
                     type="button"
                     className="btn-ghost"
                     onClick={copyChart}
-                    disabled={!enginesReady}
                     title="Sao chép văn bản"
                     aria-label="Sao chép văn bản"
                   >
@@ -416,7 +410,6 @@ export function ChartPage() {
                     type="button"
                     className="btn-ghost"
                     onClick={downloadText}
-                    disabled={!enginesReady}
                     title="Tải file .txt"
                     aria-label="Tải file .txt"
                   >
@@ -426,7 +419,7 @@ export function ChartPage() {
                     type="button"
                     className="btn-ghost"
                     onClick={downloadImage}
-                    disabled={!enginesReady || imageState === "working"}
+                    disabled={imageState === "working"}
                     title="Tải ảnh PNG"
                     aria-label="Tải ảnh PNG"
                   >

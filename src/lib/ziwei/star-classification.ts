@@ -1,4 +1,4 @@
-import type { ChartStar } from "../types/chart";
+import type { ChartStar } from "@/types/chart";
 
 const BENEFIC_LAYERS = new Set(["soft", "wealth", "helper", "move", "romance"]);
 const MALEFIC_LAYERS = new Set(["tough", "harm", "void"]);

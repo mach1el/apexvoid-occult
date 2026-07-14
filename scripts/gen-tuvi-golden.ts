@@ -5,13 +5,10 @@
  *   npx tsx scripts/gen-tuvi-golden.ts            # sinh (ghi đè) tests/golden/tuvi-*.json
  *   npx tsx scripts/gen-tuvi-golden.ts --verify    # so kết quả hiện tại với snapshot đã lưu, KHÔNG ghi đè
  *
- * QUAN TRỌNG: Ở Task 1, "engine hiện tại" là 2 file JS gốc trong pages/purple-star/,
- * chạy trong 1 jsdom Document được dựng thủ công (chưa hề sửa 1 dòng nào của 2 file đó).
- * Từ Task 2 trở đi, hàm `runEngine()` dưới đây sẽ được cập nhật để gọi thẳng
- * `calculate(input)` đã được export bình thường — cơ chế đọc input thay đổi,
- * nhưng bộ ca (golden-cases.ts) và 2 file snapshot JSON thì KHÔNG được đổi.
+ * Từ Commit 2 (cắt dây DOM), 2 engine đã export `calculate(input)` bình thường —
+ * không còn cần dựng jsdom/window.TuViEngines nữa, chỉ import thẳng và gọi.
+ * Bộ ca (golden-cases.ts) và 2 file snapshot JSON không đổi qua các commit.
  */
-import { JSDOM } from "jsdom";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -25,70 +22,23 @@ const SCHOOLS = ["nam-phai", "trung-chau"] as const;
 type School = (typeof SCHOOLS)[number];
 
 const ENGINE_PATHS: Record<School, string> = {
-  "nam-phai": path.join(ROOT, "pages/purple-star/tu-vi-engine-nam-phai.js"),
-  "trung-chau": path.join(ROOT, "pages/purple-star/tu-vi-engine-trung-chau.js"),
+  "nam-phai": path.join(ROOT, "src/lib/ziwei/engine-nam-phai.ts"),
+  "trung-chau": path.join(ROOT, "src/lib/ziwei/engine-trung-chau.ts"),
 };
 
-interface EngineHarness {
+interface EngineModule {
   calculate(input: GoldenBirthInput): unknown;
 }
 
-/**
- * Dựng 1 jsdom Document với đúng các id mà 2 engine hiện tại cào (#solarDate,
- * #annualYear, #timezone, #birthHour, #gender, #flowBase), rồi import (dynamic)
- * cả 2 file engine JS gốc — kích hoạt els cache + đăng ký window.TuViEngines.
- * Dùng <input> thuần cho mọi field (kể cả chỗ UI thật là <select>) vì engine chỉ
- * đọc .value, không quan tâm loại widget.
- */
-async function setupLegacyDomHarness(): Promise<Record<School, EngineHarness>> {
-  const dom = new JSDOM(
-    `<!doctype html><html><body>
-      <input id="solarDate">
-      <input id="annualYear">
-      <input id="timezone">
-      <input id="birthHour">
-      <input id="gender">
-      <input id="flowBase">
-    </body></html>`,
-    { url: "http://localhost/" }
-  );
-
-  (globalThis as unknown as { window: unknown }).window = dom.window;
-  (globalThis as unknown as { document: Document }).document = dom.window.document as unknown as Document;
-
-  const doc = dom.window.document;
-  function setValue(id: string, value: string) {
-    const el = doc.getElementById(id) as HTMLInputElement | null;
-    if (!el) throw new Error(`Không tìm thấy #${id} trong jsdom harness`);
-    el.value = value;
-  }
-
-  await Promise.all([
+async function loadEngines(): Promise<Record<School, EngineModule>> {
+  const [namPhai, trungChau] = await Promise.all([
     import(ENGINE_PATHS["nam-phai"]),
     import(ENGINE_PATHS["trung-chau"]),
   ]);
-
-  const win = dom.window as unknown as {
-    TuViEngines?: Partial<Record<School, { calculate(): unknown }>>;
+  return {
+    "nam-phai": namPhai as unknown as EngineModule,
+    "trung-chau": trungChau as unknown as EngineModule,
   };
-
-  const harness: Partial<Record<School, EngineHarness>> = {};
-  for (const school of SCHOOLS) {
-    const engine = win.TuViEngines?.[school];
-    if (!engine) throw new Error(`window.TuViEngines["${school}"] không được đăng ký`);
-    harness[school] = {
-      calculate(input: GoldenBirthInput) {
-        setValue("solarDate", input.solarDate);
-        setValue("annualYear", input.annualYear);
-        setValue("timezone", input.timezone);
-        setValue("birthHour", input.birthHour);
-        setValue("gender", input.gender);
-        setValue("flowBase", input.flowBase);
-        return engine.calculate();
-      },
-    };
-  }
-  return harness as Record<School, EngineHarness>;
 }
 
 /**
@@ -183,7 +133,7 @@ function printCoverage(school: School, records: Array<{ input: GoldenBirthInput;
 
 async function main() {
   const verify = process.argv.includes("--verify");
-  const harness = await setupLegacyDomHarness();
+  const harness = await loadEngines();
 
   mkdirSync(GOLDEN_DIR, { recursive: true });
 

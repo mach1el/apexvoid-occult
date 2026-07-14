@@ -28,20 +28,34 @@ toàn bộ source repository, và không còn cấu hình/phụ thuộc Netlify.
 
 ```text
 src/
-  components/          React UI: homepage, bài viết, lá số, AI chat
-  lib/                 adapter typed cho domain engine và export
+  components/
+    ziwei/             UI Tử Vi (ChartPage, CompactChart, MobileChart, AiChat)
+    bazi/              UI Bát Tự
+    iching/            trang bài viết Kinh Dịch/Lục Hào
+    shared/            HomePage, ArticlePage dùng chung
+  lib/
+    ziwei/             2 engine Tử Vi (TypeScript thuần) + adapter/export cho UI
+    bazi/              engine Bát Tự
+    calendar/          toán lịch/thiên văn dùng chung cho cả 2 engine
+  content/
+    iching/            nội dung bài viết gốc (.html), Vite import lúc build
+  styles/              CSS lá số Tử Vi
   types/               DTO/hợp đồng TypeScript với backend
-pages/
-  i-ching/             nội dung bài viết gốc, Vite import lúc build
-  purple-star/         domain engine Tử Vi và CSS lá số
 backend/               FastAPI, RAG và Gemini streaming
 deploy/
   frontend.Dockerfile  multi-stage build
   nginx.conf           static server nội bộ + SPA fallback
 ```
 
-Hai engine Tử Vi hiện hữu được giữ nguyên làm domain layer để tránh thay đổi thuật
-toán an sao. React giao tiếp với engine qua adapter typed trong `src/lib/chart.ts`.
+Alias đường dẫn `@/` trỏ vào `src/` (cấu hình ở `tsconfig.app.json` và
+`vite.config.ts`) — dùng cho mọi import từ 2 cấp thư mục trở lên; import 1 cấp
+(cùng thư mục cha) vẫn dùng đường dẫn tương đối như bình thường.
+
+2 engine Tử Vi là các hàm thuần TypeScript (`src/lib/ziwei/engine-nam-phai.ts`,
+`engine-trung-chau.ts`), không còn phụ thuộc DOM. React giao tiếp với engine qua
+adapter typed trong `src/lib/ziwei/chart.ts`. Có golden snapshot test
+(`src/lib/ziwei/golden.test.ts`, snapshot ở `tests/golden/`) chạy trong
+`npm test`/CI để chặn hồi quy khi có ai sửa engine.
 
 ## 💻 Phát triển frontend
 
