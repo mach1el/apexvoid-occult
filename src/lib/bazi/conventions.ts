@@ -54,6 +54,38 @@ export interface BaziConventions {
    * Default: "dayFirst"
    */
   thanSatBase: "dayFirst" | "yearFirst";
+
+  /**
+   * Phương pháp luận Dụng / Hỷ / Kỵ Thần.
+   * - "phu-uc": Phù Ức (Cân bằng Nhật Chủ)
+   * - "dieu-hau": Điều Hậu (Hàn Noãn)
+   * - "thong-quan": Thông Quan
+   * Default: "phu-uc"
+   */
+  baziYongShenMethod: "phu-uc" | "dieu-hau" | "thong-quan";
+
+  /**
+   * Trọng số tính điểm Ngũ Hành.
+   */
+  elementWeights: {
+    // Trọng số Thiên Can lộ ra
+    heavenlyStem: number;
+    // Trọng số Tàng Can theo role
+    hiddenStems: {
+      "Bản khí": number;
+      "Trung khí": number;
+      "Dư khí": number;
+    };
+    // Hệ số nhân cho Chi Tháng (Lệnh tháng)
+    monthBranchMultiplier: number;
+    // Trọng số cho từng Trụ
+    pillarMultipliers: {
+      year: number;
+      month: number;
+      day: number;
+      hour: number;
+    };
+  };
 }
 
 export const DEFAULT_CONVENTIONS: BaziConventions = {
@@ -63,4 +95,20 @@ export const DEFAULT_CONVENTIONS: BaziConventions = {
   yinLifeStageReverse: true,
   quyNhanVariant: "A",
   thanSatBase: "dayFirst",
+  baziYongShenMethod: "phu-uc",
+  elementWeights: {
+    heavenlyStem: 1.0,
+    hiddenStems: {
+      "Bản khí": 1.0,
+      "Trung khí": 0.6,
+      "Dư khí": 0.3,
+    },
+    monthBranchMultiplier: 2.0,
+    pillarMultipliers: {
+      year: 1.0,
+      month: 1.2,
+      day: 1.2,
+      hour: 1.0,
+    },
+  },
 };
