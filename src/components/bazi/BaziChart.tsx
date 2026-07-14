@@ -17,7 +17,7 @@ function getElementColor(char: string) {
   if (wood.includes(char)) return "text-jade";
   if (fire.includes(char)) return "text-cinnabar";
   if (earth.includes(char)) return "text-earth";
-  if (metal.includes(char)) return "text-gold";
+  if (metal.includes(char)) return "text-metal";
   if (water.includes(char)) return "text-water";
   return "text-white";
 }
@@ -72,54 +72,60 @@ function PillarColumn({
   detail,
   isDayPillar,
   pillarKey,
+  voids,
 }: {
   title: string;
   detail: BaziPillarDetail;
   isDayPillar: boolean;
   pillarKey: "year" | "month" | "day" | "hour";
+  voids: [string, string];
 }) {
   return (
     <div
       data-testid={`pillar-column-${pillarKey}`}
-      className="flex flex-col border border-white/10 rounded-lg overflow-hidden bg-[#0d0b14]"
+      className={`flex flex-col border rounded-lg overflow-hidden bg-[#0d0b14] ${
+        isDayPillar ? "border-gold/50 shadow-[0_0_15px_rgba(223,189,109,0.1)]" : "border-white/10"
+      }`}
     >
-      <div className="bg-white/5 py-2 text-center text-sm font-semibold tracking-wide border-b border-white/10 text-muted uppercase">
+      <div className={`py-1.5 text-center text-xs font-semibold tracking-wider uppercase ${
+        isDayPillar ? "bg-gold/10 text-gold" : "bg-white/5 text-muted border-b border-white/10"
+      }`}>
         {title}
       </div>
 
       {/* Can Chi */}
-      <div className="flex flex-col items-center py-6 gap-2">
+      <div className="flex flex-col items-center py-4 gap-1">
         <div className="flex flex-col items-center">
           <div
             className={
               isDayPillar
-                ? "text-sm font-bold text-gold tracking-wide mb-1"
-                : "text-xs text-muted/70 mb-1"
+                ? "text-[11px] font-bold text-gold tracking-widest mb-0.5 uppercase"
+                : "text-[10px] text-muted/70 tracking-wider mb-0.5 uppercase"
             }
           >
             {detail.tenGod}
           </div>
-          <div className={`text-4xl font-han font-bold ${getElementColor(detail.pillar.stem)}`}>
+          <div className={`text-3xl font-han font-bold leading-none ${getElementColor(detail.pillar.stem)}`}>
             {detail.pillar.stem}
           </div>
         </div>
-        <div className="flex flex-col items-center mt-2">
-          <div className={`text-4xl font-han font-bold ${getElementColor(detail.pillar.branch)}`}>
+        <div className="flex flex-col items-center mt-1.5">
+          <div className={`text-3xl font-han font-bold leading-none ${getElementColor(detail.pillar.branch)}`}>
             {detail.pillar.branch}
           </div>
         </div>
       </div>
 
-      <div className="h-px bg-white/10" />
+      <div className="h-px bg-white/10 mx-2" />
 
       {/* Tàng Can & Thập Thần, xếp theo trọng số Bản khí > Trung khí > Dư khí */}
-      <div className="p-3 text-center flex flex-col gap-2 bg-white/[0.02]">
-        <div className="text-xs uppercase text-muted tracking-wide border-b border-white/5 pb-1">Tàng Can</div>
+      <div className="p-2 text-center flex flex-col gap-1.5 bg-white/[0.02]">
+        <div className="text-[10px] uppercase text-muted/50 tracking-widest pb-0.5">Tàng Can</div>
         {detail.hiddenStems.map((hidden, i) => {
           const style = HIDDEN_STEM_STYLE[hidden.type] ?? FALLBACK_HIDDEN_STEM_STYLE;
           return (
-            <div key={i} className="flex justify-between items-center px-2">
-              <span className="flex flex-col items-start">
+            <div key={i} className="flex justify-between items-center px-1">
+              <span className="flex flex-col items-start leading-tight">
                 <span className={`${getElementColor(hidden.stem)} ${style.stem}`}>{hidden.stem}</span>
                 <span className={style.role}>{hidden.type}</span>
               </span>
@@ -129,29 +135,31 @@ function PillarColumn({
         })}
       </div>
 
-      <div className="h-px bg-white/10" />
+      <div className="h-px bg-white/10 mx-2" />
 
       {/* Trường Sinh */}
-      <div className="px-3 py-2 flex justify-between items-center text-sm bg-white/[0.02] border-b border-white/5">
-        <span className="text-muted/60">Trường Sinh</span>
-        <span className="text-right text-paper/80" data-testid="life-stage">
+      <div className="px-3 py-1.5 flex justify-between items-center text-xs bg-white/[0.02]">
+        <span className="text-muted/50 uppercase tracking-widest text-[9px]">Trường Sinh</span>
+        <span className="text-right text-paper/90 font-medium" data-testid="life-stage">
           {detail.lifeStage}
         </span>
       </div>
 
+      <div className="h-px bg-white/10 mx-2" />
+
       {/* Thông tin phụ */}
-      <div className="p-3 text-sm flex flex-col gap-1.5 bg-black/20 flex-1">
-        <div className="flex justify-between">
-          <span className="text-muted/60">Nạp Âm</span>
+      <div className="p-2.5 text-xs flex flex-col gap-1.5 bg-black/20 flex-1">
+        <div className="flex justify-between items-center">
+          <span className="text-muted/50 uppercase tracking-widest text-[9px]">Nạp Âm</span>
           <span className="text-right text-paper/80">{detail.nayin}</span>
         </div>
-        <div className="flex justify-between">
-          <span className="text-muted/60">Không Vong</span>
-          <span className="text-right text-paper/80">{detail.isVoid ? "Có" : "-"}</span>
+        <div className="flex justify-between items-center">
+          <span className="text-muted/50 uppercase tracking-widest text-[9px]">Tuần Không</span>
+          <span className="text-right text-paper/80">{detail.isVoid ? voids.join(" · ") : "-"}</span>
         </div>
         {detail.stars.length > 0 && (
-          <div className="pt-2 mt-1 border-t border-white/5">
-            <div className="text-xs text-muted/60 mb-1">Thần Sát</div>
+          <div className="pt-1.5 mt-0.5 border-t border-white/5">
+            <div className="text-[9px] uppercase tracking-widest text-muted/50 mb-1">Thần Sát</div>
             <div className="flex flex-wrap gap-1">
               {detail.stars.map((s, i) => (
                 <StarPill key={i} star={s} />
@@ -224,10 +232,10 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
 
   // Bát Tự đọc từ phải sang trái
   const pillars: { title: string; detail: BaziPillarDetail; isDayPillar: boolean; key: "year" | "month" | "day" | "hour" }[] = [
-    { title: "Trụ Giờ", detail: chart.details.hour, isDayPillar: false, key: "hour" },
-    { title: "Trụ Ngày", detail: chart.details.day, isDayPillar: true, key: "day" },
-    { title: "Trụ Tháng", detail: chart.details.month, isDayPillar: false, key: "month" },
     { title: "Trụ Năm", detail: chart.details.year, isDayPillar: false, key: "year" },
+    { title: "Trụ Tháng", detail: chart.details.month, isDayPillar: false, key: "month" },
+    { title: "Trụ Ngày", detail: chart.details.day, isDayPillar: true, key: "day" },
+    { title: "Trụ Giờ", detail: chart.details.hour, isDayPillar: false, key: "hour" },
   ];
 
   return (
@@ -235,10 +243,10 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
       {/* Tứ Trụ, Đặt dưới Khối Dụng Thần như yêu cầu hoặc trên? Thường để Tứ Trụ ở trên cho dễ nhìn */}
       <section>
         <h2 className="text-xl font-display text-paper mb-4">Tứ Trụ (Bát Tự)</h2>
-        <div className="flex flex-col-reverse md:flex-row gap-4">
+        <div className="flex flex-nowrap md:flex-row gap-4 overflow-x-auto pb-4 custom-scrollbar snap-x">
           {pillars.map((p) => (
-            <div key={p.title} className="flex-1">
-              <PillarColumn title={p.title} detail={p.detail} isDayPillar={p.isDayPillar} pillarKey={p.key} />
+            <div key={p.title} className="flex-1 min-w-[200px] snap-center">
+              <PillarColumn title={p.title} detail={p.detail} isDayPillar={p.isDayPillar} pillarKey={p.key} voids={chart.voids} />
             </div>
           ))}
         </div>
@@ -247,8 +255,8 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
       {/* Dụng Thần & Radar */}
       <section>
         <h2 className="text-xl font-display text-paper mb-4">Phân Tích Ngũ Hành & Dụng Thần</h2>
-        <div className="border border-white/10 rounded-lg p-4 bg-ink flex flex-col md:flex-row gap-6 items-start">
-          <div className="flex-1 space-y-4 w-full">
+        <div className="border border-white/10 rounded-lg p-5 lg:p-6 bg-ink flex flex-col lg:flex-row gap-8 items-center lg:items-start">
+          <div className="flex-1 space-y-5 w-full">
             <div className="flex items-center gap-3">
               <span className={`px-2 py-1 rounded text-xs uppercase tracking-wide font-medium
                 ${yongShen.dayMasterVerdict === "vượng" ? "bg-cinnabar/20 text-cinnabar" : 
@@ -305,8 +313,10 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
               )}
             </div>
           </div>
-          <div className="w-full md:w-auto flex justify-center py-2 md:py-0 md:px-4">
-            <ElementRadar strength={strength} />
+          <div className="w-full lg:w-auto flex justify-center py-4 lg:py-0">
+            <div className="max-w-full overflow-visible">
+              <ElementRadar strength={strength} size={280} />
+            </div>
           </div>
         </div>
       </section>
@@ -334,31 +344,35 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
         </div>
         
         {showLuck && (
-          <div className="flex flex-nowrap overflow-x-auto gap-3 pb-2 custom-scrollbar">
+          <div className="flex flex-nowrap overflow-x-auto gap-4 pb-4 custom-scrollbar px-1 pt-2">
             {chart.luck.pillars.map((lp, i) => {
               const active = isLuckPillarActive(chart.luck.pillars, i, now);
               return (
                 <div
                   key={i}
                   data-testid="luck-pillar-tile"
-                  className={`min-w-[90px] flex-shrink-0 flex flex-col border rounded overflow-hidden text-center ${
-                    active ? "border-gold ring-1 ring-gold/40 bg-gold/5" : "border-white/10 bg-black/20"
+                  className={`min-w-[100px] flex-shrink-0 flex flex-col border rounded-lg overflow-hidden text-center transition-all ${
+                    active ? "border-gold/80 ring-2 ring-gold/40 bg-gold/10 scale-105 z-10 shadow-lg" : "border-white/10 bg-black/30 hover:bg-black/10"
                   }`}
                 >
-                  <div className="bg-white/5 py-1 px-1 text-[10px] text-muted border-b border-white/10 whitespace-nowrap">
-                    Tuổi {lp.startAgeYear} {lp.startAgeMonth ? `${lp.startAgeMonth}th` : ""}
+                  <div className={`py-1.5 px-1 text-[10px] uppercase tracking-wider font-semibold whitespace-nowrap ${
+                    active ? "bg-gold/20 text-gold" : "bg-white/5 text-muted border-b border-white/10"
+                  }`}>
+                    Tuổi {lp.startAgeYear} {lp.startAgeMonth ? `${lp.startAgeMonth} tháng` : ""}
                   </div>
-                  <div className="py-2 px-1 flex flex-col gap-0.5">
-                    <div className="text-[10px] text-muted/70">{lp.tenGod}</div>
-                    <div className={`text-lg font-han font-medium ${getElementColor(lp.pillar.stem)}`}>
+                  <div className="py-3 px-1 flex flex-col gap-1">
+                    <div className="text-[10px] text-muted/60 uppercase tracking-widest">{lp.tenGod}</div>
+                    <div className={`text-2xl font-han font-bold leading-none ${getElementColor(lp.pillar.stem)}`}>
                       {lp.pillar.stem}
                     </div>
-                    <div className={`text-lg font-han font-medium ${getElementColor(lp.pillar.branch)}`}>
+                    <div className={`text-2xl font-han font-bold leading-none mt-1 ${getElementColor(lp.pillar.branch)}`}>
                       {lp.pillar.branch}
                     </div>
-                    <div className="text-[10px] text-muted/70">{lp.lifeStage}</div>
+                    <div className="text-[10px] text-muted/60 uppercase tracking-widest mt-1">{lp.lifeStage}</div>
                   </div>
-                  <div className="bg-white/5 py-1 text-[10px] text-muted/60 border-t border-white/10">
+                  <div className={`py-1.5 text-[11px] font-mono ${
+                    active ? "bg-gold/10 text-gold font-bold" : "bg-white/5 text-muted/60 border-t border-white/10"
+                  }`}>
                     {lp.startDate.getFullYear()}
                   </div>
                 </div>

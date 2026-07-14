@@ -6,7 +6,7 @@ const ELEMENT_COLORS: Record<Element, string> = {
   Mộc: "var(--jade)",
   Hỏa: "var(--cinnabar)",
   Thổ: "var(--earth)",
-  Kim: "var(--gold)",
+  Kim: "var(--metal)",
   Thủy: "var(--water)"
 };
 

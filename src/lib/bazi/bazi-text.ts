@@ -42,18 +42,12 @@ export function buildBaziText(chart: BaziFullChart): string {
   out.push(`TỨ TRỤ (Giờ - Ngày - Tháng - Năm)`);
   const pt = chart.details;
   
-  out.push(`[Trụ Giờ] ${pt.hour.pillar.stem} ${pt.hour.pillar.branch} (Nạp âm: ${pt.hour.nayin})`);
-  out.push(`- Thập Thần: ${pt.hour.tenGod}`);
-  out.push(`- Trường Sinh: ${pt.hour.lifeStage}`);
-  if (pt.hour.isVoid) out.push(`- Tuần Không`);
-  out.push(`- Tàng Can: ${pt.hour.hiddenStems.map(h => `${h.stem}(${h.tenGod})`).join(", ")}`);
-  out.push(`- Thần Sát: ${pt.hour.stars.map(s => s.name).join(", ")}\n`);
-
-  out.push(`[Trụ Ngày] ${pt.day.pillar.stem} ${pt.day.pillar.branch} (Nạp âm: ${pt.day.nayin})`);
-  out.push(`- Thập Thần: ${pt.day.tenGod}`);
-  out.push(`- Trường Sinh: ${pt.day.lifeStage}`);
-  out.push(`- Tàng Can: ${pt.day.hiddenStems.map(h => `${h.stem}(${h.tenGod})`).join(", ")}`);
-  out.push(`- Thần Sát: ${pt.day.stars.map(s => s.name).join(", ")}\n`);
+  out.push(`[Trụ Năm] ${pt.year.pillar.stem} ${pt.year.pillar.branch} (Nạp âm: ${pt.year.nayin})`);
+  out.push(`- Thập Thần: ${pt.year.tenGod}`);
+  out.push(`- Trường Sinh: ${pt.year.lifeStage}`);
+  if (pt.year.isVoid) out.push(`- Tuần Không`);
+  out.push(`- Tàng Can: ${pt.year.hiddenStems.map(h => `${h.stem}(${h.tenGod})`).join(", ")}`);
+  out.push(`- Thần Sát: ${pt.year.stars.map(s => s.name).join(", ")}\n`);
 
   out.push(`[Trụ Tháng] ${pt.month.pillar.stem} ${pt.month.pillar.branch} (Nạp âm: ${pt.month.nayin})`);
   out.push(`- Thập Thần: ${pt.month.tenGod}`);
@@ -62,12 +56,18 @@ export function buildBaziText(chart: BaziFullChart): string {
   out.push(`- Tàng Can: ${pt.month.hiddenStems.map(h => `${h.stem}(${h.tenGod})`).join(", ")}`);
   out.push(`- Thần Sát: ${pt.month.stars.map(s => s.name).join(", ")}\n`);
 
-  out.push(`[Trụ Năm] ${pt.year.pillar.stem} ${pt.year.pillar.branch} (Nạp âm: ${pt.year.nayin})`);
-  out.push(`- Thập Thần: ${pt.year.tenGod}`);
-  out.push(`- Trường Sinh: ${pt.year.lifeStage}`);
-  if (pt.year.isVoid) out.push(`- Tuần Không`);
-  out.push(`- Tàng Can: ${pt.year.hiddenStems.map(h => `${h.stem}(${h.tenGod})`).join(", ")}`);
-  out.push(`- Thần Sát: ${pt.year.stars.map(s => s.name).join(", ")}\n`);
+  out.push(`[Trụ Ngày] ${pt.day.pillar.stem} ${pt.day.pillar.branch} (Nạp âm: ${pt.day.nayin})`);
+  out.push(`- Thập Thần: ${pt.day.tenGod}`);
+  out.push(`- Trường Sinh: ${pt.day.lifeStage}`);
+  out.push(`- Tàng Can: ${pt.day.hiddenStems.map(h => `${h.stem}(${h.tenGod})`).join(", ")}`);
+  out.push(`- Thần Sát: ${pt.day.stars.map(s => s.name).join(", ")}\n`);
+
+  out.push(`[Trụ Giờ] ${pt.hour.pillar.stem} ${pt.hour.pillar.branch} (Nạp âm: ${pt.hour.nayin})`);
+  out.push(`- Thập Thần: ${pt.hour.tenGod}`);
+  out.push(`- Trường Sinh: ${pt.hour.lifeStage}`);
+  if (pt.hour.isVoid) out.push(`- Tuần Không`);
+  out.push(`- Tàng Can: ${pt.hour.hiddenStems.map(h => `${h.stem}(${h.tenGod})`).join(", ")}`);
+  out.push(`- Thần Sát: ${pt.hour.stars.map(s => s.name).join(", ")}\n`);
 
   // 4. Thông tin phụ
   out.push(`THÔNG TIN PHỤ`);
@@ -78,7 +78,7 @@ export function buildBaziText(chart: BaziFullChart): string {
   // 5. Đại Vận
   out.push(`ĐẠI VẬN (10 NĂM)`);
   for (const lp of chart.luck.pillars) {
-    const ageStr = `Tuổi ${lp.startAgeYear}${lp.startAgeMonth ? ` ${lp.startAgeMonth}t` : ""}`;
+    const ageStr = `Tuổi ${lp.startAgeYear}${lp.startAgeMonth ? ` ${lp.startAgeMonth} tháng` : ""}`;
     const yearStr = lp.startDate.getFullYear();
     out.push(`- [${yearStr}] ${ageStr}: ${lp.pillar.stem} ${lp.pillar.branch} (${lp.tenGod}) - ${lp.lifeStage}`);
   }
@@ -96,7 +96,7 @@ export function buildBaziText(chart: BaziFullChart): string {
         out.push(`  [Đại Vận ${currentLuckIndex === -1 ? 'Trước khởi vận' : currentLuckIndex + 1}]`);
       }
       const marker = ay.year === currentYear ? ">> " : "   ";
-      out.push(`${marker}${ay.year} (${ay.age}t): ${ay.pillar.stem} ${ay.pillar.branch} - ${ay.tenGod} (${ay.lifeStage})`);
+      out.push(`${marker}${ay.year} (${ay.age} tuổi): ${ay.pillar.stem} ${ay.pillar.branch} - ${ay.tenGod} (${ay.lifeStage})`);
     }
   }
 

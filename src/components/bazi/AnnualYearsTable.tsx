@@ -59,8 +59,7 @@ export function AnnualYearsTable({ annualYears, getElementColor }: AnnualYearsTa
                           : 'border-white/10 bg-[var(--paper-light)]'
                         }
                       `}
-                      title={`Năm ${ay.year} - ${ay.age} tuổi\n${ay.tenGod} - ${ay.lifeStage}`}
-                    >
+                      >
                       <div className="text-[10px] text-white/60 mb-1 leading-none">{ay.tenGod}</div>
                       
                       <div className="flex flex-col items-center text-lg font-bold font-serif leading-none gap-1">

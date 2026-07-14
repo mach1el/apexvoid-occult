@@ -11,4 +11,8 @@ test("YongShen PhuUc logic", () => {
   expect(result.method).toBe("phu-uc");
   expect(["vượng", "nhược", "trung hòa"]).toContain(result.dayMasterVerdict);
   expect(result.reasoning.length).toBeGreaterThan(0);
+  
+  if (result.dayMasterVerdict !== "trung hòa") {
+    expect(result.hyThan.length).toBeGreaterThan(0);
+  }
 });
