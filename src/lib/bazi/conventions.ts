@@ -65,6 +65,14 @@ export interface BaziConventions {
   baziYongShenMethod: "phu-uc" | "dieu-hau" | "thong-quan";
 
   /**
+   * Quy ước tính tuổi trong các bảng lưu niên.
+   * - "nominal": Tuổi Mụ (Năm tra cứu - Năm sinh + 1)
+   * - "chronological": Tuổi thực (Năm tra cứu - Năm sinh)
+   * Default: "nominal"
+   */
+  annualAgeMethod: "nominal" | "chronological";
+
+  /**
    * Trọng số tính điểm Ngũ Hành.
    */
   elementWeights: {
@@ -96,6 +104,7 @@ export const DEFAULT_CONVENTIONS: BaziConventions = {
   quyNhanVariant: "A",
   thanSatBase: "dayFirst",
   baziYongShenMethod: "phu-uc",
+  annualAgeMethod: "nominal",
   elementWeights: {
     heavenlyStem: 1.0,
     hiddenStems: {

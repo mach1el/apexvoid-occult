@@ -5,6 +5,7 @@ import { SymbolicStar } from "@/lib/bazi/symbolic-stars";
 import { calculateElementStrength } from "@/lib/bazi/element-strength";
 import { determineYongShen } from "@/lib/bazi/yong-shen";
 import { ElementRadar } from "./ElementRadar";
+import { AnnualYearsTable } from "./AnnualYearsTable";
 
 function getElementColor(char: string) {
   const wood = ["Giáp", "Ất", "Dần", "Mão"];
@@ -367,8 +368,10 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
         )}
       </section>
 
-      {/* Dụng Thần (Placeholder) */}
-
+      {/* Lưu Niên */}
+      {chart.luck.annualYears && chart.luck.annualYears.length > 0 && (
+        <AnnualYearsTable annualYears={chart.luck.annualYears} getElementColor={getElementColor} />
+      )}
     </div>
   );
 }

@@ -83,6 +83,23 @@ export function buildBaziText(chart: BaziFullChart): string {
     out.push(`- [${yearStr}] ${ageStr}: ${lp.pillar.stem} ${lp.pillar.branch} (${lp.tenGod}) - ${lp.lifeStage}`);
   }
 
+  // 6. Lưu Niên (quanh năm hiện tại)
+  if (chart.luck.annualYears && chart.luck.annualYears.length > 0) {
+    out.push(`\nLƯU NIÊN (GẦN ĐÂY)`);
+    const currentYear = new Date().getFullYear();
+    const recentYears = chart.luck.annualYears.filter(y => y.year >= currentYear - 5 && y.year <= currentYear + 10);
+    
+    let currentLuckIndex = -2;
+    for (const ay of recentYears) {
+      if (ay.luckPillarIndex !== currentLuckIndex) {
+        currentLuckIndex = ay.luckPillarIndex;
+        out.push(`  [Đại Vận ${currentLuckIndex === -1 ? 'Trước khởi vận' : currentLuckIndex + 1}]`);
+      }
+      const marker = ay.year === currentYear ? ">> " : "   ";
+      out.push(`${marker}${ay.year} (${ay.age}t): ${ay.pillar.stem} ${ay.pillar.branch} - ${ay.tenGod} (${ay.lifeStage})`);
+    }
+  }
+
   out.push(`\n---\n* Tạo bởi hệ thống Apexvoid Occult`);
 
   return out.join('\n');

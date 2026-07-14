@@ -10,6 +10,7 @@ import { getVoids, isVoid } from "./voids";
 import { getConceptionPillar, getLifePalace } from "./derived-pillars";
 import { getSymbolicStars, SymbolicStar } from "./symbolic-stars";
 import { Pillar } from "../calendar/sexagenary";
+import { AnnualYear, getAnnualYears } from "./annual-years";
 
 export interface BaziPillarDetail {
   pillar: Pillar;
@@ -46,6 +47,7 @@ export interface BaziFullChart extends BaziChart {
     startAgeDay: number;
     startDate: Date;
     pillars: LuckPillar[];
+    annualYears: AnnualYear[];
   };
 }
 
@@ -85,7 +87,8 @@ export function generateBaziChart(
 
   const luckInfo = getLuckPillars(date, chart.month, chart.isYangGender, dayMaster, conventions);
 
-  return {
+  // Khởi tạo BaziFullChart tạm thời (để truyền vào getAnnualYears)
+  const tempChart: BaziFullChart = {
     ...chart,
     details: {
       year: buildPillarDetail(chart.year),
@@ -113,7 +116,13 @@ export function generateBaziChart(
       startAgeMonth: luckInfo.startAgeMonth,
       startAgeDay: luckInfo.startAgeDay,
       startDate: luckInfo.startDate,
-      pillars: luckInfo.luckPillars
+      pillars: luckInfo.luckPillars,
+      annualYears: [] // sẽ gắn sau
     }
   };
+
+  const annualYears = getAnnualYears(tempChart, undefined, undefined, conventions);
+  tempChart.luck.annualYears = annualYears;
+
+  return tempChart;
 }
