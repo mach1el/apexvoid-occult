@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { buildChartText } from "./chart";
-import type { ChartData } from "../types/chart";
+import type { ChartData } from "@/types/chart";
 
 const chart: ChartData = {
   solar: { day: 21, month: 9, year: 1991 },

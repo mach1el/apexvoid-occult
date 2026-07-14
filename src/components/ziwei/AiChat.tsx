@@ -5,7 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
-import type { ChartDto } from "../../types/chart";
+import type { ChartDto } from "@/types/chart";
 
 interface HistoryTurn {
   role: "user" | "model";

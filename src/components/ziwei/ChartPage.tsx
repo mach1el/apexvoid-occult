@@ -7,15 +7,15 @@ import {
   useState,
 } from "react";
 import { toBlob } from "html-to-image";
-import chartCss from "../../../pages/purple-star/tu-vi-nam-phai.css?raw";
+import chartCss from "@/styles/tu-vi.css?raw";
 import compactChartCss from "./compact-chart.css?raw";
 import mobileChartCss from "./mobile-chart.css?raw";
 import {
   buildChartText,
   getEngine,
   serializeChart,
-} from "../../lib/chart";
-import type { BirthInput, ChartData, School } from "../../types/chart";
+} from "@/lib/ziwei/chart";
+import type { BirthInput, ChartData, School } from "@/types/chart";
 import { AiChat } from "./AiChat";
 import { CompactChart } from "./CompactChart";
 import { MobileChart } from "./MobileChart";

@@ -5,9 +5,9 @@ import type {
   ChartPalace,
   MutagenRecord,
   School,
-} from "../types/chart";
-import * as namPhaiEngine from "./ziwei/engine-nam-phai";
-import * as trungChauEngine from "./ziwei/engine-trung-chau";
+} from "@/types/chart";
+import * as namPhaiEngine from "./engine-nam-phai";
+import * as trungChauEngine from "./engine-trung-chau";
 
 export const SCHOOL_LABEL: Record<School, string> = {
   "nam-phai": "Nam phái",

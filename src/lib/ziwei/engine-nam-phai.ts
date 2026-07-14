@@ -4,7 +4,7 @@ import {
   getFlowMonthBaseIndex,
   getSmallLimitBranchRing,
   type AnnualViewMode,
-} from "../annual-flow";
+} from "./annual-flow";
 import { jdFromDate } from "../calendar/julian";
 import type {
   BirthInput,
@@ -16,7 +16,7 @@ import type {
   FlowMonthEntry,
   MutagenRecord,
   ZiweiStart,
-} from "../../types/chart";
+} from "@/types/chart";
 
 // Bản làm việc nội bộ: mỗi cung luôn có sẵn `stars` (khởi tạo rỗng ngay khi
 // tạo mảng palaces), khác với ChartPalace công khai coi field này là optional.

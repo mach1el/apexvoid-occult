@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { render, screen, within } from "@testing-library/react";
-import { generateBaziChart } from "../../lib/bazi/bazi-engine";
+import { generateBaziChart } from "@/lib/bazi/bazi-engine";
 import { BaziChart } from "./BaziChart";
 
 describe("BaziChart", () => {
