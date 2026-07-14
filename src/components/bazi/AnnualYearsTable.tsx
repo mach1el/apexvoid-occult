@@ -34,7 +34,7 @@ export function AnnualYearsTable({ annualYears, getElementColor }: AnnualYearsTa
 
   return (
     <div className="mt-8">
-      <h3 className="text-xl font-bold mb-4 font-serif text-[var(--gold)] border-b border-[var(--gold)]/30 pb-2">
+      <h3 className="text-xl font-bold mb-4 font-serif text-[var(--color-gold)] border-b border-[var(--color-gold)]/30 pb-2">
         Bảng Lưu Niên
       </h3>
       
@@ -42,10 +42,10 @@ export function AnnualYearsTable({ annualYears, getElementColor }: AnnualYearsTa
         <div className="flex flex-col gap-4 min-w-max">
           {rows.map(row => (
             <div key={row.index} className="flex flex-col gap-2">
-              <div className="text-sm font-semibold text-[var(--gold)]/80">
+              <div className="text-sm font-semibold text-[var(--color-gold)]/80">
                 {row.index === -1 ? "Trước khởi vận" : `Đại vận ${row.index + 1}`}
               </div>
-              <div className="flex gap-2">
+              <div className="flex gap-2 sm:gap-3">
                 {row.years.map(ay => {
                   const isCurrent = ay.year === currentYear;
                   
@@ -53,26 +53,26 @@ export function AnnualYearsTable({ annualYears, getElementColor }: AnnualYearsTa
                     <div 
                       key={ay.year}
                       className={`
-                        w-16 flex flex-col items-center justify-between p-2 rounded border
+                        w-20 sm:w-24 flex-shrink-0 flex flex-col items-center justify-between p-2 sm:p-3 rounded-lg border transition-all
                         ${isCurrent 
-                          ? 'border-[var(--gold)] bg-[var(--gold)]/10 ring-1 ring-[var(--gold)]' 
-                          : 'border-white/10 bg-[var(--paper-light)]'
+                          ? 'border-[var(--color-gold)] bg-[var(--color-gold)]/10 ring-1 ring-[var(--color-gold)] scale-105 shadow-lg' 
+                          : 'border-white/10 bg-black/20 hover:bg-black/10'
                         }
                       `}
                       >
-                      <div className="text-[10px] text-white/60 mb-1 leading-none">{ay.tenGod}</div>
+                      <div className="text-[10px] sm:text-[11px] text-white/60 mb-1.5 leading-none font-medium uppercase tracking-wider">{ay.tenGod}</div>
                       
-                      <div className="flex flex-col items-center text-lg font-bold font-serif leading-none gap-1">
+                      <div className="flex flex-col items-center text-xl sm:text-2xl font-bold font-serif leading-none gap-1.5 my-1">
                         <span className={getElementColor(ay.pillar.stem)}>{ay.pillar.stem}</span>
                         <span className={getElementColor(ay.pillar.branch)}>{ay.pillar.branch}</span>
                       </div>
                       
-                      <div className="flex flex-col items-center mt-2 w-full">
-                        <div className={`text-xs font-mono font-bold ${isCurrent ? 'text-[var(--gold)]' : 'text-white/80'}`}>
+                      <div className="flex flex-col items-center mt-3 w-full">
+                        <div className={`text-xs sm:text-sm font-mono font-bold ${isCurrent ? 'text-[var(--color-gold)]' : 'text-white/80'}`}>
                           {ay.year}
                         </div>
-                        <div className="text-[10px] text-white/50">{ay.age}t</div>
-                        <div className="text-[9px] mt-1 text-white/40 uppercase tracking-wider">{ay.lifeStage}</div>
+                        <div className="text-[10px] sm:text-[11px] text-white/50 mt-0.5">{ay.age} tuổi</div>
+                        <div className="text-[9px] sm:text-[10px] mt-1.5 text-white/40 uppercase tracking-widest">{ay.lifeStage}</div>
                       </div>
                     </div>
                   );

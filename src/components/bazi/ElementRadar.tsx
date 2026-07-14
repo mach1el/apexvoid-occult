@@ -3,11 +3,11 @@ import { ElementStrength } from "@/lib/bazi/element-strength";
 import { Element, ELEMENTS } from "@/lib/bazi/elements";
 
 const ELEMENT_COLORS: Record<Element, string> = {
-  Mộc: "var(--jade)",
-  Hỏa: "var(--cinnabar)",
-  Thổ: "var(--earth)",
-  Kim: "var(--metal)",
-  Thủy: "var(--water)"
+  Mộc: "var(--color-jade)",
+  Hỏa: "var(--color-cinnabar)",
+  Thổ: "var(--color-earth)",
+  Kim: "var(--color-metal)",
+  Thủy: "var(--color-water)"
 };
 
 interface ElementRadarProps {
@@ -82,7 +82,7 @@ export function ElementRadar({ strength, size = 200 }: ElementRadarProps) {
         <path 
           d={polygonPath} 
           fill="rgba(255, 255, 255, 0.15)" 
-          stroke="var(--gold)" 
+          stroke="var(--color-gold)" 
           strokeWidth="2"
           style={{ transition: "all 0.5s ease" }}
         />
