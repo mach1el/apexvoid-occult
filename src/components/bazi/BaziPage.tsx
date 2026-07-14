@@ -1,13 +1,70 @@
-import { useState, useMemo } from "react";
-import { generateBaziChart, BaziFullChart, BaziPillarDetail } from "../../lib/bazi/bazi-engine";
+import { useEffect, useMemo, useState } from "react";
+import { generateBaziChart } from "../../lib/bazi/bazi-engine";
+import {
+  DEFAULT_MANUAL_LONGITUDE,
+  DEFAULT_PROVINCE_CODE,
+  MANUAL_PROVINCE_CODE,
+  MANUAL_PROVINCE_LABEL,
+  PROVINCES,
+  getProvinceByCode,
+  resolveLongitude,
+} from "../../lib/bazi/provinces";
 import { BaziChart as BaziChartComponent } from "./BaziChart";
 
+const BAZI_FORM_STORAGE_KEY = "bazi.form";
+
+interface StoredBaziForm {
+  dateInput: string;
+  timeInput: string;
+  gender: "M" | "F";
+  provinceCode: string;
+  manualLongitude: number;
+  timezone: number;
+}
+
+function loadStoredBaziForm(): Partial<StoredBaziForm> {
+  try {
+    const raw = localStorage.getItem(BAZI_FORM_STORAGE_KEY);
+    if (!raw) return {};
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
 export function BaziPage() {
-  const [dateInput, setDateInput] = useState("01/01/1990");
-  const [timeInput, setTimeInput] = useState("12:00");
-  const [gender, setGender] = useState<"M" | "F">("M");
-  const [longitude, setLongitude] = useState(105.8);
-  const [timezone, setTimezone] = useState(7);
+  const stored = loadStoredBaziForm();
+
+  const [dateInput, setDateInput] = useState(() => stored.dateInput ?? "01/01/1990");
+  const [timeInput, setTimeInput] = useState(() => stored.timeInput ?? "12:00");
+  const [gender, setGender] = useState<"M" | "F">(() => stored.gender ?? "M");
+  const [provinceCode, setProvinceCode] = useState(() => {
+    const code = stored.provinceCode;
+    if (code === MANUAL_PROVINCE_CODE || (code && getProvinceByCode(code))) return code;
+    return DEFAULT_PROVINCE_CODE;
+  });
+  const [manualLongitude, setManualLongitude] = useState(
+    () => stored.manualLongitude ?? DEFAULT_MANUAL_LONGITUDE
+  );
+  const [timezone, setTimezone] = useState(() => stored.timezone ?? 7);
+
+  const longitude = resolveLongitude(provinceCode, manualLongitude);
+
+  useEffect(() => {
+    const payload: StoredBaziForm = {
+      dateInput,
+      timeInput,
+      gender,
+      provinceCode,
+      manualLongitude,
+      timezone,
+    };
+    try {
+      localStorage.setItem(BAZI_FORM_STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+      // bỏ qua lỗi quota/private-mode
+    }
+  }, [dateInput, timeInput, gender, provinceCode, manualLongitude, timezone]);
 
   const chart = useMemo(() => {
     try {
@@ -19,14 +76,14 @@ export function BaziPage() {
       const yearStr = dParts[2]!.length === 4 ? dParts[2]! : dParts[0]!;
       const monthStr = dParts[1]!;
       const dayStr = dParts[2]!.length === 4 ? dParts[0]! : dParts[2]!;
-      
+
       const hourStr = tParts[0]!;
       const minStr = tParts[1]!;
 
       const year = parseInt(yearStr, 10);
       const month = parseInt(monthStr, 10) - 1;
       const day = parseInt(dayStr, 10);
-      
+
       const hour = parseInt(hourStr, 10);
       const minute = parseInt(minStr, 10);
 
@@ -52,15 +109,15 @@ export function BaziPage() {
           <div className="flex flex-col gap-1 lg:col-span-2">
             <label className="text-xs text-muted uppercase tracking-wider">Ngày Giờ Sinh (Dương Lịch)</label>
             <div className="flex gap-2">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="Ngày/Tháng/Năm"
                 value={dateInput}
                 onChange={(e) => setDateInput(e.target.value)}
                 className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none flex-1 min-w-0"
               />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 placeholder="HH:MM"
                 value={timeInput}
                 onChange={(e) => setTimeInput(e.target.value)}
@@ -70,7 +127,7 @@ export function BaziPage() {
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-xs text-muted uppercase tracking-wider">Giới Tính</label>
-            <select 
+            <select
               value={gender}
               onChange={(e) => setGender(e.target.value as "M" | "F")}
               className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none"
@@ -80,19 +137,34 @@ export function BaziPage() {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-xs text-muted uppercase tracking-wider">Kinh Độ</label>
-            <input 
-              type="number" 
-              step="0.1"
-              value={longitude}
-              onChange={(e) => setLongitude(parseFloat(e.target.value))}
+            <label className="text-xs text-muted uppercase tracking-wider">Nơi Sinh (Tỉnh/Thành)</label>
+            <select
+              value={provinceCode}
+              onChange={(e) => setProvinceCode(e.target.value)}
               className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none"
-            />
+            >
+              {PROVINCES.map((p) => (
+                <option key={p.code} value={p.code}>
+                  {p.name}
+                </option>
+              ))}
+              <option value={MANUAL_PROVINCE_CODE}>{MANUAL_PROVINCE_LABEL}</option>
+            </select>
+            {provinceCode === MANUAL_PROVINCE_CODE && (
+              <input
+                type="number"
+                step="0.1"
+                value={manualLongitude}
+                onChange={(e) => setManualLongitude(parseFloat(e.target.value))}
+                placeholder="Kinh độ (độ)"
+                className="mt-1 bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none"
+              />
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-xs text-muted uppercase tracking-wider">Múi Giờ (UTC+)</label>
-            <input 
-              type="number" 
+            <input
+              type="number"
               value={timezone}
               onChange={(e) => setTimezone(parseInt(e.target.value))}
               className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none"

@@ -95,4 +95,22 @@ describe("Bazi Four Pillars Calculation", () => {
     expect(chart3.day.stem).toBe("Bính");
     expect(chart3.day.branch).toBe("Thân");
   });
+
+  it("Kinh độ Hà Nội vs TP.HCM cho chi giờ khác nhau ở ranh giới canh giờ 23h", () => {
+    // Regression test: chứng minh kinh độ (nay chọn qua dropdown tỉnh/thành thay vì
+    // nhập tay) vẫn được truyền vào engine và ảnh hưởng tới việc an chi giờ.
+    // TST = UTC + kinh độ * 4 phút (tắt Equation of Time để phép tính chính xác, dễ kiểm).
+    // Hà Nội: 105.85 * 4 = 423.4 phút. TP.HCM: 106.70 * 4 = 426.8 phút. Lệch nhau 3.4 phút.
+    // Chọn UTC = 15:55:36 để TST Hà Nội = 22:59:00 (giờ Hợi, 21:00-23:00)
+    // và TST TP.HCM = 23:02:24 (giờ Tý, 23:00-01:00) -> hai bên ranh giới 23h.
+    const date = new Date(Date.UTC(2024, 5, 15, 15, 55, 36));
+    const conventions = { ...DEFAULT_CONVENTIONS, useEquationOfTime: false };
+
+    const chartHaNoi = calculateBaziPillars(date, 105.85, 420, "M", conventions);
+    const chartHcm = calculateBaziPillars(date, 106.70, 420, "M", conventions);
+
+    expect(chartHaNoi.hour.branch).toBe("Hợi");
+    expect(chartHcm.hour.branch).toBe("Tý");
+    expect(chartHaNoi.hour.branch).not.toBe(chartHcm.hour.branch);
+  });
 });
