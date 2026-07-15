@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type {
   ChartData,
   ChartPhiFlow,
@@ -9,6 +10,8 @@ import { getEngine, SCHOOL_LABEL } from "@/lib/ziwei/chart";
 import {
   compareNatalBeforeAnnual,
   isBeneficStar,
+  isStrongBrightness,
+  starDisplayOpacity,
   starTier,
 } from "@/lib/ziwei/star-classification";
 
@@ -74,6 +77,15 @@ function tierClass(star: ChartStar): string {
   return tier === 1 ? "" : ` is-tier-${tier}`;
 }
 
+// Độ sáng miếu/vượng/hãm áp SAU màu ngũ hành (mobile-element-*) — chỉ đổi
+// opacity (đã kết hợp tầng bậc) và độ đậm, không đổi màu. Nhãn chữ brightness
+// giữ nguyên như cũ.
+function starVisualStyle(star: ChartStar): CSSProperties {
+  const style: CSSProperties = { opacity: starDisplayOpacity(star) };
+  if (isStrongBrightness(star.brightness)) style.fontWeight = 800;
+  return style;
+}
+
 function Stars({
   stars,
   school,
@@ -89,6 +101,7 @@ function Stars({
       {stars.map((star, index) => (
         <span
           className={`mobile-star${elementClass(star.name, school)}${tierClass(star)}`}
+          style={starVisualStyle(star)}
           key={`${star.name}-${star.source ?? ""}-${index}`}
         >
           {star.name}

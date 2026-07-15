@@ -163,3 +163,23 @@ export function starTier(star: ChartStar): StarTier {
   if (TIER2_NAMES.has(baseStarName(star.name))) return 2;
   return 3;
 }
+
+const TIER_OPACITY: Record<StarTier, number> = { 1: 1, 2: 0.9, 3: 0.62 };
+
+// Chỉ ĐỌC star.brightness (đã tính sẵn ở engine) để đổi độ mờ — không đụng
+// bảng BRIGHTNESS hay cách xác định miếu/hãm. Hãm là sao yếu, cho trông yếu
+// hẳn; Miếu/Vượng/Đắc/Bình giữ chói đầy đủ (không mờ thêm).
+export function brightnessOpacityFactor(brightness?: string): number {
+  return brightness === "Hãm" ? 0.68 : 1;
+}
+
+export function isStrongBrightness(brightness?: string): boolean {
+  return brightness === "Miếu" || brightness === "Vượng";
+}
+
+// Kết hợp tầng bậc (Commit 2) với độ sáng miếu/hãm (Commit 3): nhân hai hệ
+// số, sàn 0.5 để không bao giờ mờ tới mức mất chữ trên nền tối.
+export function starDisplayOpacity(star: ChartStar): number {
+  const tierOpacity = TIER_OPACITY[starTier(star)];
+  return Math.max(0.5, tierOpacity * brightnessOpacityFactor(star.brightness));
+}

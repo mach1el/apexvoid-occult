@@ -2,6 +2,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type RefObject,
 } from "react";
@@ -11,6 +12,8 @@ import {
   compareNatalBeforeAnnual,
   isAnnualStar,
   isBeneficStar,
+  isStrongBrightness,
+  starDisplayOpacity,
   starTier,
 } from "@/lib/ziwei/star-classification";
 import type {
@@ -273,6 +276,15 @@ function starTierClass(star: ChartStar): string {
   return tier === 1 ? "" : ` is-tier-${tier}`;
 }
 
+// Độ sáng miếu/vượng/hãm áp SAU màu ngũ hành — không đổi fill, chỉ đổi
+// opacity (kết hợp sẵn với tầng bậc) và độ đậm. Nhãn chữ (M/V/Đ/B/H) giữ
+// nguyên như cũ, đây chỉ là tín hiệu thị giác bổ sung.
+function starVisualStyle(star: ChartStar): CSSProperties {
+  const style: CSSProperties = { opacity: starDisplayOpacity(star) };
+  if (isStrongBrightness(star.brightness)) style.fontWeight = 900;
+  return style;
+}
+
 function Palace({
   palace,
   school,
@@ -359,6 +371,7 @@ function Palace({
             textAnchor="middle"
             className={`compact-major-star${starTierClass(star)}`}
             fill={starColor(star, school)}
+            style={starVisualStyle(star)}
             key={`${star.name}-${index}`}
           >
             {star.name}
@@ -383,6 +396,7 @@ function Palace({
             y={minorStartY + rowIndex * 13}
             className={`compact-minor-star${starTierClass(star)}`}
             fill={starColor(star, school)}
+            style={starVisualStyle(star)}
             key={`${star.name}-${star.source ?? ""}-${columnIndex}-${rowIndex}`}
           >
             {compactName(star)}
