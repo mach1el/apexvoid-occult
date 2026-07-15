@@ -133,14 +133,14 @@ export function BaziPage() {
           {chart && (
             <button
               onClick={copyChart}
-              className="text-sm bg-white/5 hover:bg-white/10 border border-white/10 rounded px-3 py-1.5 transition-colors whitespace-nowrap text-paper"
+              className="text-sm bg-[var(--surface-1)] hover:bg-[var(--state-hover)] border border-[var(--border-subtle)] rounded px-3 py-1.5 transition-colors whitespace-nowrap text-paper"
             >
               {copyLabel}
             </button>
           )}
         </header>
 
-        <section className="bg-ink rounded-lg p-3 lg:p-6 border border-white/5 grid grid-cols-2 gap-3 items-stretch lg:flex lg:flex-row lg:gap-4 lg:items-end">
+        <section className="bg-ink rounded-lg p-3 lg:p-6 border border-[var(--border-subtle)] grid grid-cols-2 gap-3 items-stretch lg:flex lg:flex-row lg:gap-4 lg:items-end">
           <div className="col-span-2 flex flex-col gap-1 lg:flex-[2] lg:min-w-[280px]">
             <label className="text-xs text-muted uppercase tracking-wider">Ngày Giờ Sinh (DL)</label>
             <div className="flex gap-2">
@@ -149,14 +149,14 @@ export function BaziPage() {
                 placeholder="Ngày/Tháng/Năm"
                 value={dateInput}
                 onChange={(e) => setDateInput(e.target.value)}
-                className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none flex-1 min-w-0"
+                className="bg-void border border-[var(--border-subtle)] rounded px-3 py-2 text-sm focus:border-gold outline-none flex-1 min-w-0"
               />
               <input
                 type="text"
                 placeholder="HH:mm"
                 value={timeInput}
                 onChange={(e) => setTimeInput(e.target.value)}
-                className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none w-24 flex-shrink-0 text-center"
+                className="bg-void border border-[var(--border-subtle)] rounded px-3 py-2 text-sm focus:border-gold outline-none w-24 flex-shrink-0 text-center"
               />
             </div>
           </div>
@@ -165,7 +165,7 @@ export function BaziPage() {
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value as "M" | "F")}
-              className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none w-full"
+              className="bg-void border border-[var(--border-subtle)] rounded px-3 py-2 text-sm focus:border-gold outline-none w-full"
             >
               <option value="M">Nam</option>
               <option value="F">Nữ</option>
@@ -176,7 +176,7 @@ export function BaziPage() {
             <select
               value={provinceCode}
               onChange={(e) => setProvinceCode(e.target.value)}
-              className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none w-full"
+              className="bg-void border border-[var(--border-subtle)] rounded px-3 py-2 text-sm focus:border-gold outline-none w-full"
             >
               {PROVINCES.map((p) => (
                 <option key={p.code} value={p.code}>
@@ -192,7 +192,7 @@ export function BaziPage() {
                 value={manualLongitude}
                 onChange={(e) => setManualLongitude(parseFloat(e.target.value))}
                 placeholder="Kinh độ (độ)"
-                className="mt-1 bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none w-full"
+                className="mt-1 bg-void border border-[var(--border-subtle)] rounded px-3 py-2 text-sm focus:border-gold outline-none w-full"
               />
             )}
           </div>
@@ -203,7 +203,7 @@ export function BaziPage() {
             <select
               value={timezone}
               onChange={(e) => setTimezone(parseInt(e.target.value, 10))}
-              className="bg-void border border-white/10 rounded px-3 py-2 text-sm focus:border-gold outline-none w-full"
+              className="bg-void border border-[var(--border-subtle)] rounded px-3 py-2 text-sm focus:border-gold outline-none w-full"
             >
               <option value={7}>UTC+7 (Mặc định)</option>
               <option value={8}>UTC+8 (Miền Nam 1959-1975)</option>

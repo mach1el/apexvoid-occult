@@ -9,7 +9,7 @@ export function SupportButton() {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-14 h-14 bg-ink border border-white/20 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:border-gold/50 transition-all z-50 group"
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-14 h-14 bg-ink border border-[var(--border-strong)] rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:border-gold/50 transition-all z-50 group"
         aria-label="Support My Work"
       >
         <span className="text-2xl text-gold group-hover:animate-pulse">❤️</span>
@@ -18,7 +18,7 @@ export function SupportButton() {
       {/* Modal Overlay */}
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-void/80 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-sm bg-ink border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl shadow-gold/5 animate-in zoom-in-95 duration-200">
+          <div className="relative w-full max-w-sm bg-ink border border-[var(--border-subtle)] rounded-2xl p-6 md:p-8 shadow-2xl shadow-gold/5 animate-in zoom-in-95 duration-200">
             {/* Close Button */}
             <button
               onClick={() => setIsOpen(false)}
@@ -50,7 +50,7 @@ export function SupportButton() {
               </div>
 
               {/* VietQR Image */}
-              <div className="mx-auto border border-white/10 rounded-xl overflow-hidden bg-white/5 p-2 w-full max-w-[240px]">
+              <div className="mx-auto border border-[var(--border-subtle)] rounded-xl overflow-hidden bg-[var(--surface-1)] p-2 w-full max-w-[240px]">
                 <img
                   src={donateQr}
                   alt="VietQR Donate"

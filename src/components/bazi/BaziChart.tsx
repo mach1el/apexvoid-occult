@@ -28,7 +28,7 @@ function StarPill({ star }: { star: SymbolicStar }) {
   return (
     <span
       title={STAR_SOURCE_LABEL[star.sourceType]}
-      className="inline-flex flex-col items-center text-[11px] bg-white/10 px-1.5 py-0.5 rounded text-paper/80 leading-tight"
+      className="inline-flex flex-col items-center text-[11px] bg-[var(--surface-2)] px-1.5 py-0.5 rounded text-paper/80 leading-tight"
     >
       <span>{star.name}</span>
       <span className="text-[8px] text-muted/50">{STAR_SOURCE_LABEL[star.sourceType]}</span>
@@ -78,12 +78,12 @@ function PillarColumn({
   return (
     <div
       data-testid={`pillar-column-${pillarKey}`}
-      className={`flex flex-col border rounded-lg overflow-hidden bg-[#0d0b14] ${
-        isDayPillar ? "border-gold/50 shadow-[0_0_15px_rgba(223,189,109,0.1)]" : "border-white/10"
+      className={`flex flex-col border rounded-lg overflow-hidden bg-[var(--surface-1)] ${
+        isDayPillar ? "border-gold/50 shadow-[0_0_15px_rgba(223,189,109,0.1)]" : "border-[var(--border-subtle)]"
       }`}
     >
       <div className={`py-1.5 text-center text-xs font-semibold tracking-wider uppercase ${
-        isDayPillar ? "bg-gold/10 text-gold" : "bg-white/5 text-muted border-b border-white/10"
+        isDayPillar ? "bg-gold/10 text-gold" : "bg-[var(--surface-2)] text-muted border-b border-[var(--border-subtle)]"
       }`}>
         {title}
       </div>
@@ -117,10 +117,10 @@ function PillarColumn({
         </div>
       </div>
 
-      <div className="h-px bg-white/10 mx-2" />
+      <div className="h-px bg-[var(--border-subtle)] mx-2" />
 
       {/* Tàng Can & Thập Thần, xếp theo trọng số Bản khí > Trung khí > Dư khí */}
-      <div className="p-1.5 lg:p-2 text-center flex flex-col gap-1 lg:gap-1.5 bg-white/[0.02]">
+      <div className="p-1.5 lg:p-2 text-center flex flex-col gap-1 lg:gap-1.5 bg-[var(--surface-1)]">
         <div className="text-[10px] uppercase text-muted/50 tracking-widest pb-0.5">Tàng Can</div>
         {detail.hiddenStems.map((hidden, i) => {
           const style = HIDDEN_STEM_STYLE[hidden.type] ?? FALLBACK_HIDDEN_STEM_STYLE;
@@ -136,17 +136,17 @@ function PillarColumn({
         })}
       </div>
 
-      <div className="h-px bg-white/10 mx-2" />
+      <div className="h-px bg-[var(--border-subtle)] mx-2" />
 
       {/* Trường Sinh */}
-      <div className="px-2 py-1 lg:px-3 lg:py-1.5 flex justify-between items-center text-xs bg-white/[0.02]">
+      <div className="px-2 py-1 lg:px-3 lg:py-1.5 flex justify-between items-center text-xs bg-[var(--surface-1)]">
         <span className="text-muted/50 uppercase tracking-widest text-[9px]">Trường Sinh</span>
         <span className="text-right text-paper/90 font-medium" data-testid="life-stage">
           {detail.lifeStage}
         </span>
       </div>
 
-      <div className="h-px bg-white/10 mx-2" />
+      <div className="h-px bg-[var(--border-subtle)] mx-2" />
 
       {/* Thông tin phụ */}
       <div className="p-2 lg:p-2.5 text-xs flex flex-col gap-1 lg:gap-1.5 bg-black/20 flex-1">
@@ -159,7 +159,7 @@ function PillarColumn({
           <span className="text-right text-paper/80">{detail.isVoid ? voids.join(" · ") : "-"}</span>
         </div>
         {detail.stars.length > 0 && (
-          <div className="pt-1.5 mt-0.5 border-t border-white/5">
+          <div className="pt-1.5 mt-0.5 border-t border-[var(--border-subtle)]">
             <div className="text-[9px] uppercase tracking-widest text-muted/50 mb-1">Thần Sát</div>
             <div className="flex flex-wrap gap-1">
               {detail.stars.map((s, i) => (
@@ -175,8 +175,8 @@ function PillarColumn({
 
 function VoidCard({ voids }: { voids: [string, string] }) {
   return (
-    <div className="border border-white/10 rounded-lg p-3 bg-[#0d0b14]">
-      <div className="text-xs uppercase text-muted tracking-wide border-b border-white/5 pb-1 mb-2">
+    <div className="border border-[var(--border-subtle)] rounded-lg p-3 bg-[var(--surface-1)]">
+      <div className="text-xs uppercase text-muted tracking-wide border-b border-[var(--border-subtle)] pb-1 mb-2">
         Không Vong (Tuần Không)
       </div>
       <div className="text-sm text-paper/80">
@@ -189,8 +189,8 @@ function VoidCard({ voids }: { voids: [string, string] }) {
 
 function DerivedInfoCard({ detail }: { detail: DerivedPillarDetail }) {
   return (
-    <div className="border border-white/10 rounded-lg p-3 bg-[#0d0b14]">
-      <div className="text-xs uppercase text-muted tracking-wide border-b border-white/5 pb-1 mb-2">
+    <div className="border border-[var(--border-subtle)] rounded-lg p-3 bg-[var(--surface-1)]">
+      <div className="text-xs uppercase text-muted tracking-wide border-b border-[var(--border-subtle)] pb-1 mb-2">
         {detail.name}
       </div>
       <div className="flex items-center gap-2 mb-2">
@@ -258,7 +258,7 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
       {/* Dụng Thần & Radar */}
       <section>
         <h2 className="text-xl font-display text-paper mb-4">Phân Tích Ngũ Hành & Dụng Thần</h2>
-        <div className="border border-white/10 rounded-lg p-5 lg:p-6 bg-ink flex flex-col lg:flex-row gap-8 items-center lg:items-start">
+        <div className="border border-[var(--border-subtle)] rounded-lg p-5 lg:p-6 bg-ink flex flex-col lg:flex-row gap-8 items-center lg:items-start">
           <div className="flex-1 space-y-5 w-full">
             <div className="flex items-center gap-3">
               <span className={`px-2 py-1 rounded text-xs uppercase tracking-wide font-medium
@@ -286,7 +286,7 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
               </div>
             )}
 
-            <div className="mt-4 border-t border-white/10 pt-4">
+            <div className="mt-4 border-t border-[var(--border-subtle)] pt-4">
               <button 
                 onClick={() => setShowYongShenCalc(!showYongShenCalc)}
                 className="text-xs text-muted hover:text-paper flex items-center gap-1"
@@ -365,11 +365,11 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
                   data-testid="luck-pillar-tile"
                   onClickCapture={dragScroll.onClickCapture}
                   className={`flex flex-col border rounded-lg overflow-hidden text-center transition-all ${
-                    active ? "border-gold/80 ring-2 ring-gold/40 bg-gold/10 scale-105 z-10 shadow-lg" : "border-white/10 bg-black/30 hover:bg-black/10"
+                    active ? "border-gold/80 ring-2 ring-gold/40 bg-gold/10 scale-105 z-10 shadow-lg" : "border-[var(--border-subtle)] bg-black/30 hover:bg-black/10"
                   }`}
                 >
                   <div className={`py-1.5 px-1 text-[10px] uppercase tracking-wider font-semibold whitespace-nowrap ${
-                    active ? "bg-gold/20 text-gold" : "bg-white/5 text-muted border-b border-white/10"
+                    active ? "bg-gold/20 text-gold" : "bg-[var(--surface-2)] text-muted border-b border-[var(--border-subtle)]"
                   }`}>
                     Tuổi {lp.startAgeYear} {lp.startAgeMonth ? `${lp.startAgeMonth} tháng` : ""}
                   </div>
@@ -390,7 +390,7 @@ export function BaziChart({ chart }: { chart: BaziFullChart }) {
                     <div className="text-[10px] text-muted/60 uppercase tracking-widest mt-1">{lp.lifeStage}</div>
                   </div>
                   <div className={`py-1.5 text-[11px] font-mono ${
-                    active ? "bg-gold/10 text-gold font-bold" : "bg-white/5 text-muted/60 border-t border-white/10"
+                    active ? "bg-gold/10 text-gold font-bold" : "bg-[var(--surface-2)] text-muted/60 border-t border-[var(--border-subtle)]"
                   }`}>
                     {lp.startDate.getFullYear()}
                   </div>

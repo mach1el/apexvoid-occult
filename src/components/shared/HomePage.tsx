@@ -68,7 +68,7 @@ const accentClasses = {
 
 export function HomePage() {
   return (
-    <div className="home-noise min-h-screen overflow-hidden bg-void text-paper">
+    <div className="min-h-screen bg-void text-paper">
       <main className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-16 sm:px-8">
         <header className="flex min-h-[58vh] flex-col items-center justify-center py-20 text-center">
           <div className="mb-8 grid size-24 -rotate-3 place-items-center rounded-2xl border-2 border-cinnabar/85 bg-cinnabar/5 font-han text-5xl font-black text-cinnabar shadow-[inset_0_0_28px_rgba(213,83,66,.12),0_0_45px_rgba(213,83,66,.08)] sm:size-28 sm:text-6xl">
@@ -83,7 +83,7 @@ export function HomePage() {
         </header>
 
         <section aria-labelledby="explore-heading">
-          <div className="mb-7 flex items-end justify-between gap-4 border-b border-white/10 pb-5">
+          <div className="mb-7 flex items-end justify-between gap-4 border-b border-[var(--border-subtle)] pb-5">
             <div>
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-muted">
                 Khám phá
@@ -107,7 +107,7 @@ export function HomePage() {
                 <a
                   key={feature.href}
                   href={feature.href}
-                  className={`feature-card group relative isolate min-h-72 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.07] to-white/[0.025] p-7 text-inherit shadow-2xl shadow-black/20 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-white/[0.08] sm:p-9 ${accent.border} ${feature.wide ? "md:col-span-2 md:min-h-64" : ""}`}
+                  className={`feature-card group relative isolate min-h-72 overflow-hidden rounded-3xl border border-[var(--border-subtle)] bg-gradient-to-br from-white/[0.07] to-white/[0.025] p-7 text-inherit shadow-2xl shadow-black/20 backdrop-blur-sm transition duration-300 hover:-translate-y-1 hover:bg-[var(--state-hover)] sm:p-9 ${accent.border} ${feature.wide ? "md:col-span-2 md:min-h-64" : ""}`}
                   style={
                     {
                       "--card-glow": accent.glow,
@@ -147,7 +147,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <footer className="mt-16 border-t border-white/10 pt-7 text-center text-xs text-muted">
+        <footer className="mt-16 border-t border-[var(--border-subtle)] pt-7 text-center text-xs text-muted">
           © 2026 ApexVoid. All rights reserved.
         </footer>
       </main>
