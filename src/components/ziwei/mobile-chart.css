@@ -310,14 +310,15 @@
   }
 
   /* Tầng bậc thị giác — tầng 1 (chính tinh) không cần class, đã nổi qua
-     .mobile-star-list.is-major. Tầng 2 nhạt nhẹ, tầng 3 (tạp diệu + lưu sao)
-     lùi hẳn nhưng vẫn đọc được (sàn 0.62). */
+     .mobile-star-list.is-major. Tầng 2 nhạt rất nhẹ, tầng 3 (tạp diệu + lưu
+     sao) lùi xuống nền nhưng vẫn sáng rõ (nâng 1 tông so với bản đầu — xem
+     src/lib/ziwei/star-classification.ts TIER_OPACITY). */
   .mobile-star.is-tier-2 {
-    opacity: 0.9;
+    opacity: 0.96;
   }
 
   .mobile-star.is-tier-3 {
-    opacity: 0.62;
+    opacity: 0.75;
   }
 
   .mobile-brightness,

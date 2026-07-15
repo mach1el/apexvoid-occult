@@ -135,4 +135,17 @@ describe("starDisplayOpacity", () => {
     const opacity = starDisplayOpacity({ name: "Thiên Khốc", layer: "tough", brightness: "Hãm" });
     expect(opacity).toBeGreaterThanOrEqual(0.5);
   });
+
+  it("tầng 2/3 sáng hơn 1 tông so với bản đầu, vẫn phân biệt được với tầng 1", () => {
+    const tier1 = starDisplayOpacity({ name: "Tử Vi", layer: "major" });
+    const tier2 = starDisplayOpacity({ name: "Tả Phụ", layer: "helper" });
+    const tier3 = starDisplayOpacity({ name: "Thiên Khốc", layer: "tough" });
+
+    // Sáng hơn giá trị cũ (0.9 / 0.62) — đây là fix "sáng lên 1 tone".
+    expect(tier2).toBeGreaterThan(0.9);
+    expect(tier3).toBeGreaterThan(0.62);
+    // Vẫn giữ thứ bậc tầng 1 > tầng 2 > tầng 3 để không mất phân cấp thị giác.
+    expect(tier1).toBeGreaterThan(tier2);
+    expect(tier2).toBeGreaterThan(tier3);
+  });
 });

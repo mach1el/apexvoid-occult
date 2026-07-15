@@ -285,14 +285,15 @@
 }
 
 /* Tầng bậc thị giác — tầng 1 (chính tinh) không cần class, đã đủ nổi.
-   Tầng 2 (phụ tinh chính) nhạt nhẹ, tầng 3 (tạp diệu + lưu sao) lùi hẳn
-   xuống nền nhưng vẫn đọc được (sàn 0.62, không xuống dưới 0.55). */
+   Tầng 2 (phụ tinh chính) nhạt rất nhẹ, tầng 3 (tạp diệu + lưu sao) lùi
+   xuống nền nhưng vẫn sáng rõ (nâng 1 tông so với bản đầu — xem
+   src/lib/ziwei/star-classification.ts TIER_OPACITY). */
 .compact-minor-star.is-tier-2 {
-  opacity: 0.9;
+  opacity: 0.96;
 }
 
 .compact-minor-star.is-tier-3 {
-  opacity: 0.62;
+  opacity: 0.75;
 }
 
 .compact-palace-footer {
