@@ -11,6 +11,7 @@ import {
   compareNatalBeforeAnnual,
   isAnnualStar,
   isBeneficStar,
+  starTier,
 } from "@/lib/ziwei/star-classification";
 import type {
   ChartData,
@@ -267,6 +268,11 @@ export function starColor(star: ChartStar, school: School): string {
   );
 }
 
+function starTierClass(star: ChartStar): string {
+  const tier = starTier(star);
+  return tier === 1 ? "" : ` is-tier-${tier}`;
+}
+
 function Palace({
   palace,
   school,
@@ -351,7 +357,7 @@ function Palace({
             x="90"
             y={marks.length ? 51 + index * 17 : 39 + index * 17}
             textAnchor="middle"
-            className="compact-major-star"
+            className={`compact-major-star${starTierClass(star)}`}
             fill={starColor(star, school)}
             key={`${star.name}-${index}`}
           >
@@ -375,7 +381,7 @@ function Palace({
           <text
             x={columnIndex === 0 ? 9 : 94}
             y={minorStartY + rowIndex * 13}
-            className="compact-minor-star"
+            className={`compact-minor-star${starTierClass(star)}`}
             fill={starColor(star, school)}
             key={`${star.name}-${star.source ?? ""}-${columnIndex}-${rowIndex}`}
           >

@@ -269,7 +269,7 @@
 }
 
 .compact-major-star {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
 }
 
@@ -282,6 +282,17 @@
 .compact-minor-star {
   font-size: 10.4px;
   font-weight: 600;
+}
+
+/* Tầng bậc thị giác — tầng 1 (chính tinh) không cần class, đã đủ nổi.
+   Tầng 2 (phụ tinh chính) nhạt nhẹ, tầng 3 (tạp diệu + lưu sao) lùi hẳn
+   xuống nền nhưng vẫn đọc được (sàn 0.62, không xuống dưới 0.55). */
+.compact-minor-star.is-tier-2 {
+  opacity: 0.9;
+}
+
+.compact-minor-star.is-tier-3 {
+  opacity: 0.62;
 }
 
 .compact-palace-footer {

@@ -309,6 +309,17 @@
     background: rgb(120 174 234 / 8%);
   }
 
+  /* Tầng bậc thị giác — tầng 1 (chính tinh) không cần class, đã nổi qua
+     .mobile-star-list.is-major. Tầng 2 nhạt nhẹ, tầng 3 (tạp diệu + lưu sao)
+     lùi hẳn nhưng vẫn đọc được (sàn 0.62). */
+  .mobile-star.is-tier-2 {
+    opacity: 0.9;
+  }
+
+  .mobile-star.is-tier-3 {
+    opacity: 0.62;
+  }
+
   .mobile-brightness,
   .mobile-target {
     color: var(--muted);

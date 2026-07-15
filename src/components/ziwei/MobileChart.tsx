@@ -9,6 +9,7 @@ import { getEngine, SCHOOL_LABEL } from "@/lib/ziwei/chart";
 import {
   compareNatalBeforeAnnual,
   isBeneficStar,
+  starTier,
 } from "@/lib/ziwei/star-classification";
 
 interface MobileChartProps {
@@ -68,6 +69,11 @@ function elementClass(name: string, school: School): string {
   return element ? ` mobile-element-${element.toLowerCase()}` : "";
 }
 
+function tierClass(star: ChartStar): string {
+  const tier = starTier(star);
+  return tier === 1 ? "" : ` is-tier-${tier}`;
+}
+
 function Stars({
   stars,
   school,
@@ -82,7 +88,7 @@ function Stars({
     <div className={`mobile-star-list is-${tone}`}>
       {stars.map((star, index) => (
         <span
-          className={`mobile-star ${elementClass(star.name, school)}`}
+          className={`mobile-star${elementClass(star.name, school)}${tierClass(star)}`}
           key={`${star.name}-${star.source ?? ""}-${index}`}
         >
           {star.name}

@@ -3,6 +3,7 @@ import {
   compareNatalBeforeAnnual,
   isAnnualStar,
   isBeneficStar,
+  starTier,
 } from "./star-classification";
 
 describe("isBeneficStar", () => {
@@ -64,5 +65,33 @@ describe("isBeneficStar", () => {
         source: "annual",
       }),
     ).toBe(true);
+  });
+});
+
+describe("starTier", () => {
+  it("chính tinh (layer major) luôn tầng 1", () => {
+    expect(starTier({ name: "Tử Vi", layer: "major" })).toBe(1);
+    expect(starTier({ name: "Phá Quân", layer: "major", source: "natal" })).toBe(1);
+  });
+
+  it("13 phụ tinh chính theo spec chỉ định luôn tầng 2", () => {
+    expect(starTier({ name: "Tả Phụ", layer: "helper" })).toBe(2);
+    expect(starTier({ name: "Văn Xương", layer: "helper" })).toBe(2);
+    expect(starTier({ name: "Địa Kiếp", layer: "harm" })).toBe(2);
+  });
+
+  it("tạp diệu (không thuộc tầng 1/2) rơi về tầng 3", () => {
+    expect(starTier({ name: "Thiên Khốc", layer: "tough" })).toBe(3);
+    expect(starTier({ name: "Đào Hoa", layer: "romance" })).toBe(3);
+    expect(starTier({ name: "Lưu Hà", layer: "harm", source: "natal" })).toBe(3);
+  });
+
+  it("sao lưu niên/lưu nguyệt luôn tầng 3, dù trùng tên phụ tinh chính tầng 2", () => {
+    expect(
+      starTier({ name: "Lưu Văn Xương", layer: "helper", source: "annual" }),
+    ).toBe(3);
+    expect(
+      starTier({ name: "Lưu Kình Dương", layer: "tough", source: "annual" }),
+    ).toBe(3);
   });
 });

@@ -133,3 +133,33 @@ export function compareNatalBeforeAnnual(
 ): number {
   return Number(isAnnualStar(first)) - Number(isAnnualStar(second));
 }
+
+// Tầng bậc thị giác cho lá số (chỉ ảnh hưởng độ mờ/nổi, KHÔNG đổi dữ liệu lá
+// số). 14 chính tinh lấy từ layer === "major" (metadata engine đã có sẵn).
+// Tầng 2 là danh sách phụ tinh chính do spec chỉ định rõ tên — không tự suy
+// diễn thêm. Lưu sao (tiền tố "Lưu") luôn rơi về tầng 3 dù trùng tên phụ tinh
+// chính, vì đây là bản lưu niên/lưu nguyệt, không phải sao nguyên cục.
+const TIER2_NAMES = new Set([
+  "Tả Phụ",
+  "Hữu Bật",
+  "Văn Xương",
+  "Văn Khúc",
+  "Thiên Khôi",
+  "Thiên Việt",
+  "Lộc Tồn",
+  "Kình Dương",
+  "Đà La",
+  "Hỏa Tinh",
+  "Linh Tinh",
+  "Địa Không",
+  "Địa Kiếp",
+]);
+
+export type StarTier = 1 | 2 | 3;
+
+export function starTier(star: ChartStar): StarTier {
+  if (star.layer === "major") return 1;
+  if (isAnnualStar(star)) return 3;
+  if (TIER2_NAMES.has(baseStarName(star.name))) return 2;
+  return 3;
+}
