@@ -354,17 +354,17 @@ export function ChartPage() {
 
         <main className="shell">
           <aside className="panel birth-panel">
-            <div className="birth-panel-intro">
-              <span className="birth-kicker">Tử Vi Đẩu Số</span>
-              <h1>Lập lá số Tử Vi</h1>
-              <p>Khám phá vận mệnh · Định hướng tương lai</p>
-            </div>
-            <div className="panel-body">
+            <div className="birth-panel-body">
+              <div className="birth-intro">
+                <span className="birth-kicker">Tử Vi Đẩu Số</span>
+                <h1>Lập lá số Tử Vi</h1>
+              </div>
+
               <form
                 className="profile-form"
                 onSubmit={(event) => event.preventDefault()}
               >
-                <label className="profile-field profile-field-wide">
+                <label className="profile-field">
                   <FieldIcon name="user" />
                   <span className="sr-only">Họ và tên</span>
                   <input
@@ -378,7 +378,7 @@ export function ChartPage() {
                   />
                 </label>
 
-                <label className="profile-field profile-field-wide">
+                <label className="profile-field">
                   <FieldIcon name="calendar" />
                   <span className="sr-only">Ngày sinh dương lịch</span>
                   <input
@@ -386,14 +386,13 @@ export function ChartPage() {
                     type="text"
                     inputMode="numeric"
                     autoComplete="bday"
-                    placeholder="Ngày / Tháng / Năm"
+                    placeholder="Ngày/Tháng/Năm DL"
                     value={form.solarDate}
                     onChange={fieldChange("solarDate")}
                   />
-                  <span className="field-suffix">Dương lịch</span>
                 </label>
 
-                <label className="profile-field profile-field-wide">
+                <label className="profile-field">
                   <FieldIcon name="clock" />
                   <span className="sr-only">Giờ sinh</span>
                   <select
@@ -489,7 +488,7 @@ export function ChartPage() {
                 <summary>Tùy chọn</summary>
                 <div className="advanced-options-body">
                   <div
-                    className="school-tabs"
+                    className="school-tabs advanced-span-2"
                     role="radiogroup"
                     aria-label="Trường phái"
                   >
@@ -511,64 +510,60 @@ export function ChartPage() {
                       </label>
                     ))}
                   </div>
-                  <div className="advanced-grid">
-                    <label className="advanced-field">
-                      <span>Cách xem vận</span>
-                      <select
-                        name="flowBase"
-                        value={form.flowBase}
-                        onChange={fieldChange("flowBase")}
-                      >
-                        <option value="luu-nien">Lưu Niên</option>
-                        <option value="tieu-han">Tiểu Hạn</option>
-                        <option value="dai-van">Lưu Niên Đại Vận</option>
-                      </select>
-                    </label>
-                    <label className="advanced-field">
-                      <span>Múi giờ</span>
-                      <select
-                        name="timezone"
-                        value={form.timezone}
-                        onChange={fieldChange("timezone")}
-                      >
-                        <option value="7">Việt Nam +7</option>
-                        <option value="8">Trung Quốc +8</option>
-                        <option value="0">Giờ gốc +0</option>
-                      </select>
-                    </label>
-                  </div>
-                  <div className="toggles">
-                    <label className="toggle">
-                      <input
-                        type="checkbox"
-                        checked={form.showMutagens}
-                        onChange={(event) =>
-                          update("showMutagens", event.target.checked)
-                        }
-                      />
-                      Tứ Hóa
-                    </label>
-                    <label className="toggle">
-                      <input
-                        type="checkbox"
-                        checked={form.showPhi}
-                        onChange={(event) =>
-                          update("showPhi", event.target.checked)
-                        }
-                      />
-                      Phi Hóa
-                    </label>
-                    <label className="toggle">
-                      <input
-                        type="checkbox"
-                        checked={form.showAnnual}
-                        onChange={(event) =>
-                          update("showAnnual", event.target.checked)
-                        }
-                      />
-                      Sao lưu
-                    </label>
-                  </div>
+                  <label className="advanced-field">
+                    <span>Cách xem vận</span>
+                    <select
+                      name="flowBase"
+                      value={form.flowBase}
+                      onChange={fieldChange("flowBase")}
+                    >
+                      <option value="luu-nien">Lưu Niên</option>
+                      <option value="tieu-han">Tiểu Hạn</option>
+                      <option value="dai-van">Lưu Niên Đại Vận</option>
+                    </select>
+                  </label>
+                  <label className="advanced-field">
+                    <span>Múi giờ</span>
+                    <select
+                      name="timezone"
+                      value={form.timezone}
+                      onChange={fieldChange("timezone")}
+                    >
+                      <option value="7">Việt Nam +7</option>
+                      <option value="8">Trung Quốc +8</option>
+                      <option value="0">Giờ gốc +0</option>
+                    </select>
+                  </label>
+                  <label className="toggle">
+                    <input
+                      type="checkbox"
+                      checked={form.showMutagens}
+                      onChange={(event) =>
+                        update("showMutagens", event.target.checked)
+                      }
+                    />
+                    Tứ Hóa
+                  </label>
+                  <label className="toggle">
+                    <input
+                      type="checkbox"
+                      checked={form.showPhi}
+                      onChange={(event) =>
+                        update("showPhi", event.target.checked)
+                      }
+                    />
+                    Phi Hóa
+                  </label>
+                  <label className="toggle">
+                    <input
+                      type="checkbox"
+                      checked={form.showAnnual}
+                      onChange={(event) =>
+                        update("showAnnual", event.target.checked)
+                      }
+                    />
+                    Sao lưu
+                  </label>
                 </div>
               </details>
             </div>
