@@ -2,6 +2,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type RefObject,
 } from "react";
@@ -11,6 +12,9 @@ import {
   compareNatalBeforeAnnual,
   isAnnualStar,
   isBeneficStar,
+  isStrongBrightness,
+  starDisplayOpacity,
+  starTier,
 } from "@/lib/ziwei/star-classification";
 import type {
   ChartData,
@@ -247,13 +251,13 @@ function compactName(star: ChartStar): string {
   return name;
 }
 
-function starColor(star: ChartStar, school: School): string {
+export function starColor(star: ChartStar, school: School): string {
   const source = star.source ?? "";
   if (source.endsWith("-mutagen")) {
-    if (star.name.includes("Kỵ")) return "var(--cinnabar)";
-    if (star.name.includes("Lộc")) return "var(--jade)";
-    if (star.name.includes("Quyền")) return "var(--amber)";
-    return "var(--blue)";
+    if (star.name.includes("Kỵ")) return "var(--mutagen-ky)";
+    if (star.name.includes("Lộc")) return "var(--mutagen-loc)";
+    if (star.name.includes("Quyền")) return "var(--mutagen-quyen)";
+    return "var(--mutagen-khoa)";
   }
   const element = getEngine(school)?.elementForStar(star.name);
   return (
@@ -265,6 +269,20 @@ function starColor(star: ChartStar, school: School): string {
       Thổ: "var(--element-tho)",
     }[element ?? ""] ?? "var(--ash)"
   );
+}
+
+function starTierClass(star: ChartStar): string {
+  const tier = starTier(star);
+  return tier === 1 ? "" : ` is-tier-${tier}`;
+}
+
+// Độ sáng miếu/vượng/hãm áp SAU màu ngũ hành — không đổi fill, chỉ đổi
+// opacity (kết hợp sẵn với tầng bậc) và độ đậm. Nhãn chữ (M/V/Đ/B/H) giữ
+// nguyên như cũ, đây chỉ là tín hiệu thị giác bổ sung.
+function starVisualStyle(star: ChartStar): CSSProperties {
+  const style: CSSProperties = { opacity: starDisplayOpacity(star) };
+  if (isStrongBrightness(star.brightness)) style.fontWeight = 900;
+  return style;
 }
 
 function Palace({
@@ -351,8 +369,9 @@ function Palace({
             x="90"
             y={marks.length ? 51 + index * 17 : 39 + index * 17}
             textAnchor="middle"
-            className="compact-major-star"
+            className={`compact-major-star${starTierClass(star)}`}
             fill={starColor(star, school)}
+            style={starVisualStyle(star)}
             key={`${star.name}-${index}`}
           >
             {star.name}
@@ -375,8 +394,9 @@ function Palace({
           <text
             x={columnIndex === 0 ? 9 : 94}
             y={minorStartY + rowIndex * 13}
-            className="compact-minor-star"
+            className={`compact-minor-star${starTierClass(star)}`}
             fill={starColor(star, school)}
+            style={starVisualStyle(star)}
             key={`${star.name}-${star.source ?? ""}-${columnIndex}-${rowIndex}`}
           >
             {compactName(star)}

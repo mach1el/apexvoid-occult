@@ -133,3 +133,53 @@ export function compareNatalBeforeAnnual(
 ): number {
   return Number(isAnnualStar(first)) - Number(isAnnualStar(second));
 }
+
+// Tầng bậc thị giác cho lá số (chỉ ảnh hưởng độ mờ/nổi, KHÔNG đổi dữ liệu lá
+// số). 14 chính tinh lấy từ layer === "major" (metadata engine đã có sẵn).
+// Tầng 2 là danh sách phụ tinh chính do spec chỉ định rõ tên — không tự suy
+// diễn thêm. Lưu sao (tiền tố "Lưu") luôn rơi về tầng 3 dù trùng tên phụ tinh
+// chính, vì đây là bản lưu niên/lưu nguyệt, không phải sao nguyên cục.
+const TIER2_NAMES = new Set([
+  "Tả Phụ",
+  "Hữu Bật",
+  "Văn Xương",
+  "Văn Khúc",
+  "Thiên Khôi",
+  "Thiên Việt",
+  "Lộc Tồn",
+  "Kình Dương",
+  "Đà La",
+  "Hỏa Tinh",
+  "Linh Tinh",
+  "Địa Không",
+  "Địa Kiếp",
+]);
+
+export type StarTier = 1 | 2 | 3;
+
+export function starTier(star: ChartStar): StarTier {
+  if (star.layer === "major") return 1;
+  if (isAnnualStar(star)) return 3;
+  if (TIER2_NAMES.has(baseStarName(star.name))) return 2;
+  return 3;
+}
+
+const TIER_OPACITY: Record<StarTier, number> = { 1: 1, 2: 0.9, 3: 0.62 };
+
+// Chỉ ĐỌC star.brightness (đã tính sẵn ở engine) để đổi độ mờ — không đụng
+// bảng BRIGHTNESS hay cách xác định miếu/hãm. Hãm là sao yếu, cho trông yếu
+// hẳn; Miếu/Vượng/Đắc/Bình giữ chói đầy đủ (không mờ thêm).
+export function brightnessOpacityFactor(brightness?: string): number {
+  return brightness === "Hãm" ? 0.68 : 1;
+}
+
+export function isStrongBrightness(brightness?: string): boolean {
+  return brightness === "Miếu" || brightness === "Vượng";
+}
+
+// Kết hợp tầng bậc (Commit 2) với độ sáng miếu/hãm (Commit 3): nhân hai hệ
+// số, sàn 0.5 để không bao giờ mờ tới mức mất chữ trên nền tối.
+export function starDisplayOpacity(star: ChartStar): number {
+  const tierOpacity = TIER_OPACITY[starTier(star)];
+  return Math.max(0.5, tierOpacity * brightnessOpacityFactor(star.brightness));
+}

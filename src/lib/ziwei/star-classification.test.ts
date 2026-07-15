@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  brightnessOpacityFactor,
   compareNatalBeforeAnnual,
   isAnnualStar,
   isBeneficStar,
+  isStrongBrightness,
+  starDisplayOpacity,
+  starTier,
 } from "./star-classification";
 
 describe("isBeneficStar", () => {
@@ -64,5 +68,71 @@ describe("isBeneficStar", () => {
         source: "annual",
       }),
     ).toBe(true);
+  });
+});
+
+describe("starTier", () => {
+  it("chính tinh (layer major) luôn tầng 1", () => {
+    expect(starTier({ name: "Tử Vi", layer: "major" })).toBe(1);
+    expect(starTier({ name: "Phá Quân", layer: "major", source: "natal" })).toBe(1);
+  });
+
+  it("13 phụ tinh chính theo spec chỉ định luôn tầng 2", () => {
+    expect(starTier({ name: "Tả Phụ", layer: "helper" })).toBe(2);
+    expect(starTier({ name: "Văn Xương", layer: "helper" })).toBe(2);
+    expect(starTier({ name: "Địa Kiếp", layer: "harm" })).toBe(2);
+  });
+
+  it("tạp diệu (không thuộc tầng 1/2) rơi về tầng 3", () => {
+    expect(starTier({ name: "Thiên Khốc", layer: "tough" })).toBe(3);
+    expect(starTier({ name: "Đào Hoa", layer: "romance" })).toBe(3);
+    expect(starTier({ name: "Lưu Hà", layer: "harm", source: "natal" })).toBe(3);
+  });
+
+  it("sao lưu niên/lưu nguyệt luôn tầng 3, dù trùng tên phụ tinh chính tầng 2", () => {
+    expect(
+      starTier({ name: "Lưu Văn Xương", layer: "helper", source: "annual" }),
+    ).toBe(3);
+    expect(
+      starTier({ name: "Lưu Kình Dương", layer: "tough", source: "annual" }),
+    ).toBe(3);
+  });
+});
+
+describe("brightnessOpacityFactor / isStrongBrightness", () => {
+  it("chỉ Hãm mới giảm độ sáng, Miếu/Vượng/Đắc/Bình giữ chói đầy đủ", () => {
+    expect(brightnessOpacityFactor("Hãm")).toBeLessThan(1);
+    expect(brightnessOpacityFactor("Miếu")).toBe(1);
+    expect(brightnessOpacityFactor("Vượng")).toBe(1);
+    expect(brightnessOpacityFactor("Đắc")).toBe(1);
+    expect(brightnessOpacityFactor("Bình")).toBe(1);
+    expect(brightnessOpacityFactor(undefined)).toBe(1);
+    expect(brightnessOpacityFactor("")).toBe(1);
+  });
+
+  it("Miếu/Vượng được đánh dấu 'mạnh', các mức khác không", () => {
+    expect(isStrongBrightness("Miếu")).toBe(true);
+    expect(isStrongBrightness("Vượng")).toBe(true);
+    expect(isStrongBrightness("Đắc")).toBe(false);
+    expect(isStrongBrightness("Bình")).toBe(false);
+    expect(isStrongBrightness("Hãm")).toBe(false);
+  });
+});
+
+describe("starDisplayOpacity", () => {
+  it("chính tinh Hãm vẫn rõ hơn tạp diệu Hãm, nhưng cả hai mờ hơn khi bình thường", () => {
+    const majorNormal = starDisplayOpacity({ name: "Tử Vi", layer: "major", brightness: "Miếu" });
+    const majorHam = starDisplayOpacity({ name: "Tử Vi", layer: "major", brightness: "Hãm" });
+    const miscNormal = starDisplayOpacity({ name: "Thiên Khốc", layer: "tough" });
+    const miscHam = starDisplayOpacity({ name: "Thiên Khốc", layer: "tough", brightness: "Hãm" });
+
+    expect(majorHam).toBeLessThan(majorNormal);
+    expect(miscHam).toBeLessThan(miscNormal);
+    expect(majorHam).toBeGreaterThan(miscHam);
+  });
+
+  it("không bao giờ mờ dưới sàn 0.5 dù kết hợp tầng 3 + Hãm", () => {
+    const opacity = starDisplayOpacity({ name: "Thiên Khốc", layer: "tough", brightness: "Hãm" });
+    expect(opacity).toBeGreaterThanOrEqual(0.5);
   });
 });
