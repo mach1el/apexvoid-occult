@@ -46,6 +46,12 @@ describe("page-level scheme tokens (src/styles.css :root)", () => {
     expect(s1).not.toBe(s3);
   });
 
+  it("gives body an explicit void background (defensive edge/overscroll hardening)", () => {
+    const bodyBlock = globalStylesCss.match(/\nbody\s*\{([^}]*)\}/);
+    expect(bodyBlock).not.toBeNull();
+    expect(bodyBlock![1]).toMatch(/background:\s*var\(--color-void\)/);
+  });
+
   it("does not repurpose ngũ hành/tứ hóa tokens as context colors", () => {
     // Token khung cảnh (context) phải tách biệt khỏi token dữ liệu ngũ hành —
     // không token nào ở nhóm surface/border/text/state trỏ lại var(--element-*)

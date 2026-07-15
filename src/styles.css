@@ -79,6 +79,11 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  /* Phòng vệ mép overscroll: html đã có background void nên canvas không lộ
+     màu lạ trong thực tế hiện tại (đã kiểm, không có background vàng nào rải
+     rác) — khai báo tường minh ở đây để body không mặc định phụ thuộc vào
+     hành vi "canvas background" của html khi nó thay đổi trong tương lai. */
+  background: var(--color-void);
 }
 
 button,
