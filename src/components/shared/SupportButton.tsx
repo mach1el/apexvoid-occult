@@ -43,8 +43,8 @@ export function SupportButton() {
               </svg>
             </button>
 
-            <div className="space-y-6 text-center">
-              <div className="space-y-2">
+            <div className="flex w-full flex-col items-center gap-6 text-center">
+              <div className="w-full space-y-2">
                 <h2 className="support-title bg-gradient-to-br from-[#fff1c4] via-[var(--color-gold)] to-[#c9963a] bg-clip-text font-serif text-2xl font-bold text-transparent">
                   Support My Work
                 </h2>
@@ -54,11 +54,11 @@ export function SupportButton() {
               </div>
 
               {/* VietQR Image */}
-              <div className="mx-auto w-full max-w-[240px] overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-1)] p-2">
+              <div className="w-full max-w-[240px] shrink-0 overflow-hidden rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-1)] p-2">
                 <img
                   src={donateQr}
                   alt="VietQR Donate"
-                  className="h-auto w-full rounded-lg"
+                  className="mx-auto block h-auto w-full rounded-lg"
                 />
               </div>
 
@@ -67,7 +67,7 @@ export function SupportButton() {
                 href="https://paypal.me/stmichael01"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex w-full items-center justify-center gap-2 rounded-lg border border-transparent bg-[#00457C] px-4 py-3 font-medium text-white transition-colors hover:bg-[#0079C1]"
+                className="flex w-full max-w-none self-stretch items-center justify-center gap-2 rounded-lg border border-transparent bg-[#00457C] px-4 py-3 font-medium text-white transition-colors hover:bg-[#0079C1]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
