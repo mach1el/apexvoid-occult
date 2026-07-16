@@ -27,9 +27,9 @@
 @media (min-width: 1360px) {
   .shell {
     width: 100%;
-    max-width: 1960px;
+    max-width: none;
     margin-inline: auto;
-    grid-template-columns: minmax(860px, 980px) minmax(620px, 1fr);
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
     grid-template-rows: auto auto;
     gap: 16px;
     align-items: stretch;
@@ -166,17 +166,16 @@
     padding: 12px;
   }
 
-  /* Specificity bump: base `.compact-chart-capture` (min(100%,900px)) sits
-     later in the file, nên phải đặc tả hơn để lá số scale full cột đã mở rộng. */
+  /* Scale theo đúng bề rộng cột để màn hình lớn không làm lá số bị co nhỏ. */
   .shell .compact-chart-capture {
-    width: fit-content;
-    max-width: 100%;
+    width: 100%;
+    max-width: none;
   }
 
   .shell .compact-chart-svg {
-    width: auto;
-    max-width: 100%;
-    height: min(calc(100svh - 88px), 900px);
+    width: 100%;
+    max-width: none;
+    height: auto;
     max-height: none;
   }
 
