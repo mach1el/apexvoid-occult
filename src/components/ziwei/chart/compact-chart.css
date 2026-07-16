@@ -326,8 +326,15 @@
 
 .compact-phi-flow {
   fill: var(--violet);
-  font-size: 6.8px;
-  font-weight: 750;
+  /* Sans rõ hơn serif Noto của SVG cha — chữ L/Q/Kh→cung dễ đọc ở đáy cung */
+  font-family: var(--font-stars-minor), var(--font-chat), sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.25px;
+  paint-order: stroke fill;
+  stroke: rgb(8 9 28 / 78%);
+  stroke-width: 2.4px;
+  stroke-linejoin: round;
 }
 
 .compact-phi-flow.is-lộc {

@@ -360,9 +360,12 @@
   .mobile-phi-section span {
     border: 1px solid rgb(180 155 255 / 28%);
     border-radius: 999px;
-    padding: 3px 7px;
+    padding: 4px 8px;
     color: var(--violet);
-    font-size: 0.68rem;
+    font-family: var(--font-stars-minor), var(--font-chat), sans-serif;
+    font-size: 0.78rem;
+    font-weight: 650;
+    letter-spacing: 0.02em;
   }
 
   .mobile-palace-meta {
