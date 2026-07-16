@@ -16,6 +16,11 @@ import {
   getEngine,
   serializeChart,
 } from "@/lib/ziwei/chart";
+import {
+  getDaiVanTrend,
+  getLuuNienTrend,
+  type TrendPoint,
+} from "@/lib/ziwei/trend-score";
 import type {
   BirthInput,
   ChartData,
@@ -25,6 +30,7 @@ import type {
 import { AiChat } from "./AiChat";
 import { CompactChart } from "./CompactChart";
 import { MobileChart } from "./MobileChart";
+import { TrendChart } from "./TrendChart";
 
 const HOUR_BRANCHES = [
   "Tý",
@@ -194,6 +200,9 @@ export function ChartPage() {
   const [mobileMode, setMobileMode] = useState<MobileChartMode>("compact");
   const [copyState, setCopyState] = useState<Notice>("idle");
   const [imageState, setImageState] = useState<Notice>("idle");
+  const [selectedTrendPoint, setSelectedTrendPoint] = useState<TrendPoint | null>(
+    null,
+  );
   const compactChartRef = useRef<HTMLDivElement>(null);
   const birthInput = useMemo(
     () => buildBirthInput(form),
@@ -205,6 +214,21 @@ export function ChartPage() {
       form.solarDate,
       form.timezone,
     ],
+  );
+
+  const daiVanTrend = useMemo(
+    () => (chartData ? getDaiVanTrend(chartData) : []),
+    [chartData],
+  );
+  const luuNienTrend = useMemo(
+    () =>
+      chartData
+        ? getLuuNienTrend(chartData, chartData.annualYear, 10, {
+            school,
+            birthInput,
+          })
+        : [],
+    [birthInput, chartData, school],
   );
 
   useEffect(() => {
@@ -655,6 +679,23 @@ export function ChartPage() {
                   showPhi={form.showPhi}
                   profileName={form.name}
                   gender={form.gender}
+                />
+              </div>
+
+              <div className="trend-charts">
+                <TrendChart
+                  title="Xu hướng Đại vận"
+                  points={daiVanTrend}
+                  currentLabel="Chính vận"
+                  selectedLabel={selectedTrendPoint?.label ?? null}
+                  onSelectPoint={setSelectedTrendPoint}
+                />
+                <TrendChart
+                  title="Xu hướng Lưu niên"
+                  points={luuNienTrend}
+                  currentLabel="Năm nay"
+                  selectedLabel={selectedTrendPoint?.label ?? null}
+                  onSelectPoint={setSelectedTrendPoint}
                 />
               </div>
             </div>
