@@ -90,7 +90,7 @@ body::after{
 }
 a{color:inherit}
 .wrap{
-  width:min(2048px,100%);
+  width:100%;
   min-height:100vh;
   margin:0 auto;
   padding:0 clamp(8px,1.2vw,24px);
@@ -555,7 +555,7 @@ body{
   display:none;
 }
 .wrap{
-  width:min(2048px,100%);
+  width:100%;
   padding:0 clamp(12px,2vw,34px);
 }
 .topbar{
@@ -570,7 +570,7 @@ body{
 }
 .shell{
   display:grid;
-  grid-template-columns:minmax(860px,980px) minmax(620px,1fr);
+  grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);
   grid-template-rows:auto auto auto;
   gap:16px;
   align-items:stretch;
