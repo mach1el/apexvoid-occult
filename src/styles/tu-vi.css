@@ -571,8 +571,8 @@ body{
 }
 .shell{
   display:grid;
-  /* Lá số trần 1120px; chat nhận phần còn lại. */
-  grid-template-columns:minmax(780px,1120px) minmax(400px,1fr);
+  /* Lá số trần 1200px; chat cùng hàng kéo dài theo. */
+  grid-template-columns:minmax(780px,1200px) minmax(400px,1fr);
   grid-template-rows:auto auto auto;
   gap:16px;
   align-items:stretch;

@@ -74,16 +74,16 @@ describe("ChartPage profile form", () => {
   });
 
   it("keeps desktop chart compact-fit in view (not full-bleed, not collapsed)", () => {
-    // Gọn fit view: trần cột 1120px + sized theo viewport, không phình full page.
+    // Gọn fit view: trần cột 1200px + sized theo viewport, không phình full page.
     expect(chartCss).toMatch(/\.wrap\{[^}]*width:min\(2100px,100%\)/);
     expect(chartCss).toMatch(
-      /\.shell\{[^}]*grid-template-columns:minmax\(780px,1120px\)\s+minmax\(400px,1fr\)/,
+      /\.shell\{[^}]*grid-template-columns:minmax\(780px,1200px\)\s+minmax\(400px,1fr\)/,
     );
     expect(compactChartCss).toMatch(
-      /grid-template-columns:\s*minmax\(780px,\s*1120px\)\s+minmax\(400px,\s*1fr\)/,
+      /grid-template-columns:\s*minmax\(780px,\s*1200px\)\s+minmax\(400px,\s*1fr\)/,
     );
     expect(compactChartCss).toMatch(
-      /\.shell\s+\.compact-chart-capture\s*\{[^}]*min\(100%,\s*1120px,\s*calc\(\(100svh\s*-\s*168px\)\s*\*\s*880\s*\/\s*896\)\)/,
+      /\.shell\s+\.compact-chart-capture\s*\{[^}]*min\(100%,\s*1200px,\s*calc\(\(100svh\s*-\s*140px\)\s*\*\s*880\s*\/\s*896\)\)/,
     );
     // SVG width:100% trong khung (có width/height attribute) — không collapse.
     expect(compactChartCss).toMatch(

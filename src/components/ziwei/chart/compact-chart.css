@@ -22,8 +22,8 @@
     width: 100%;
     max-width: 2100px;
     margin-inline: auto;
-    /* Cột lá số có trần 1120px — rộng hơn bản 1040 cũ một chút, không chiếm hết page. */
-    grid-template-columns: minmax(780px, 1120px) minmax(400px, 1fr);
+    /* Cột lá số trần 1200px — kéo dài thêm một chút so với 1120, vẫn không full-bleed. */
+    grid-template-columns: minmax(780px, 1200px) minmax(400px, 1fr);
     grid-template-rows: auto auto;
     gap: 16px;
     align-items: stretch;
@@ -160,10 +160,10 @@
     padding: 12px;
   }
 
-  /* Gọn fit view: min(cột, trần 1120px, chiều cao khả dụng × tỷ lệ viewBox).
-     Vừa đủ to đọc được, vừa không vượt viewport, vừa không phình full page. */
+  /* Gọn fit view: min(cột, trần 1200px, chiều cao khả dụng × tỷ lệ viewBox).
+     Chat cùng hàng stretch theo chiều cao lá số. */
   .shell .compact-chart-capture {
-    width: min(100%, 1120px, calc((100svh - 168px) * 880 / 896));
+    width: min(100%, 1200px, calc((100svh - 140px) * 880 / 896));
     max-width: 100%;
     margin-inline: auto;
   }
