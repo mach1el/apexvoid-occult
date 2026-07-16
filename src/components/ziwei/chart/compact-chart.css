@@ -27,9 +27,9 @@
 @media (min-width: 1360px) {
   .shell {
     width: 100%;
-    max-width: none;
+    max-width: 2048px;
     margin-inline: auto;
-    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    grid-template-columns: minmax(720px, 1040px) minmax(420px, 1fr);
     grid-template-rows: auto auto;
     gap: 16px;
     align-items: stretch;
@@ -166,17 +166,20 @@
     padding: 12px;
   }
 
-  /* Scale theo đúng bề rộng cột để màn hình lớn không làm lá số bị co nhỏ. */
+  /* Scale theo cột lá số (đã có trần 1040px). width:auto + max-height để
+     vừa vừa bề ngang cột vừa vừa chiều cao viewport — không méo tỷ lệ
+     (width:100% + max-height sẽ kéo méo SVG). */
   .shell .compact-chart-capture {
-    width: 100%;
-    max-width: none;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
   }
 
   .shell .compact-chart-svg {
-    width: 100%;
-    max-width: none;
+    width: auto;
+    max-width: 100%;
     height: auto;
-    max-height: none;
+    max-height: min(calc(100svh - 96px), 980px);
   }
 
   .compact-chart-stage {

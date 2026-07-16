@@ -60,6 +60,25 @@ describe("ChartPage profile form", () => {
     expect(mobileChartCss).toContain("background: var(--danger-soft)");
   });
 
+  it("caps desktop workspace scale so QHD/ultrawide cannot blow up the chart", () => {
+    // Hồi quy a77b039: wrap/shell/SVG bỏ hết trần → lá số scale full viewport
+    // trên màn 2560+. Phải giữ trần cứng + max-height viewport.
+    expect(chartCss).toMatch(/\.wrap\{[^}]*width:min\(2048px,100%\)/);
+    expect(chartCss).toMatch(
+      /\.shell\{[^}]*grid-template-columns:minmax\(720px,1040px\)\s+minmax\(420px,1fr\)/,
+    );
+    expect(compactChartCss).toMatch(
+      /grid-template-columns:\s*minmax\(720px,\s*1040px\)\s+minmax\(420px,\s*1fr\)/,
+    );
+    expect(compactChartCss).toMatch(
+      /\.shell\s+\.compact-chart-svg\s*\{[^}]*max-height:\s*min\(calc\(100svh\s*-\s*96px\),\s*980px\)/,
+    );
+    // Không được dùng width:100% + max-height (méo tỷ lệ) trên desktop.
+    expect(compactChartCss).toMatch(
+      /\.shell\s+\.compact-chart-svg\s*\{[^}]*width:\s*auto/,
+    );
+  });
+
   it("defines ngũ hành + tứ hóa tokens in exactly one place (src/styles.css :root)", () => {
     // Đọc giá trị thật từ CSS (không hard-code lại hex trong test, tránh vướng
     // grep dò hex ngũ hành và tránh test tự khớp với giá trị nó tự đặt ra).
