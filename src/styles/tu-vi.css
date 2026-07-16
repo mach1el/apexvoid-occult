@@ -90,7 +90,7 @@ body::after{
 }
 a{color:inherit}
 .wrap{
-  width:100%;
+  width:min(2100px,100%);
   min-height:100vh;
   margin:0 auto;
   padding:0 clamp(8px,1.2vw,24px);
@@ -555,11 +555,9 @@ body{
   display:none;
 }
 .wrap{
-  /* Dùng gần full bề ngang màn hình lớn — lá số scale theo viewport
-     (xem .compact-chart-capture), không để gutter QHD lãng phí. */
-  width:100%;
-  max-width:none;
-  padding:0 clamp(12px,1.4vw,28px);
+  /* Trần workspace — đủ rộng QHD nhưng không full-bleed phình page. */
+  width:min(2100px,100%);
+  padding:0 clamp(12px,2vw,28px);
 }
 .topbar{
   min-height:48px;
@@ -573,8 +571,8 @@ body{
 }
 .shell{
   display:grid;
-  /* Cột lá số rộng hơn chat; trần thật nằm ở capture theo 100svh. */
-  grid-template-columns:minmax(0,1.35fr) minmax(360px,.65fr);
+  /* Lá số trần 1120px; chat nhận phần còn lại. */
+  grid-template-columns:minmax(780px,1120px) minmax(400px,1fr);
   grid-template-rows:auto auto auto;
   gap:16px;
   align-items:stretch;

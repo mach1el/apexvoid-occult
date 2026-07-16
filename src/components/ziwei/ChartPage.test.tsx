@@ -60,19 +60,19 @@ describe("ChartPage profile form", () => {
     expect(mobileChartCss).toContain("background: var(--danger-soft)");
   });
 
-  it("scales the chart to viewport height on desktop without collapsing the SVG", () => {
-    // Cột lá số rộng hơn chat; trần thật = chiều cao viewport × tỷ lệ viewBox.
+  it("keeps desktop chart compact-fit in view (not full-bleed, not collapsed)", () => {
+    // Gọn fit view: trần cột 1120px + sized theo viewport, không phình full page.
+    expect(chartCss).toMatch(/\.wrap\{[^}]*width:min\(2100px,100%\)/);
     expect(chartCss).toMatch(
-      /\.shell\{[^}]*grid-template-columns:minmax\(0,1\.35fr\)\s+minmax\(360px,\.?65fr\)/,
+      /\.shell\{[^}]*grid-template-columns:minmax\(780px,1120px\)\s+minmax\(400px,1fr\)/,
     );
     expect(compactChartCss).toMatch(
-      /grid-template-columns:\s*minmax\(0,\s*1\.35fr\)\s+minmax\(360px,\s*0?\.?65fr\)/,
+      /grid-template-columns:\s*minmax\(780px,\s*1120px\)\s+minmax\(400px,\s*1fr\)/,
     );
-    // Capture sized by viewport height — không kẹt trần 1040px cứng.
     expect(compactChartCss).toMatch(
-      /\.shell\s+\.compact-chart-capture\s*\{[^}]*calc\(\(100svh\s*-\s*148px\)\s*\*\s*880\s*\/\s*896\)/,
+      /\.shell\s+\.compact-chart-capture\s*\{[^}]*min\(100%,\s*1120px,\s*calc\(\(100svh\s*-\s*168px\)\s*\*\s*880\s*\/\s*896\)\)/,
     );
-    // SVG phải width:100% trong khung (có width/height attribute) — không width:auto.
+    // SVG width:100% trong khung (có width/height attribute) — không collapse.
     expect(compactChartCss).toMatch(
       /\.shell\s+\.compact-chart-svg\s*\{[^}]*width:\s*100%/,
     );
