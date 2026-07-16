@@ -74,22 +74,25 @@ describe("ChartPage profile form", () => {
   });
 
   it("keeps desktop chart compact-fit in view (not full-bleed, not collapsed)", () => {
-    // Trần cột 1280px + fit viewport; chart width 100% cột (không max-content/intrinsic 880).
+    // Cột 1 = --ziwei-chart-fit; chat 1fr — không khoảng trống giữa chart và chat.
     expect(chartCss).toMatch(/\.wrap\{[^}]*width:min\(2100px,100%\)/);
     expect(chartCss).toMatch(
-      /\.shell\{[^}]*grid-template-columns:minmax\(780px,1280px\)\s+minmax\(400px,1fr\)/,
+      /\.shell\{[^}]*--ziwei-chart-fit:\s*min\(1280px,\s*calc\(\(100svh\s*-\s*120px\)\s*\*\s*880\s*\/\s*896\)\)/,
+    );
+    expect(chartCss).toMatch(
+      /\.shell\{[^}]*grid-template-columns:minmax\(780px,var\(--ziwei-chart-fit\)\)\s+minmax\(400px,1fr\)/,
     );
     expect(compactChartCss).toMatch(
-      /grid-template-columns:\s*minmax\(780px,\s*1280px\)\s+minmax\(400px,\s*1fr\)/,
+      /--ziwei-chart-fit:\s*min\(1280px,\s*calc\(\(100svh\s*-\s*120px\)\s*\*\s*880\s*\/\s*896\)\)/,
+    );
+    expect(compactChartCss).toMatch(
+      /grid-template-columns:\s*minmax\(780px,\s*var\(--ziwei-chart-fit\)\)\s+minmax\(400px,\s*1fr\)/,
     );
     expect(compactChartCss).toMatch(
       /\.shell\s+\.compact-chart-capture\s*\{[^}]*width:\s*100%/,
     );
     expect(compactChartCss).toMatch(
-      /\.shell\s+\.compact-chart-capture\s*\{[^}]*max-width:\s*min\(1280px,\s*calc\(\(100svh\s*-\s*120px\)\s*\*\s*880\s*\/\s*896\)\)/,
-    );
-    expect(compactChartCss).toMatch(
-      /\.shell\s+\.compact-chart-capture\s*\{[^}]*margin-inline:\s*0/,
+      /\.shell\s+\.compact-chart-capture\s*\{[^}]*max-width:\s*none/,
     );
     // SVG width:100% trong khung (có width/height attribute) — không collapse.
     expect(compactChartCss).toMatch(

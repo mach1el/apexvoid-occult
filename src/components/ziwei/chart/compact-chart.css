@@ -22,8 +22,10 @@
     width: 100%;
     max-width: 2100px;
     margin-inline: auto;
-    /* Cột lá số trần 1280px; chat 1fr. Chart canh trái trong cột (không margin auto). */
-    grid-template-columns: minmax(780px, 1280px) minmax(400px, 1fr);
+    /* Cột 1 = đúng bề rộng fit của lá số (không rộng hơn chart → hết khoảng trống
+       trước chat). Chat 1fr giãn full phần còn lại. */
+    --ziwei-chart-fit: min(1280px, calc((100svh - 120px) * 880 / 896));
+    grid-template-columns: minmax(780px, var(--ziwei-chart-fit)) minmax(400px, 1fr);
     grid-template-rows: auto auto;
     gap: 16px;
     align-items: stretch;
@@ -167,11 +169,10 @@
     padding: 12px;
   }
 
-  /* Trần 1280px × fit viewport; canh trái cột — width:100% để lấp đầy cột, không bị
-     thu về intrinsic 880px của SVG attribute. */
+  /* Chart lấp đầy cột (cột đã sized = --ziwei-chart-fit). Chat 1fr sát bên phải. */
   .shell .compact-chart-capture {
     width: 100%;
-    max-width: min(1280px, calc((100svh - 120px) * 880 / 896));
+    max-width: none;
     margin-inline: 0;
   }
 
@@ -183,9 +184,13 @@
     max-height: none;
   }
 
+  .shell > .chart-section > .chart-workspace,
   .compact-chart-stage {
-    place-items: start start;
     width: 100%;
+  }
+
+  .compact-chart-stage {
+    place-items: start stretch;
   }
 }
 
