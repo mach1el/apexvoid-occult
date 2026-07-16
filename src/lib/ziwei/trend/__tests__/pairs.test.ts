@@ -34,6 +34,107 @@ describe("detectPairRules", () => {
     expect(longKy!.kyReliefRatio).toBeGreaterThan(0);
   });
 
+  it("Tham + Hỏa đồng cung không phá cách → cộng Cát, Hỏa được relief", () => {
+    const menh = {
+      index: 0,
+      branch: "Mùi",
+      name: "Mệnh",
+      stars: [
+        { name: "Tham Lang", layer: "major", brightness: "Miếu" },
+        { name: "Hỏa Tinh", layer: "tough", brightness: "Đắc" },
+      ],
+    } as ChartPalace;
+
+    const hits = detectPairRules([{ palace: menh, role: "focus" }], SCORING_WEIGHTS, true);
+    const thamHoa = hits.find((hit) => hit.id === "thamHoa");
+    expect(thamHoa).toBeDefined();
+    expect(thamHoa!.catPoints).toBeGreaterThan(0);
+    expect(thamHoa!.hungRelief).toBeGreaterThan(0);
+  });
+
+  it("Tham + Linh tam hợp → có cát × sanFangFactor", () => {
+    const menh = {
+      index: 0,
+      branch: "Mùi",
+      name: "Mệnh",
+      stars: [{ name: "Tham Lang", layer: "major", brightness: "Miếu" }],
+    } as ChartPalace;
+    const quan = {
+      index: 8,
+      branch: "Mão",
+      name: "Quan Lộc",
+      stars: [{ name: "Linh Tinh", layer: "tough", brightness: "Đắc" }],
+    } as ChartPalace;
+
+    const hits = detectPairRules(
+      [
+        { palace: menh, role: "focus" },
+        { palace: quan, role: "tam-hop" },
+      ],
+      SCORING_WEIGHTS,
+      true,
+    );
+    const thamHoa = hits.find((hit) => hit.id === "thamHoa");
+    expect(thamHoa).toBeDefined();
+    expect(thamHoa!.catPoints).toBe(Math.round(SCORING_WEIGHTS.thamHoaCat * SCORING_WEIGHTS.sanFangFactor));
+  });
+
+  it("Tham + Hỏa + Hóa Kỵ trong khung → KHÔNG cộng cát, phá cách", () => {
+    const menh = {
+      index: 0,
+      branch: "Mùi",
+      name: "Mệnh",
+      stars: [
+        { name: "Tham Lang", layer: "major", brightness: "Miếu" },
+        { name: "Hỏa Tinh", layer: "tough", brightness: "Đắc" },
+        { name: "Hóa Kỵ", source: "natal-mutagen", mutagen: "Kỵ" },
+      ],
+    } as ChartPalace;
+
+    const hits = detectPairRules([{ palace: menh, role: "focus" }], SCORING_WEIGHTS, true);
+    expect(hits.some((hit) => hit.id === "thamHoa")).toBe(false);
+  });
+
+  it("Tham + Hỏa + Kình Dương giao hội → phá cách", () => {
+    const menh = {
+      index: 0,
+      branch: "Mùi",
+      name: "Mệnh",
+      stars: [
+        { name: "Tham Lang", layer: "major", brightness: "Miếu" },
+        { name: "Hỏa Tinh", layer: "tough", brightness: "Đắc" },
+      ],
+    } as ChartPalace;
+    const di = {
+      index: 6,
+      branch: "Sửu",
+      name: "Thiên Di",
+      stars: [{ name: "Kình Dương", layer: "tough", brightness: "Miếu" }],
+    } as ChartPalace;
+
+    const hits = detectPairRules(
+      [
+        { palace: menh, role: "focus" },
+        { palace: di, role: "xung" },
+      ],
+      SCORING_WEIGHTS,
+      true,
+    );
+    expect(hits.some((hit) => hit.id === "thamHoa")).toBe(false);
+  });
+
+  it("Hỏa không có Tham Lang → không thành cách", () => {
+    const menh = {
+      index: 0,
+      branch: "Mùi",
+      name: "Mệnh",
+      stars: [{ name: "Hỏa Tinh", layer: "tough", brightness: "Đắc" }],
+    } as ChartPalace;
+
+    const hits = detectPairRules([{ palace: menh, role: "focus" }], SCORING_WEIGHTS, true);
+    expect(hits.some((hit) => hit.id === "thamHoa")).toBe(false);
+  });
+
   it("Vũ + Tham trên mộ thành vuThamMo", () => {
     const menh = {
       index: 0,
