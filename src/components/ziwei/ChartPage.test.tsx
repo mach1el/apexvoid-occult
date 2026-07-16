@@ -38,7 +38,9 @@ describe("ChartPage profile form", () => {
     ).toHaveLength(5);
     expect(
       container.querySelectorAll(".profile-row-meta > .profile-field"),
-    ).toHaveLength(4);
+    ).toHaveLength(2);
+    expect(container.querySelector(".birth-prefs")).not.toBeNull();
+    expect(container.querySelector(".birth-prefs .profile-school")).not.toBeNull();
     expect(container.querySelector(".shell > .chart-section")).not.toBeNull();
     expect(container.querySelector(".shell > .chat-section")).not.toBeNull();
     expect(container.querySelector(".shell > .trend-section")).not.toBeNull();
