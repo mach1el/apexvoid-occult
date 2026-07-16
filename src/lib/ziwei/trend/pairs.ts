@@ -202,9 +202,10 @@ export function detectPairRules(
     });
   }
 
+  const hoaLocs = stars.filter((s) => isHoaLocStar(s.star, s.base) && s.base !== "Lộc Tồn");
   const quyens = stars.filter((s) => s.base === "Hóa Quyền" || (s.star.mutagen && s.star.mutagen.includes("Quyền")));
   const khoas = stars.filter((s) => s.base === "Hóa Khoa" || (s.star.mutagen && s.star.mutagen.includes("Khoa")));
-  if (locStars.length > 0 && quyens.length > 0 && khoas.length > 0) {
+  if (hoaLocs.length > 0 && quyens.length > 0 && khoas.length > 0) {
     hits.push({
       id: "tamKy",
       geometry: "tam-hop",

@@ -146,13 +146,57 @@ describe("detectPairRules", () => {
       ],
     } as ChartPalace;
 
-    const hits = detectPairRules(
-      [{ palace: menh, role: "focus" }],
-      SCORING_WEIGHTS,
-      true,
-    );
+    const hits = detectPairRules([{ palace: menh, role: "focus" }], SCORING_WEIGHTS, true);
     expect(hits.some((hit) => hit.id === "vuThamMo")).toBe(true);
   });
+
+  it("Khung đủ Lộc+Quyền+Khoa → có tamKyCat", () => {
+    const menh = {
+      index: 0,
+      branch: "Mùi",
+      name: "Mệnh",
+      stars: [
+        { name: "Hóa Lộc", source: "natal" },
+        { name: "Hóa Quyền", source: "natal" },
+        { name: "Hóa Khoa", source: "natal" },
+      ],
+    } as ChartPalace;
+
+    const hits = detectPairRules([{ palace: menh, role: "focus" }], SCORING_WEIGHTS, true);
+    expect(hits.some((hit) => hit.id === "tamKy")).toBe(true);
+  });
+
+  it("Khung đủ 3 nhưng có Hóa lưu (includeAnnual=false) → KHÔNG tính tamKyCat", () => {
+    const menh = {
+      index: 0,
+      branch: "Mùi",
+      name: "Mệnh",
+      stars: [
+        { name: "Hóa Lộc", source: "natal" },
+        { name: "Hóa Quyền", source: "natal" },
+        { name: "Hóa Khoa", source: "annual-mutagen", mutagen: "Khoa" }, // Hóa Khoa lưu
+      ],
+    } as ChartPalace;
+
+    const hits = detectPairRules([{ palace: menh, role: "focus" }], SCORING_WEIGHTS, false);
+    expect(hits.some((hit) => hit.id === "tamKy")).toBe(false);
+  });
+
+  it("Chỉ 2 trong 3 → KHÔNG có bonus tamKyCat", () => {
+    const menh = {
+      index: 0,
+      branch: "Mùi",
+      name: "Mệnh",
+      stars: [
+        { name: "Hóa Lộc", source: "natal" },
+        { name: "Hóa Khoa", source: "natal" },
+      ],
+    } as ChartPalace;
+
+    const hits = detectPairRules([{ palace: menh, role: "focus" }], SCORING_WEIGHTS, true);
+    expect(hits.some((hit) => hit.id === "tamKy")).toBe(false);
+  });
+
 
   it("Lộc Tồn + Thiên Mã thành locMa", () => {
     const menh = {
