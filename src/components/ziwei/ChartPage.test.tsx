@@ -32,15 +32,18 @@ describe("ChartPage profile form", () => {
     expect(screen.getByLabelText("Trường phái")).toBeInTheDocument();
     expect(screen.getByLabelText("Cách xem vận")).toBeInTheDocument();
     expect(screen.getByLabelText("Múi giờ")).toBeInTheDocument();
+    expect(screen.getByLabelText("Giờ sinh")).toBeInTheDocument();
     expect(screen.queryByText("Tùy chọn")).not.toBeInTheDocument();
     expect(
       container.querySelectorAll(".profile-row-primary > .profile-field"),
-    ).toHaveLength(5);
+    ).toHaveLength(4);
+    expect(
+      container.querySelector(".profile-row-primary > .profile-school"),
+    ).not.toBeNull();
     expect(
       container.querySelectorAll(".profile-row-meta > .profile-field"),
-    ).toHaveLength(2);
-    expect(container.querySelector(".birth-prefs")).not.toBeNull();
-    expect(container.querySelector(".birth-prefs .profile-school")).not.toBeNull();
+    ).toHaveLength(5);
+    expect(container.querySelector(".birth-prefs")).toBeNull();
     expect(container.querySelector(".shell > .chart-section")).not.toBeNull();
     expect(container.querySelector(".shell > .chat-section")).not.toBeNull();
     expect(container.querySelector(".shell > .trend-section")).not.toBeNull();

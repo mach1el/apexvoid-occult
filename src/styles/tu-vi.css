@@ -633,29 +633,23 @@ body{
   font-size:1rem;
 }
 
-/* Guided birth profile — toolbar + 2 hàng nhập liệu */
+/* Guided birth profile — intro + 2 hàng nhập liệu */
 .birth-panel{overflow:hidden}
 .birth-panel-body{
-  display:block;
-  padding:10px 14px;
-}
-.birth-toolbar{
-  display:flex;
+  display:grid;
+  grid-template-columns:142px minmax(0,1fr);
   align-items:center;
-  justify-content:space-between;
-  gap:12px 16px;
-  margin-bottom:10px;
-  padding-bottom:10px;
-  border-bottom:1px solid var(--line-soft);
+  gap:10px 14px;
+  padding:10px 14px;
 }
 .birth-intro{
   display:flex;
   flex-direction:column;
   justify-content:center;
   gap:2px;
-  min-width:0;
-  padding:0;
-  border:0;
+  min-height:auto;
+  padding-right:14px;
+  border-right:1px solid var(--line-soft);
 }
 .birth-kicker{
   display:block;
@@ -675,29 +669,6 @@ body{
   letter-spacing:-.01em;
   white-space:nowrap;
 }
-.birth-prefs{
-  display:flex;
-  align-items:stretch;
-  justify-content:flex-end;
-  gap:8px;
-  margin-left:auto;
-  flex-shrink:0;
-}
-.birth-prefs .profile-school{
-  margin:0;
-  min-width:168px;
-}
-.birth-prefs .profile-school .school-tab{
-  min-height:36px;
-}
-.birth-prefs .profile-field{
-  min-width:100px;
-  min-height:36px;
-}
-.birth-prefs .profile-field-compact{
-  min-width:88px;
-  padding-inline:10px;
-}
 .profile-form{
   display:flex;
   flex-direction:column;
@@ -711,21 +682,32 @@ body{
   align-items:stretch;
   min-width:0;
 }
-/* Hàng 1: dữ liệu sinh — 5 ô rộng, không cắt chữ */
+/* Hàng 1: tên/ngày + phái/vận/múi giờ (góc phải) */
 .profile-row-primary{
   grid-template-columns:
     minmax(140px,1.5fr)
     minmax(120px,1.15fr)
-    minmax(120px,1.15fr)
-    minmax(88px,.7fr)
-    minmax(88px,.7fr);
+    minmax(168px,1.15fr)
+    minmax(100px,.75fr)
+    minmax(84px,.6fr);
 }
-/* Hàng 2: hoàn cảnh + lớp sao + xuất */
+.profile-row-primary .profile-school{
+  margin:0;
+  min-width:0;
+  align-self:stretch;
+}
+.profile-row-primary .profile-school .school-tab{
+  min-height:100%;
+}
+/* Hàng 2: giờ/giới/năm + hoàn cảnh + lớp sao + xuất */
 .profile-row-meta{
   grid-template-columns:
-    minmax(140px,1.2fr)
-    minmax(140px,1.2fr)
-    minmax(220px,1.4fr)
+    minmax(120px,1.15fr)
+    minmax(88px,.7fr)
+    minmax(88px,.7fr)
+    minmax(120px,1.1fr)
+    minmax(120px,1.1fr)
+    minmax(200px,1.2fr)
     auto;
 }
 .profile-row-meta .profile-toggles{
@@ -930,20 +912,14 @@ body{
     grid-column:1;
     grid-row:4;
   }
-  .birth-toolbar{
-    flex-wrap:wrap;
-  }
-  .birth-prefs{
-    width:100%;
-    margin-left:0;
-    justify-content:flex-start;
-    flex-wrap:wrap;
-  }
   .profile-row-primary{
     grid-template-columns:repeat(3,minmax(0,1fr));
   }
+  .profile-row-primary .profile-school{
+    grid-column:1/-1;
+  }
   .profile-row-meta{
-    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-columns:repeat(3,minmax(0,1fr));
   }
   .profile-row-meta .profile-toggles,
   .profile-row-meta .profile-chart-actions{
@@ -951,7 +927,13 @@ body{
   }
 }
 @media(max-width:1060px){
-  .birth-panel-body{padding:12px}
+  .birth-panel-body{padding:12px;grid-template-columns:1fr}
+  .birth-intro{
+    min-height:auto;
+    padding:0 0 8px;
+    border-right:0;
+    border-bottom:1px solid var(--line-soft);
+  }
   .panel,.ai-chat-panel{
     backdrop-filter:none;
     -webkit-backdrop-filter:none;
@@ -962,26 +944,15 @@ body{
   .wrap{padding:0 10px}
   .topbar{min-height:44px;flex-direction:row;align-items:center}
   .shell{margin-top:10px;gap:12px}
-  .birth-panel-body{padding:10px}
-  .birth-toolbar{
-    flex-direction:column;
-    align-items:stretch;
-    gap:10px;
-  }
+  .birth-panel-body{padding:10px;gap:8px 10px}
   .birth-intro h1{font-size:1rem;white-space:normal}
-  .birth-prefs{
-    width:100%;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:7px;
-  }
-  .birth-prefs .profile-school{grid-column:1/-1;min-width:0}
   .profile-form{gap:7px}
   .profile-row-primary,
   .profile-row-meta{
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:7px;
   }
+  .profile-row-primary .profile-school{grid-column:1/-1}
   .profile-field{
     min-height:44px;
     grid-template-columns:31px minmax(0,1fr);
@@ -1001,8 +972,7 @@ body{
 }
 @media(max-width:390px){
   .profile-row-primary,
-  .profile-row-meta,
-  .birth-prefs{grid-template-columns:1fr}
+  .profile-row-meta{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){
   .profile-field,.btn-ghost,.ai-send-btn{

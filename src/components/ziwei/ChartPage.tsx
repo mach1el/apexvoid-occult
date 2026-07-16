@@ -381,70 +381,15 @@ export function ChartPage() {
         <main className="shell">
           <aside className="panel birth-panel">
             <div className="birth-panel-body">
+              <div className="birth-intro">
+                <span className="birth-kicker">Tử Vi Đẩu Số</span>
+                <h1>Lập lá số Tử Vi</h1>
+              </div>
+
               <form
                 className="profile-form"
                 onSubmit={(event) => event.preventDefault()}
               >
-                <div className="birth-toolbar">
-                  <div className="birth-intro">
-                    <span className="birth-kicker">Tử Vi Đẩu Số</span>
-                    <h1>Lập lá số Tử Vi</h1>
-                  </div>
-
-                  <div className="birth-prefs" aria-label="Tuỳ chọn lá số">
-                    <div
-                      className="school-tabs profile-school"
-                      role="radiogroup"
-                      aria-label="Trường phái"
-                    >
-                      {(
-                        [
-                          ["nam-phai", "Nam phái"],
-                          ["trung-chau", "Trung Châu"],
-                        ] as const
-                      ).map(([value, label]) => (
-                        <label className="school-tab" key={value}>
-                          <input
-                            type="radio"
-                            name="school"
-                            value={value}
-                            checked={school === value}
-                            onChange={() => changeSchool(value)}
-                          />
-                          <span>{label}</span>
-                        </label>
-                      ))}
-                    </div>
-
-                    <label className="profile-field profile-field-plain profile-field-compact">
-                      <span className="sr-only">Cách xem vận</span>
-                      <select
-                        name="flowBase"
-                        aria-label="Cách xem vận"
-                        value={form.flowBase}
-                        onChange={fieldChange("flowBase")}
-                      >
-                        <option value="luu-nien">Lưu Niên</option>
-                        <option value="tieu-han">Tiểu Hạn</option>
-                      </select>
-                    </label>
-
-                    <label className="profile-field profile-field-plain profile-field-compact">
-                      <span className="sr-only">Múi giờ</span>
-                      <select
-                        name="timezone"
-                        aria-label="Múi giờ"
-                        value={form.timezone}
-                        onChange={fieldChange("timezone")}
-                      >
-                        <option value="7">UTC+7</option>
-                        <option value="8">UTC+8</option>
-                        <option value="0">UTC+0</option>
-                      </select>
-                    </label>
-                  </div>
-                </div>
-
                 <div className="profile-row profile-row-primary">
                   <label className="profile-field">
                     <FieldIcon name="user" />
@@ -474,6 +419,59 @@ export function ChartPage() {
                     />
                   </label>
 
+                  <div
+                    className="school-tabs profile-school"
+                    role="radiogroup"
+                    aria-label="Trường phái"
+                  >
+                    {(
+                      [
+                        ["nam-phai", "Nam phái"],
+                        ["trung-chau", "Trung Châu"],
+                      ] as const
+                    ).map(([value, label]) => (
+                      <label className="school-tab" key={value}>
+                        <input
+                          type="radio"
+                          name="school"
+                          value={value}
+                          checked={school === value}
+                          onChange={() => changeSchool(value)}
+                        />
+                        <span>{label}</span>
+                      </label>
+                    ))}
+                  </div>
+
+                  <label className="profile-field profile-field-plain profile-field-compact">
+                    <span className="sr-only">Cách xem vận</span>
+                    <select
+                      name="flowBase"
+                      aria-label="Cách xem vận"
+                      value={form.flowBase}
+                      onChange={fieldChange("flowBase")}
+                    >
+                      <option value="luu-nien">Lưu Niên</option>
+                      <option value="tieu-han">Tiểu Hạn</option>
+                    </select>
+                  </label>
+
+                  <label className="profile-field profile-field-plain profile-field-compact">
+                    <span className="sr-only">Múi giờ</span>
+                    <select
+                      name="timezone"
+                      aria-label="Múi giờ"
+                      value={form.timezone}
+                      onChange={fieldChange("timezone")}
+                    >
+                      <option value="7">UTC+7</option>
+                      <option value="8">UTC+8</option>
+                      <option value="0">UTC+0</option>
+                    </select>
+                  </label>
+                </div>
+
+                <div className="profile-row profile-row-meta">
                   <label className="profile-field">
                     <FieldIcon name="clock" />
                     <span className="sr-only">Giờ sinh</span>
@@ -524,9 +522,7 @@ export function ChartPage() {
                       })}
                     </select>
                   </label>
-                </div>
 
-                <div className="profile-row profile-row-meta">
                   <label className="profile-field">
                     <FieldIcon name="work" />
                     <span className="sr-only">Tình trạng công việc</span>
