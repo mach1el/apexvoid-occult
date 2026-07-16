@@ -3,7 +3,12 @@
  * Đại vận · Lưu niên · độ vững 12 cung.
  */
 
-import type { ChartData, ChartEngine, MutagenRecord } from "@/types/chart";
+import type {
+  ChartData,
+  ChartEngine,
+  FlowMonthEntry,
+  MutagenRecord,
+} from "@/types/chart";
 import { getEngine } from "../chart";
 import {
   baseStarName,
@@ -21,10 +26,27 @@ import type {
 } from "./types";
 import {
   finalizeLayer,
+  findDauQuanPalace,
   isMutagenStar,
   mutagenKind,
+  palaceStemForYear,
   voidBranches,
 } from "./util";
+
+const LUUN_NIEN_MONTH_LABELS = [
+  "Giêng",
+  "Hai",
+  "Ba",
+  "Tư",
+  "Năm",
+  "Sáu",
+  "Bảy",
+  "Tám",
+  "Chín",
+  "Mười",
+  "Một",
+  "Chạp",
+] as const;
 
 export type {
   ScoreLine,
@@ -99,8 +121,35 @@ function monthlyMutagenRecords(
 }
 
 /**
+ * 12 khung lưu nguyệt cho biểu đồ Lưu niên — luôn theo công thức Lưu niên:
+ * Tháng Giêng khởi tại cung Lưu Đẩu Quân, các tháng kế tiếp đếm thuận;
+ * can Tứ Hóa tháng theo cung an vị (không phụ thuộc flowBase an trên lá số).
+ */
+function buildLuuNienScoreMonths(chart: ChartData): FlowMonthEntry[] {
+  const fallback = chart.monthlyPalaces ?? [];
+  const startPalace = findDauQuanPalace(chart);
+  if (!startPalace || !chart.palaces.length) return fallback;
+
+  return Array.from({ length: 12 }, (_, offset) => {
+    const palaceIndex = (startPalace.index + offset) % 12;
+    const palace =
+      chart.palaces.find((item) => item.index === palaceIndex) ??
+      chart.palaces[palaceIndex]!;
+    const month = offset + 1;
+    return {
+      month,
+      label: LUUN_NIEN_MONTH_LABELS[offset] ?? `Th.${month}`,
+      palace,
+      stem: palaceStemForYear(chart.annualStem, palace.index),
+      branch: palace.branch,
+    };
+  });
+}
+
+/**
  * Xu hướng Lưu niên: 12 tháng âm trong năm xem.
- * Cung hạn = cung nguyệt hạn của từng tháng (monthlyPalaces).
+ * Cung hạn = cung nguyệt hạn Lưu niên (T1 = Lưu Đẩu Quân, không lấy thẳng
+ * monthlyPalaces khi lá số đang an theo Tiểu Hạn).
  * Mỗi tháng dùng Tứ Hóa RIÊNG của tháng đó (lưu nguyệt, theo can tháng), xếp
  * lớp cùng Tứ Hóa năm (lưu niên) và Tứ Hóa gốc.
  */
@@ -110,7 +159,7 @@ export function getLuuNienTrend(
   asOf: Date = new Date(),
 ): TrendPoint[] {
   const weights = opts.weights ?? SCORING_WEIGHTS;
-  const months = chart.monthlyPalaces ?? [];
+  const months = buildLuuNienScoreMonths(chart);
   if (!months.length) return [];
 
   const engine = getEngine(opts.school);

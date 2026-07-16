@@ -80,6 +80,29 @@ describe("getLuuNienTrend", () => {
     expect(points).toHaveLength(12);
     expect(points.filter((point) => point.isCurrent)).toHaveLength(0);
   });
+
+  it("scoring lưu nguyệt luôn theo Lưu niên (T1 = Lưu Đẩu Quân) dù lá số an Tiểu Hạn", () => {
+    const input = {
+      ...birthInput,
+      flowBase: "luu-nien",
+      annualYear: "2026",
+    };
+    const tieuHan = calculateNamPhai({ ...input, flowBase: "tieu-han" });
+    const luuNien = calculateNamPhai({ ...input, flowBase: "luu-nien" });
+    const dauQuan = tieuHan.palaces.find((palace) =>
+      (palace.stars ?? []).some((star) => star.name === "Lưu Đẩu Quân"),
+    );
+
+    expect(tieuHan.monthlyPalaces?.[0]?.palace?.index).not.toBe(
+      dauQuan?.index,
+    );
+    expect(luuNien.monthlyPalaces?.[0]?.palace?.index).toBe(dauQuan?.index);
+
+    const opts = { school: "nam-phai" as const, birthInput: input };
+    expect(getLuuNienTrend(tieuHan, opts)).toEqual(
+      getLuuNienTrend(luuNien, opts),
+    );
+  });
 });
 
 describe("getPalaceStrengths", () => {
