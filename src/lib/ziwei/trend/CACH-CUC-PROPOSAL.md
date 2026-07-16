@@ -7,7 +7,7 @@
 
 ## A. Cách cục engine đang tính SAI dấu (ưu tiên sửa)
 
-### A1. Hỏa Tham / Linh Tham cách (Tham Hỏa/Linh tương phùng) — CÁT
+### A1. ✅ Hỏa Tham / Linh Tham cách (Tham Hỏa/Linh tương phùng) — CÁT
 - **Hiện trạng:** Hỏa Tinh / Linh Tinh luôn bị tính thuần **hung** (lục sát).
   Khi đi cùng Tham Lang, đây là cách **phát tài/thăng tiến đột ngột**, rất
   mạnh **đúng ở Đại vận** ("vận đến phát rất nhanh"). Engine đang chấm ngược.
@@ -18,18 +18,18 @@
   - Relief: trừ ~60% điểm hung của Hỏa/Linh khi thành cách (giống cơ chế
     `longKyHungRelief`).
   - ⚠️ Phá cách: nếu đồng thời gặp Hóa Kỵ / Kình Đà giao hội → cách vỡ,
-    KHÔNG cộng cát (theo tuvilyso: "Đà La giao hội phá cách"). Cần chốt.
+    KHÔNG cộng cát (theo tuvilyso: "Đà La giao hội phá cách"). Đã xử lý (vỡ cách khi có Kỵ/Kình/Đà trong khung).
 - Nguồn: cohoc.vn "Tham Hỏa tương phùng — Phú Ông Chi Cách"; tuvi.cohoc.net
   "Tham Linh triều viên"; tuvilyso.org (phá cách Đà La).
 
 ## B. Cách cục engine ĐANG THIẾU
 
-### B1. Tam Kỳ Gia Hội (Lộc + Quyền + Khoa hội đủ) — CÁT lớn
+### B1. ✅ Tam Kỳ Gia Hội (Lộc + Quyền + Khoa hội đủ) — CÁT lớn
 - **Hiện trạng:** engine cộng từng Hóa riêng lẻ, KHÔNG có bonus khi **cả ba**
   Lộc·Quyền·Khoa cùng hội tam phương tứ chính. Đây là quý cách hàng đầu.
 - **Đề xuất:** khi trong khung có đủ 3 loại Hóa cát (gốc **hoặc** ĐV, không
   tính lưu vì Đại vận không lấy sao lưu) → bonus `tamKyCat: 18`.
-  Có thể tăng nếu cả 3 đều ở cung hạn chính.
+  (Đã áp dụng: lấy chính xác Hóa Lộc, loại Lộc Tồn)
 - Nguồn: hocvienlyso.org "Những Quý Cục"; huyenthiencac.vn "Tam Kỳ Gia Hội";
   Kabala "Tam Kỳ Gia Hội Cách".
 
@@ -47,7 +47,7 @@
 - Nguồn: tuvi.cohoc.net "chính không bằng chiếu…"; lyso.vn (Kình Đà giáp Kỵ);
   luantuvi.vn "Khôi Việt".
 
-## C. Rà lại weight cách cục ĐÃ CÓ (đề xuất tinh chỉnh)
+## C. ✅ Rà lại weight cách cục ĐÃ CÓ (đề xuất tinh chỉnh)
 
 | Cách (id) | Weight hiện tại | Đề xuất | Lý do |
 |---|---|---|---|
@@ -68,9 +68,9 @@
   cơ chế phá cách (A1) quan trọng để tránh chấm cát ảo.
 
 ## Thứ tự đề xuất triển khai (khi thầy duyệt)
-1. **A1 Hỏa/Linh Tham** — sửa dấu sai, tác động lớn nhất.
-2. **B1 Tam Kỳ Gia Hội** — thêm bonus hội tụ, dễ làm.
-3. **C** tinh chỉnh vài weight nhỏ.
+1. **A1 Hỏa/Linh Tham** — ✅ Sửa dấu sai, thêm phá cách Kỵ/Kình/Đà.
+2. **B1 Tam Kỳ Gia Hội** — ✅ Thêm bonus hội tụ Hóa Lộc, Quyền, Khoa.
+3. **C** tinh chỉnh vài weight nhỏ — ✅ Đã giảm longKyCat về 10.
 4. **B2 Giáp cách** — đợt sau, cần thêm hàm cung lân cận.
 
 ---
