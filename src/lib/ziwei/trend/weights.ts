@@ -58,10 +58,17 @@ export interface ScoringWeights {
   hoaKhoa: number;
   /** Mỗi cát tinh lục cát / Lộc Tồn hội tại khung nhìn. */
   lucCat: number;
-  /** Chính tinh miếu hoặc vượng tại cung hạn (trọng tâm). */
+  /** Chính tinh miếu / vượng / đắc tại khung. */
   majorMieuVuong: number;
-  /** Hệ số nhân khi tín hiệu nằm ở tam hợp / xung (không phải cung hạn chính). */
+  /**
+   * Hệ số khi tín hiệu nằm ở tam hợp / xung — giữ cho pair geometry & tương thích
+   * cũ; Đại vận dùng xungFactor / tamHopFactor riêng.
+   */
   sanFangFactor: number;
+  /** Trọng số đối cung (xung chiếu) trong TP4C Đại vận. */
+  xungFactor: number;
+  /** Trọng số mỗi cung tam hợp trong TP4C Đại vận. */
+  tamHopFactor: number;
 
   /** Hóa Kỵ vào cung hạn hoặc xung chiếu. */
   hoaKy: number;
@@ -102,9 +109,12 @@ export interface ScoringWeights {
   taiTueHungMaFactor: number;
 
   // ── Pair rules — draft ──
-  /** Cát từ cách Thanh Long ↔ Hóa Kỵ (đồng/xung; tam hợp × sanFang). */
+  /** Cát từ cách Thanh Long ↔ Hóa Kỵ (đồng/xung; tam hợp × tamHop). */
   longKyCat: number;
-  /** Phần hung Kỵ được trừ khi thành cách Long–Kỵ (0–1 của điểm Kỵ đã cộng). */
+  /**
+   * @deprecated Cát/Hung độc lập — không trừ hung bằng hóa giải.
+   * Giữ field để không gãy type; scorer bỏ qua.
+   */
   longKyHungRelief: number;
   /** Cát Thanh Long ↔ Lưu Hà. */
   longHaCat: number;
@@ -143,11 +153,11 @@ export interface ScoringWeights {
 
   /** Cát Phi Liêm ↔ Bạch Hổ. */
   phiHoCat: number;
-  /** Giảm hung flat khi Phi–Hổ. */
+  /** @deprecated Không trừ hung — scorer bỏ qua. */
   phiHoHungRelief: number;
-  /** Cát Phục Binh ↔ Thiên Hình. */
+  /** Cát Phục Binh ↔ Thiên Hình / Tướng Ấn. */
   binhHinhCat: number;
-  /** Giảm hung flat khi Binh–Hình. */
+  /** @deprecated Không trừ hung — scorer bỏ qua. */
   binhHinhHungRelief: number;
   /** Cát Đào ↔ Hồng hoặc Đào ↔ Hỷ. */
   daoHongCat: number;
@@ -181,13 +191,19 @@ export interface ScoringWeights {
   taiTuePressHung: number;
   /** Thiếu Dương / Thiếu Âm / Trực Phù (nhẹ cát). */
   taiTueSoftCat: number;
-  /** Trường Sinh: Tràng Sinh / Quan Đới / Lâm Quan / Đế Vượng / Thai / Dưỡng. */
+  /** Trường Sinh: Tràng Sinh / Đế Vượng. */
+  truongSinhVuongCat: number;
+  /** Trường Sinh: Lâm Quan / Quan Đới. */
+  truongSinhQuanCat: number;
+  /** Trường Sinh: Thai / Dưỡng. */
+  truongSinhThaiCat: number;
+  /** @deprecated Dùng truongSinhVuong/Quan/ThaiCat. */
   truongSinhCat: number;
-  /** Trường Sinh: Mộc Dục (bại địa / dục). */
+  /** Trường Sinh: Mộc Dục / Suy. */
   mocDucHung: number;
-  /** Trường Sinh: Suy / Bệnh / Tử / Tuyệt. */
+  /** Trường Sinh: Bệnh / Tử / Mộ / Tuyệt. */
   truongSinhSuyHung: number;
-  /** Trường Sinh: Mộ (tụ — nhẹ cát tại cung hạn). */
+  /** @deprecated Mộ chuyển sang hung (truongSinhSuyHung). */
   moChangSinhCat: number;
 
   /** Cát Tam Thai ↔ Bát Tọa. */
@@ -202,7 +218,7 @@ export interface ScoringWeights {
 
   /** Cát Tham Hỏa/Linh tương phùng. */
   thamHoaCat: number;
-  /** Giảm hung của Hỏa/Linh khi thành cách Tham Hỏa/Linh. */
+  /** @deprecated Không trừ hung — scorer bỏ qua. */
   thamHoaHungReliefRatio: number;
 
   /** Cát Tam Kỳ Gia Hội (Lộc Quyền Khoa). */
@@ -219,42 +235,39 @@ export interface ScoringWeights {
   /** Bonus khi tài tinh ở Tứ Mộ (Thìn, Tuất, Sửu, Mùi). */
   majorTaiMoBonus: number;
 
-  /** Cát Tử Phủ Vũ Tướng (Cách cục lớn). */
+  /** Cát Tử Phủ Vũ Tướng / Quân Thần Khánh Hội (Cách cục lớn). */
   tuPhuVuTuongCat: number;
-  /** Cát Sát Phá Tham. */
+  /** Cát Sát Phá Tham Miếu/Đắc hoặc hội Hỏa Linh. */
   satPhaThamCat: number;
-  /** Cát Cơ Nguyệt Đồng Lương. */
+  /** Hung Sát Phá Tham Hãm + sát/Kỵ. */
+  satPhaThamHung: number;
+  /** Cát Cơ Nguyệt Đồng Lương + Khoa Quyền Lộc. */
   coNguyetDongLuongCat: number;
+  /** Hung Linh Xương Đà Vũ. */
+  linhXuongDaVuHung: number;
 }
 
 /**
- * Draft mặc định — chờ thầy duyệt.
- * Cát ≈ lục cát + Lộc/Quyền/Khoa + miếu/vượng + pair quý.
- * Hung ≈ lục sát + Kỵ + hãm + Tuần/Triệt + Thái Tuế hung − relief Long–Kỵ.
- *
- * hoaLoc/hoaQuyen/hoaKhoa/lucCat/majorMieuVuong đã hạ ×0.65 (từ
- * 18/14/12/7/11) so với bản gốc — đo trên 2736 khung (96 lá số × 12 mốc
- * Đại vận): raw của riêng 3 nhóm "core" này (Tứ Hóa + lục cát + miếu/vượng)
- * đã đủ đẩy Cát dính trần 100 ở 44.6% số mốc kể cả sau khi phase 2/3 (phụ
- * tinh/tạp) đã siết theo focus-cung-hạn/cluster ở trên. Hệ số 0.65 chọn vì
- * đưa phân phối Cát khớp với Hung (đã fix): mean 77.6 so với 76.0, median
- * 79 so với 78, trần 17.6% so với 18.6% — không phải số tròn đoán bừa.
+ * Trọng số theo công thức scoring Đại vận (master spec).
+ * Cát / Hung độc lập; Ngũ hành = hệ số nhân toàn cục; không hóa giải trừ hung.
  */
 export const SCORING_WEIGHTS: ScoringWeights = {
-  hoaLoc: 12,
-  hoaQuyen: 9,
-  hoaKhoa: 8,
+  hoaLoc: 10,
+  hoaQuyen: 8,
+  hoaKhoa: 6,
   lucCat: 5,
   majorMieuVuong: 7,
-  sanFangFactor: 0.55,
+  sanFangFactor: 0.3,
+  xungFactor: 0.5,
+  tamHopFactor: 0.3,
 
-  hoaKy: 20,
+  hoaKy: 15,
   lucSat: 9,
   kySatCluster: 12,
   satCluster: 10,
-  majorHam: 12,
-  tuanTriet: 10,
-  taiTueHung: 7,
+  majorHam: 10,
+  tuanTriet: 8,
+  taiTueHung: 8,
 
   palaceBase: 42,
   palaceHasMajor: 8,
@@ -269,18 +282,18 @@ export const SCORING_WEIGHTS: ScoringWeights = {
   taiTueHungMaFactor: 1.15,
 
   longKyCat: 10,
-  longKyHungRelief: 0.55,
+  longKyHungRelief: 0,
   longHaCat: 8,
-  locMaCat: 14,
+  locMaCat: 10,
   vuThamMoCat: 16,
   maSatHung: 10,
 
   bacSiCat: 6,
-  songHaoHung: 8,
+  songHaoHung: 6,
   songHaoDacFactor: 0.4,
   songHaoDacCat: 6,
   bacSiHung: 7,
-  phiLiemHung: 5,
+  phiLiemHung: 4,
   daoHongHyCat: 5,
   coQuaHung: 6,
   ducCat: 6,
@@ -289,9 +302,9 @@ export const SCORING_WEIGHTS: ScoringWeights = {
   phaToaiHung: 7,
 
   phiHoCat: 6,
-  phiHoHungRelief: 5,
-  binhHinhCat: 5,
-  binhHinhHungRelief: 5,
+  phiHoHungRelief: 0,
+  binhHinhCat: 10,
+  binhHinhHungRelief: 0,
   daoHongCat: 7,
   daoSatHung: 8,
 
@@ -302,25 +315,28 @@ export const SCORING_WEIGHTS: ScoringWeights = {
   giaiCat: 4,
   longPhuongCat: 4,
   thienTaiThoCat: 4,
-  luuHaHung: 5,
+  luuHaHung: 4,
   dauQuanHung: 5,
   thienSuHung: 5,
   thienThuongHung: 5,
   taiTuePressHung: 5,
   taiTueSoftCat: 4,
-  truongSinhCat: 7,
+  truongSinhVuongCat: 6,
+  truongSinhQuanCat: 4,
+  truongSinhThaiCat: 2,
+  truongSinhCat: 6,
   mocDucHung: 4,
   truongSinhSuyHung: 6,
-  moChangSinhCat: 4,
+  moChangSinhCat: 0,
 
   thaiToaPairCat: 6,
   quangQuyPairCat: 6,
 
-  cuKyHung: 12,
-  khocHuHung: 6,
+  cuKyHung: 15,
+  khocHuHung: 15,
 
   thamHoaCat: 16,
-  thamHoaHungReliefRatio: 0.6,
+  thamHoaHungReliefRatio: 0,
 
   tamKyCat: 18,
 
@@ -331,7 +347,9 @@ export const SCORING_WEIGHTS: ScoringWeights = {
   majorDongMaBonus: 5,
   majorTaiMoBonus: 8,
 
-  tuPhuVuTuongCat: 20,
-  satPhaThamCat: 18,
-  coNguyetDongLuongCat: 16,
+  tuPhuVuTuongCat: 15,
+  satPhaThamCat: 15,
+  satPhaThamHung: 18,
+  coNguyetDongLuongCat: 12,
+  linhXuongDaVuHung: 15,
 };

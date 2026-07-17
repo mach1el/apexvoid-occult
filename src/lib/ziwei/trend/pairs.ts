@@ -16,6 +16,7 @@ import {
 import {
   HOA_LINH_NAMES,
   KHONG_KIEP_NAMES,
+  SAT_SET,
   SAT_TINH_NAMES,
 } from "./star-sets";
 import type { ScoringWeights } from "./weights";
@@ -46,14 +47,16 @@ export interface PairHit {
     | "xuongKhucNhatNguyet"
     | "tuPhuVuTuong"
     | "satPhaTham"
-    | "coNguyetDongLuong";
+    | "satPhaThamHung"
+    | "coNguyetDongLuong"
+    | "linhXuongDaVu";
   geometry: PairGeometry;
   factor: number;
   label: string;
   catPoints: number;
   hungPoints: number;
   kyReliefRatio: number;
-  /** Flat hung relief (âm) ngoài longKy ratio. */
+  /** @deprecated Cát/Hung độc lập — luôn 0; scorer không trừ hung. */
   hungRelief: number;
 }
 
@@ -122,6 +125,19 @@ function bestPair(
   return best;
 }
 
+function isCatBrightness(brightness?: string): boolean {
+  return brightness === "Miếu" || brightness === "Vượng" || brightness === "Đắc";
+}
+
+function isHamBrightness(brightness?: string): boolean {
+  return brightness === "Hãm";
+}
+
+/** Hệ số hình học cặp: đồng=1, xung=0.85, tam hợp=tamHopFactor. */
+function pairFactor(geometry: PairGeometry, weights: ScoringWeights): number {
+  return pairGeometryFactor(geometry, weights.tamHopFactor, 0.85);
+}
+
 const GEO_PREF: PairGeometry[] = ["dong", "xung", "tam-hop"];
 const GEO_PREF_STRONG: PairGeometry[] = ["dong", "xung"];
 
@@ -155,7 +171,7 @@ export function detectPairRules(
     const isPhaCach = kys.length > 0 || kinhDa.length > 0;
 
     if (!isPhaCach) {
-      const factor = pairGeometryFactor(thamHoa.geometry, weights.sanFangFactor);
+      const factor = pairFactor(thamHoa.geometry, weights);
       hits.push({
         id: "thamHoa",
         geometry: thamHoa.geometry,
@@ -166,9 +182,7 @@ export function detectPairRules(
         kyReliefRatio: 0,
         // hungRelief đẩy thẳng vào lớp Hung nên phải ÂM mới giảm hung (xem
         // phiHo/binhHinh). Trong Hỏa/Linh Tham sát tinh đổi vai → bớt hung.
-        hungRelief: -Math.round(
-          weights.lucSat * weights.thamHoaHungReliefRatio * factor,
-        ),
+hungRelief: 0,
       });
     }
   }
@@ -177,7 +191,7 @@ export function detectPairRules(
   const cuLiem = stars.filter((s) => s.base === "Cự Môn" || s.base === "Liêm Trinh");
   const xuongKhucCuLiem = bestPair(xuongKhuc, cuLiem, GEO_PREF);
   if (xuongKhucCuLiem) {
-    const factor = pairGeometryFactor(xuongKhucCuLiem.geometry, weights.sanFangFactor);
+    const factor = pairFactor(xuongKhucCuLiem.geometry, weights);
     hits.push({
       id: "xuongKhucCuLiem",
       geometry: xuongKhucCuLiem.geometry,
@@ -193,7 +207,7 @@ export function detectPairRules(
   const nhatNguyet = stars.filter((s) => s.base === "Thái Dương" || s.base === "Thái Âm");
   const xuongKhucNhatNguyet = bestPair(xuongKhuc, nhatNguyet, GEO_PREF);
   if (xuongKhucNhatNguyet) {
-    const factor = pairGeometryFactor(xuongKhucNhatNguyet.geometry, weights.sanFangFactor);
+    const factor = pairFactor(xuongKhucNhatNguyet.geometry, weights);
     hits.push({
       id: "xuongKhucNhatNguyet",
       geometry: xuongKhucNhatNguyet.geometry,
@@ -239,33 +253,70 @@ export function detectPairRules(
     });
   }
 
-  // Sát Phá Tham
+  // Sát Phá Tham — phân nhánh Cát (Miếu/Đắc / hội Hỏa Linh) vs Hung (Hãm + sát/Kỵ)
   const thatSat = stars.filter((s) => s.base === "Thất Sát");
   const phaQuan = stars.filter((s) => s.base === "Phá Quân");
   if (thatSat.length && phaQuan.length && tham.length) {
-    hits.push({
-      id: "satPhaTham",
-      geometry: "tam-hop",
-      factor: 1,
-      label: `Sát Phá Tham hội tụ`,
-      catPoints: weights.satPhaThamCat,
-      hungPoints: 0,
-      kyReliefRatio: 0,
-      hungRelief: 0,
-    });
+    const sptStars = [...thatSat, ...phaQuan, ...tham];
+    const anyHam = sptStars.some((s) => isHamBrightness(s.star.brightness));
+    const allCatBright = sptStars.every((s) => isCatBrightness(s.star.brightness));
+    const hoaLinhDac = hoaLinh.some((s) => isCatBrightness(s.star.brightness));
+    const hungCompanions = stars.some(
+      (s) =>
+        SAT_SET.has(s.base) ||
+        s.base === "Bạch Hổ" ||
+        s.base === "Tang Môn" ||
+        s.base === "Phi Liêm" ||
+        s.base === "Lưu Hà",
+    );
+    const hasSatOrKy = kys.length > 0 || hungCompanions;
+
+    if (anyHam && hasSatOrKy) {
+      hits.push({
+        id: "satPhaThamHung",
+        geometry: "tam-hop",
+        factor: 1,
+        label: `Sát Phá Tham Hãm ngộ sát/Kỵ`,
+        catPoints: 0,
+        hungPoints: weights.satPhaThamHung,
+        kyReliefRatio: 0,
+        hungRelief: 0,
+      });
+    } else if (allCatBright || (hoaLinh.length > 0 && hoaLinhDac && !anyHam)) {
+      hits.push({
+        id: "satPhaTham",
+        geometry: "tam-hop",
+        factor: 1,
+        label: hoaLinhDac
+          ? `Sát Phá Tham hội Hỏa Linh đắc`
+          : `Sát Phá Tham Miếu/Đắc hội tụ`,
+        catPoints: weights.satPhaThamCat,
+        hungPoints: 0,
+        kyReliefRatio: 0,
+        hungRelief: 0,
+      });
+    }
   }
 
-  // Cơ Nguyệt Đồng Lương
+  // Cơ Nguyệt Đồng Lương + Khoa Quyền Lộc
   const thienCo = stars.filter((s) => s.base === "Thiên Cơ");
   const thaiAm = stars.filter((s) => s.base === "Thái Âm");
   const thienDong = stars.filter((s) => s.base === "Thiên Đồng");
   const thienLuong = stars.filter((s) => s.base === "Thiên Lương");
-  if (thienCo.length && thaiAm.length && thienDong.length && thienLuong.length) {
+  const hasKhoaQuyenLoc =
+    hoaLocs.length > 0 && quyens.length > 0 && khoas.length > 0;
+  if (
+    thienCo.length &&
+    thaiAm.length &&
+    thienDong.length &&
+    thienLuong.length &&
+    hasKhoaQuyenLoc
+  ) {
     hits.push({
       id: "coNguyetDongLuong",
       geometry: "tam-hop",
       factor: 1,
-      label: `Cơ Nguyệt Đồng Lương hội tụ`,
+      label: `Cơ Nguyệt Đồng Lương + Khoa Quyền Lộc`,
       catPoints: weights.coNguyetDongLuongCat,
       hungPoints: 0,
       kyReliefRatio: 0,
@@ -275,7 +326,7 @@ export function detectPairRules(
 
   const longKy = bestPair(longs, kys, GEO_PREF);
   if (longKy) {
-    const factor = pairGeometryFactor(longKy.geometry, weights.sanFangFactor);
+    const factor = pairFactor(longKy.geometry, weights);
     hits.push({
       id: "longKy",
       geometry: longKy.geometry,
@@ -283,21 +334,30 @@ export function detectPairRules(
       label: `Thanh Long–Hóa Kỵ ${geometryLabel(longKy.geometry)} (${longKy.a.palaceName}↔${longKy.b.palaceName})`,
       catPoints: Math.round(weights.longKyCat * factor),
       hungPoints: 0,
-      kyReliefRatio: weights.longKyHungRelief * factor,
+      kyReliefRatio: 0,
       hungRelief: 0,
     });
   }
 
-  // Cự Kỵ: Cự Môn (ám tinh chủ) + Hóa Kỵ — "ám thượng gia ám", tăng thị phi/khẩu thiệt.
+  // Cự Kỵ / Cự Môn Hãm + Đà La — ám thượng gia ám
   const cuMon = stars.filter((s) => s.base === "Cự Môn");
+  const daLa = stars.filter((s) => s.base === "Đà La");
   const cuKy = bestPair(cuMon, kys, GEO_PREF);
-  if (cuKy) {
-    const factor = pairGeometryFactor(cuKy.geometry, weights.sanFangFactor);
+  const cuHamDa =
+    cuMon.some((s) => isHamBrightness(s.star.brightness)) && daLa.length > 0;
+  if (cuKy || cuHamDa) {
+    const factor = cuKy
+      ? pairFactor(cuKy.geometry, weights)
+      : 1;
+    const geometry = cuKy?.geometry ?? "dong";
+    const label = cuKy
+      ? `Cự Môn–Hóa Kỵ ${geometryLabel(cuKy.geometry)} (${cuKy.a.palaceName}↔${cuKy.b.palaceName}) — ám thượng gia ám`
+      : `Cự Môn Hãm + Đà La — ám thượng gia ám`;
     hits.push({
       id: "cuKy",
-      geometry: cuKy.geometry,
+      geometry,
       factor,
-      label: `Cự Môn–Hóa Kỵ ${geometryLabel(cuKy.geometry)} (${cuKy.a.palaceName}↔${cuKy.b.palaceName}) — ám thượng gia ám`,
+      label,
       catPoints: 0,
       hungPoints: Math.round(weights.cuKyHung * factor),
       kyReliefRatio: 0,
@@ -307,7 +367,7 @@ export function detectPairRules(
 
   const longHa = bestPair(longs, luuHas, GEO_PREF_STRONG);
   if (longHa) {
-    const factor = pairGeometryFactor(longHa.geometry, weights.sanFangFactor);
+    const factor = pairFactor(longHa.geometry, weights);
     hits.push({
       id: "longHa",
       geometry: longHa.geometry,
@@ -322,7 +382,7 @@ export function detectPairRules(
 
   const locMa = bestPair(locStars, mas, GEO_PREF);
   if (locMa) {
-    const factor = pairGeometryFactor(locMa.geometry, weights.sanFangFactor);
+    const factor = pairFactor(locMa.geometry, weights);
     hits.push({
       id: "locMa",
       geometry: locMa.geometry,
@@ -341,7 +401,7 @@ export function detectPairRules(
     vuTham &&
     (isMoBranch(vuTham.a.branch) || isMoBranch(vuTham.b.branch))
   ) {
-    const factor = pairGeometryFactor(vuTham.geometry, weights.sanFangFactor);
+    const factor = pairFactor(vuTham.geometry, weights);
     const bothMo =
       isMoBranch(vuTham.a.branch) && isMoBranch(vuTham.b.branch);
     const boost = bothMo && vuTham.geometry === "dong" ? 1 : 0.85;
@@ -361,16 +421,17 @@ export function detectPairRules(
   const bachHo = stars.filter((s) => s.base === "Bạch Hổ");
   const phiHo = bestPair(phi, bachHo, GEO_PREF_STRONG);
   if (phiHo) {
-    const factor = pairGeometryFactor(phiHo.geometry, weights.sanFangFactor);
+    const factor = pairFactor(phiHo.geometry, weights);
+    // Phi–Hổ: không thưởng Cát — từng sao đã vào đường ống Hung riêng.
     hits.push({
       id: "phiHo",
       geometry: phiHo.geometry,
       factor,
       label: `Phi Liêm–Bạch Hổ ${geometryLabel(phiHo.geometry)} (${phiHo.a.palaceName}↔${phiHo.b.palaceName})`,
-      catPoints: Math.round(weights.phiHoCat * factor),
+      catPoints: 0,
       hungPoints: 0,
       kyReliefRatio: 0,
-      hungRelief: -Math.round(weights.phiHoHungRelief * factor),
+      hungRelief: 0,
     });
   }
 
@@ -378,7 +439,7 @@ export function detectPairRules(
   const hinh = stars.filter((s) => s.base === "Thiên Hình");
   const binhHinh = bestPair(phucBinh, hinh, GEO_PREF_STRONG);
   if (binhHinh) {
-    const factor = pairGeometryFactor(binhHinh.geometry, weights.sanFangFactor);
+    const factor = pairFactor(binhHinh.geometry, weights);
     hits.push({
       id: "binhHinh",
       geometry: binhHinh.geometry,
@@ -387,7 +448,7 @@ export function detectPairRules(
       catPoints: Math.round(weights.binhHinhCat * factor),
       hungPoints: 0,
       kyReliefRatio: 0,
-      hungRelief: -Math.round(weights.binhHinhHungRelief * factor),
+      hungRelief: 0,
     });
   }
 
@@ -400,7 +461,7 @@ export function detectPairRules(
   const daoHy = bestPair(dao, hy, GEO_PREF_STRONG);
   const daoPair = daoHong ?? daoHy;
   if (daoPair) {
-    const factor = pairGeometryFactor(daoPair.geometry, weights.sanFangFactor);
+    const factor = pairFactor(daoPair.geometry, weights);
     hits.push({
       id: "daoHong",
       geometry: daoPair.geometry,
@@ -413,19 +474,39 @@ export function detectPairRules(
     });
   }
 
-  // Khốc–Hư: cặp cố định xung chiếu nhau — giao hội nhấn thêm mất mát/u uất.
+  // Khốc–Hư Tang Hổ: cặp cố định + Tang Môn/Bạch Hổ → Combo Hung đầy đủ
   const khoc = stars.filter((s) => s.base === "Thiên Khốc");
   const hu = stars.filter((s) => s.base === "Thiên Hư");
+  const tangMon = stars.filter((s) => s.base === "Tang Môn");
+  const bachHoForKhoc = stars.filter((s) => s.base === "Bạch Hổ");
   const khocHu = bestPair(khoc, hu, GEO_PREF_STRONG);
-  if (khocHu) {
-    const factor = pairGeometryFactor(khocHu.geometry, weights.sanFangFactor);
+  if (khocHu && (tangMon.length > 0 || bachHoForKhoc.length > 0)) {
+    const factor = pairFactor(khocHu.geometry, weights);
     hits.push({
       id: "khocHu",
       geometry: khocHu.geometry,
       factor,
-      label: `Thiên Khốc–Thiên Hư ${geometryLabel(khocHu.geometry)} (${khocHu.a.palaceName}↔${khocHu.b.palaceName})`,
+      label: `Khốc Hư Tang Hổ ${geometryLabel(khocHu.geometry)} (${khocHu.a.palaceName}↔${khocHu.b.palaceName})`,
       catPoints: 0,
       hungPoints: Math.round(weights.khocHuHung * factor),
+      kyReliefRatio: 0,
+      hungRelief: 0,
+    });
+  }
+
+  // Linh Xương Đà Vũ — Combo Hung
+  const linh = stars.filter((s) => s.base === "Linh Tinh");
+  const xuong = stars.filter((s) => s.base === "Văn Xương");
+  const da = stars.filter((s) => s.base === "Đà La");
+  const vuKhuc = stars.filter((s) => s.base === "Vũ Khúc");
+  if (linh.length && xuong.length && da.length && vuKhuc.length) {
+    hits.push({
+      id: "linhXuongDaVu",
+      geometry: "tam-hop",
+      factor: 1,
+      label: `Linh Xương Đà Vũ hội tụ`,
+      catPoints: 0,
+      hungPoints: weights.linhXuongDaVuHung,
       kyReliefRatio: 0,
       hungRelief: 0,
     });
@@ -456,7 +537,7 @@ export function detectPairRules(
   const batToa = stars.filter((s) => s.base === "Bát Tọa");
   const thaiToa = bestPair(tamThai, batToa, GEO_PREF);
   if (thaiToa) {
-    const factor = pairGeometryFactor(thaiToa.geometry, weights.sanFangFactor);
+    const factor = pairFactor(thaiToa.geometry, weights);
     hits.push({
       id: "thaiToa",
       geometry: thaiToa.geometry,
@@ -473,7 +554,7 @@ export function detectPairRules(
   const thienQuy = stars.filter((s) => s.base === "Thiên Quý");
   const quangQuy = bestPair(anQuang, thienQuy, GEO_PREF);
   if (quangQuy) {
-    const factor = pairGeometryFactor(quangQuy.geometry, weights.sanFangFactor);
+    const factor = pairFactor(quangQuy.geometry, weights);
     hits.push({
       id: "quangQuy",
       geometry: quangQuy.geometry,
