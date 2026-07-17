@@ -382,7 +382,7 @@ describe("frame scoring 6-step (via getDaiVanTrend)", () => {
     expect(
       point.breakdown.hung.some(
         (line) =>
-          line.reason.includes("xung chiếu") && line.reason.includes("Kỵ"),
+          line.reason.includes("xung chiếu") && line.source.includes("Kỵ"),
       ),
     ).toBe(true);
     expect(

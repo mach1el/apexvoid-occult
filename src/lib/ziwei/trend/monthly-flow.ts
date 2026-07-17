@@ -188,7 +188,6 @@ export function scoreLuuNguyetFrame(
   const voids = voidBranches(chart);
   const frame = monthSanFangSiZheng(chart, focus);
   const frameByIndex = new Map(frame.map((row) => [row.palace.index, row]));
-  const elementForStar = engine.elementForStar;
   const hits: LocKyHit[] = [];
 
   // ── Bước A: quét sao gốc trong khung (chính tinh/phụ tinh + Tuần/Triệt +
@@ -199,7 +198,7 @@ export function scoreLuuNguyetFrame(
 
     for (const star of palace.stars ?? []) {
       if (isAnnualStar(star)) continue; // sao lưu niên không thuộc gốc cung
-      const energy = computeStarEnergy(star, chart.menhElement, elementForStar);
+      const energy = computeStarEnergy(star);
       if (!energy) continue;
       const routed = routeStarEnergy(energy);
       if (!routed) continue;
@@ -207,15 +206,14 @@ export function scoreLuuNguyetFrame(
       const points = scale(routed.points, wCung);
       if (points === 0) continue;
 
-      const noteParts = [
-        energy.bright ?? energy.anchor,
-        energy.note,
-        wCung !== 1 ? `W=${wCung}` : "",
-      ].filter(Boolean);
+      // UI chuẩn: Tên sao + Độ sáng + Nguồn kích hoạt (luôn "base" ở đây vì
+      // Bước A đã loại sao lưu niên ở trên) — giữ vị trí TP4C để không mất
+      // minh bạch "hiện bài làm" (AGENTS §5).
+      const brightLabel = energy.bright ?? energy.anchor;
       const line: ScoreLine = {
         source: star.name,
         points,
-        reason: `${energy.base} tại ${where} (${noteParts.join(" · ")})`,
+        reason: `${brightLabel} · base tại ${where}`,
       };
       if (routed.layer === "cat") cat.push(line);
       else hung.push(line);

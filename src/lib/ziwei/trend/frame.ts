@@ -1,6 +1,7 @@
 /**
  * Chấm một khung hạn = cung hạn + tam phương tứ chính.
- * Đại vận: công thức 6 bước (P_csv × M_pos × M_nh × W_cung → Cát/Hung độc lập).
+ * Đại vận: công thức 6 bước (P_csv × M_pos × W_cung → Cát/Hung độc lập).
+ * Không còn hệ số Ngũ Hành Bản Mệnh (M_nh) — thầy chốt bỏ 2026-07-18.
  */
 
 import type {
@@ -9,7 +10,6 @@ import type {
   MutagenRecord,
   School,
 } from "@/types/chart";
-import { getEngine } from "../chart";
 import { baseStarName, isAnnualStar } from "../star-classification";
 import {
   evaluateCombos,
@@ -24,7 +24,7 @@ import {
 import { findStarScore } from "./star-scores";
 import type { ScoringWeights } from "./weights";
 import type { ScoreLine, TrendPoint } from "./types";
-import { finalizeLayer, voidBranches } from "./util";
+import { finalizeLayer, isMutagenStar, mutagenKind, voidBranches } from "./util";
 import { roundTo1Decimal } from "./ui-breakdown";
 import {
   extractBaseElement,
@@ -202,15 +202,16 @@ export function scoreFortuneFrame(
   options: FrameScoreOptions,
 ): Pick<TrendPoint, "cat" | "hung" | "breakdown"> {
   const { includeAnnual } = options;
-  const school = options.school ?? "nam-phai";
-  const elementForStar =
-    getEngine(school)?.elementForStar ?? (() => "");
 
   const cat: ScoreLine[] = [];
   const hung: ScoreLine[] = [];
   const voids = voidBranches(chart);
   const rawFrame = sanFangSiZheng(chart, focus);
   const applyHomeTurf = !includeAnnual;
+  // Tứ Hóa đã có mặt là sao thật trong khung (Bước A) — dùng để chặn mutagen
+  // record cộng trùng ở dưới. Key theo (kind, palaceIndex), KHÔNG dò text
+  // reason (đã bỏ "tại cung X" khỏi reason hiển thị).
+  const mutagenHitPalaces = new Set<string>();
 
   const frame: FrameRow[] = rawFrame.map(({ palace, role }) => ({
     palace,
@@ -226,20 +227,25 @@ export function scoreFortuneFrame(
     for (const star of palace.stars ?? []) {
       if (!includeAnnual && isAnnualStar(star)) continue;
 
-      const energy = computeStarEnergy(star, chart.menhElement, elementForStar);
+      if (isMutagenStar(star)) {
+        const kind = mutagenKind(star);
+        if (kind) mutagenHitPalaces.add(`${kind}:${palace.index}`);
+      }
+
+      const energy = computeStarEnergy(star);
       if (!energy) continue;
 
       let routed = routeStarEnergy(energy);
       if (!routed) continue;
 
       // Khoa Chế Không: sát Không/Kiếp/Hỏa/Linh trong cung cứu giải → ×0.5 hung
-      if (
+      const khoaChe =
         routed.layer === "hung" &&
         salvation &&
         SAT_KHONG_HOA.includes(
           energy.base as (typeof SAT_KHONG_HOA)[number],
-        )
-      ) {
+        );
+      if (khoaChe) {
         routed = { layer: "hung", points: routed.points * 0.5 };
       }
 
@@ -249,19 +255,20 @@ export function scoreFortuneFrame(
       const points = scale(routed.points, wCung);
       if (points === 0) continue;
 
+      // UI chuẩn: Tên sao + Độ sáng + Nguồn kích hoạt (base/lưu niên) — không
+      // còn ghi chú Ngũ Hành Bản Mệnh. Vẫn giữ vị trí TP4C + trọng số cung để
+      // không mất minh bạch "hiện bài làm" (AGENTS §5) và không phá dedup Tứ
+      // Hóa phía dưới.
+      const originTag = isAnnualStar(star) ? "lưu niên" : "base";
+      const brightLabel = energy.bright ?? energy.anchor;
       const noteParts = [
-        energy.bright ?? energy.anchor,
-        energy.note,
         wCung !== 1 ? `W=${wCung}` : "",
-        salvation && routed.layer === "hung" && SAT_KHONG_HOA.includes(energy.base as (typeof SAT_KHONG_HOA)[number])
-          ? "Khoa chế ×0.5"
-          : "",
+        khoaChe ? "Khoa chế ×0.5" : "",
       ].filter(Boolean);
-
       const line: ScoreLine = {
         source: star.name,
         points,
-        reason: `${energy.base} tại ${where} (${noteParts.join(" · ")})`,
+        reason: `${brightLabel} · ${originTag} tại ${where}${noteParts.length ? ` (${noteParts.join(" · ")})` : ""}`,
       };
       if (routed.layer === "cat") cat.push(line);
       else hung.push(line);
@@ -343,11 +350,7 @@ export function scoreFortuneFrame(
               : null;
       if (!kind) continue;
 
-      const already =
-        kind === "Kỵ"
-          ? hung.some((l) => l.source.includes("Kỵ") && l.reason.includes(palace.name))
-          : cat.some((l) => l.source.includes(kind) && l.reason.includes(palace.name));
-      if (already) continue;
+      if (mutagenHitPalaces.has(`${kind}:${palace.index}`)) continue;
 
       // Điểm CSV Tứ Hóa
       const scoreName =
