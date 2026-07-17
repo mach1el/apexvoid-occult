@@ -24,7 +24,7 @@
     margin-inline: auto;
     /* Cột 1 = đúng bề rộng fit của lá số (không rộng hơn chart → hết khoảng trống
        trước chat). Chat 1fr giãn full phần còn lại. */
-    --ziwei-chart-fit: min(1280px, calc((100svh - 120px) * 880 / 896));
+    --ziwei-chart-fit: min(1280px, calc((100svh - 80px) * 880 / 896));
     grid-template-columns: minmax(780px, var(--ziwei-chart-fit)) minmax(400px, 1fr);
     grid-template-rows: auto auto;
     gap: 16px;
@@ -635,8 +635,17 @@
 }
 
 @media (max-width: 960px) {
+  .shell > .chart-section,
+  .shell > .chart-section > .chart-workspace,
+  .compact-chart-stage {
+    overflow: visible;
+    height: auto;
+    max-height: none;
+  }
+
   .compact-chart-stage {
     padding: 0;
+    place-items: start stretch;
   }
 
   .compact-chart-stage.is-reading {
@@ -650,14 +659,20 @@
   }
 
   .compact-chart-svg {
+    display: block;
     width: 100%;
-    max-width: 720px;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
     touch-action: pan-y;
   }
 
+  /* contain:paint trên desktop có thể cắt đáy SVG khi scale mobile. */
   .compact-chart-capture {
     width: 100%;
-    max-width: 720px;
+    max-width: 100%;
+    contain: none;
+    overflow: visible;
     touch-action: pan-y;
   }
 
