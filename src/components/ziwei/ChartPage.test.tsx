@@ -90,6 +90,18 @@ describe("ChartPage profile form", () => {
     expect(compactChartCss).toContain("fill: var(--amber-soft)");
     expect(mobileChartCss).toContain("color: var(--element-kim) !important");
     expect(mobileChartCss).toContain("background: var(--danger-soft)");
+    expect(mobileChartCss).toMatch(
+      /\.mobile-chart-switch button\.is-active\s*\{[^}]*background:\s*linear-gradient\(145deg,\s*#fff3c4/,
+    );
+    expect(compactChartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*960px\s*\)[\s\S]*?\.compact-phi-flow\s*\{[^}]*font-family:\s*"Be Vietnam Pro"[^}]*font-size:\s*11px/,
+    );
+    expect(mobileChartCss).toMatch(
+      /\.mobile-phi-section span\s*\{[^}]*font-family:\s*"Be Vietnam Pro"[^}]*font-size:\s*0\.84rem/,
+    );
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*700px\s*\)[\s\S]*?\.profile-toggles \.toggle\.is-phi-toggle\s*\{[^}]*font-family:\s*'Be Vietnam Pro'/,
+    );
   });
 
   it("keeps desktop page shell and compact chart fit under min-width 1201", () => {

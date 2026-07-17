@@ -574,7 +574,7 @@ export function ChartPage() {
                       />
                       Tứ Hóa
                     </label>
-                    <label className="toggle">
+                    <label className="toggle is-phi-toggle">
                       <input
                         type="checkbox"
                         checked={form.showPhi}

@@ -1043,6 +1043,19 @@ body{
   .field-icon{width:31px;height:31px}
   .profile-field input[type="text"],.profile-field select{font-size:.8rem}
   .profile-toggles{display:grid;grid-template-columns:repeat(3,1fr)}
+  .profile-toggles .toggle.is-phi-toggle{
+    color:var(--amber-soft);
+    font-family:'Be Vietnam Pro',system-ui,sans-serif;
+    font-size:.72rem;
+    font-weight:600;
+    font-synthesis:none;
+  }
+  .school-tab:has(input:checked){
+    color:#100b02;
+    border-color:#f4d88c;
+    background:linear-gradient(145deg,#fff3c4 0%,#f0cd72 44%,#d7a93f 100%);
+    box-shadow:0 3px 16px rgba(226,188,95,.44),inset 0 1px 0 rgba(255,255,255,.5);
+  }
   .profile-chart-actions{justify-content:stretch;padding-left:0;border-left:0}
   .profile-chart-actions .btn-ghost{flex:1 1 0;justify-content:center}
   .chart-workspace,.panel,.ai-chat-panel{border-radius:16px}

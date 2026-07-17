@@ -27,9 +27,12 @@
   }
 
   .mobile-chart-switch button.is-active {
-    color: var(--void);
-    background: linear-gradient(180deg, #fff1c4 0%, var(--amber-soft) 42%, var(--amber) 100%);
-    box-shadow: 0 3px 14px rgb(226 188 95 / 30%);
+    color: #100b02;
+    border: 1px solid #f4d88c;
+    background: linear-gradient(145deg, #fff3c4 0%, #f0cd72 44%, #d7a93f 100%);
+    box-shadow:
+      0 3px 16px rgb(226 188 95 / 44%),
+      inset 0 1px 0 rgb(255 255 255 / 50%);
   }
 
   .mobile-chart-reader {
@@ -358,10 +361,11 @@
     border-radius: 999px;
     padding: 4px 8px;
     color: var(--violet);
-    font-family: var(--font-stars-minor), var(--font-chat), sans-serif;
-    font-size: 0.78rem;
-    font-weight: 650;
-    letter-spacing: 0.02em;
+    font-family: "Be Vietnam Pro", system-ui, sans-serif;
+    font-size: 0.84rem;
+    font-weight: 600;
+    font-synthesis: none;
+    letter-spacing: 0;
   }
 
   .mobile-palace-meta {
