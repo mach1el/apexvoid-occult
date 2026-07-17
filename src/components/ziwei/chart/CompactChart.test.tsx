@@ -9,10 +9,11 @@ const compactChartSource = readFileSync(
   "utf8",
 );
 
-test("lá số compact giữ ô cung cao 248 (không rút về tỉ lệ gần vuông)", () => {
-  expect(compactChartSource).toMatch(/const CELL_HEIGHT = 248/);
+test("lá số compact giữ ô cung cao 300 (tỉ lệ portrait trên mobile)", () => {
+  expect(compactChartSource).toMatch(/const CELL_HEIGHT = 300/);
   expect(compactChartSource).toMatch(/const HEIGHT = CELL_HEIGHT \* 4/);
   expect(compactChartSource).not.toMatch(/const CELL_HEIGHT = 224/);
+  expect(compactChartSource).not.toMatch(/const CELL_HEIGHT = 248/);
 });
 
 test("Vũ Khúc (Kim) và Tử Vi (Thổ) nhận màu ngũ hành khác nhau", () => {

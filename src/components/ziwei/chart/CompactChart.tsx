@@ -42,8 +42,11 @@ interface Position {
 }
 
 const CELL_WIDTH = 220;
-/** Cao hơn tỉ lệ gần-vuông (224) — mobile không bị rút ngắn khi width:100%. */
-const CELL_HEIGHT = 248;
+/**
+ * Ô cung cao 300 → viewBox 880×1200 (tỉ lệ ~1.36, gần bản cũ 720×992).
+ * Với width:100% trên mobile, chiều cao ~ width×1.36 — hết bị “vuông thấp”.
+ */
+const CELL_HEIGHT = 300;
 const WIDTH = CELL_WIDTH * 4;
 const HEIGHT = CELL_HEIGHT * 4;
 const CENTER_WIDTH = CELL_WIDTH * 2;
