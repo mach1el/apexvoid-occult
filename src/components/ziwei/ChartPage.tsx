@@ -19,6 +19,7 @@ import {
 import {
   getDaiVanTrend,
   getLuuNienTrend,
+  SCORING_WEIGHTS,
   type TrendPoint,
 } from "@/lib/ziwei/trend";
 import type {
@@ -220,8 +221,8 @@ export function ChartPage() {
   );
 
   const daiVanTrend = useMemo(
-    () => (chartData ? getDaiVanTrend(chartData) : []),
-    [chartData],
+    () => (chartData ? getDaiVanTrend(chartData, SCORING_WEIGHTS, school) : []),
+    [chartData, school],
   );
   const luuNienTrend = useMemo(
     () =>

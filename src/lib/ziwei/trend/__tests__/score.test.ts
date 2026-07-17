@@ -31,17 +31,64 @@ describe("getDaiVanTrend", () => {
     expect(risky!.hung).toBeGreaterThan(current!.hung);
   });
 
-  it("đổi trọng số → điểm đổi", () => {
-    const chart = makeChart();
-    const baseline = getDaiVanTrend(chart);
-    // Đại vận không tính sao lưu niên; Hóa Lộc của makeChart là annual-mutagen
-    // (thuộc lưu niên), nên boost lục cát — Tả Phụ/Văn Khúc thực có trong khung.
-    const boosted: ScoringWeights = {
-      ...SCORING_WEIGHTS,
-      lucCat: SCORING_WEIGHTS.lucCat + 40,
-    };
-    const next = getDaiVanTrend(chart, boosted);
-    expect(next).not.toEqual(baseline);
+  it("nghiệm thu ĐV 35–44 (nữ Tân Mùi 1991): SPT Hãm→Hung, Khắc Nhập, Hung áp đảo Cát", () => {
+    const chart = calculateNamPhai({
+      solarDate: "1991-09-21",
+      birthHour: "Dậu",
+      gender: "female",
+      timezone: "7",
+      annualYear: "2026",
+      flowBase: "luu-nien",
+    });
+    const point = getDaiVanTrend(chart).find((item) => item.label === "35-44");
+    expect(point).toBeDefined();
+
+    expect(
+      point!.breakdown.hung.some((line) => line.source.includes("HUNG_03")),
+    ).toBe(true);
+    expect(
+      point!.breakdown.cat.some((line) => line.source.includes("CAT_02")),
+    ).toBe(false);
+    expect(
+      point!.breakdown.cat.some(
+        (line) => line.source === "Ngũ Hành Vận" && line.reason.includes("×0.75"),
+      ),
+    ).toBe(true);
+    expect(
+      point!.breakdown.hung.some(
+        (line) => line.source === "Ngũ Hành Vận" && line.reason.includes("×1.25"),
+      ),
+    ).toBe(true);
+    expect(point!.hung).toBeGreaterThan(point!.cat);
+    // Tay thầy ~35/73 dùng điểm tay (Tham+10, Kỵ lưu…). Engine bám P_csv×M_nh
+    // → tuyệt đối khác; kiến trúc (SPT Hung + Khắc Nhập) là chân lý nghiệm thu.
+    // ## Cần thầy duyệt: có siết điểm CSV cho khớp 35/73 không?
+    expect(
+      point!.breakdown.hung
+        .filter((line) => line.source === "Ngũ Hành Vận")
+        .every((line) => line.points === 0),
+    ).toBe(true);
+    expect(
+      point!.breakdown.hung.every(
+        (line) => line.points >= 0 || line.source === "Chuẩn hóa",
+      ),
+    ).toBe(true);
+  });
+
+  it("label trục X Đại vận bám cục số: 1991 Thổ Ngũ → 5-14…; không nhầm Thủy Nhị 2-11", () => {
+    const chart1991 = calculateNamPhai({
+      solarDate: "1991-09-21",
+      birthHour: "Dậu",
+      gender: "female",
+      timezone: "7",
+      annualYear: "2026",
+      flowBase: "luu-nien",
+    });
+    expect(chart1991.cuc.number).toBe(5);
+    const labels1991 = getDaiVanTrend(chart1991).map((p) => p.label);
+    expect(labels1991[0]).toBe("5-14");
+    expect(labels1991).toContain("35-44");
+    expect(labels1991.some((l) => l.startsWith("2-"))).toBe(false);
   });
 });
 

@@ -36,3 +36,7 @@ export {
 
 export type { ScoringWeights } from "./weights";
 export { SCORING_WEIGHTS } from "./weights";
+
+export type { ComboRule, ComboLayer } from "./combo-rules";
+export { COMBO_RULES, EXCLUDED_MEDICAL_COMBO_IDS } from "./combo-rules";
+export { evaluateCombos } from "./combo-eval";

@@ -1,8 +1,17 @@
 import type { ScoreLine, TrendPoint } from "@/lib/ziwei/trend";
+import { roundTo1Decimal } from "@/lib/ziwei/trend";
 
 interface TrendPointPanelProps {
   point: TrendPoint | null;
   onClose: () => void;
+}
+
+function formatPoints(points: number): string {
+  const rounded = roundTo1Decimal(points);
+  if (rounded === 0) return "·";
+  const text =
+    Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+  return rounded > 0 ? `+${text}` : text;
 }
 
 function BreakdownList({
@@ -31,7 +40,7 @@ function BreakdownList({
           <li key={`${line.source}-${index}`}>
             <span className="trend-breakdown-source">{line.source}</span>
             <span className="trend-breakdown-points">
-              {line.points > 0 ? `+${line.points}` : line.points}
+              {formatPoints(line.points)}
             </span>
             <small>{line.reason}</small>
           </li>

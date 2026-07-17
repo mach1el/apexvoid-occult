@@ -2,22 +2,23 @@ import { describe, expect, it } from "vitest";
 import { getDaiVanTrend } from "../score";
 import { makeChart, minimalFortune, palace } from "./fixtures";
 
-describe("frame scoring (via getDaiVanTrend)", () => {
-  it("Hóa Kỵ ở vùng mộ hung thấp hơn ở vùng mã", () => {
+describe("frame scoring 6-step (via getDaiVanTrend)", () => {
+  it("Hóa Kỵ CSV hung > 0; vùng không đổi dấu sang cát", () => {
     const ky = {
       name: "Hóa Kỵ",
       source: "natal-mutagen" as const,
       mutagen: "Kỵ",
     };
-    const mo = getDaiVanTrend(minimalFortune("Thìn", [ky]))[0]!;
-    const ma = getDaiVanTrend(minimalFortune("Dần", [ky]))[0]!;
-    expect(mo.hung).toBeLessThan(ma.hung);
-    expect(mo.breakdown.hung.some((line) => line.reason.includes("vùng mộ"))).toBe(
-      true,
-    );
+    const point = getDaiVanTrend(minimalFortune("Thìn", [ky]))[0]!;
+    expect(point.hung).toBeGreaterThan(0);
+    expect(
+      point.breakdown.hung.some(
+        (line) => line.source.includes("Kỵ") || line.reason.includes("Kỵ"),
+      ),
+    ).toBe(true);
   });
 
-  it("Thanh Long xung Hóa Kỵ: có cát cách + giảm hung Kỵ", () => {
+  it("Cát/Hung độc lập: không có dòng hóa giải âm trên Hung", () => {
     const menh = palace({
       index: 0,
       branch: "Thìn",
@@ -31,9 +32,7 @@ describe("frame scoring (via getDaiVanTrend)", () => {
       branch: "Tuất",
       name: "Thiên Di",
       majorFortune: { order: 2, active: false, start: 20, end: 29 },
-      stars: [
-        { name: "Hóa Kỵ", source: "natal-mutagen", mutagen: "Kỵ" },
-      ],
+      stars: [{ name: "Hóa Kỵ", source: "natal-mutagen", mutagen: "Kỵ" }],
     });
     const withPair = getDaiVanTrend(
       makeChart({
@@ -49,67 +48,113 @@ describe("frame scoring (via getDaiVanTrend)", () => {
     ).find((point) => point.isCurrent)!;
 
     expect(
-      withPair.breakdown.cat.some((line) => line.source.includes("longKy")),
+      withPair.breakdown.hung.every(
+        (line) =>
+          line.points >= 0 || line.source === "Chuẩn hóa",
+      ),
     ).toBe(true);
     expect(
       withPair.breakdown.hung.some((line) => line.source.includes("hóa giải")),
-    ).toBe(true);
+    ).toBe(false);
   });
 
-  it("Vũ Tham trên mộ cộng cát cách vuThamMo", () => {
+  it("Sát Phá Tham Hãm + hung companion → HUNG_03, không CAT_02", () => {
+    const focus = palace({
+      index: 0,
+      branch: "Mão",
+      name: "Điền Trạch",
+      majorFortune: { order: 1, active: true, start: 35, end: 44 },
+      stars: [
+        { name: "Tham Lang", layer: "major", brightness: "Hãm" },
+        { name: "Bạch Hổ", layer: "harm" },
+      ],
+    });
+    const hop1 = palace({
+      index: 4,
+      branch: "Hợi",
+      name: "Tật Ách",
+      stars: [{ name: "Phá Quân", layer: "major", brightness: "Hãm" }],
+    });
+    const hop2 = palace({
+      index: 8,
+      branch: "Mùi",
+      name: "Quan Lộc",
+      stars: [
+        { name: "Thất Sát", layer: "major", brightness: "Đắc" },
+        { name: "Hóa Kỵ", source: "natal-mutagen", mutagen: "Kỵ" },
+      ],
+    });
     const point = getDaiVanTrend(
-      minimalFortune("Mùi", [
-        { name: "Vũ Khúc", layer: "major", brightness: "Miếu" },
-        { name: "Tham Lang", layer: "major", brightness: "Miếu" },
-      ]),
+      makeChart({
+        palaces: [focus, hop1, hop2],
+        menhBranch: "Mùi",
+        menhElement: "Lộ Bàng Thổ",
+        menhIndex: 0,
+        majorFortunePalace: focus,
+        annualPalace: focus,
+        voidMarkers: [],
+        annualMutagens: [],
+        natalMutagens: [],
+      }),
     )[0]!;
+
     expect(
-      point.breakdown.cat.some((line) => line.source.includes("vuThamMo")),
+      point.breakdown.hung.some((line) => line.source.includes("HUNG_03")),
     ).toBe(true);
+    expect(
+      point.breakdown.cat.some((line) => line.source.includes("CAT_02")),
+    ).toBe(false);
   });
 
-  it("Song Hao đắc (Dần) hung thấp hơn Song Hao hãm (Tý) và có cát đắc", () => {
-    const hao = { name: "Đại Hao", layer: "harm" as const };
-    const dac = getDaiVanTrend(minimalFortune("Dần", [hao]))[0]!;
-    const ham = getDaiVanTrend(minimalFortune("Tý", [hao]))[0]!;
-    expect(dac.hung).toBeLessThan(ham.hung);
-    expect(dac.breakdown.cat.some((line) => line.reason.includes("Song Hao đắc"))).toBe(
-      true,
-    );
-  });
-
-  it("phase 2: Bác Sĩ cát + Cô Quả hung + Đức cát vào breakdown", () => {
+  it("Ngũ hành Cung khắc Mệnh: ×0.75 / ×1.25", () => {
+    const focus = palace({
+      index: 0,
+      branch: "Mão",
+      name: "Điền Trạch",
+      majorFortune: { order: 1, active: true, start: 35, end: 44 },
+      stars: [
+        { name: "Tả Phụ", layer: "helper" },
+        { name: "Tham Lang", layer: "major", brightness: "Hãm" },
+      ],
+    });
     const point = getDaiVanTrend(
-      minimalFortune("Thìn", [
-        { name: "Bác Sĩ", layer: "helper" },
-        { name: "Quả Tú", layer: "harm" },
-        { name: "Thiên Đức", layer: "helper" },
-      ]),
+      makeChart({
+        palaces: [focus],
+        menhBranch: "Mùi",
+        menhElement: "Lộ Bàng Thổ",
+        menhIndex: 0,
+        majorFortunePalace: focus,
+        annualPalace: focus,
+        voidMarkers: [],
+        annualMutagens: [],
+        natalMutagens: [],
+      }),
     )[0]!;
-    expect(point.breakdown.cat.some((line) => line.reason.includes("Bác Sĩ cát"))).toBe(
-      true,
+
+    const catNh = point.breakdown.cat.find(
+      (line) => line.source === "Ngũ Hành Vận",
     );
-    expect(point.breakdown.hung.some((line) => line.reason.includes("Cô Quả"))).toBe(
-      true,
+    const hungNh = point.breakdown.hung.find(
+      (line) => line.source === "Ngũ Hành Vận",
     );
-    expect(point.breakdown.cat.some((line) => line.reason.includes("Đức tinh"))).toBe(
+    expect(catNh?.reason).toContain("×0.75");
+    expect(hungNh?.reason).toContain("×1.25");
+    expect(catNh?.points).toBe(0);
+    expect(hungNh?.points).toBe(0);
+    expect(point.breakdown.hung.every((line) => line.points >= 0 || line.source === "Chuẩn hóa")).toBe(
       true,
     );
   });
 
-  it("phase 3: Thai Tọa + Quang Quý + Trường Sinh Đế Vượng", () => {
+  it("Chính tinh Đắc vào Cát; Mộ Trường Sinh vào Hung", () => {
     const focus = palace({
       index: 0,
       branch: "Ngọ",
       name: "Mệnh",
       isMenh: true,
-      changSheng: "Đế Vượng",
+      changSheng: "Mộ",
       majorFortune: { order: 1, active: true, start: 10, end: 19 },
-      stars: [
-        { name: "Tam Thai", layer: "helper" },
-        { name: "Ân Quang", layer: "helper" },
-        { name: "Quốc Ấn", layer: "helper" },
-      ],
+      stars: [{ name: "Thiên Tướng", layer: "major", brightness: "Đắc" }],
     });
     const point = getDaiVanTrend(
       makeChart({
@@ -123,49 +168,183 @@ describe("frame scoring (via getDaiVanTrend)", () => {
         natalMutagens: [],
       }),
     )[0]!;
-    expect(point.breakdown.cat.some((line) => line.reason.includes("Thai Tọa"))).toBe(
-      true,
-    );
-    expect(point.breakdown.cat.some((line) => line.reason.includes("Quang Quý"))).toBe(
-      true,
-    );
-    expect(point.breakdown.cat.some((line) => line.source.includes("Đế Vượng"))).toBe(
-      true,
-    );
     expect(
-      point.breakdown.cat.some((line) => line.reason.includes("Quan Ấn")),
+      point.breakdown.cat.some(
+        (line) => line.source.includes("Thiên Tướng") && line.points > 0,
+      ),
+    ).toBe(true);
+    expect(
+      point.breakdown.hung.some((line) => line.source.includes("Mộ")),
     ).toBe(true);
   });
 
-  it("phase 3: Trường Sinh Tuyệt tăng hung", () => {
-    const focus = palace({
+  it("Đất Nhà: tam hợp Mệnh/Tài/Quan nâng W khi ĐV là Quan Lộc", () => {
+    const quan = palace({
       index: 0,
       branch: "Hợi",
+      name: "Quan Lộc",
+      majorFortune: { order: 1, active: true, start: 46, end: 55 },
+      stars: [{ name: "Vũ Khúc", layer: "major", brightness: "Bình" }],
+    });
+    const menh = palace({
+      index: 4,
+      branch: "Mùi",
       name: "Mệnh",
       isMenh: true,
-      changSheng: "Tuyệt",
-      majorFortune: { order: 1, active: true, start: 10, end: 19 },
-      stars: [],
+      stars: [{ name: "Thiên Lương", layer: "major", brightness: "Đắc" }],
+    });
+    const tai = palace({
+      index: 8,
+      branch: "Mão",
+      name: "Tài Bạch",
+      stars: [{ name: "Hữu Bật", layer: "helper" }],
     });
     const point = getDaiVanTrend(
       makeChart({
-        palaces: [focus],
-        menhBranch: "Hợi",
-        menhIndex: 0,
-        majorFortunePalace: focus,
-        annualPalace: focus,
+        palaces: [quan, menh, tai],
+        menhBranch: "Mùi",
+        menhElement: "Thành Đầu Thổ",
+        menhIndex: 4,
+        thanIndex: 0,
+        majorFortunePalace: quan,
+        annualPalace: quan,
         voidMarkers: [],
         annualMutagens: [],
         natalMutagens: [],
       }),
     )[0]!;
-    expect(point.breakdown.hung.some((line) => line.source.includes("Tuyệt"))).toBe(
-      true,
-    );
+
+    expect(
+      point.breakdown.cat.some(
+        (line) =>
+          line.reason.includes("W=0.6") && line.source.includes("Thiên Lương"),
+      ),
+    ).toBe(true);
+    expect(
+      point.breakdown.cat.some(
+        (line) =>
+          line.reason.includes("W=0.6") && line.source.includes("Hữu Bật"),
+      ),
+    ).toBe(true);
   });
 
-  it("Đại vận chấm tam phương tứ chính: Hóa Kỵ gốc ở xung + chính tinh hãm ở tam hợp", () => {
-    // Thìn xung Tuất; Thìn tam hợp Thân·Tý
+  it("Đất Nhà: tam hợp Thân cũng W=0.6 (không chỉ Mệnh–Tài–Quan)", () => {
+    // Thân Tuất; tam hợp Thân = Tuất–Ngọ–Dần. ĐV tại Phúc Đức (Dần).
+    const phuc = palace({
+      index: 0,
+      branch: "Dần",
+      name: "Phúc Đức",
+      majorFortune: { order: 1, active: true, start: 24, end: 33 },
+      stars: [{ name: "Tử Vi", layer: "major", brightness: "Miếu" }],
+    });
+    const thienDi = palace({
+      index: 4,
+      branch: "Ngọ",
+      name: "Thiên Di",
+      stars: [{ name: "Thiên Lương", layer: "major", brightness: "Đắc" }],
+    });
+    const phuThe = palace({
+      index: 8,
+      branch: "Tuất",
+      name: "Phu Thê",
+      isThan: true,
+      stars: [{ name: "Hữu Bật", layer: "helper" }],
+    });
+    const menh = palace({
+      index: 2,
+      branch: "Tỵ",
+      name: "Mệnh",
+      isMenh: true,
+      stars: [],
+    });
+    const point = getDaiVanTrend(
+      makeChart({
+        palaces: [phuc, thienDi, phuThe, menh],
+        menhBranch: "Tỵ",
+        menhElement: "Dương Liễu Mộc",
+        menhIndex: 2,
+        thanIndex: 8,
+        majorFortunePalace: phuc,
+        annualPalace: phuc,
+        voidMarkers: [],
+        annualMutagens: [],
+        natalMutagens: [],
+      }),
+    )[0]!;
+
+    expect(
+      point.breakdown.cat.some(
+        (line) =>
+          line.reason.includes("W=0.6") && line.source.includes("Thiên Lương"),
+      ),
+    ).toBe(true);
+    expect(
+      point.breakdown.cat.some(
+        (line) =>
+          line.reason.includes("W=0.6") && line.source.includes("Hữu Bật"),
+      ),
+    ).toBe(true);
+  });
+
+  it("Tam Hóa Liên Châu vẫn thưởng Cát dù TP4C có Địa Không/Kiếp", () => {
+    const focus = palace({
+      index: 0,
+      branch: "Ngọ",
+      name: "Mệnh",
+      isMenh: true,
+      majorFortune: { order: 1, active: true, start: 10, end: 19 },
+      stars: [
+        {
+          name: "Hóa Lộc",
+          layer: "helper",
+          source: "natal-mutagen",
+          mutagen: "Lộc",
+        },
+        {
+          name: "Hóa Quyền",
+          layer: "helper",
+          source: "natal-mutagen",
+          mutagen: "Quyền",
+        },
+        {
+          name: "Hóa Khoa",
+          layer: "helper",
+          source: "natal-mutagen",
+          mutagen: "Khoa",
+        },
+        { name: "Địa Không", layer: "harm" },
+        { name: "Địa Kiếp", layer: "harm" },
+      ],
+    });
+    const point = getDaiVanTrend(
+      makeChart({
+        palaces: [focus],
+        menhBranch: "Ngọ",
+        menhIndex: 0,
+        majorFortunePalace: focus,
+        annualPalace: focus,
+        voidMarkers: [],
+        annualMutagens: [],
+        natalMutagens: [
+          { mutagen: "Lộc", starName: "Hóa Lộc", palace: focus },
+          { mutagen: "Quyền", starName: "Hóa Quyền", palace: focus },
+          { mutagen: "Khoa", starName: "Hóa Khoa", palace: focus },
+        ],
+      }),
+    )[0]!;
+
+    expect(
+      point.breakdown.cat.some((line) => line.source.includes("CAT_03")),
+    ).toBe(true);
+    expect(
+      point.breakdown.hung.some(
+        (line) =>
+          line.source.includes("Địa Không") || line.source.includes("Địa Kiếp"),
+      ),
+    ).toBe(true);
+  });
+
+  it("Đại vận chấm TP4C: Hóa Kỵ gốc ở xung + chính tinh hãm ở tam hợp", () => {
     const menh = palace({
       index: 0,
       branch: "Thìn",
@@ -178,9 +357,7 @@ describe("frame scoring (via getDaiVanTrend)", () => {
       index: 6,
       branch: "Tuất",
       name: "Thiên Di",
-      stars: [
-        { name: "Hóa Kỵ", source: "natal-mutagen", mutagen: "Kỵ" },
-      ],
+      stars: [{ name: "Hóa Kỵ", source: "natal-mutagen", mutagen: "Kỵ" }],
     });
     const quan = palace({
       index: 3,
@@ -197,9 +374,7 @@ describe("frame scoring (via getDaiVanTrend)", () => {
         annualPalace: menh,
         voidMarkers: [],
         annualMutagens: [],
-        natalMutagens: [
-          { mutagen: "Kỵ", starName: "Cự Môn", palace: di },
-        ],
+        natalMutagens: [{ mutagen: "Kỵ", starName: "Cự Môn", palace: di }],
         majorMutagens: [],
       }),
     )[0]!;

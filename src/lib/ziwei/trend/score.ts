@@ -58,6 +58,7 @@ export type {
 export function getDaiVanTrend(
   chart: ChartData,
   weights: ScoringWeights = SCORING_WEIGHTS,
+  school: "nam-phai" | "trung-chau" = "nam-phai",
 ): TrendPoint[] {
   const fortunes = chart.palaces
     .filter((palace) => palace.majorFortune)
@@ -68,25 +69,13 @@ export function getDaiVanTrend(
 
   return fortunes.map((palace) => {
     const fortune = palace.majorFortune!;
-    // Tứ Hóa gốc / ĐV: truyền cả bảng — scorer chỉ giữ record rơi vào khung
-    // tam phương tứ chính của cung đại vận (không chỉ đồng cung hạn).
+    // Spec 6 bước: Tứ Hóa GỐC only — không lấy sao lưu / ĐV mutagen.
     const scored = scoreFortuneFrame(
       chart,
       palace,
       weights,
-      [
-        {
-          label: "ĐV",
-          records: fortune.active ? chart.majorMutagens : [],
-        },
-        {
-          label: "Gốc",
-          records: chart.natalMutagens,
-        },
-      ],
-      // Đại vận đo bằng tam phương tứ chính của cung đại hạn — chính tinh +
-      // Tứ Hóa gốc/ĐV, KHÔNG lấy sao lưu niên (sao lưu chỉ thuộc lưu niên).
-      { includeAnnual: false },
+      [{ label: "Gốc", records: chart.natalMutagens }],
+      { includeAnnual: false, school },
     );
 
     return {
@@ -187,7 +176,7 @@ export function getLuuNienTrend(
         { label: "Gốc", records: chart.natalMutagens },
       ],
       // Lưu niên tháng: sao lưu niên chính là tín hiệu của năm/tháng đang xem.
-      { includeAnnual: true },
+      { includeAnnual: true, school: opts.school },
     );
 
     const monthLabel = entry.label ?? `Th.${entry.month}`;

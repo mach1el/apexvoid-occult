@@ -85,11 +85,12 @@ export function pairGeometry(a: string, b: string): PairGeometry | null {
 /** Hệ số lực cặp: đồng cung > xung > tam hợp. */
 export function pairGeometryFactor(
   geometry: PairGeometry,
-  sanFangFactor: number,
+  tamHopFactor: number,
+  xungFactor = 0.85,
 ): number {
   if (geometry === "dong") return 1;
-  if (geometry === "xung") return 0.85;
-  return sanFangFactor;
+  if (geometry === "xung") return xungFactor;
+  return tamHopFactor;
 }
 
 export function geometryLabel(geometry: PairGeometry): string {
@@ -106,9 +107,24 @@ export function getBranchElement(branch: string): string {
   return "Thổ"; // Thìn, Tuất, Sửu, Mùi
 }
 
-export function getElementRelationFactor(subject: string, object: string): number {
-  if (subject === object) return 1.1; // Bình hòa, có trợ lực nhẹ
-  
+export interface DaiVanElementFactors {
+  /** Hệ số nhân toàn cục cột Cát. */
+  cat: number;
+  /** Hệ số nhân toàn cục cột Hung. */
+  hung: number;
+  /** Nhãn phong thủy cho breakdown. */
+  label: string;
+}
+
+/**
+ * Hệ số môi trường Ngũ hành Đại vận (Cung ĐV vs Bản Mệnh).
+ * Nguồn: công thức scoring đại vận — nhân toàn cục, không cộng trừ cơ học.
+ * subject = ngũ hành cung đại vận; object = ngũ hành bản mệnh.
+ */
+export function getDaiVanElementFactors(
+  palaceElement: string,
+  menhElement: string,
+): DaiVanElementFactors {
   const generates: Record<string, string> = {
     Kim: "Thủy",
     Thủy: "Mộc",
@@ -116,7 +132,6 @@ export function getElementRelationFactor(subject: string, object: string): numbe
     Hỏa: "Thổ",
     Thổ: "Kim",
   };
-  
   const controls: Record<string, string> = {
     Kim: "Mộc",
     Mộc: "Thổ",
@@ -125,13 +140,34 @@ export function getElementRelationFactor(subject: string, object: string): numbe
     Hỏa: "Kim",
   };
 
-  if (generates[subject] === object) return 1.0; // Sinh xuất: bình thường
-  if (generates[object] === subject) return 1.2; // Sinh nhập: rất tốt
-  
-  if (controls[subject] === object) return 0.9; // Khắc xuất: vất vả
-  if (controls[object] === subject) return 0.7; // Khắc nhập: xấu
+  // Đồng hành hoặc Cung sinh Mệnh → Thuận vận
+  if (
+    palaceElement === menhElement ||
+    generates[palaceElement] === menhElement
+  ) {
+    return { cat: 1.2, hung: 0.8, label: "Tương Sinh / Thuận Vận" };
+  }
+  // Mệnh sinh Cung → Sinh Xuất
+  if (generates[menhElement] === palaceElement) {
+    return { cat: 1.0, hung: 1.0, label: "Sinh Xuất / Sinh Kế" };
+  }
+  // Mệnh khắc Cung → Khắc Xuất
+  if (controls[menhElement] === palaceElement) {
+    return { cat: 0.9, hung: 1.0, label: "Khắc Xuất / Chế Ngự" };
+  }
+  // Cung khắc Mệnh → Khắc Nhập
+  if (controls[palaceElement] === menhElement) {
+    return { cat: 0.75, hung: 1.25, label: "Khắc Nhập / Nghịch Vận" };
+  }
+  return { cat: 1.0, hung: 1.0, label: "Bình hòa" };
+}
 
-  return 1.0;
+/** @deprecated Dùng getDaiVanElementFactors — giữ alias để không gãy import cũ. */
+export function getElementRelationFactor(
+  subject: string,
+  object: string,
+): number {
+  return getDaiVanElementFactors(subject, object).cat;
 }
 
 export function extractBaseElement(napAm: string): string {

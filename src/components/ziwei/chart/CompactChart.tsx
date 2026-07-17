@@ -570,47 +570,74 @@ function RelationLines({ branch }: { branch: string | null }) {
   );
 }
 
+const VOID_MARKER_WIDTH = 40;
+const VOID_MARKER_GAP = 4;
+
 function VoidMarkers({ markers }: { markers: ChartVoidMarker[] }) {
   const geo = useChartGeometry();
-  const occupied = new Map<string, number>();
+
+  // Gom theo điểm neo biên: Tuần+Triệt đồng cung xếp ngang, không chồng dọc.
+  const groups = new Map<
+    string,
+    Array<{
+      marker: ChartVoidMarker;
+      baseX: number;
+      baseY: number;
+    }>
+  >();
+
+  for (const marker of markers) {
+    const points = marker.branches
+      .slice(0, 2)
+      .map((branch) => palaceCenter(branch, geo))
+      .filter((point): point is Position => Boolean(point));
+    if (points.length !== 2) continue;
+    const baseX = (points[0]!.x + points[1]!.x) / 2;
+    const sameRow = points[0]!.y === points[1]!.y;
+    const middleY = (points[0]!.y + points[1]!.y) / 2;
+    // Kabala đặt nhãn của hai cung nằm ngang ở đầu đường biên hướng vào
+    // trung cung; với hai cung xếp dọc, nhãn nằm giữa đường biên ngang.
+    const baseY = sameRow
+      ? middleY < geo.height / 2
+        ? geo.cellHeight
+        : geo.height - geo.cellHeight
+      : middleY;
+    const key = `${baseX}:${baseY}`;
+    const bucket = groups.get(key) ?? [];
+    bucket.push({ marker, baseX, baseY });
+    groups.set(key, bucket);
+  }
 
   return (
     <g className="compact-void-markers" aria-label="Vị trí Tuần Triệt">
-      {markers.map((marker) => {
-        const points = marker.branches
-          .slice(0, 2)
-          .map((branch) => palaceCenter(branch, geo))
-          .filter((point): point is Position => Boolean(point));
-        if (points.length !== 2) return null;
-        const baseX = (points[0]!.x + points[1]!.x) / 2;
-        const sameRow = points[0]!.y === points[1]!.y;
-        const middleY = (points[0]!.y + points[1]!.y) / 2;
-        // Kabala đặt nhãn của hai cung nằm ngang ở đầu đường biên hướng vào
-        // trung cung; với hai cung xếp dọc, nhãn nằm giữa đường biên ngang.
-        const baseY = sameRow
-          ? middleY < geo.height / 2
-            ? geo.cellHeight
-            : geo.height - geo.cellHeight
-          : middleY;
-        const key = `${baseX}:${baseY}`;
-        const overlap = occupied.get(key) ?? 0;
-        occupied.set(key, overlap + 1);
-        const y = baseY + overlap * 17;
-        return (
-          <g
-            className={`compact-void-marker is-${marker.type.toLowerCase()}`}
-            transform={`translate(${baseX} ${y})`}
-            key={`${marker.type}-${marker.branches.join("-")}`}
-          >
-            <title>
-              {marker.type}: {marker.branches.join(" – ")}
-            </title>
-            <rect x="-20" y="-8" width="40" height="16" rx="1.5" />
-            <text y="3" textAnchor="middle">
-              {marker.type}
-            </text>
-          </g>
-        );
+      {[...groups.values()].flatMap((bucket) => {
+        const step = VOID_MARKER_WIDTH + VOID_MARKER_GAP;
+        const startX =
+          bucket[0]!.baseX - ((bucket.length - 1) * step) / 2;
+        return bucket.map(({ marker, baseY }, index) => {
+          const x = startX + index * step;
+          return (
+            <g
+              className={`compact-void-marker is-${marker.type.toLowerCase()}`}
+              transform={`translate(${x} ${baseY})`}
+              key={`${marker.type}-${marker.branches.join("-")}`}
+            >
+              <title>
+                {marker.type}: {marker.branches.join(" – ")}
+              </title>
+              <rect
+                x={-VOID_MARKER_WIDTH / 2}
+                y="-8"
+                width={VOID_MARKER_WIDTH}
+                height="16"
+                rx="1.5"
+              />
+              <text y="3" textAnchor="middle">
+                {marker.type}
+              </text>
+            </g>
+          );
+        });
       })}
     </g>
   );

@@ -1,66 +1,38 @@
-/** Chấm một khung hạn = cung hạn + tam phương tứ chính. */
+/**
+ * Chấm một khung hạn = cung hạn + tam phương tứ chính.
+ * Đại vận: công thức 6 bước (P_csv × M_pos × M_nh × W_cung → Cát/Hung độc lập).
+ */
 
 import type {
   ChartData,
   ChartPalace,
   MutagenRecord,
+  School,
 } from "@/types/chart";
+import { getEngine } from "../chart";
+import { baseStarName, isAnnualStar } from "../star-classification";
 import {
-  getBranchZone,
-  isMaBranch,
-  isMoBranch,
-  TAM_HOP,
-  XUNG_CHIEU,
-  zoneLabel,
-  extractBaseElement,
-  getBranchElement,
-  getElementRelationFactor,
-} from "./zones";
-import { detectPairRules } from "./pairs";
+  evaluateCombos,
+  palaceHasSalvation,
+  type FrameRow,
+} from "./combo-eval";
 import {
-  baseStarName,
-  isAnnualStar,
-  isStrongBrightness,
-} from "../star-classification";
-import {
-  BAC_SI_CAT_SET,
-  BAC_SI_HUNG_SET,
-  CAT_SET,
-  CO_QUA_SET,
-  DAO_HONG_HY_SET,
-  DUC_SET,
-  GIAI_SET,
-  HINH_RIEU_SET,
-  KINH_DA_SET,
-  KHONG_KIEP_SET,
-  LONG_PHUONG_SET,
-  PHA_TOAI_SET,
-  PHU_CAO_SET,
-  QUAN_AN_SET,
-  QUANG_QUY_SET,
-  SAT_SET,
-  SONG_HAO_DAC_SET,
-  SONG_HAO_SET,
-  TAI_TUE_HUNG_SET,
-  TAI_TUE_PRESS_SET,
-  TAI_TUE_SOFT_SET,
-  THAI_TOA_SET,
-  THIEN_TAI_THO_SET,
-  TRUONG_SINH_CAT_SET,
-  TRUONG_SINH_SUY_SET,
-} from "./star-sets";
+  computeStarEnergy,
+  routeStarEnergy,
+  SAT_KHONG_HOA,
+} from "./star-energy";
+import { findStarScore } from "./star-scores";
 import type { ScoringWeights } from "./weights";
 import type { ScoreLine, TrendPoint } from "./types";
+import { finalizeLayer, voidBranches } from "./util";
+import { roundTo1Decimal } from "./ui-breakdown";
 import {
-  finalizeLayer,
-  isMutagenStar,
-  mutagenKind,
-  voidBranches,
-} from "./util";
-
-function scalePoints(points: number, factor: number): number {
-  return Math.round(points * factor);
-}
+  extractBaseElement,
+  getBranchElement,
+  getDaiVanElementFactors,
+  TAM_HOP,
+  XUNG_CHIEU,
+} from "./zones";
 
 function sanFangSiZheng(
   chart: ChartData,
@@ -83,160 +55,143 @@ function sanFangSiZheng(
   return rows;
 }
 
-function roleFactor(role: "focus" | "tam-hop" | "xung", weights: ScoringWeights): number {
-  return role === "focus" ? 1 : weights.sanFangFactor;
+/**
+ * Luật Đất Nhà: cung thuộc tam hợp Mệnh hoặc tam hợp Thân → W tam hợp = 0.6.
+ * (Mệnh–Tài–Quan luôn là một bộ tam hợp; Thân + hai cung hợp cũng là Đất Nhà.)
+ */
+function isHomeTurfPalace(chart: ChartData, palace: ChartPalace): boolean {
+  const menh =
+    chart.palaces.find((p) => p.isMenh) ??
+    chart.palaces.find((p) => p.index === chart.menhIndex);
+  if (menh) {
+    const menhHop = new Set(TAM_HOP[menh.branch] ?? [menh.branch]);
+    if (menhHop.has(palace.branch)) return true;
+  }
+  const than =
+    chart.palaces.find((p) => p.isThan) ??
+    (typeof chart.thanIndex === "number"
+      ? chart.palaces.find((p) => p.index === chart.thanIndex)
+      : undefined);
+  if (than) {
+    const thanHop = new Set(TAM_HOP[than.branch] ?? [than.branch]);
+    if (thanHop.has(palace.branch)) return true;
+  }
+  return false;
 }
 
-function roleLabel(role: "focus" | "tam-hop" | "xung", palace: ChartPalace): string {
+function roleWeight(
+  role: "focus" | "tam-hop" | "xung",
+  palace: ChartPalace,
+  weights: ScoringWeights,
+  chart: ChartData,
+  applyHomeTurf: boolean,
+): number {
+  if (role === "focus") return 1;
+  if (role === "xung") return weights.xungFactor;
+  if (applyHomeTurf && isHomeTurfPalace(chart, palace)) return 0.6;
+  return weights.tamHopFactor;
+}
+
+function roleLabel(
+  role: "focus" | "tam-hop" | "xung",
+  palace: ChartPalace,
+): string {
   if (role === "focus") return `cung hạn ${palace.name}`;
   if (role === "xung") return `xung chiếu ${palace.name}`;
   return `tam hợp ${palace.name}`;
 }
 
-/** Hệ số vùng cho Tứ Hóa cát (Lộc/Quyền/Khoa) — hạn chế ở mộ. */
-function tuHoaCatZoneFactor(branch: string, weights: ScoringWeights): number {
-  return isMoBranch(branch) ? weights.hoaLocMoFactor : 1;
-}
-
-/** Hệ số vùng cho Hóa Kỵ — đắc mộ (giảm hung). */
-function hoaKyZoneFactor(branch: string, weights: ScoringWeights): number {
-  return isMoBranch(branch) ? weights.hoaKyMoFactor : 1;
-}
-
-/** Hệ số vùng cho lục sát không brightness (Kình/Đà/Không/Kiếp). */
-function satZoneFactor(base: string, branch: string, weights: ScoringWeights): number {
-  if (KINH_DA_SET.has(base)) {
-    if (isMoBranch(branch)) return weights.kinhDaMoFactor;
-    if (isMaBranch(branch)) return weights.kinhDaMaFactor;
-  }
-  if (KHONG_KIEP_SET.has(base) && isMaBranch(branch)) {
-    return weights.khongKiepMaFactor;
-  }
-  return 1;
-}
-
-function zoneNote(branch: string): string {
-  const zone = getBranchZone(branch);
-  return zone ? ` · ${zoneLabel(zone)}` : "";
+function scale(points: number, factor: number): number {
+  return roundTo1Decimal(points * factor);
 }
 
 /**
- * Phụ tinh / tạp diệu "rời rạc" (phase 2/3), cả hai lớp Cát và Hung — Thai
- * Tọa, Quang Quý, Phụ Cáo, Quốc Ấn, Giải tinh, Long Phượng, Thiên Tài/Thọ,
- * Bác Sĩ cát, Đào/Hồng/Hỷ, Đức, Hoa Cái, Thái Tuế mềm, Trường Sinh cát;
- * Bác Sĩ hung, Song Hao, Phi Liêm, Thái Tuế áp, Thái Tuế hung, Trường Sinh
- * suy/Mộc Dục, Đẩu Quân, Lưu Hà, Hình/Riêu, Cô Quả, Phá/La Võng/Kiếp. Một
- * sao lẻ ở tam hợp xa KHÔNG tự cộng điểm nữa — chỉ tính khi nằm đúng cung
- * hạn chính, hoặc khi ≥2 sao cùng nhóm cùng hội trong khung tam phương tứ
- * chính. Trước đây mỗi sao cộng điểm vô điều kiện nên cả Cát lẫn Hung gần
- * như luôn kịch trần 100 (đo thực tế trên ~2700 khung: Cát 60%, Hung 67%
- * số mốc dính trần).
- *
- * Bác Sĩ / Thái Tuế (áp + mềm + hung) / Trường Sinh / Song Hao / Phi Liêm
- * là các vòng 12 vị trí phủ TẤT CẢ 12 cung; Thiên La·Địa Võng (trong
- * PHA_TOAI_SET) và Đẩu Quân/Lưu Hà cố định theo chi năm, không phụ thuộc
- * lá số. Khung 4 cung nào cũng gần như chắc chắn dính các vị trí này dù
- * không có tín hiệu thật (nhiễu cấu trúc, không phải hội tụ) — đo thực tế
- * trung bình 1 lượt/khung dù lá số nào cũng vậy. Ngoại lệ cluster không áp
- * dụng cho các nhóm này — chỉ tính khi đúng cung hạn chính.
+ * Đưa tổng các dòng về đúng `target` bằng cách chỉnh dòng lớn nhất
+ * (giữ WYSIWYG; không thêm dòng delta âm giả).
  */
-type LooseLayer = "cat" | "hung";
+function reconcileLinesToTarget(
+  lines: ScoreLine[],
+  target: number,
+): ScoreLine[] {
+  if (!lines.length) return lines;
+  const result = lines.map((line) => ({ ...line }));
+  const sum = roundTo1Decimal(
+    result.reduce((total, line) => total + line.points, 0),
+  );
+  const diff = roundTo1Decimal(target - sum);
+  if (diff === 0) return result;
 
-type LooseCategory =
-  | "bacSiCat"
-  | "daoHongHyCat"
-  | "ducCat"
-  | "hoaCaiCat"
-  | "thaiToaCat"
-  | "quangQuyCat"
-  | "phuCaoCat"
-  | "quanAnCat"
-  | "giaiCat"
-  | "longPhuongCat"
-  | "thienTaiThoCat"
-  | "taiTueSoftCat"
-  | "truongSinhCat"
-  | "bacSiHung"
-  | "songHaoHung"
-  | "phiLiemHung"
-  | "taiTuePressHung"
-  | "taiTueHung"
-  | "truongSinhSuyHung"
-  | "mocDucHung"
-  | "dauQuanHung"
-  | "luuHaHung"
-  | "phaToaiHung"
-  | "hinhRieuHung"
-  | "coQuaHung"
-  | "thienSuHung"
-  | "thienThuongHung";
+  let bestIdx = 0;
+  for (let i = 1; i < result.length; i++) {
+    if ((result[i]?.points ?? 0) > (result[bestIdx]?.points ?? 0)) {
+      bestIdx = i;
+    }
+  }
+  const best = result[bestIdx]!;
+  const next = roundTo1Decimal(best.points + diff);
+  result[bestIdx] = {
+    ...best,
+    points: Math.max(0, next),
+  };
 
-/**
- * Ngưỡng cluster mặc định là 2. `Infinity` = chỉ tính khi đúng cung hạn
- * chính, không có ngoại lệ cluster (dùng cho các vòng 12 vị trí, và cho
- * ducCat/daoHongHyCat — 2 sao trong mỗi nhóm này luôn đi cùng nhau theo
- * quy tắc an sao cổ điển: Long Đức·Phúc Đức là 2 vị trí của vòng Thái Tuế;
- * Hồng Loan·Thiên Hỷ luôn xung chiếu nhau nên hễ 1 sao vào khung thì sao
- * kia gần như chắc chắn cũng vào — "cluster ≥2" bị vô hiệu hóa vì luôn
- * đúng, không phải tín hiệu hội tụ thật). quanAnCat có 5 sao thay vì 2 nên
- * ngưỡng 2 quá dễ đạt do hiệu ứng birthday-paradox — nâng lên 3.
- *
- * thienSuHung/thienThuongHung: Thiên Sứ cố định tại Tật Ách, Thiên Thương cố
- * định tại Nô Bộc trong MỌI lá số (không đổi theo giờ/ngày sinh) — mỗi sao
- * chỉ có đúng 1 vị trí trong cả lá số, giống Đẩu Quân/Lưu Hà, nên cũng
- * focus-only thay vì cluster.
- */
-const LOOSE_CLUSTER_THRESHOLD: Partial<Record<LooseCategory, number>> = {
-  bacSiCat: Infinity,
-  taiTueSoftCat: Infinity,
-  truongSinhCat: Infinity,
-  ducCat: Infinity,
-  daoHongHyCat: Infinity,
-  bacSiHung: Infinity,
-  songHaoHung: Infinity,
-  phiLiemHung: Infinity,
-  taiTuePressHung: Infinity,
-  taiTueHung: Infinity,
-  truongSinhSuyHung: Infinity,
-  mocDucHung: Infinity,
-  dauQuanHung: Infinity,
-  luuHaHung: Infinity,
-  phaToaiHung: Infinity,
-  thienSuHung: Infinity,
-  thienThuongHung: Infinity,
-  quanAnCat: 3,
-};
-
-interface LooseCandidate {
-  category: LooseCategory;
-  layer: LooseLayer;
-  isFocus: boolean;
-  line: ScoreLine;
+  // Nếu clamp 0 làm lệch (hiếm), trải phần dư lên dòng dương khác.
+  const after = roundTo1Decimal(
+    result.reduce((total, line) => total + line.points, 0),
+  );
+  let leftover = roundTo1Decimal(target - after);
+  if (leftover !== 0) {
+    for (const line of result) {
+      if (leftover === 0) break;
+      if (leftover < 0 && line.points <= 0) continue;
+      const step =
+        leftover > 0
+          ? leftover
+          : -Math.min(line.points, Math.abs(leftover));
+      line.points = roundTo1Decimal(line.points + step);
+      leftover = roundTo1Decimal(leftover - step);
+    }
+  }
+  return result;
 }
 
-function resolveLoose(candidates: LooseCandidate[], layer: LooseLayer): ScoreLine[] {
-  const layerCandidates = candidates.filter((candidate) => candidate.layer === layer);
-  const counts = new Map<LooseCategory, number>();
-  for (const candidate of layerCandidates) {
-    counts.set(candidate.category, (counts.get(candidate.category) ?? 0) + 1);
+/**
+ * Nhân hệ số Ngũ hành vào TỪNG dòng đóng góp (giữ ≥0 trên Hung),
+ * không chèn delta âm giả. Ghi chú hệ số bằng dòng points=0.
+ * Tổng dòng đóng góp = round(thô × M) để khớp điểm hiển thị.
+ */
+function applyElementMultiplier(
+  lines: ScoreLine[],
+  multiplier: number,
+  meta: {
+    label: string;
+    palaceElement: string;
+    menhElement: string;
+  },
+): { lines: ScoreLine[]; target: number } {
+  const raw = roundTo1Decimal(
+    lines.reduce((sum, line) => sum + line.points, 0),
+  );
+  const target = Math.round(raw * multiplier);
+  let scaled = lines.map((line) => ({
+    ...line,
+    points: roundTo1Decimal(line.points * multiplier),
+  }));
+  scaled = reconcileLinesToTarget(scaled, target);
+
+  if (multiplier !== 1) {
+    scaled.push({
+      source: "Ngũ Hành Vận",
+      points: 0,
+      reason: `${meta.label}: Cung ${meta.palaceElement} ↔ Mệnh ${meta.menhElement} · hệ số ×${multiplier} (thô ${raw} → ${target})`,
+    });
   }
-  return layerCandidates
-    .filter((candidate) => {
-      if (candidate.isFocus) return true;
-      const threshold = LOOSE_CLUSTER_THRESHOLD[candidate.category] ?? 2;
-      return (counts.get(candidate.category) ?? 0) >= threshold;
-    })
-    .map((candidate) => candidate.line);
+  return { lines: scaled, target };
 }
 
 export interface FrameScoreOptions {
-  /**
-   * Có tính sao lưu niên (source "annual" / "annual-mutagen") không.
-   * - Lưu niên tháng: true — sao lưu chính là tín hiệu của năm/tháng xem.
-   * - Đại vận: false — đại hạn đo bằng chính tinh + Tứ Hóa gốc/ĐV trên tam
-   *   phương tứ chính, KHÔNG lấy sao lưu niên (sao lưu chỉ thuộc về lưu niên).
-   */
   includeAnnual: boolean;
+  /** Phái — lấy elementForStar. Mặc định nam-phai. */
+  school?: School;
 }
 
 export function scoreFortuneFrame(
@@ -247,547 +202,136 @@ export function scoreFortuneFrame(
   options: FrameScoreOptions,
 ): Pick<TrendPoint, "cat" | "hung" | "breakdown"> {
   const { includeAnnual } = options;
+  const school = options.school ?? "nam-phai";
+  const elementForStar =
+    getEngine(school)?.elementForStar ?? (() => "");
+
   const cat: ScoreLine[] = [];
   const hung: ScoreLine[] = [];
-  const loose: LooseCandidate[] = [];
   const voids = voidBranches(chart);
-  const frame = sanFangSiZheng(chart, focus);
+  const rawFrame = sanFangSiZheng(chart, focus);
+  const applyHomeTurf = !includeAnnual;
 
-  let focusIsVCD = false;
-  const focusRow = frame.find((f) => f.role === "focus");
-  if (focusRow) {
-    const focusMajors = (focusRow.palace.stars ?? []).filter(
-      (s) => s.layer === "major" && (includeAnnual || !isAnnualStar(s)),
-    );
-    focusIsVCD = focusMajors.length === 0;
-  }
+  const frame: FrameRow[] = rawFrame.map(({ palace, role }) => ({
+    palace,
+    role,
+    weight: roleWeight(role, palace, weights, chart, applyHomeTurf),
+  }));
 
-  let kyInFrame = false;
-  let satInFrame = 0;
-  let satOnFocus = 0;
-  let kyHungPoints = 0;
-
-  for (const { palace, role } of frame) {
-    const baseFactor = roleFactor(role, weights);
+  // ── BƯỚC 2–3: quét sao + phân luồng + Khoa Chế Không ──
+  for (const { palace, role, weight: wCung } of frame) {
     const where = roleLabel(role, palace);
-    const stars = (palace.stars ?? []).filter(
-      (star) => includeAnnual || !isAnnualStar(star),
-    );
+    const salvation = palaceHasSalvation(palace, includeAnnual);
 
-    for (const star of stars) {
-      const base = baseStarName(star.name);
+    for (const star of palace.stars ?? []) {
+      if (!includeAnnual && isAnnualStar(star)) continue;
 
-      if (isMutagenStar(star)) {
-        const kind = mutagenKind(star);
-        if (kind === "Lộc") {
-          const z = tuHoaCatZoneFactor(palace.branch, weights);
-          cat.push({
-            source: star.name,
-            points: scalePoints(weights.hoaLoc, baseFactor * z),
-            reason: `${star.name} tại ${where}${zoneNote(palace.branch)}`,
-          });
-        } else if (kind === "Quyền") {
-          const z = tuHoaCatZoneFactor(palace.branch, weights);
-          cat.push({
-            source: star.name,
-            points: scalePoints(weights.hoaQuyen, baseFactor * z),
-            reason: `${star.name} tại ${where}${zoneNote(palace.branch)}`,
-          });
-        } else if (kind === "Khoa") {
-          const z = tuHoaCatZoneFactor(palace.branch, weights);
-          cat.push({
-            source: star.name,
-            points: scalePoints(weights.hoaKhoa, baseFactor * z),
-            reason: `${star.name} tại ${where}${zoneNote(palace.branch)}`,
-          });
-        } else if (kind === "Kỵ") {
-          kyInFrame = true;
-          const z = hoaKyZoneFactor(palace.branch, weights);
-          const points = scalePoints(weights.hoaKy, baseFactor * z);
-          kyHungPoints += points;
-          hung.push({
-            source: star.name,
-            points,
-            reason: `${star.name} tại ${where}${zoneNote(palace.branch)}`,
-          });
-        }
+      const energy = computeStarEnergy(star, chart.menhElement, elementForStar);
+      if (!energy) continue;
+
+      let routed = routeStarEnergy(energy);
+      if (!routed) continue;
+
+      // Khoa Chế Không: sát Không/Kiếp/Hỏa/Linh trong cung cứu giải → ×0.5 hung
+      if (
+        routed.layer === "hung" &&
+        salvation &&
+        SAT_KHONG_HOA.includes(
+          energy.base as (typeof SAT_KHONG_HOA)[number],
+        )
+      ) {
+        routed = { layer: "hung", points: routed.points * 0.5 };
       }
 
-      if (CAT_SET.has(base)) {
-        cat.push({
-          source: star.name,
-          points: scalePoints(weights.lucCat, baseFactor),
-          reason: `Cát tinh ${star.name} hội ${where}`,
-        });
-      }
+      // Bảo vệ Cát: không chiết khấu vùng bại cho Khoa/Quyền/Lộc khi có salvation
+      // (không áp zone penalty — điểm CSV thuần đã đủ)
 
-      if (base === "Thanh Long" && isMoBranch(palace.branch)) {
-        cat.push({
-          source: star.name,
-          points: scalePoints(weights.thanhLongMoBonus, baseFactor),
-          reason: `Thanh Long đắc ${zoneLabel("mo")} tại ${where}`,
-        });
-      }
+      const points = scale(routed.points, wCung);
+      if (points === 0) continue;
 
-      if (BAC_SI_CAT_SET.has(base)) {
-        loose.push({
-          category: "bacSiCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.bacSiCat, baseFactor),
-            reason: `Bác Sĩ cát ${star.name} tại ${where}`,
-          },
-        });
-      }
+      const noteParts = [
+        energy.bright ?? energy.anchor,
+        energy.note,
+        wCung !== 1 ? `W=${wCung}` : "",
+        salvation && routed.layer === "hung" && SAT_KHONG_HOA.includes(energy.base as (typeof SAT_KHONG_HOA)[number])
+          ? "Khoa chế ×0.5"
+          : "",
+      ].filter(Boolean);
 
-      if (base === "Phi Liêm") {
-        loose.push({
-          category: "phiLiemHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.phiLiemHung, baseFactor),
-            reason: `Phi Liêm (động/thị phi) tại ${where}`,
-          },
-        });
-      }
-
-      if (BAC_SI_HUNG_SET.has(base)) {
-        loose.push({
-          category: "bacSiHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.bacSiHung, baseFactor),
-            reason: `Bác Sĩ hung ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (SONG_HAO_SET.has(base)) {
-        const dac = SONG_HAO_DAC_SET.has(palace.branch);
-        const z = dac ? weights.songHaoDacFactor : 1;
-        loose.push({
-          category: "songHaoHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.songHaoHung, baseFactor * z),
-            reason: `Song Hao ${star.name} tại ${where}${dac ? " · đắc (giảm hung)" : ""}`,
-          },
-        });
-        if (dac) {
-          cat.push({
-            source: star.name,
-            points: scalePoints(weights.songHaoDacCat, baseFactor),
-            reason: `Song Hao đắc ${palace.branch} (Chúng Thủy / luân chuyển) tại ${where}`,
-          });
-        }
-      }
-
-      if (DAO_HONG_HY_SET.has(base)) {
-        loose.push({
-          category: "daoHongHyCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.daoHongHyCat, baseFactor),
-            reason: `Đào/Hồng/Hỷ ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (CO_QUA_SET.has(base)) {
-        loose.push({
-          category: "coQuaHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.coQuaHung, baseFactor),
-            reason: `Cô Quả ${star.name} tại ${where}${zoneNote(palace.branch)}`,
-          },
-        });
-      }
-
-      if (DUC_SET.has(base)) {
-        loose.push({
-          category: "ducCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.ducCat, baseFactor),
-            reason: `Đức tinh ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (HINH_RIEU_SET.has(base)) {
-        const z = isMaBranch(palace.branch) ? 1.15 : 1;
-        loose.push({
-          category: "hinhRieuHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.hinhRieuHung, baseFactor * z),
-            reason: `Hình/Riêu ${star.name} tại ${where}${zoneNote(palace.branch)}`,
-          },
-        });
-      }
-
-      if (base === "Hoa Cái") {
-        const z = isMoBranch(palace.branch) ? 1.15 : 1;
-        loose.push({
-          category: "hoaCaiCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.hoaCaiCat, baseFactor * z),
-            reason: `Hoa Cái tại ${where}${zoneNote(palace.branch)}`,
-          },
-        });
-      }
-
-      if (PHA_TOAI_SET.has(base)) {
-        loose.push({
-          category: "phaToaiHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.phaToaiHung, baseFactor),
-            reason: `Phá/La Võng/Kiếp ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (THAI_TOA_SET.has(base)) {
-        loose.push({
-          category: "thaiToaCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.thaiToaCat, baseFactor),
-            reason: `Thai Tọa ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (QUANG_QUY_SET.has(base)) {
-        loose.push({
-          category: "quangQuyCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.quangQuyCat, baseFactor),
-            reason: `Quang Quý ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (PHU_CAO_SET.has(base)) {
-        loose.push({
-          category: "phuCaoCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.phuCaoCat, baseFactor),
-            reason: `Phụ Cáo ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (QUAN_AN_SET.has(base)) {
-        loose.push({
-          category: "quanAnCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.quanAnCat, baseFactor),
-            reason: `Quan Ấn/Phù/Trù ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (GIAI_SET.has(base)) {
-        loose.push({
-          category: "giaiCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.giaiCat, baseFactor),
-            reason: `Giải tinh ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (LONG_PHUONG_SET.has(base)) {
-        loose.push({
-          category: "longPhuongCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.longPhuongCat, baseFactor),
-            reason: `Long Phượng ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (THIEN_TAI_THO_SET.has(base)) {
-        loose.push({
-          category: "thienTaiThoCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.thienTaiThoCat, baseFactor),
-            reason: `${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (base === "Lưu Hà") {
-        loose.push({
-          category: "luuHaHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.luuHaHung, baseFactor),
-            reason: `Lưu Hà tại ${where}`,
-          },
-        });
-      }
-
-      if (base === "Đẩu Quân") {
-        loose.push({
-          category: "dauQuanHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.dauQuanHung, baseFactor),
-            reason: `Đẩu Quân tại ${where}`,
-          },
-        });
-      }
-
-      if (base === "Thiên Sứ") {
-        loose.push({
-          category: "thienSuHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.thienSuHung, baseFactor),
-            reason: `Thiên Sứ (bệnh tật) tại ${where}`,
-          },
-        });
-      }
-
-      if (base === "Thiên Thương") {
-        loose.push({
-          category: "thienThuongHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.thienThuongHung, baseFactor),
-            reason: `Thiên Thương (tổn hại) tại ${where}`,
-          },
-        });
-      }
-
-      if (TAI_TUE_PRESS_SET.has(base)) {
-        loose.push({
-          category: "taiTuePressHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.taiTuePressHung, baseFactor),
-            reason: `Thái Tuế áp ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (TAI_TUE_SOFT_SET.has(base)) {
-        loose.push({
-          category: "taiTueSoftCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.taiTueSoftCat, baseFactor),
-            reason: `Thái Tuế mềm ${star.name} tại ${where}`,
-          },
-        });
-      }
-
-      if (SAT_SET.has(base)) {
-        satInFrame += 1;
-        if (role === "focus") satOnFocus += 1;
-        const z = satZoneFactor(base, palace.branch, weights);
-        hung.push({
-          source: star.name,
-          points: scalePoints(weights.lucSat, baseFactor * z),
-          reason: `Sát tinh ${star.name} hội ${where}${zoneNote(palace.branch)}`,
-        });
-      }
-
-      if (TAI_TUE_HUNG_SET.has(base)) {
-        const z = isMaBranch(palace.branch) ? weights.taiTueHungMaFactor : 1;
-        loose.push({
-          category: "taiTueHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: star.name,
-            points: scalePoints(weights.taiTueHung, baseFactor * z),
-            reason: `Thái Tuế hung ${star.name} tại ${where}${zoneNote(palace.branch)}`,
-          },
-        });
-      }
-
-      if (star.layer === "major") {
-        let majorFactor = baseFactor;
-        let brightnessReason = `Chính tinh ${star.name} ${star.brightness} tại ${where}`;
-
-        if (focusIsVCD && role === "xung") {
-          majorFactor = 0.8;
-          brightnessReason = `Mượn chính tinh ${star.name} ${star.brightness} từ ${where}`;
-        }
-
-        let basePoints = 0;
-
-        if (isStrongBrightness(star.brightness)) {
-          basePoints = scalePoints(weights.majorMieuVuong, majorFactor);
-          cat.push({
-            source: star.name,
-            points: basePoints,
-            reason: brightnessReason,
-          });
-        } else if (star.brightness === "Hãm") {
-          basePoints = scalePoints(weights.majorHam, majorFactor);
-          hung.push({
-            source: star.name,
-            points: basePoints,
-            reason: brightnessReason,
-          });
-        }
-
-        // Tứ Mã: sao động tăng hệ số
-        if (isMaBranch(palace.branch) && ["Thiên Cơ", "Thái Dương", "Phá Quân"].includes(base)) {
-          cat.push({
-            source: star.name,
-            points: scalePoints(weights.majorDongMaBonus, majorFactor),
-            reason: `Sao động ${star.name} đắc lực tại Tứ Mã (${palace.branch})`,
-          });
-        }
-
-        // Tứ Mộ: tài tinh thành khố
-        if (isMoBranch(palace.branch) && ["Vũ Khúc", "Thiên Phủ", "Thái Âm"].includes(base)) {
-          cat.push({
-            source: star.name,
-            points: scalePoints(weights.majorTaiMoBonus, majorFactor),
-            reason: `Tài tinh ${star.name} nhập mộ thành khố tại ${palace.branch}`,
-          });
-        }
-      }
+      const line: ScoreLine = {
+        source: star.name,
+        points,
+        reason: `${energy.base} tại ${where} (${noteParts.join(" · ")})`,
+      };
+      if (routed.layer === "cat") cat.push(line);
+      else hung.push(line);
     }
 
+    // Tuần / Triệt — +6 áp lực mỗi loại (6-step)
     if (voids.has(palace.branch)) {
-      hung.push({
-        source: "Tuần/Triệt",
-        points: scalePoints(weights.tuanTriet, baseFactor),
-        reason: `Tuần/Triệt án ngữ ${where} (${palace.branch})`,
-      });
+      const types = (chart.voidMarkers ?? [])
+        .filter((m) => m.branches.includes(palace.branch))
+        .map((m) => m.type);
+      const unique = [...new Set(types)];
+      for (const type of unique) {
+        hung.push({
+          source: type,
+          points: scale(6, wCung),
+          reason: `${type} án ngữ ${where} (${palace.branch})`,
+        });
+      }
     }
 
+    // Vòng Trường Sinh trên cung
     const cs = palace.changSheng;
     if (cs) {
-      if (TRUONG_SINH_CAT_SET.has(cs)) {
-        loose.push({
-          category: "truongSinhCat",
-          layer: "cat",
-          isFocus: role === "focus",
-          line: {
-            source: `Trường Sinh·${cs}`,
-            points: scalePoints(weights.truongSinhCat, baseFactor),
-            reason: `${cs} tại ${where}`,
-          },
-        });
-      } else if (cs === "Mộc Dục") {
-        loose.push({
-          category: "mocDucHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: `Trường Sinh·${cs}`,
-            points: scalePoints(weights.mocDucHung, baseFactor),
-            reason: `Mộc Dục (bại địa) tại ${where}`,
-          },
-        });
-      } else if (TRUONG_SINH_SUY_SET.has(cs)) {
-        loose.push({
-          category: "truongSinhSuyHung",
-          layer: "hung",
-          isFocus: role === "focus",
-          line: {
-            source: `Trường Sinh·${cs}`,
-            points: scalePoints(weights.truongSinhSuyHung, baseFactor),
-            reason: `${cs} tại ${where}`,
-          },
-        });
-      } else if (cs === "Mộ" && role === "focus") {
-        cat.push({
+      const csRow = findStarScore(cs === "Trường Sinh" ? "Tràng Sinh" : cs);
+      if (csRow) {
+        const bright = null;
+        const anchor =
+          cs === "Mộ" || cs === "Tuyệt" || cs === "Bệnh" || cs === "Tử" || cs === "Suy" || cs === "Mộc Dục"
+            ? csRow.ham
+            : csRow.dac || csRow.base;
+        // Dùng polarity CSV: dương → cát, âm → hung
+        const raw = csRow.polarity === "hung" || anchor < 0 ? -Math.abs(anchor || csRow.base) : Math.abs(anchor || csRow.base);
+        // Override theo 6-step bậc
+        let layer: "cat" | "hung" = raw >= 0 ? "cat" : "hung";
+        let pts = Math.abs(raw);
+        if (["Tràng Sinh", "Đế Vượng"].includes(cs)) {
+          layer = "cat";
+          pts = 6;
+        } else if (["Lâm Quan", "Quan Đới"].includes(cs)) {
+          layer = "cat";
+          pts = 4;
+        } else if (["Thai", "Dưỡng"].includes(cs)) {
+          layer = "cat";
+          pts = 2;
+        } else if (["Bệnh", "Tử", "Mộ", "Tuyệt"].includes(cs)) {
+          layer = "hung";
+          pts = 6;
+        } else if (["Suy", "Mộc Dục"].includes(cs)) {
+          layer = "hung";
+          pts = 4;
+        }
+        const line: ScoreLine = {
           source: `Trường Sinh·${cs}`,
-          points: weights.moChangSinhCat,
-          reason: `Mộ (tụ khí) tại cung hạn ${palace.name}`,
-        });
+          points: scale(pts, wCung),
+          reason: `${cs} tại ${where}`,
+        };
+        if (layer === "cat") cat.push(line);
+        else hung.push(line);
       }
     }
   }
 
-  if (satOnFocus >= 2) {
-    hung.push({
-      source: "Trùng sát",
-      points: weights.satCluster,
-      reason: `${satOnFocus} sát tinh đồng cung hạn`,
-    });
-  }
-
-  if (kyInFrame && satInFrame >= 1) {
-    hung.push({
-      source: "Kỵ–sát kích",
-      points: weights.kySatCluster,
-      reason: "Hóa Kỵ gặp sát trong tam phương tứ chính",
-    });
-  }
-
+  // Tứ Hóa từ mutagen records (gốc / ĐV) — nếu chưa có sao tương ứng trong khung
   for (const { label, records } of mutagenSources) {
     for (const record of records ?? []) {
       const palace = record.palace;
       if (!palace) continue;
       const hit = frame.find((row) => row.palace.index === palace.index);
       if (!hit) continue;
-      const factor = roleFactor(hit.role, weights);
-      const where = roleLabel(hit.role, palace);
+
       const kind = record.mutagen.includes("Kỵ")
         ? "Kỵ"
         : record.mutagen.includes("Lộc")
@@ -801,129 +345,182 @@ export function scoreFortuneFrame(
 
       const already =
         kind === "Kỵ"
-          ? hung.some((line) => line.source.includes("Kỵ") && line.reason.includes(palace.name))
-          : cat.some((line) => line.source.includes(kind) && line.reason.includes(palace.name));
+          ? hung.some((l) => l.source.includes("Kỵ") && l.reason.includes(palace.name))
+          : cat.some((l) => l.source.includes(kind) && l.reason.includes(palace.name));
       if (already) continue;
 
+      // Điểm CSV Tứ Hóa
+      const scoreName =
+        kind === "Kỵ"
+          ? "Hóa Kỵ"
+          : kind === "Lộc"
+            ? "Hóa Lộc"
+            : kind === "Quyền"
+              ? "Hóa Quyền"
+              : "Hóa Khoa";
+      const row = findStarScore(scoreName);
+      const basePts = row
+        ? kind === "Kỵ"
+          ? Math.abs(row.ham || row.base)
+          : Math.abs(row.dac || row.base)
+        : kind === "Kỵ"
+          ? 15
+          : kind === "Lộc"
+            ? 10
+            : kind === "Quyền"
+              ? 8
+              : 6;
+
+      const points = scale(basePts, hit.weight);
+      const where = roleLabel(hit.role, palace);
       if (kind === "Kỵ") {
-        kyInFrame = true;
-        const z = hoaKyZoneFactor(palace.branch, weights);
-        const points = scalePoints(weights.hoaKy, factor * z);
-        kyHungPoints += points;
         hung.push({
           source: `${label} Hóa Kỵ`,
           points,
-          reason: `${label} Hóa Kỵ→${record.starName} tại ${where}${zoneNote(palace.branch)}`,
-        });
-      } else if (kind === "Lộc") {
-        const z = tuHoaCatZoneFactor(palace.branch, weights);
-        cat.push({
-          source: `${label} Hóa Lộc`,
-          points: scalePoints(weights.hoaLoc, factor * z),
-          reason: `${label} Hóa Lộc→${record.starName} tại ${where}${zoneNote(palace.branch)}`,
-        });
-      } else if (kind === "Quyền") {
-        const z = tuHoaCatZoneFactor(palace.branch, weights);
-        cat.push({
-          source: `${label} Hóa Quyền`,
-          points: scalePoints(weights.hoaQuyen, factor * z),
-          reason: `${label} Hóa Quyền→${record.starName} tại ${where}${zoneNote(palace.branch)}`,
+          reason: `${label} Hóa Kỵ→${record.starName} tại ${where}`,
         });
       } else {
-        const z = tuHoaCatZoneFactor(palace.branch, weights);
         cat.push({
-          source: `${label} Hóa Khoa`,
-          points: scalePoints(weights.hoaKhoa, factor * z),
-          reason: `${label} Hóa Khoa→${record.starName} tại ${where}${zoneNote(palace.branch)}`,
+          source: `${label} Hóa ${kind}`,
+          points,
+          reason: `${label} Hóa ${kind}→${record.starName} tại ${where}`,
         });
       }
     }
   }
 
-  const pairs = detectPairRules(frame, weights, includeAnnual);
-  for (const pair of pairs) {
-    if (pair.catPoints) {
-      cat.push({
-        source: `Cách ${pair.id}`,
-        points: pair.catPoints,
-        reason: pair.label,
-      });
+  // ── BƯỚC 4: Combo ──
+  const comboHits = evaluateCombos(frame, chart, includeAnnual);
+  let halveCat = false;
+  let halveSatHung = false;
+  let halveTuyetHung = false;
+  let tuanFactor = 1;
+
+  for (const hit of comboHits) {
+    const { rule, reason } = hit;
+    if (rule.effect?.kind === "halve-cat") halveCat = true;
+    if (rule.effect?.kind === "halve-sat-hung") halveSatHung = true;
+    if (rule.effect?.kind === "halve-tuyet-hung") halveTuyetHung = true;
+    if (rule.effect?.kind === "tuan-factor") tuanFactor = rule.effect.factor;
+
+    if (rule.points === 0) {
+      // Override-only rule — ghi chú breakdown
+      if (rule.effect) {
+        const target = rule.layer === "cat" ? cat : hung;
+        target.push({
+          source: `Cách ${rule.id}`,
+          points: 0,
+          reason: `${rule.label}: ${reason}`,
+        });
+      }
+      continue;
     }
-    if (pair.hungPoints) {
-      hung.push({
-        source: `Cách ${pair.id}`,
-        points: pair.hungPoints,
-        reason: pair.label,
-      });
+
+    const line: ScoreLine = {
+      source: `Cách ${rule.id}`,
+      points: rule.points,
+      reason: `${rule.label} — ${reason}`,
+    };
+    if (rule.layer === "cat") cat.push(line);
+    else hung.push(line);
+  }
+
+  // Áp effect overrides lên dòng đã có
+  if (halveCat) {
+    for (const line of cat) {
+      if (line.source.startsWith("Cách ")) continue;
+      line.points = Math.round(line.points * 0.5 * 10) / 10;
+      line.reason += " · Cát xứ tàng hung ×0.5";
     }
-    if (pair.hungRelief) {
-      hung.push({
-        source: `Hóa giải ${pair.id}`,
-        points: pair.hungRelief,
-        reason: `Giảm hung nhờ ${pair.label}`,
-      });
+  }
+  if (halveSatHung) {
+    for (const line of hung) {
+      if (
+        SAT_KHONG_HOA.some((n) => line.source.includes(n) || line.reason.includes(n))
+      ) {
+        line.points = Math.round(line.points * 0.5 * 10) / 10;
+        line.reason += " · Khoa chế ×0.5";
+      }
     }
-    if (pair.id === "longKy" && pair.kyReliefRatio > 0 && kyHungPoints > 0) {
-      const relief = -Math.round(kyHungPoints * pair.kyReliefRatio);
-      hung.push({
-        source: "Long–Kỵ hóa giải",
-        points: relief,
-        reason: `Giảm hung Kỵ nhờ ${pair.label}`,
-      });
+  }
+  if (halveTuyetHung) {
+    for (const line of hung) {
+      if (line.source.includes("Tuyệt")) {
+        line.points = Math.round(line.points * 0.5 * 10) / 10;
+        line.reason += " · Tuyệt phùng sinh ×0.5";
+      }
+    }
+  }
+  if (tuanFactor !== 1) {
+    for (const line of hung) {
+      if (line.source === "Tuần" || line.source === "Triệt") {
+        line.points = Math.round(line.points * tuanFactor * 10) / 10;
+        line.reason += ` · T×${tuanFactor}`;
+      }
     }
   }
 
-  const rawCatLayer = finalizeLayer([...cat, ...resolveLoose(loose, "cat")]);
-  const rawHungLayer = finalizeLayer([...hung, ...resolveLoose(loose, "hung")]);
+  // ── BƯỚC 5–6: Ngũ hành ĐV × từng dòng (không delta âm) + clamp ──
+  let mCat = 1;
+  let mHung = 1;
+  let elementLabel = "";
+  let palaceElement = "";
+  let menhBaseElement = "";
 
-  let finalCatScore = rawCatLayer.score;
-  let finalHungScore = rawHungLayer.score;
-  const finalCatLines = [...rawCatLayer.lines];
-  const finalHungLines = [...rawHungLayer.lines];
+  if (!includeAnnual) {
+    menhBaseElement = extractBaseElement(chart.menhElement);
+    palaceElement = getBranchElement(focus.branch);
+    const factors = getDaiVanElementFactors(palaceElement, menhBaseElement);
+    mCat = factors.cat;
+    mHung = factors.hung;
+    elementLabel = factors.label;
+  }
 
-  // Sinh/Khắc Ngũ Hành: Đại Vận vs Mệnh Chủ
-  if (!includeAnnual) { // Chỉ áp dụng Đại Vận, vì Lưu Niên có tính chất khác
-    const menhBaseElement = extractBaseElement(chart.menhElement);
-    const palaceElement = getBranchElement(focus.branch);
-    const elementMultiplier = getElementRelationFactor(palaceElement, menhBaseElement);
-    
-    if (elementMultiplier !== 1.0) {
-      const newCat = Math.round(finalCatScore * elementMultiplier);
-      const catDiff = newCat - finalCatScore;
-      finalCatScore = newCat;
-      
-      const hungMultiplier = 2 - elementMultiplier; // Cát sinh -> Hung giảm
-      const newHung = Math.round(finalHungScore * hungMultiplier);
-      const hungDiff = newHung - finalHungScore;
-      finalHungScore = newHung;
-      
-      if (catDiff !== 0) {
-        finalCatLines.push({
-          source: "Ngũ Hành Vận",
-          points: catDiff,
-          reason: `Ngũ hành Vận (${palaceElement}) tác động Mệnh (${menhBaseElement}): x${elementMultiplier}`,
-        });
-      }
-      if (hungDiff !== 0) {
-        finalHungLines.push({
-          source: "Ngũ Hành Vận",
-          points: hungDiff,
-          reason: `Ngũ hành Vận (${palaceElement}) tác động Mệnh (${menhBaseElement}): x${Math.round(hungMultiplier * 10) / 10}`,
-        });
-      }
-    }
+  const meta = {
+    label: elementLabel,
+    palaceElement,
+    menhElement: menhBaseElement,
+  };
+  const { lines: catScaled, target: scaledCat } = applyElementMultiplier(
+    cat,
+    mCat,
+    meta,
+  );
+  const { lines: hungScaled, target: scaledHung } = applyElementMultiplier(
+    hung,
+    mHung,
+    meta,
+  );
+
+  const catFinal = finalizeLayer([
+    { source: "__scaled__", points: scaledCat, reason: "scaled" },
+  ]);
+  const hungFinal = finalizeLayer([
+    { source: "__scaled__", points: scaledHung, reason: "scaled" },
+  ]);
+
+  const finalCatLines = [...catScaled];
+  if (catFinal.score !== scaledCat) {
+    finalCatLines.push({
+      source: "Chuẩn hóa",
+      points: roundTo1Decimal(catFinal.score - scaledCat),
+      reason: `Clamp 0–100 (thô ${scaledCat})`,
+    });
+  }
+
+  const finalHungLines = [...hungScaled];
+  if (hungFinal.score !== scaledHung) {
+    // Clamp chỉ khi lệch 0–100; không dùng cho Ngũ hành (đã nhân từng dòng).
+    finalHungLines.push({
+      source: "Chuẩn hóa",
+      points: roundTo1Decimal(hungFinal.score - scaledHung),
+      reason: `Clamp 0–100 (thô ${scaledHung})`,
+    });
   }
 
   return {
-    cat: finalCatScore,
-    hung: finalHungScore,
+    cat: catFinal.score,
+    hung: hungFinal.score,
     breakdown: { cat: finalCatLines, hung: finalHungLines },
   };
 }
-
-/**
- * Xu hướng Đại Vận: một điểm / cung có majorFortune.
- * Cung hạn = cung mang đại vận đó; chấm theo **tam phương tứ chính**
- * (cung hạn + 2 tam hợp + xung chiếu) qua `scoreFortuneFrame`.
- */
-
