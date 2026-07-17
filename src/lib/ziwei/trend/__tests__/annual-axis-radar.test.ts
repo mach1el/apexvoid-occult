@@ -141,8 +141,8 @@ describe("getAnnualAxisStrengths", () => {
     const taiLoc = getAnnualAxisStrengths(chart, { school: "nam-phai" }).find(
       (a) => a.axis === "Tài lộc",
     )!;
-    // Hóa Lộc hành Mộc khắc nhập Mệnh Thổ: +12 ×0.7 = +8.4.
-    expect(taiLoc.score).toBe(58);
+    // Nền 50 + Lưu Hóa Lộc tại cung chính +12 (không còn hệ số Ngũ Hành Bản Mệnh).
+    expect(taiLoc.score).toBe(62);
     expect(taiLoc.breakdown.some((line) => line.source === "Lưu Hóa Lộc")).toBe(true);
     spy.mockRestore();
   });
@@ -172,8 +172,8 @@ describe("getAnnualAxisStrengths", () => {
     const taiLoc = getAnnualAxisStrengths(chart, { school: "nam-phai" }).find(
       (a) => a.axis === "Tài lộc",
     )!;
-    // Lộc chính: +12×0.7; Kỵ đối: −15×0.9×0.5, rồi Trading Guard ×0.6.
-    expect(taiLoc.score).toBe(31);
+    // Nền 50 + Lộc chính +12 + Kỵ đối −15×0.5 = 54.5, rồi Trading Guard ×0.6 ≈ 33.
+    expect(taiLoc.score).toBe(33);
     expect(taiLoc.breakdown.some((line) => line.source === "Trading Guard")).toBe(true);
     spy.mockRestore();
   });
@@ -237,8 +237,8 @@ describe("getAnnualAxisStrengths", () => {
     const congViec = getAnnualAxisStrengths(chart, { school: "nam-phai" }).find(
       (a) => a.axis === "Công việc",
     )!;
-    // Mã +6, Quyền hành Mộc ×0.7 = +7, Career Boost +15.
-    expect(congViec.score).toBe(78);
+    // Nền 50 + Mã +6 + Quyền +10 + Career Boost +15 = 81.
+    expect(congViec.score).toBe(81);
     expect(congViec.breakdown.some((line) => line.source === "Career Boost")).toBe(true);
     spy.mockRestore();
   });
@@ -342,7 +342,8 @@ describe("getAnnualAxisStrengths", () => {
     const love = getAnnualAxisStrengths(chart, { school: "nam-phai" }).find(
       (axis) => axis.axis === "Tình duyên",
     )!;
-    expect(love.score).toBe(27);
+    // Nền 50 + Đào Hoa +8 + Kỵ −15 = 43, rồi Đào Hoa Sát đổi Đào Hoa +8→−18 = 25.
+    expect(love.score).toBe(25);
     expect(
       love.breakdown.some((line) => line.source === "Đào Hoa Sát"),
     ).toBe(true);
