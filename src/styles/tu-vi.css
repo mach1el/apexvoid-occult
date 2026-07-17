@@ -530,7 +530,7 @@ footer .han{
 @media(max-width:700px){
   .chat-section{padding:0;margin:20px 0}
   .ai-chat{font-size:.9rem;line-height:1.52}
-  .ai-chat-panel{border-radius:0;border-left:none;border-right:none;min-height:560px}
+  .ai-chat-panel{border-radius:0;border-left:none;border-right:none}
   .ai-chat-head{padding:11px 14px}
   .ai-chat-head strong{font-size:.94rem}
   .ai-msg{padding:14px 12px;gap:10px;font-size:.9rem;line-height:1.54}
@@ -573,7 +573,7 @@ body{
 .shell{
   display:grid;
   /* Cột lá số = --ziwei-chart-fit; chat 1fr giãn sát chart, hết khoảng trống giữa. */
-  --ziwei-chart-fit:min(1280px, calc((100svh - 120px) * 880 / 896));
+  --ziwei-chart-fit:min(1280px, calc((100svh - 80px) * 880 / 896));
   grid-template-columns:minmax(780px,var(--ziwei-chart-fit)) minmax(400px,1fr);
   grid-template-rows:auto auto auto;
   gap:16px;
@@ -691,60 +691,47 @@ body{
   white-space:nowrap;
 }
 .profile-form{
-  display:flex;
-  flex-direction:column;
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  grid-template-areas:
+    "name name date date hour hour gender school school flow timezone timezone"
+    "year work work relation relation toggles toggles toggles actions actions actions actions";
   gap:8px;
   min-width:0;
   color-scheme:dark;
 }
 .profile-row{
-  display:grid;
-  gap:8px;
-  align-items:stretch;
-  min-width:0;
+  display:contents;
 }
-/* Hàng 1: tên/ngày + phái/vận/múi giờ (góc phải) */
-.profile-row-primary{
-  grid-template-columns:
-    minmax(140px,1.5fr)
-    minmax(120px,1.15fr)
-    minmax(168px,1.15fr)
-    minmax(100px,.75fr)
-    minmax(84px,.6fr);
-}
-.profile-row-primary .profile-school{
-  margin:0;
-  min-width:0;
-  align-self:stretch;
-}
-.profile-row-primary .profile-school .school-tab{
+.profile-name{grid-area:name}
+.profile-date{grid-area:date}
+.profile-hour{grid-area:hour}
+.profile-gender{grid-area:gender}
+.profile-school{grid-area:school;margin:0;min-width:0;align-self:stretch}
+.profile-flow{grid-area:flow}
+.profile-timezone{grid-area:timezone}
+.profile-year{grid-area:year}
+.profile-work{grid-area:work}
+.profile-relationship{grid-area:relation}
+.profile-toggles{grid-area:toggles}
+.profile-chart-actions{grid-area:actions}
+.profile-school .school-tab{
   min-height:100%;
 }
-/* Hàng 2: giờ/giới/năm + hoàn cảnh + lớp sao + xuất */
-.profile-row-meta{
-  grid-template-columns:
-    minmax(120px,1.15fr)
-    minmax(88px,.7fr)
-    minmax(88px,.7fr)
-    minmax(120px,1.1fr)
-    minmax(120px,1.1fr)
-    minmax(200px,1.2fr)
-    auto;
-}
-.profile-row-meta .profile-toggles{
+.profile-toggles{
   display:flex;
   gap:4px;
   min-width:0;
   margin:0;
   align-self:stretch;
 }
-.profile-row-meta .profile-toggles .toggle{
+.profile-toggles .toggle{
   flex:1 1 0;
   min-width:0;
   min-height:100%;
   justify-content:center;
 }
-.profile-row-meta .profile-chart-actions{
+.profile-chart-actions{
   justify-content:flex-end;
   flex-wrap:nowrap;
   align-items:stretch;
@@ -752,8 +739,10 @@ body{
   padding-left:8px;
   border-left:1px solid var(--line-soft);
 }
-.profile-row-meta .profile-chart-actions .btn-ghost{
+.profile-chart-actions .btn-ghost{
   align-self:stretch;
+  flex:1 1 0;
+  justify-content:center;
 }
 .profile-field-compact{
   padding-inline:10px;
@@ -921,30 +910,79 @@ body{
 }
 
 @media(max-width:1200px){
-  .shell{grid-template-columns:1fr;grid-template-rows:auto auto auto auto}
-  .shell > aside{grid-column:1;grid-row:1}
-  .shell > .chart-section{grid-column:1;grid-row:2}
+  /* Stack 1 cột: bỏ flex-grow desktop (collapse ~0), nhưng KHÔNG để
+     min-height:auto — nếu không chat chỉ cao bằng 1 bubble + input. */
+  .shell{
+    grid-template-columns:1fr;
+    grid-template-rows:auto auto auto auto;
+    align-items:start;
+  }
+  .shell > aside{grid-column:1;grid-row:1;align-self:stretch}
+  .shell > .chart-section{
+    grid-column:1;
+    grid-row:2;
+    align-self:start;
+    display:block;
+    min-height:0;
+    overflow:visible;
+  }
+  .shell > .chart-section > .chart-workspace{
+    height:auto;
+    min-height:0;
+    overflow:visible;
+  }
   .shell > .chat-section{
     grid-column:1;
     grid-row:3;
     margin:0 0 12px;
+    align-self:stretch;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+  }
+  .shell > .chat-section > .ai-chat{
+    flex:none;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    height:auto;
+    align-self:stretch;
+  }
+  .shell > .chat-section .ai-chat-panel{
+    flex:none;
+    display:flex;
+    flex-direction:column;
+    /* Cao gần 1 viewport — đủ dài khi stack, không phụ thuộc ≤700. */
+    min-height:min(78svh, 820px);
+    height:auto;
+    max-height:none;
+    align-self:stretch;
+  }
+  .shell > .chat-section .ai-chat-msgs{
+    flex:1 1 auto;
+    min-height:min(52svh, 520px);
+    max-height:none;
   }
   .shell > .trend-section{
     grid-column:1;
     grid-row:4;
   }
-  .profile-row-primary{
-    grid-template-columns:repeat(3,minmax(0,1fr));
+  .profile-form{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-areas:
+      "name date"
+      "hour gender"
+      "school school"
+      "flow flow"
+      "year timezone"
+      "work relation"
+      "toggles toggles"
+      "actions actions";
+    gap:10px;
   }
-  .profile-row-primary .profile-school{
-    grid-column:1/-1;
-  }
-  .profile-row-meta{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-  .profile-row-meta .profile-toggles,
-  .profile-row-meta .profile-chart-actions{
-    grid-column:1/-1;
+  .profile-chart-actions{
+    padding-left:0;
+    border-left:0;
   }
 }
 @media(max-width:1060px){
@@ -967,13 +1005,7 @@ body{
   .shell{margin-top:10px;gap:12px}
   .birth-panel-body{padding:10px;gap:8px 10px}
   .birth-intro h1{font-size:1rem;white-space:normal}
-  .profile-form{gap:7px}
-  .profile-row-primary,
-  .profile-row-meta{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:7px;
-  }
-  .profile-row-primary .profile-school{grid-column:1/-1}
+  .profile-form{gap:8px}
   .profile-field{
     min-height:44px;
     grid-template-columns:31px minmax(0,1fr);
@@ -982,18 +1014,40 @@ body{
   }
   .field-icon{width:31px;height:31px}
   .profile-field input[type="text"],.profile-field select{font-size:.8rem}
-  .profile-row-meta .profile-toggles,
-  .profile-row-meta .profile-chart-actions{grid-column:1/-1}
-  .profile-row-meta .profile-toggles{display:grid;grid-template-columns:repeat(3,1fr)}
-  .profile-row-meta .profile-chart-actions{justify-content:stretch;padding-left:0;border-left:0}
-  .profile-row-meta .profile-chart-actions .btn-ghost{flex:1 1 0;justify-content:center}
+  .profile-toggles{display:grid;grid-template-columns:repeat(3,1fr)}
+  .profile-chart-actions{justify-content:stretch;padding-left:0;border-left:0}
+  .profile-chart-actions .btn-ghost{flex:1 1 0;justify-content:center}
   .chart-workspace,.panel,.ai-chat-panel{border-radius:16px}
-  .ai-chat-panel{min-height:520px;border-left:1px solid var(--line-soft);border-right:1px solid var(--line-soft)}
+  /* Phone: cao gần full màn (đã set ở ≤1200, tăng thêm một nấc). */
+  .shell > .chat-section .ai-chat-panel,
+  .ai-chat-panel{
+    min-height:min(85svh, 900px);
+    border-left:1px solid var(--line-soft);
+    border-right:1px solid var(--line-soft);
+  }
+  .shell > .chat-section .ai-chat-msgs,
+  .ai-chat-msgs{
+    min-height:min(58svh, 620px);
+  }
   .chat-section{margin-bottom:28px}
 }
 @media(max-width:390px){
-  .profile-row-primary,
-  .profile-row-meta{grid-template-columns:1fr}
+  .profile-form{
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "name"
+      "date"
+      "hour"
+      "gender"
+      "school"
+      "flow"
+      "year"
+      "timezone"
+      "work"
+      "relation"
+      "toggles"
+      "actions";
+  }
 }
 @media(prefers-reduced-motion:reduce){
   .profile-field,.btn-ghost,.ai-send-btn{

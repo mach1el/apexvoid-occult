@@ -391,7 +391,7 @@ export function ChartPage() {
                 onSubmit={(event) => event.preventDefault()}
               >
                 <div className="profile-row profile-row-primary">
-                  <label className="profile-field">
+                  <label className="profile-field profile-name">
                     <FieldIcon name="user" />
                     <span className="sr-only">Họ và tên</span>
                     <input
@@ -405,7 +405,7 @@ export function ChartPage() {
                     />
                   </label>
 
-                  <label className="profile-field">
+                  <label className="profile-field profile-date">
                     <FieldIcon name="calendar" />
                     <span className="sr-only">Ngày sinh dương lịch</span>
                     <input
@@ -443,7 +443,7 @@ export function ChartPage() {
                     ))}
                   </div>
 
-                  <label className="profile-field profile-field-plain profile-field-compact">
+                  <label className="profile-field profile-field-plain profile-field-compact profile-flow">
                     <span className="sr-only">Cách xem vận</span>
                     <select
                       name="flowBase"
@@ -456,7 +456,7 @@ export function ChartPage() {
                     </select>
                   </label>
 
-                  <label className="profile-field profile-field-plain profile-field-compact">
+                  <label className="profile-field profile-field-plain profile-field-compact profile-timezone">
                     <span className="sr-only">Múi giờ</span>
                     <select
                       name="timezone"
@@ -472,7 +472,7 @@ export function ChartPage() {
                 </div>
 
                 <div className="profile-row profile-row-meta">
-                  <label className="profile-field">
+                  <label className="profile-field profile-hour">
                     <FieldIcon name="clock" />
                     <span className="sr-only">Giờ sinh</span>
                     <select
@@ -489,7 +489,7 @@ export function ChartPage() {
                     </select>
                   </label>
 
-                  <label className="profile-field">
+                  <label className="profile-field profile-gender">
                     <FieldIcon name="gender" />
                     <span className="sr-only">Giới tính</span>
                     <select
@@ -503,7 +503,7 @@ export function ChartPage() {
                     </select>
                   </label>
 
-                  <label className="profile-field">
+                  <label className="profile-field profile-year">
                     <FieldIcon name="calendar" />
                     <span className="sr-only">Năm xem</span>
                     <select
@@ -523,7 +523,7 @@ export function ChartPage() {
                     </select>
                   </label>
 
-                  <label className="profile-field">
+                  <label className="profile-field profile-work">
                     <FieldIcon name="work" />
                     <span className="sr-only">Tình trạng công việc</span>
                     <select
@@ -542,7 +542,7 @@ export function ChartPage() {
                     </select>
                   </label>
 
-                  <label className="profile-field">
+                  <label className="profile-field profile-relationship">
                     <FieldIcon name="relationship" />
                     <span className="sr-only">Tình trạng mối quan hệ</span>
                     <select

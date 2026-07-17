@@ -22,7 +22,7 @@ const mobileChartCss = readFileSync(
 );
 
 describe("ChartPage profile form", () => {
-  it("exposes profile and chart options in a two-row toolbar", () => {
+  it("exposes profile fields in a natural input sequence", () => {
     const { container } = render(<ChartPage />);
 
     expect(screen.getByPlaceholderText("Họ và tên")).toBeInTheDocument();
@@ -52,6 +52,25 @@ describe("ChartPage profile form", () => {
     expect(container.querySelector(".chart-workspace > .panel-head")).toBeNull();
     expect(container.querySelector(".profile-chart-actions")).not.toBeNull();
     expect(screen.getByLabelText("Sao chép văn bản")).toBeInTheDocument();
+    for (const className of [
+      "profile-name",
+      "profile-date",
+      "profile-hour",
+      "profile-gender",
+      "profile-flow",
+      "profile-year",
+      "profile-timezone",
+      "profile-work",
+      "profile-relationship",
+    ]) {
+      expect(container.querySelector(`.${className}`)).not.toBeNull();
+    }
+    expect(chartCss).toContain('"name date"');
+    expect(chartCss).toContain('"hour gender"');
+    expect(chartCss).toContain('"school school"');
+    expect(chartCss).toContain('"flow flow"');
+    expect(chartCss).toContain('"year timezone"');
+    expect(chartCss).toContain('"work relation"');
   });
 
   it("keeps closed selects transparent and native options dark", () => {
@@ -77,13 +96,13 @@ describe("ChartPage profile form", () => {
     // Cột 1 = --ziwei-chart-fit; chat 1fr — không khoảng trống giữa chart và chat.
     expect(chartCss).toMatch(/\.wrap\{[^}]*width:min\(2100px,100%\)/);
     expect(chartCss).toMatch(
-      /\.shell\{[^}]*--ziwei-chart-fit:\s*min\(1280px,\s*calc\(\(100svh\s*-\s*120px\)\s*\*\s*880\s*\/\s*896\)\)/,
+      /\.shell\{[^}]*--ziwei-chart-fit:\s*min\(1280px,\s*calc\(\(100svh\s*-\s*80px\)\s*\*\s*880\s*\/\s*896\)\)/,
     );
     expect(chartCss).toMatch(
       /\.shell\{[^}]*grid-template-columns:minmax\(780px,var\(--ziwei-chart-fit\)\)\s+minmax\(400px,1fr\)/,
     );
     expect(compactChartCss).toMatch(
-      /--ziwei-chart-fit:\s*min\(1280px,\s*calc\(\(100svh\s*-\s*120px\)\s*\*\s*880\s*\/\s*896\)\)/,
+      /--ziwei-chart-fit:\s*min\(1280px,\s*calc\(\(100svh\s*-\s*80px\)\s*\*\s*880\s*\/\s*896\)\)/,
     );
     expect(compactChartCss).toMatch(
       /grid-template-columns:\s*minmax\(780px,\s*var\(--ziwei-chart-fit\)\)\s+minmax\(400px,\s*1fr\)/,
@@ -105,6 +124,34 @@ describe("ChartPage profile form", () => {
     );
     expect(chartCss).toMatch(
       /\.shell\s*>\s*\.chat-section\s+\.ai-chat-panel\{[^}]*flex:\s*1\s+1\s+0/,
+    );
+  });
+
+  it("resets chat flex grow on stacked/mobile so chatbox does not collapse", () => {
+    // ≤1200px stack 1 cột: bỏ flex-grow desktop, giữ min-height theo viewport.
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*1200px\s*\)[\s\S]*?\.shell\s*>\s*\.chat-section\s*>\s*\.ai-chat[\s\S]*?flex:\s*none/,
+    );
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*1200px\s*\)[\s\S]*?\.shell\s*>\s*\.chat-section\s+\.ai-chat-panel[\s\S]*?flex:\s*none/,
+    );
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*1200px\s*\)[\s\S]*?\.shell\s*>\s*\.chat-section\s+\.ai-chat-panel[\s\S]*?min-height:\s*min\(78svh,\s*820px\)/,
+    );
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*1200px\s*\)[\s\S]*?\.shell\s*>\s*\.chat-section\s+\.ai-chat-msgs[\s\S]*?min-height:\s*min\(52svh,\s*520px\)/,
+    );
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*700px\s*\)[\s\S]*?\.shell\s*>\s*\.chat-section\s+\.ai-chat-panel[\s\S]*?min-height:\s*min\(85svh,\s*900px\)/,
+    );
+  });
+
+  it("keeps compact chart overflow visible on mobile (no paint clip)", () => {
+    expect(compactChartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*960px\s*\)[\s\S]*?\.compact-chart-capture\s*\{[^}]*contain:\s*none/,
+    );
+    expect(compactChartCss).toMatch(
+      /@media\s*\(\s*max-width:\s*960px\s*\)[\s\S]*?\.compact-chart-capture\s*\{[^}]*overflow:\s*visible/,
     );
   });
 
