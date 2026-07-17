@@ -42,8 +42,8 @@ function twelvePalaceChart(
 describe("getPalaceStrengths (radar vận khí)", () => {
   it("trả đúng 12 cung, tất định, rollup khớp điểm thô, khởi từ Mệnh", () => {
     const chart = calculateNamPhai(birthInput);
-    const first = getPalaceStrengths(chart, { school: "nam-phai" });
-    expect(first).toEqual(getPalaceStrengths(chart, { school: "nam-phai" }));
+    const first = getPalaceStrengths(chart);
+    expect(first).toEqual(getPalaceStrengths(chart));
     expect(first).toHaveLength(12);
     expect(first[0]?.palace).toBe("Mệnh");
     for (const item of first) {
@@ -56,7 +56,7 @@ describe("getPalaceStrengths (radar vận khí)", () => {
 
   it("điểm nằm trong thang tuyệt đối 0–100", () => {
     const chart = calculateNamPhai(birthInput);
-    for (const item of getPalaceStrengths(chart, { school: "nam-phai" })) {
+    for (const item of getPalaceStrengths(chart)) {
       expect(item.score).toBeGreaterThanOrEqual(0);
       expect(item.score).toBeLessThanOrEqual(100);
     }
@@ -75,7 +75,7 @@ describe("getPalaceStrengths (radar vận khí)", () => {
         { name: "Đà La", layer: "tough" },
       ],
     );
-    const s = getPalaceStrengths(chart, { school: "nam-phai" });
+    const s = getPalaceStrengths(chart);
     expect(s.find((i) => i.palace === "Mệnh")!.score).toBeGreaterThan(
       s.find((i) => i.palace === "Phụ Mẫu")!.score,
     );
@@ -85,11 +85,11 @@ describe("getPalaceStrengths (radar vận khí)", () => {
     const chart = calculateNamPhai(birthInput);
     const boosted: RadarWeights = {
       ...RADAR_WEIGHTS,
-      mThuan: RADAR_WEIGHTS.mThuan + 1,
+      mPosMieu: RADAR_WEIGHTS.mPosMieu + 1,
     };
     expect(
-      getPalaceStrengths(chart, { school: "nam-phai", weights: boosted }),
-    ).not.toEqual(getPalaceStrengths(chart, { school: "nam-phai" }));
+      getPalaceStrengths(chart, { weights: boosted }),
+    ).not.toEqual(getPalaceStrengths(chart));
   });
 
   it("Tam Phương Tứ Chính: cung trống hưởng lây từ tam hợp/xung chiếu", () => {
@@ -102,10 +102,10 @@ describe("getPalaceStrengths (radar vận khí)", () => {
       { name: "Thiên Khôi", layer: "helper" },
     ];
 
-    const a = getPalaceStrengths(weak, { school: "nam-phai" }).find(
+    const a = getPalaceStrengths(weak).find(
       (i) => i.palace === "Mệnh",
     )!;
-    const b = getPalaceStrengths(strongTamHop, { school: "nam-phai" }).find(
+    const b = getPalaceStrengths(strongTamHop).find(
       (i) => i.palace === "Mệnh",
     )!;
     expect(b.score).toBeGreaterThan(a.score);
@@ -117,7 +117,7 @@ describe("getPalaceStrengths (radar vận khí)", () => {
     const thienDi = chart.palaces.find((p) => p.branch === "Sửu")!;
     thienDi.stars = [{ name: "Tử Vi", layer: "major", brightness: "Miếu" }];
 
-    const menh = getPalaceStrengths(chart, { school: "nam-phai" }).find(
+    const menh = getPalaceStrengths(chart).find(
       (i) => i.palace === "Mệnh",
     )!;
     expect(
@@ -137,11 +137,11 @@ describe("getPalaceStrengths (radar vận khí)", () => {
       return { ...c, voidMarkers: voids };
     };
     const env = (chart: ReturnType<typeof mk>) =>
-      getPalaceStrengths(chart, { school: "nam-phai" })
+      getPalaceStrengths(chart)
         .find((i) => i.palace === "Mệnh")!
         .detail.find((l) => l.source === "Hệ số môi trường")?.reason ?? "";
     const detail = (chart: ReturnType<typeof mk>) =>
-      getPalaceStrengths(chart, { school: "nam-phai" }).find(
+      getPalaceStrengths(chart).find(
         (i) => i.palace === "Mệnh",
       )!.detail;
 
@@ -163,59 +163,29 @@ describe("getPalaceStrengths (radar vận khí)", () => {
     expect(env(mk([], []))).toContain("×0.7");
   });
 
-  it("M_nh đồng nhất: cùng quan hệ ngũ hành → cùng hệ số, dù sao cát hay hãm", () => {
-    // Regression: trước đây hệ số key theo DẤU điểm nên Thái Âm (chính tinh
-    // Thủy, hãm → điểm âm) bị gán "mệnh chế được sát ×0.7", trong khi sao Thủy
-    // điểm dương lại ×0.9 — cùng quan hệ mà ra hai hệ số.
-    // Cả hai đều Tier ≤2 để cùng chịu ngũ hành.
+  it("Không còn hệ số Ngũ Hành Bản Mệnh — điểm sao chỉ theo CSV × độ sáng", () => {
+    // Thầy chốt bỏ M_nh 2026-07-18: Thái Âm hãm (Tier 1) và Hữu Bật (Tier 2)
+    // dù menhElement khắc/sinh gì cũng không còn hệ số ngũ hành trong reason.
     const chart = {
       ...twelvePalaceChart(
         [
-          { name: "Thái Âm", layer: "major", brightness: "Hãm" }, // Tier 1, Thủy, âm
-          { name: "Hữu Bật", layer: "helper" }, // Tier 2, Thủy, dương
-        ],
-        [],
-      ),
-      menhElement: "Thổ", // Thổ khắc Thủy → cả hai đều là "mệnh khắc sao"
-    };
-    const menh = getPalaceStrengths(chart, { school: "nam-phai" }).find(
-      (i) => i.palace === "Mệnh",
-    )!;
-    const thaiAm = menh.detail.find((l) => l.source === "Thái Âm")!;
-    const huuBat = menh.detail.find((l) => l.source === "Hữu Bật")!;
-
-    expect(thaiAm.reason).toContain("mệnh khắc sao (khắc xuất)×0.9");
-    expect(huuBat.reason).toContain("mệnh khắc sao (khắc xuất)×0.9");
-    // Chính tinh hãm KHÔNG được gán nhãn sát tinh.
-    expect(thaiAm.reason).not.toContain("sát");
-  });
-
-  it("Ngũ hành CHỈ áp Tier 1 & 2 — Tier 3/4 giữ nguyên điểm gốc", () => {
-    const chart = {
-      ...twelvePalaceChart(
-        [
-          { name: "Thái Âm", layer: "major", brightness: "Hãm" }, // Tier 1 Thủy
-          { name: "Thiên Việt", layer: "helper" }, // Tier 2 Hỏa
-          { name: "Thiên Hỷ", layer: "romance" }, // Tier 3 Thủy
-          { name: "Long Đức", layer: "helper" }, // Tier 4 Thủy
+          { name: "Thái Âm", layer: "major", brightness: "Hãm" },
+          { name: "Hữu Bật", layer: "helper" },
         ],
         [],
       ),
       menhElement: "Thổ",
     };
-    const menh = getPalaceStrengths(chart, { school: "nam-phai" }).find(
+    const menh = getPalaceStrengths(chart).find(
       (i) => i.palace === "Mệnh",
     )!;
-    const line = (n: string) => menh.detail.find((l) => l.source === n)!;
+    const thaiAm = menh.detail.find((l) => l.source === "Thái Âm")!;
+    const huuBat = menh.detail.find((l) => l.source === "Hữu Bật")!;
 
-    // Tier 1 & 2 → CÓ ngũ hành
-    expect(line("Thái Âm").reason).toContain("×0.9");
-    expect(line("Thiên Việt").reason).toContain("×1.2");
-    // Tier 3 & 4 → KHÔNG ngũ hành, giữ nguyên điểm CSV
-    expect(line("Thiên Hỷ").reason).not.toContain("×");
-    expect(line("Thiên Hỷ").points).toBe(2.5);
-    expect(line("Long Đức").reason).not.toContain("×");
-    expect(line("Long Đức").points).toBe(1.5);
+    for (const label of ["thuận mệnh", "mệnh khắc sao", "sao khắc mệnh"]) {
+      expect(thaiAm.reason).not.toContain(label);
+      expect(huuBat.reason).not.toContain(label);
+    }
   });
 
   it("Tuần/Triệt: Miếu→0.6 · Bình→0.5 · Hãm→0.35", () => {
@@ -227,7 +197,7 @@ describe("getPalaceStrengths (radar vận khí)", () => {
       return { ...c, voidMarkers: [{ type: "Tuần", branches: ["Mùi"] }] };
     };
     const note = (b: string) =>
-      getPalaceStrengths(mk(b), { school: "nam-phai" })
+      getPalaceStrengths(mk(b))
         .find((i) => i.palace === "Mệnh")!
         .detail.find((l) => l.source === "Hệ số môi trường")!.reason;
 
@@ -250,7 +220,7 @@ describe("getPalaceStrengths (radar vận khí)", () => {
       [],
     );
     const chart = { ...c, voidMarkers: [{ type: "Tuần", branches: ["Mùi"] }] };
-    const note = getPalaceStrengths(chart, { school: "nam-phai" })
+    const note = getPalaceStrengths(chart)
       .find((i) => i.palace === "Mệnh")!
       .detail.find((l) => l.source === "Hệ số môi trường")!.reason;
 
@@ -262,7 +232,7 @@ describe("getPalaceStrengths (radar vận khí)", () => {
   it("làm tròn đối xứng quanh 0", () => {
     // Math.round(-1.75*10)/10 = -1.7 (lệch), helper phải cho -1.8.
     const chart = calculateNamPhai(birthInput);
-    for (const item of getPalaceStrengths(chart, { school: "nam-phai" })) {
+    for (const item of getPalaceStrengths(chart)) {
       for (const line of [...item.detail, ...item.breakdown]) {
         expect(Math.abs(line.points * 10 - Math.round(line.points * 10))).toBeLessThan(1e-6);
       }

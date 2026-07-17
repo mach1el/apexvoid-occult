@@ -3,12 +3,7 @@
  * Đại vận · Lưu niên · độ vững 12 cung.
  */
 
-import type {
-  ChartData,
-  ChartEngine,
-  FlowMonthEntry,
-  MutagenRecord,
-} from "@/types/chart";
+import type { ChartData, FlowMonthEntry } from "@/types/chart";
 import { getEngine } from "../chart";
 import {
   baseStarName,
@@ -18,6 +13,7 @@ import {
 import { CAT_SET, SAT_SET } from "./star-sets";
 import { SCORING_WEIGHTS, type ScoringWeights } from "./weights";
 import { scoreFortuneFrame } from "./frame";
+import { scoreLuuNguyetFrame } from "./monthly-flow";
 import type {
   LuuNienTrendOptions,
   PalaceStrength,
@@ -58,7 +54,6 @@ export type {
 export function getDaiVanTrend(
   chart: ChartData,
   weights: ScoringWeights = SCORING_WEIGHTS,
-  school: "nam-phai" | "trung-chau" = "nam-phai",
 ): TrendPoint[] {
   const fortunes = chart.palaces
     .filter((palace) => palace.majorFortune)
@@ -75,7 +70,7 @@ export function getDaiVanTrend(
       palace,
       weights,
       [{ label: "Gốc", records: chart.natalMutagens }],
-      { includeAnnual: false, school },
+      { includeAnnual: false },
     );
 
     return {
@@ -85,27 +80,6 @@ export function getDaiVanTrend(
       isCurrent: Boolean(fortune.active),
       breakdown: scored.breakdown,
     };
-  });
-}
-
-/**
- * Lưu nguyệt Tứ Hóa của một tháng: theo Thiên Can của tháng đó (entry.stem),
- * KHÔNG phải Tứ Hóa năm. Sao đích là chính tinh / phụ tinh gốc — tìm cung an
- * sao đó trên lá số. Bảng Tứ Hóa lấy từ engine vì khác nhau giữa các phái
- * (vd Canh: Nam phái Khoa Thái Âm, Trung Châu Khoa Thiên Phủ).
- */
-function monthlyMutagenRecords(
-  chart: ChartData,
-  engine: ChartEngine,
-  stem: string | undefined,
-): MutagenRecord[] {
-  if (!stem) return [];
-  return engine.tuHoaTargets(stem).map(({ mutagen, starName }) => {
-    const palace =
-      chart.palaces.find((palace) =>
-        (palace.stars ?? []).some((star) => star.name === starName),
-      ) ?? null;
-    return { mutagen, starName, palace };
   });
 }
 
@@ -139,45 +113,28 @@ function buildLuuNienScoreMonths(chart: ChartData): FlowMonthEntry[] {
  * Xu hướng Lưu niên: 12 tháng âm trong năm xem.
  * Cung hạn = cung nguyệt hạn Lưu niên (T1 = Lưu Đẩu Quân, không lấy thẳng
  * monthlyPalaces khi lá số đang an theo Tiểu Hạn).
- * Mỗi tháng dùng Tứ Hóa RIÊNG của tháng đó (lưu nguyệt, theo can tháng), xếp
- * lớp cùng Tứ Hóa năm (lưu niên) và Tứ Hóa gốc.
+ * Chấm điểm qua engine Tầng 4 độc lập (`scoreLuuNguyetFrame`, monthly-flow.ts)
+ * — Nguyệt Tứ Hóa/Lộc Tồn/Kình/Đà + guardrail Kỵ Trùng Kỵ/Lộc Trùng Lộc/
+ * Xung Thái Tuế/Khoa Chế Nguyệt Kỵ. Không dùng `scoreFortuneFrame` (Đại Vận).
  */
 export function getLuuNienTrend(
   chart: ChartData,
   opts: LuuNienTrendOptions,
   asOf: Date = new Date(),
 ): TrendPoint[] {
-  const weights = opts.weights ?? SCORING_WEIGHTS;
   const months = buildLuuNienScoreMonths(chart);
   if (!months.length) return [];
 
   const engine = getEngine(opts.school);
+  if (!engine) return [];
+
   const currentMonth = resolveCurrentFlowMonth(chart, months, opts, asOf);
   const points: TrendPoint[] = [];
 
   for (const entry of months) {
-    const focus = entry.palace;
-    if (!focus) continue;
+    if (!entry.palace) continue;
 
-    // Tứ Hóa RIÊNG của tháng (lưu nguyệt, theo can tháng) — trước đây mọi
-    // tháng đều dùng Tứ Hóa năm nên "sai tháng"; nay mỗi tháng có tín hiệu
-    // riêng, xếp lớp cùng Tứ Hóa năm và gốc.
-    const monthMutagens = engine
-      ? monthlyMutagenRecords(chart, engine, entry.stem)
-      : [];
-
-    const scored = scoreFortuneFrame(
-      chart,
-      focus,
-      weights,
-      [
-        { label: "Lưu nguyệt", records: monthMutagens },
-        { label: "Lưu niên", records: chart.annualMutagens },
-        { label: "Gốc", records: chart.natalMutagens },
-      ],
-      // Lưu niên tháng: sao lưu niên chính là tín hiệu của năm/tháng đang xem.
-      { includeAnnual: true, school: opts.school },
-    );
+    const scored = scoreLuuNguyetFrame(chart, engine, entry);
 
     const monthLabel = entry.label ?? `Th.${entry.month}`;
     points.push({

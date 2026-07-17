@@ -60,8 +60,9 @@ describe("getDaiVanTrend", () => {
       ),
     ).toBe(true);
     expect(point!.hung).toBeGreaterThan(point!.cat);
-    // Tay thầy ~35/73 dùng điểm tay (Tham+10, Kỵ lưu…). Engine bám P_csv×M_nh
-    // → tuyệt đối khác; kiến trúc (SPT Hung + Khắc Nhập) là chân lý nghiệm thu.
+    // Tay thầy ~35/73 dùng điểm tay (Tham+10, Kỵ lưu…). Engine bám P_csv×M_pos
+    // (từ 2026-07-18 không còn M_nh) → tuyệt đối khác; kiến trúc (SPT Hung +
+    // Khắc Nhập) là chân lý nghiệm thu.
     // ## Cần thầy duyệt: có siết điểm CSV cho khớp 35/73 không?
     expect(
       point!.breakdown.hung

@@ -5,9 +5,8 @@
  * và đối cung của từng trục. Guardrails áp sau cộng sao, trước clamp.
  */
 
-import type { ChartData, ChartPalace, ChartStar, School } from "@/types/chart";
-import { getEngine } from "../chart";
-import { baseStarName, isAnnualStar } from "../star-classification";
+import type { ChartData, ChartPalace, ChartStar } from "@/types/chart";
+import { isAnnualStar } from "../star-classification";
 import { getPalaceStrengths } from "./palace-radar";
 import type { AnnualAxisName, AnnualAxisStrength, ScoreLine } from "./types";
 import { TAM_HOP, XUNG_CHIEU } from "./zones";
@@ -111,13 +110,6 @@ const ANNUAL_STAR_POINTS: Record<string, number> = {
 };
 
 const LOC_STARS = new Set(["Lưu Hóa Lộc", "Lưu Lộc Tồn"]);
-const ELEMENTAL_STARS = new Set([
-  "Lưu Lộc Tồn",
-  "Lưu Hóa Lộc",
-  "Lưu Hóa Quyền",
-  "Lưu Hóa Khoa",
-  "Lưu Hóa Kỵ",
-]);
 const KY_KHONG_KIEP_STARS = new Set([
   "Lưu Hóa Kỵ",
   "Lưu Địa Không",
@@ -127,25 +119,6 @@ const QUYEN_LOC_STARS = new Set(["Lưu Hóa Quyền", "Lưu Hóa Lộc", "Lưu L
 const MA_BROKEN_STARS = new Set(["Lưu Hóa Kỵ", "Lưu Đà La"]);
 const LOVE_STARS = new Set(["Lưu Đào Hoa", "Lưu Hồng Loan", "Lưu Thiên Hỷ"]);
 const LOVE_DRAMA_STARS = new Set(["Lưu Hóa Kỵ", "Lưu Đà La", "Lưu Địa Kiếp"]);
-
-const GENERATES: Record<string, string> = {
-  Mộc: "Hỏa",
-  Hỏa: "Thổ",
-  Thổ: "Kim",
-  Kim: "Thủy",
-  Thủy: "Mộc",
-};
-const CONTROLS: Record<string, string> = {
-  Mộc: "Thổ",
-  Thổ: "Thủy",
-  Thủy: "Hỏa",
-  Hỏa: "Kim",
-  Kim: "Mộc",
-};
-
-export interface AnnualAxisRadarOptions {
-  school: School;
-}
 
 function clampScore(value: number): number {
   return Math.max(0, Math.min(100, Math.round(value)));
@@ -186,27 +159,6 @@ function scoreAnnualStar(star: ChartStar): number | null {
   return ANNUAL_STAR_POINTS[star.name] ?? null;
 }
 
-function elementMultiplier(
-  starElement: string,
-  menhElement: string,
-): { multiplier: number; note: string } {
-  if (!starElement || !menhElement) return { multiplier: 1, note: "" };
-  if (
-    starElement === menhElement ||
-    GENERATES[starElement] === menhElement ||
-    GENERATES[menhElement] === starElement
-  ) {
-    return { multiplier: 1.2, note: "sinh/đồng hành" };
-  }
-  if (CONTROLS[menhElement] === starElement) {
-    return { multiplier: 0.9, note: "mệnh khắc sao" };
-  }
-  if (CONTROLS[starElement] === menhElement) {
-    return { multiplier: 0.7, note: "sao khắc mệnh" };
-  }
-  return { multiplier: 1, note: "" };
-}
-
 function hasVoidMarker(chart: ChartData, palace: ChartPalace): boolean {
   return (chart.voidMarkers ?? []).some(
     (marker) =>
@@ -219,7 +171,6 @@ function collectDynamicLines(
   chart: ChartData,
   mainPalace: ChartPalace,
   opposite: ChartPalace | undefined,
-  elementForStar: (name: string) => string,
 ): { points: number; lines: ScoreLine[] } {
   const lines: ScoreLine[] = [];
   let points = 0;
@@ -241,10 +192,7 @@ function collectDynamicLines(
             : 6
           : scoreAnnualStar(star);
       if (baseDelta == null) continue;
-      const elemental = ELEMENTAL_STARS.has(star.name)
-        ? elementMultiplier(elementForStar(baseStarName(star.name)), chart.menhElement)
-        : { multiplier: 1, note: "" };
-      const delta = baseDelta * elemental.multiplier * geometry;
+      const delta = baseDelta * geometry;
       points += delta;
       lines.push({
         source: star.name,
@@ -252,7 +200,6 @@ function collectDynamicLines(
         reason: [
           `Sao lưu tại ${palace.name}`,
           geometry === 0.5 ? "đối cung ×0.5" : "",
-          elemental.note ? `${elemental.note} ×${elemental.multiplier}` : "",
           star.name === "Lưu Thiên Mã" && maBroken
             ? "gặp Kỵ/Đà/Tuần/Triệt"
             : "",
@@ -295,14 +242,11 @@ function activationLine(
 
 export function getAnnualAxisStrengths(
   chart: ChartData,
-  { school }: AnnualAxisRadarOptions,
 ): AnnualAxisStrength[] {
-  const palaceStrengths = getPalaceStrengths(chart, { school });
+  const palaceStrengths = getPalaceStrengths(chart);
   const scoreMap = new Map(palaceStrengths.map((item) => [item.palace, item.score]));
   const year = chart.annualYear;
   const smallLimitPalace = chart.smallLimitPalace?.name ?? null;
-  const elementForStar =
-    getEngine(school)?.elementForStar ?? (() => "");
 
   const draft = AXIS_CONFIGS.map((config) => {
     const base = computeBase(config.weights, scoreMap);
@@ -321,7 +265,7 @@ export function getAnnualAxisStrengths(
     }));
 
     const dynamic = main
-      ? collectDynamicLines(chart, main, opposite, elementForStar)
+      ? collectDynamicLines(chart, main, opposite)
       : { points: 0, lines: [] };
     const activation = main ? activationLine(chart, main) : null;
     const raw = base + dynamic.points + (activation?.points ?? 0);
