@@ -10,6 +10,8 @@ import { collectDomainAnchorFrames } from "./collect-domain-frames";
 import { collectStarEvidence } from "./collect-star-evidence";
 import { collectMutagenEvidence } from "./collect-mutagen-evidence";
 import { collectFocalEvidence } from "./collect-focal-evidence";
+import { collectAnnualFocusEvidence } from "./collect-annual-focus-evidence";
+import { buildAnnualFocusFrame, type AnnualFocusFrame } from "./build-annual-focus-frame";
 import { aggregateDomainEvidence } from "./aggregate";
 import { sumWeightedAxes, normalizeAnnualAxes } from "./normalize";
 import { dedupeAnnualAxesDiagnostics, emptyAnnualAxesDiagnostics } from "./diagnostics";
@@ -179,9 +181,8 @@ export function analyzeAnnualAxes(chart: ChartData, options: { school: ZiweiScho
   diagnostics.ambiguousDomainAnchor.push(...domainAnchors.diagnostics.ambiguousDomainAnchor);
 
   // Annual focus resolution — Nam Phái = Tiểu Hạn, Trung Châu = annual
-  // Mệnh. The activation-only overlay itself is applied in Commit 2 via
-  // `collect-annual-focus-evidence.ts`; here we resolve the palace so
-  // downstream code (and the UI) can read the focus summary regardless.
+  // Mệnh. Then materialise the focus TP4C frame for the activation-only
+  // overlay applied per-domain below.
   const focusResolution = resolveAnnualFocus(chart, school);
   if (focusResolution.issues.missingSmallLimitPalace) {
     diagnostics.missingSmallLimitPalace.push("chart:smallLimitPalace");
@@ -189,6 +190,19 @@ export function analyzeAnnualAxes(chart: ChartData, options: { school: ZiweiScho
   if (focusResolution.issues.invalidAnnualFocusPalace) {
     diagnostics.invalidAnnualFocusPalace.push(`${school}:focus-palace`);
   }
+
+  const focusFrame: AnnualFocusFrame | null = buildAnnualFocusFrame(chart, focusResolution.focus);
+  if (focusResolution.focus && !focusFrame) {
+    diagnostics.missingAnnualFocusFrameNodes.push(
+      `${school}:${focusResolution.focus.palaceIndex}`,
+    );
+  }
+
+  // Anti-double-count: when Nam Phái's focus is the small-limit palace,
+  // suppress the small-limit *focal-marker* row for the same palace so
+  // the annual-focus overlay is the sole activation contributor there.
+  const suppressSmallLimitFocal =
+    school === "nam-phai" && focusResolution.focus?.mode === "small-limit";
 
   const axes = {} as Record<AnnualAxisDomain, AnnualAxisResult>;
 
@@ -206,7 +220,26 @@ export function analyzeAnnualAxes(chart: ChartData, options: { school: ZiweiScho
     const candidates: AnnualAxisEvidence[] = [
       ...collectStarEvidence({ chart, domain, frames, numericKnowledge, annualKnowledge, diagnostics }),
       ...collectMutagenEvidence({ chart, domain, frames, annualKnowledge, diagnostics }),
-      ...collectFocalEvidence({ chart, domain, frames, school, annualKnowledge, diagnostics }),
+      ...collectFocalEvidence({
+        chart,
+        domain,
+        frames,
+        school,
+        annualKnowledge,
+        diagnostics,
+        suppressSmallLimitFocal,
+      }),
+      ...(focusFrame
+        ? collectAnnualFocusEvidence({
+            chart,
+            domain,
+            domainFrames: frames,
+            focusFrame,
+            school,
+            annualKnowledge,
+            diagnostics,
+          })
+        : []),
     ];
 
     const evidence = aggregateDomainEvidence(candidates, annualKnowledge.scoringProfile);
@@ -231,25 +264,23 @@ export function analyzeAnnualAxes(chart: ChartData, options: { school: ZiweiScho
   const domainStatuses = ANNUAL_AXIS_DOMAINS.map((domain) => axes[domain].status);
   const moduleStatus = resolveModuleStatus(domainStatuses);
 
-  const annualFocus: AnnualFocusSummary | null = focusResolution.focus
-    ? {
-        mode: focusResolution.focus.mode,
-        palaceIndex: focusResolution.focus.palaceIndex,
-        palaceName: focusResolution.focus.palaceName,
-        palaceBranch: focusResolution.focus.palaceBranch,
-        annualPalaceName: focusResolution.focus.annualPalaceName,
-        // Frame branches are computed by the caller only after the focus
-        // frame is materialised (Commit 2). Here we ship an empty array
-        // until that overlay lands, keeping the field shape stable.
-        frameBranches: [],
-      }
-    : null;
+  const annualFocus: AnnualFocusSummary | null =
+    focusResolution.focus && focusFrame
+      ? {
+          mode: focusResolution.focus.mode,
+          palaceIndex: focusResolution.focus.palaceIndex,
+          palaceName: focusResolution.focus.palaceName,
+          palaceBranch: focusResolution.focus.palaceBranch,
+          annualPalaceName: focusResolution.focus.annualPalaceName,
+          frameBranches: focusFrame.frameBranches,
+        }
+      : null;
 
   const capabilities = capabilitiesFor(
     school,
     annualKnowledge,
     domainAnchors,
-    focusResolution.focus,
+    annualFocus ? focusResolution.focus : null,
     domainStatuses,
   );
 

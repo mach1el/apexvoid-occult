@@ -84,6 +84,8 @@ describe("analyzeAnnualAxes — domain resolution (Trung Châu chart, real annua
       "collect-star-evidence.ts",
       "collect-mutagen-evidence.ts",
       "collect-focal-evidence.ts",
+      "collect-annual-focus-evidence.ts",
+      "build-annual-focus-frame.ts",
       "aggregate.ts",
       "normalize.ts",
       "analyze.ts",

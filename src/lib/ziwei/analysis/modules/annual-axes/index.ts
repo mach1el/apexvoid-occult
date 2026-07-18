@@ -12,6 +12,8 @@ export {
 export { collectStarEvidence } from "./collect-star-evidence";
 export { collectMutagenEvidence } from "./collect-mutagen-evidence";
 export { collectFocalEvidence } from "./collect-focal-evidence";
+export { collectAnnualFocusEvidence } from "./collect-annual-focus-evidence";
+export { buildAnnualFocusFrame, type AnnualFocusFrame } from "./build-annual-focus-frame";
 export {
   namPhaiDomainResolver,
   trungChauDomainResolver,
