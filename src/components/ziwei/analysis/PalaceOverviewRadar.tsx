@@ -328,6 +328,43 @@ function groupByScope(
   return [...map.entries()];
 }
 
+function normalizeForDedup(text: string): string {
+  return text.trim().replace(/\s+/g, " ");
+}
+
+interface TransformTargetGroup {
+  key: string;
+  label: string;
+  bullets: string[];
+}
+
+/**
+ * V1.2.1 — one transformation fact can match several semantic rules (e.g.
+ * both "communication-friction" and "documentation-pressure" for the same
+ * Hóa Kỵ → target). Group by the shared transformation fact id (factIds[0])
+ * so the UI renders one card per fact instead of a repeated header, with
+ * deduplicated bullet text. No annotations are dropped from engine output —
+ * this is presentation-only grouping.
+ */
+function groupTransformTargetAnnotations(
+  annotations: PalaceAnnotation[],
+): TransformTargetGroup[] {
+  const map = new Map<string, { label: string; bullets: Set<string> }>();
+  const order: string[] = [];
+  for (const a of annotations) {
+    const key = a.factIds[0] ?? a.id;
+    if (!map.has(key)) {
+      map.set(key, { label: a.label, bullets: new Set() });
+      order.push(key);
+    }
+    map.get(key)!.bullets.add(normalizeForDedup(renderExplanationKey(a.explanationKey, a.label)));
+  }
+  return order.map((key) => {
+    const entry = map.get(key)!;
+    return { key, label: entry.label, bullets: [...entry.bullets] };
+  });
+}
+
 /** V1.2 — trace a domain-projection annotation back to the evidence it
  * projects from, so the UI can tell major/transform subjects (shown in
  * full) apart from minor-star subjects (capped to top 3 by effect). */
@@ -568,13 +605,16 @@ function PalaceOverviewDetail({
       {transformTargetAnnotations.length > 0 ? (
         <section className="palace-overview-detail__section">
           <h5>Tứ Hóa theo sao nhận Hóa</h5>
-          <ul>
-            {transformTargetAnnotations.map((a) => (
-              <li key={a.id}>
-                {a.label} — {renderExplanationKey(a.explanationKey, a.label)}
-              </li>
-            ))}
-          </ul>
+          {groupTransformTargetAnnotations(transformTargetAnnotations).map((group) => (
+            <div key={group.key} className="palace-overview-detail__family-group">
+              <p className="palace-overview-detail__family-label">{group.label}</p>
+              <ul>
+                {group.bullets.map((bullet) => (
+                  <li key={bullet}>{bullet}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </section>
       ) : null}
 
