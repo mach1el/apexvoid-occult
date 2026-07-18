@@ -1,6 +1,6 @@
 /** Kiểu dữ liệu public của engine xu hướng. */
 
-import type { BirthInput, School } from "@/types/chart";
+import type { BirthInput, ChartPalace, School } from "@/types/chart";
 import type { ScoringWeights } from "./weights";
 
 export interface ScoreLine {
@@ -35,6 +35,29 @@ export interface PalaceStrength {
   detail: ScoreLine[];
   /** Rollup tam phương tứ chính: bản cung · đối cung · tam hợp. Tổng = `raw`. */
   breakdown: ScoreLine[];
+}
+
+/**
+ * Một tháng Lưu Nguyệt cho engine chấm điểm (Tầng 4) — KHÔNG dùng cho hiển thị
+ * lá số (đó vẫn là `ChartPalace.flowMonths` / `ChartData.monthlyPalaces`,
+ * kiểu `FlowMonthEntry` trong `@/types/chart`, cố tình giữ nguyên để không đổi
+ * UI chart — xem AGENTS §3 "lá số không được đổi trong im lặng").
+ *
+ * Hai hệ tọa độ độc lập, KHÔNG được dùng thay thế lẫn nhau:
+ * - `focusPalace`: cung Lưu Nguyệt Mệnh — dùng cho TP4C/trọng số cung.
+ * - `calendarStem`/`calendarBranch`: Can Chi lịch thật của tháng âm (Ngũ Hổ
+ *   Độn theo can năm xem) — dùng cho Tứ Hóa/Lộc Tồn/Kình/Đà/Xung Thái Tuế.
+ *   KHÔNG suy ra từ `focusPalace.stem`/`focusPalace.branch`.
+ */
+export interface MonthlyFocusEntry {
+  month: number;
+  label?: string;
+  /** Cung Lưu Nguyệt Mệnh của tháng — dùng cho TP4C, không dùng để suy Can Chi. */
+  focusPalace: ChartPalace;
+  /** Thiên can lịch tháng âm (Ngũ Hổ Độn) — độc lập với focusPalace. */
+  calendarStem: string;
+  /** Địa chi lịch tháng âm — độc lập với focusPalace. */
+  calendarBranch: string;
 }
 
 export interface LuuNienTrendOptions {
