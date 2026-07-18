@@ -13,6 +13,7 @@ import {
 } from "./collect-evidence";
 import { evaluateStructuralRules } from "./evaluate-structural-rules";
 import { buildMenhThanAnnotations, resolveMenhThanStatus } from "./menh-than-annotations";
+import { buildMinorPairAnnotations } from "./minor-pair-annotations";
 import {
   bandForScore,
   computeEvidenceCompleteness,
@@ -125,13 +126,22 @@ export function analyzePalace(input: AnalyzePalaceInput): PalaceOverviewResult {
 
   const menhThanStatus = resolveMenhThanStatus(chart, palace, semanticDiagnostics);
   const annotations: PalaceAnnotation[] = semanticKnowledge
-    ? buildMenhThanAnnotations({
-        chart,
-        palace,
-        factsByPalace,
-        knowledge: semanticKnowledge,
-        status: menhThanStatus,
-      })
+    ? [
+        ...buildMenhThanAnnotations({
+          chart,
+          palace,
+          factsByPalace,
+          knowledge: semanticKnowledge,
+          status: menhThanStatus,
+        }),
+        ...buildMinorPairAnnotations({
+          frame,
+          factsByPalace,
+          knowledge: semanticKnowledge,
+          diagnostics: semanticDiagnostics,
+          focusPalaceIndex: palace.index,
+        }),
+      ]
     : [];
 
   return {

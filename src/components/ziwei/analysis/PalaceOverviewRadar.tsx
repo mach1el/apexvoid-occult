@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import type { ChartData, School } from "@/types/chart";
 import {
   analyzeAllPalaces,
+  type PalaceAnnotation,
   type PalaceEvidence,
   type PalaceOverviewBand,
   type PalaceOverviewResult,
@@ -39,6 +40,14 @@ const BAND_LABEL: Record<PalaceOverviewBand, string> = {
   balanced: "Cân bằng",
   supportive: "Thuận lợi",
   strong: "Mạnh",
+};
+
+/** V1.2 — pair/group annotation scope → Vietnamese group label. */
+const SCOPE_LABEL: Record<string, string> = {
+  "same-palace": "Đồng cung",
+  "opposite-link": "Đối cung",
+  "trine-link": "Tam hợp",
+  tp4c: "Toàn tam phương tứ chính",
 };
 
 /** V1.2 — small non-score Mệnh/Thân suffix for the radar point label. */
@@ -276,6 +285,19 @@ function groupByFamilyLabel(items: PalaceEvidence[]): Array<[string, PalaceEvide
   return [...map.entries()];
 }
 
+function groupByScope(
+  annotations: PalaceAnnotation[],
+): Array<[string, PalaceAnnotation[]]> {
+  const map = new Map<string, PalaceAnnotation[]>();
+  for (const a of annotations) {
+    const key = a.metadata?.scope ?? "tp4c";
+    const list = map.get(key) ?? [];
+    list.push(a);
+    map.set(key, list);
+  }
+  return [...map.entries()];
+}
+
 function EvidenceLine({ e }: { e: PalaceEvidence }) {
   return (
     <li key={e.id}>
@@ -328,6 +350,10 @@ function PalaceOverviewDetail({
   const menhThanAnnotations = result.annotations.filter(
     (a) => a.category === "menh-than",
   );
+  const minorPairAnnotations = result.annotations.filter(
+    (a) => a.category === "minor-pair",
+  );
+  const pairAnnotationsByScope = groupByScope(minorPairAnnotations);
 
   return (
     <div className="palace-overview-detail">
@@ -421,6 +447,27 @@ function PalaceOverviewDetail({
           {groupG.length === 0 ? <li>—</li> : groupG.map((e) => <EvidenceLine key={e.id} e={e} />)}
         </ul>
       </section>
+
+      {minorPairAnnotations.length > 0 ? (
+        <section className="palace-overview-detail__section">
+          <h5>Liên kết phụ tinh</h5>
+          <p className="palace-overview-detail__semantic-note">
+            Ngữ nghĩa cấu trúc, chưa cộng điểm V1.2.
+          </p>
+          {pairAnnotationsByScope.map(([scope, items]) => (
+            <div key={scope} className="palace-overview-detail__family-group">
+              <p className="palace-overview-detail__family-label">
+                {SCOPE_LABEL[scope] ?? scope}
+              </p>
+              <ul>
+                {items.map((a) => (
+                  <li key={a.id}>{a.label}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+      ) : null}
 
       <section className="palace-overview-detail__section">
         <h5>Top hỗ trợ</h5>

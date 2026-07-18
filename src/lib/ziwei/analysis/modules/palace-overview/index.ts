@@ -21,6 +21,7 @@ export {
   resolveMenhThanStatus,
   type MenhThanStatus,
 } from "./menh-than-annotations";
+export { buildMinorPairAnnotations } from "./minor-pair-annotations";
 export {
   applyLocalVoidAttenuation,
   collectPalaceEvidence,

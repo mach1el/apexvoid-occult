@@ -188,6 +188,13 @@
   opacity: 0.85;
 }
 
+.palace-overview-detail__semantic-note {
+  margin: 0 0 0.4rem;
+  font-size: 0.74rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
 .palace-overview-detail__meta-details summary,
 .palace-overview-detail__context-only summary {
   cursor: pointer;
