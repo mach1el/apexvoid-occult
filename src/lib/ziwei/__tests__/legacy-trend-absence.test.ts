@@ -60,8 +60,9 @@ describe("legacy trend scoring absence", () => {
 
     const hits: string[] = [];
     for (const file of readSrcProduction()) {
-      // Absence tests may mention symbols; skip this file.
+      // Absence tests may mention symbols; skip this file and similar guards.
       if (file.path.includes("legacy-trend-absence")) continue;
+      if (file.path.includes("invariants.test")) continue;
       for (const token of forbidden) {
         if (file.text.includes(token)) {
           hits.push(`${file.path}: ${token}`);
