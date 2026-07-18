@@ -44,4 +44,6 @@ export * from "./modules/major-fortune";
 export {
   isPalaceOverviewV1Enabled,
   PALACE_OVERVIEW_FEATURE_FLAG,
+  isAnnualAxesV02Enabled,
+  ANNUAL_AXES_V02_FEATURE_FLAG,
 } from "./feature-flags";
