@@ -1,0 +1,15 @@
+{
+  "id": "palace-overview-version-manifest-v1-2",
+  "version": "1.2.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": [
+    "nam-phai-v1",
+    "trung-chau-v1"
+  ],
+  "effectiveFrom": "2026-07-18",
+  "module": "palace-overview",
+  "contractVersion": "1.0.0",
+  "engineVersion": "1.2.0",
+  "knowledgeVersion": "1.2.0-experimental",
+  "notes": "Contract, implementation and knowledge versions are intentionally separate."
+}

@@ -1,0 +1,51 @@
+{
+  "id": "palace-overview-source-mapping-v1-2",
+  "version": "1.2.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": [
+    "nam-phai-v1",
+    "trung-chau-v1"
+  ],
+  "effectiveFrom": "2026-07-18",
+  "notes": "Separates semantic provenance from numeric calibration provenance.",
+  "mappings": [
+    {
+      "dataFile": "menh-than-context.json",
+      "semanticSourceIds": [
+        "src-semantic-menh-than-v1-2"
+      ],
+      "numericSourceIds": []
+    },
+    {
+      "dataFile": "minor-structural-pairs.json",
+      "semanticSourceIds": [
+        "src-semantic-minor-pairs-v1-2"
+      ],
+      "numericSourceIds": []
+    },
+    {
+      "dataFile": "transformation-target-semantics.json",
+      "semanticSourceIds": [
+        "src-semantic-transform-target-v1-2"
+      ],
+      "numericSourceIds": []
+    },
+    {
+      "dataFile": "trait-palace-projection.json",
+      "semanticSourceIds": [
+        "src-semantic-domain-projection-v1-2"
+      ],
+      "numericSourceIds": []
+    },
+    {
+      "dataFile": "existing-v1-1-scoring-data",
+      "semanticSourceIds": [
+        "src-heuristic-palace-overview-v1"
+      ],
+      "numericSourceIds": [
+        "src-heuristic-palace-overview-v1",
+        "src-minor-catalog-v1-1-heuristic"
+      ]
+    }
+  ]
+}

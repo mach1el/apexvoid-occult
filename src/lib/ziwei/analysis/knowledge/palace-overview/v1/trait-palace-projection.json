@@ -1,0 +1,313 @@
+{
+  "id": "palace-overview-trait-palace-projection-v1-2",
+  "version": "1.2.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": [
+    "nam-phai-v1",
+    "trung-chau-v1"
+  ],
+  "sourceIds": [
+    "src-semantic-domain-projection-v1-2"
+  ],
+  "confidence": 0.55,
+  "effectiveFrom": "2026-07-18",
+  "notes": "Explanation-only projection. Palace names do not multiply or alter axes.",
+  "composition": {
+    "fallbackTemplate": "{traitLabel} trong phạm vi {palaceLabel}",
+    "scoreMode": "annotation-only"
+  },
+  "palaces": {
+    "Mệnh": {
+      "domainId": "self",
+      "label": "bản thân, khí chất và khả năng tự chủ"
+    },
+    "Phụ Mẫu": {
+      "domainId": "support-authority",
+      "label": "nền hỗ trợ, cấp trên và giấy tờ"
+    },
+    "Phúc Đức": {
+      "domainId": "inner-foundation",
+      "label": "nội tâm, nền tinh thần và phúc khí"
+    },
+    "Điền Trạch": {
+      "domainId": "foundation-assets",
+      "label": "nền tảng sống, nhà cửa và tài sản cố định"
+    },
+    "Quan Lộc": {
+      "domainId": "career-role",
+      "label": "công việc, vai trò và nghề nghiệp"
+    },
+    "Nô Bộc": {
+      "domainId": "network",
+      "label": "mạng lưới, cộng sự và quan hệ xã hội"
+    },
+    "Thiên Di": {
+      "domainId": "external-world",
+      "label": "môi trường ngoài, di chuyển và tương tác bên ngoài"
+    },
+    "Tật Ách": {
+      "domainId": "resilience",
+      "label": "sức bền, áp lực và khả năng phục hồi"
+    },
+    "Tài Bạch": {
+      "domainId": "resources",
+      "label": "tài nguyên, thu nhập và quản trị tiền"
+    },
+    "Tử Tức": {
+      "domainId": "creation-output",
+      "label": "sản phẩm, sáng tạo và hậu thế"
+    },
+    "Phu Thê": {
+      "domainId": "one-to-one",
+      "label": "quan hệ một-một và hợp tác"
+    },
+    "Huynh Đệ": {
+      "domainId": "peers",
+      "label": "người ngang hàng và nguồn lực gần"
+    }
+  },
+  "traits": [
+    {
+      "trait": "authority",
+      "label": "quyền chủ động và trách nhiệm"
+    },
+    {
+      "trait": "protection",
+      "label": "khả năng bảo hộ và giảm rủi ro"
+    },
+    {
+      "trait": "planning",
+      "label": "khả năng hoạch định"
+    },
+    {
+      "trait": "adaptability",
+      "label": "khả năng thích nghi"
+    },
+    {
+      "trait": "visibility",
+      "label": "độ lộ diện và được chú ý"
+    },
+    {
+      "trait": "finance",
+      "label": "năng lực quản trị tài nguyên"
+    },
+    {
+      "trait": "discipline",
+      "label": "tính kỷ luật và quy chuẩn"
+    },
+    {
+      "trait": "nurture",
+      "label": "khả năng nuôi dưỡng và duy trì"
+    },
+    {
+      "trait": "desire",
+      "label": "động lực theo đuổi"
+    },
+    {
+      "trait": "resource",
+      "label": "khả năng tạo và giữ nguồn lực"
+    },
+    {
+      "trait": "communication",
+      "label": "giao tiếp và diễn đạt"
+    },
+    {
+      "trait": "support",
+      "label": "khả năng hỗ trợ"
+    },
+    {
+      "trait": "decisiveness",
+      "label": "tính quyết đoán"
+    },
+    {
+      "trait": "disruption",
+      "label": "khả năng phá cấu trúc cũ và đổi mới"
+    },
+    {
+      "trait": "mentorship",
+      "label": "quý nhân, hướng dẫn và cố vấn"
+    },
+    {
+      "trait": "coordination",
+      "label": "phối hợp và điều phối"
+    },
+    {
+      "trait": "resolution",
+      "label": "khả năng tháo gỡ"
+    },
+    {
+      "trait": "recognition",
+      "label": "sự ghi nhận"
+    },
+    {
+      "trait": "learning",
+      "label": "học tập và tiếp thu"
+    },
+    {
+      "trait": "documentation",
+      "label": "văn thư và tài liệu"
+    },
+    {
+      "trait": "expression",
+      "label": "biểu đạt"
+    },
+    {
+      "trait": "accumulation",
+      "label": "tích lũy"
+    },
+    {
+      "trait": "maintenance",
+      "label": "duy trì"
+    },
+    {
+      "trait": "organization",
+      "label": "tổ chức"
+    },
+    {
+      "trait": "execution",
+      "label": "thực thi"
+    },
+    {
+      "trait": "movement",
+      "label": "di chuyển"
+    },
+    {
+      "trait": "change",
+      "label": "biến đổi"
+    },
+    {
+      "trait": "connection",
+      "label": "kết nối"
+    },
+    {
+      "trait": "attraction",
+      "label": "sức hút"
+    },
+    {
+      "trait": "prestige",
+      "label": "danh dự và biểu tượng"
+    },
+    {
+      "trait": "reflection",
+      "label": "chiêm nghiệm"
+    },
+    {
+      "trait": "pressure",
+      "label": "áp lực"
+    },
+    {
+      "trait": "constraint",
+      "label": "ràng buộc"
+    },
+    {
+      "trait": "friction",
+      "label": "ma sát"
+    },
+    {
+      "trait": "dispersion",
+      "label": "phân tán"
+    },
+    {
+      "trait": "distance",
+      "label": "khoảng cách"
+    },
+    {
+      "trait": "independence",
+      "label": "tính độc lập"
+    },
+    {
+      "trait": "rules",
+      "label": "quy định"
+    },
+    {
+      "trait": "debate",
+      "label": "tranh luận"
+    },
+    {
+      "trait": "procedure",
+      "label": "thủ tục"
+    },
+    {
+      "trait": "strain",
+      "label": "sức ép duy trì"
+    },
+    {
+      "trait": "recovery-demand",
+      "label": "nhu cầu phục hồi"
+    }
+  ],
+  "overrides": [
+    {
+      "id": "projection-authority-menh",
+      "trait": "authority",
+      "palace": "Mệnh",
+      "label": "xu hướng tự định hướng, gánh trách nhiệm và thể hiện vai trò dẫn dắt"
+    },
+    {
+      "id": "projection-authority-quan",
+      "trait": "authority",
+      "palace": "Quan Lộc",
+      "label": "quyền hạn, trách nhiệm nghề nghiệp và khả năng đứng vai trò chủ trì"
+    },
+    {
+      "id": "projection-finance-tai",
+      "trait": "finance",
+      "palace": "Tài Bạch",
+      "label": "khả năng tổ chức, kiểm soát và phân bổ nguồn lực tài chính"
+    },
+    {
+      "id": "projection-resource-dien",
+      "trait": "resource",
+      "palace": "Điền Trạch",
+      "label": "khả năng xây nền tảng, tích lũy và duy trì tài sản cố định"
+    },
+    {
+      "id": "projection-communication-quan",
+      "trait": "communication",
+      "palace": "Quan Lộc",
+      "label": "giao tiếp nghề nghiệp, thương lượng và xử lý thông tin trong công việc"
+    },
+    {
+      "id": "projection-communication-phu",
+      "trait": "communication",
+      "palace": "Phu Thê",
+      "label": "cách trao đổi, thương lượng và điều chỉnh trong quan hệ một-một"
+    },
+    {
+      "id": "projection-planning-phuc",
+      "trait": "planning",
+      "palace": "Phúc Đức",
+      "label": "cách tổ chức suy nghĩ, dự tính và xử lý vấn đề nội tâm"
+    },
+    {
+      "id": "projection-movement-di",
+      "trait": "movement",
+      "palace": "Thiên Di",
+      "label": "nhịp di chuyển, thay đổi môi trường và phản ứng với thế giới bên ngoài"
+    },
+    {
+      "id": "projection-support-no",
+      "trait": "support",
+      "palace": "Nô Bộc",
+      "label": "khả năng nhận, trao và tổ chức hỗ trợ trong mạng lưới cộng sự"
+    },
+    {
+      "id": "projection-nurture-tu",
+      "trait": "nurture",
+      "palace": "Tử Tức",
+      "label": "khả năng nuôi dưỡng sản phẩm, sáng tạo hoặc trách nhiệm hậu thế"
+    },
+    {
+      "id": "projection-disruption-dien",
+      "trait": "disruption",
+      "palace": "Điền Trạch",
+      "label": "xu hướng tái cấu trúc nền tảng sống, hệ thống hoặc tài sản cố định"
+    },
+    {
+      "id": "projection-resilience-tat",
+      "trait": "recovery-demand",
+      "palace": "Tật Ách",
+      "label": "mức yêu cầu phục hồi, nghỉ ngơi và quản lý sức bền"
+    }
+  ]
+}

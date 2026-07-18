@@ -1,0 +1,54 @@
+{
+  "id": "palace-overview-structural-rules-v1",
+  "version": "1.0.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": ["nam-phai-v1", "trung-chau-v1"],
+  "sourceIds": ["src-heuristic-palace-overview-v1", "src-palace-overview-v1-spec"],
+  "confidence": 0.55,
+  "effectiveFrom": "2026-07-18",
+  "notes": "Three TP4C structural rules only; effects are not re-multiplied by geometry.",
+  "rules": [
+    {
+      "id": "rule-tu-phu-vu-tuong",
+      "label": "Tử Phủ Vũ Tướng",
+      "participants": ["Tử Vi", "Thiên Phủ", "Vũ Khúc", "Thiên Tướng"],
+      "baseAxes": { "support": 3.0, "pressure": 0, "stability": 2.0, "activation": 1.0 },
+      "conditions": {
+        "minGoodBrightness": 2,
+        "goodBrightness": ["Miếu", "Vượng", "Đắc"],
+        "weakSupportFactor": 0.5,
+        "weakStabilityFactor": 0.5
+      }
+    },
+    {
+      "id": "rule-co-nguyet-dong-luong",
+      "label": "Cơ Nguyệt Đồng Lương",
+      "participants": ["Thiên Cơ", "Thái Âm", "Thiên Đồng", "Thiên Lương"],
+      "baseAxes": { "support": 2.5, "pressure": 0, "stability": 1.5, "activation": 1.0 },
+      "conditions": {
+        "hamThreshold": 2,
+        "supportFactorWhenHam": 0.5,
+        "pressureDeltaWhenHam": 1.5,
+        "stabilityDeltaWhenHam": -1.0
+      }
+    },
+    {
+      "id": "rule-sat-pha-tham",
+      "label": "Sát Phá Tham",
+      "participants": ["Thất Sát", "Phá Quân", "Tham Lang"],
+      "baseAxes": { "support": 0, "pressure": 0, "stability": -0.5, "activation": 3.0 },
+      "conditions": {
+        "hamThreshold": 2,
+        "pressureDeltaWhenHam": 2.0,
+        "stabilityDeltaWhenHam": -1.0,
+        "goodBrightness": ["Miếu", "Vượng", "Đắc"],
+        "goodThreshold": 2,
+        "beneficTransforms": ["Lộc", "Quyền", "Khoa"],
+        "supportDeltaWhenGoodTransform": 1.5,
+        "activationDeltaWhenGoodTransform": 0.5,
+        "pressureDeltaWhenKy": 1.5,
+        "activationDeltaWhenKy": 0.5
+      }
+    }
+  ]
+}

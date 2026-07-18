@@ -1,0 +1,51 @@
+{
+  "sources": [
+    {
+      "id": "src-heuristic-palace-overview-v1",
+      "version": "1.0.0-experimental",
+      "status": "experimental",
+      "schoolProfiles": ["nam-phai-v1", "trung-chau-v1"],
+      "sourceIds": ["src-heuristic-palace-overview-v1"],
+      "confidence": 0.55,
+      "effectiveFrom": "2026-07-18",
+      "notes": "Seed heuristic from palace-overview engine v1 prompt; not classical scripture values.",
+      "title": "Palace Overview V1 heuristic seeds",
+      "kind": "heuristic-seed"
+    },
+    {
+      "id": "src-calculation-core",
+      "version": "1.0.0",
+      "status": "approved",
+      "schoolProfiles": ["nam-phai-v1", "trung-chau-v1"],
+      "sourceIds": ["src-calculation-core"],
+      "confidence": 1.0,
+      "effectiveFrom": "2026-01-01",
+      "notes": "Brightness, natal mutagens, void markers from Calculation Core.",
+      "title": "Zi Wei Calculation Core",
+      "kind": "calculation-core"
+    },
+    {
+      "id": "src-palace-overview-v1-spec",
+      "version": "1.0.0-experimental",
+      "status": "experimental",
+      "schoolProfiles": ["nam-phai-v1", "trung-chau-v1"],
+      "sourceIds": ["src-palace-overview-v1-spec"],
+      "confidence": 0.7,
+      "effectiveFrom": "2026-07-18",
+      "title": "Palace Overview Engine V1 specification",
+      "kind": "spec"
+    },
+    {
+      "id": "src-minor-catalog-v1-1-heuristic",
+      "version": "1.1.0-experimental",
+      "status": "experimental",
+      "schoolProfiles": ["nam-phai-v1", "trung-chau-v1"],
+      "sourceIds": ["src-minor-catalog-v1-1-heuristic"],
+      "confidence": 0.5,
+      "effectiveFrom": "2026-07-18",
+      "title": "Palace Overview V1.1 complete minor-star heuristic catalog",
+      "kind": "heuristic-seed",
+      "notes": "Axis values are engineering calibration seeds, not numeric constants from classical texts."
+    }
+  ]
+}

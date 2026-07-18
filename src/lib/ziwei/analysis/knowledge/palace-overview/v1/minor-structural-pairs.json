@@ -1,0 +1,392 @@
+{
+  "id": "palace-overview-minor-structural-pairs-v1-2",
+  "version": "1.2.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": [
+    "nam-phai-v1",
+    "trung-chau-v1"
+  ],
+  "sourceIds": [
+    "src-semantic-minor-pairs-v1-2"
+  ],
+  "confidence": 0.55,
+  "effectiveFrom": "2026-07-18",
+  "notes": "Annotation-only pair/group detector. No axes, multipliers or score bonus.",
+  "scopePriority": [
+    "same-palace",
+    "opposite-link",
+    "trine-link",
+    "tp4c"
+  ],
+  "rules": [
+    {
+      "id": "pair-ta-huu",
+      "label": "Tả Phụ – Hữu Bật",
+      "participants": [
+        "Tả Phụ",
+        "Hữu Bật"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-assistance",
+        "coordination"
+      ],
+      "explanationKey": "pair.pair-ta-huu",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-xuong-khuc",
+      "label": "Văn Xương – Văn Khúc",
+      "participants": [
+        "Văn Xương",
+        "Văn Khúc"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-literary",
+        "documentation-expression"
+      ],
+      "explanationKey": "pair.pair-xuong-khuc",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-khoi-viet",
+      "label": "Thiên Khôi – Thiên Việt",
+      "participants": [
+        "Thiên Khôi",
+        "Thiên Việt"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-mentorship",
+        "recognition"
+      ],
+      "explanationKey": "pair.pair-khoi-viet",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-quang-quy",
+      "label": "Ân Quang – Thiên Quý",
+      "participants": [
+        "Ân Quang",
+        "Thiên Quý"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-grace",
+        "support"
+      ],
+      "explanationKey": "pair.pair-quang-quy",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-thai-toa",
+      "label": "Tam Thai – Bát Tọa",
+      "participants": [
+        "Tam Thai",
+        "Bát Tọa"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-platform",
+        "organization"
+      ],
+      "explanationKey": "pair.pair-thai-toa",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-long-phuong",
+      "label": "Long Trì – Phượng Các",
+      "participants": [
+        "Long Trì",
+        "Phượng Các"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-prestige",
+        "presentation"
+      ],
+      "explanationKey": "pair.pair-long-phuong",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "group-dao-hong-hy",
+      "label": "Đào Hoa – Hồng Loan – Thiên Hỷ",
+      "participants": [
+        "Đào Hoa",
+        "Hồng Loan",
+        "Thiên Hỷ"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "social-visibility",
+        "connection"
+      ],
+      "explanationKey": "pair.group-dao-hong-hy",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-loc-ma",
+      "label": "Lộc Tồn – Thiên Mã",
+      "participants": [
+        "Lộc Tồn",
+        "Thiên Mã"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "resource-movement",
+        "activation"
+      ],
+      "explanationKey": "pair.pair-loc-ma",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-kinh-da",
+      "label": "Kình Dương – Đà La",
+      "participants": [
+        "Kình Dương",
+        "Đà La"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-obstruction",
+        "pressure"
+      ],
+      "explanationKey": "pair.pair-kinh-da",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-hoa-linh",
+      "label": "Hỏa Tinh – Linh Tinh",
+      "participants": [
+        "Hỏa Tinh",
+        "Linh Tinh"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-fire",
+        "activation-pressure"
+      ],
+      "explanationKey": "pair.pair-hoa-linh",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-khong-kiep",
+      "label": "Địa Không – Địa Kiếp",
+      "participants": [
+        "Địa Không",
+        "Địa Kiếp"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-disruption",
+        "instability"
+      ],
+      "explanationKey": "pair.pair-khong-kiep",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-co-qua",
+      "label": "Cô Thần – Quả Tú",
+      "participants": [
+        "Cô Thần",
+        "Quả Tú"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-isolation",
+        "distance"
+      ],
+      "explanationKey": "pair.pair-co-qua",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-song-hao",
+      "label": "Đại Hao – Tiểu Hao",
+      "participants": [
+        "Đại Hao",
+        "Tiểu Hao"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-dispersion",
+        "resource-turnover"
+      ],
+      "explanationKey": "pair.pair-song-hao",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-tang-ho",
+      "label": "Tang Môn – Bạch Hổ",
+      "participants": [
+        "Tang Môn",
+        "Bạch Hổ"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-pressure",
+        "strain"
+      ],
+      "explanationKey": "pair.pair-tang-ho",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-khoc-hu",
+      "label": "Thiên Khốc – Thiên Hư",
+      "participants": [
+        "Thiên Khốc",
+        "Thiên Hư"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-emotional-pressure",
+        "noise"
+      ],
+      "explanationKey": "pair.pair-khoc-hu",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "pair-la-vong",
+      "label": "Thiên La – Địa Võng",
+      "participants": [
+        "Thiên La",
+        "Địa Võng"
+      ],
+      "match": {
+        "mode": "all",
+        "allowedScopes": [
+          "same-palace",
+          "opposite-link",
+          "trine-link",
+          "tp4c"
+        ]
+      },
+      "tags": [
+        "paired-constraint",
+        "entanglement"
+      ],
+      "explanationKey": "pair.pair-la-vong",
+      "scoreMode": "annotation-only"
+    }
+  ]
+}

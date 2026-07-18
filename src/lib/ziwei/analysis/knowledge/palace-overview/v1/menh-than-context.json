@@ -1,0 +1,70 @@
+{
+  "id": "palace-overview-menh-than-context-v1-2",
+  "version": "1.2.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": [
+    "nam-phai-v1",
+    "trung-chau-v1"
+  ],
+  "sourceIds": [
+    "src-semantic-menh-than-v1-2",
+    "src-calculation-core"
+  ],
+  "confidence": 0.65,
+  "effectiveFrom": "2026-07-18",
+  "notes": "Annotation-only. These rules never alter scoring axes or normalization.",
+  "rules": [
+    {
+      "id": "context-menh-core",
+      "label": "Cung Mệnh",
+      "condition": {
+        "focusPalaceIsMenh": true
+      },
+      "tags": [
+        "natal-core",
+        "self-structure"
+      ],
+      "explanationKey": "context.menh.core",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "context-than-emphasis",
+      "label": "Cung Thân",
+      "condition": {
+        "focusPalaceIsThan": true
+      },
+      "tags": [
+        "embodied-focus",
+        "life-emphasis"
+      ],
+      "explanationKey": "context.than.emphasis",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "context-menh-than-same-palace",
+      "label": "Mệnh–Thân đồng cung",
+      "condition": {
+        "menhIndexEqualsThanIndex": true
+      },
+      "tags": [
+        "aligned-core-and-expression"
+      ],
+      "explanationKey": "context.menh-than.same-palace",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "context-menh-void-than-reference",
+      "label": "Mệnh Vô chính diệu — tham chiếu cung Thân",
+      "condition": {
+        "menhPalaceHasNoNatalMajorStar": true,
+        "thanPalaceExists": true
+      },
+      "tags": [
+        "menh-void",
+        "than-context-important"
+      ],
+      "explanationKey": "context.menh-void.than-reference",
+      "scoreMode": "annotation-only"
+    }
+  ]
+}

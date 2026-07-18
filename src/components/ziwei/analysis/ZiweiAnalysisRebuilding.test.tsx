@@ -3,8 +3,15 @@ import { describe, expect, it } from "vitest";
 import { ANALYSIS_MODULES } from "@/lib/ziwei/analysis";
 import { ZiweiAnalysisRebuilding } from "./ZiweiAnalysisRebuilding";
 
+// palace-overview is default-on now — ChartPage swaps in the real
+// PalaceOverviewRadar for it once chart data exists, so this placeholder
+// component only ever renders "unavailable" for the other 3 modules.
+const STILL_REBUILDING_MODULES = ANALYSIS_MODULES.filter(
+  (m) => m !== "palace-overview",
+);
+
 describe("ZiweiAnalysisRebuilding", () => {
-  it.each(ANALYSIS_MODULES)(
+  it.each(STILL_REBUILDING_MODULES)(
     "shows rebuilding copy for %s without numeric scores",
     (module) => {
       const { container } = render(<ZiweiAnalysisRebuilding module={module} />);
@@ -21,4 +28,9 @@ describe("ZiweiAnalysisRebuilding", () => {
       expect(container.querySelector(".trend-bar")).toBeNull();
     },
   );
+
+  it("reports palace-overview as available now that the flag defaults on", () => {
+    const { container } = render(<ZiweiAnalysisRebuilding module="palace-overview" />);
+    expect(container.querySelector("[data-status='available']")).not.toBeNull();
+  });
 });

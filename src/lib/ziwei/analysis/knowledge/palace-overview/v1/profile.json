@@ -1,0 +1,33 @@
+{
+  "id": "palace-overview-v1",
+  "version": "1.1.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": ["nam-phai-v1", "trung-chau-v1"],
+  "sourceIds": ["src-heuristic-palace-overview-v1", "src-palace-overview-v1-spec"],
+  "confidence": 0.55,
+  "effectiveFrom": "2026-07-18",
+  "notes": "Experimental profile; geometry and scales are versioned heuristic seeds.",
+  "geometry": {
+    "focus": 1.0,
+    "opposite": 0.5,
+    "trine": 0.3
+  },
+  "familyDiminishingReturns": [1.0, 0.6, 0.35, 0.2],
+  "familyMaxContributors": 4,
+  "qualityNormalization": {
+    "method": "logistic",
+    "scale": 8.0,
+    "midpoint": 50
+  },
+  "axisNormalization": {
+    "supportScale": 14,
+    "pressureScale": 14,
+    "activationScale": 12,
+    "stabilityScale": 8
+  },
+  "intensityNormalization": {
+    "scale": 22
+  },
+  "featureFlag": "ziweiPalaceOverviewV1",
+  "voidMajorBorrowFactor": 0.65
+}

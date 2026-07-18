@@ -1,0 +1,114 @@
+{
+  "id": "palace-overview-major-stars-v1",
+  "version": "1.0.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": ["nam-phai-v1", "trung-chau-v1"],
+  "sourceIds": ["src-heuristic-palace-overview-v1"],
+  "confidence": 0.55,
+  "effectiveFrom": "2026-07-18",
+  "notes": "Raw axes 0–10 before brightness and geometry. Trait tags are explanatory only in V1.",
+  "brightnessModifiers": {
+    "Miếu": {
+      "supportFactor": 1.25,
+      "pressureFactor": 0.85,
+      "stabilityDelta": 1.5,
+      "activationFactor": 1.1
+    },
+    "Vượng": {
+      "supportFactor": 1.15,
+      "pressureFactor": 0.9,
+      "stabilityDelta": 1.0,
+      "activationFactor": 1.05
+    },
+    "Đắc": {
+      "supportFactor": 1.05,
+      "pressureFactor": 0.95,
+      "stabilityDelta": 0.5,
+      "activationFactor": 1.0
+    },
+    "Bình": {
+      "supportFactor": 1.0,
+      "pressureFactor": 1.0,
+      "stabilityDelta": 0.0,
+      "activationFactor": 1.0
+    },
+    "Hãm": {
+      "supportFactor": 0.65,
+      "pressureFactor": 1.35,
+      "stabilityDelta": -1.5,
+      "activationFactor": 1.1
+    }
+  },
+  "stars": [
+    {
+      "name": "Tử Vi",
+      "axes": { "support": 7.5, "pressure": 2.5, "stability": 7.5, "activation": 6.0 },
+      "traits": ["authority", "protection"]
+    },
+    {
+      "name": "Thiên Cơ",
+      "axes": { "support": 6.5, "pressure": 3.5, "stability": 4.5, "activation": 7.5 },
+      "traits": ["planning", "adaptability"]
+    },
+    {
+      "name": "Thái Dương",
+      "axes": { "support": 7.0, "pressure": 3.5, "stability": 6.0, "activation": 7.0 },
+      "traits": ["visibility", "authority"]
+    },
+    {
+      "name": "Vũ Khúc",
+      "axes": { "support": 6.5, "pressure": 4.5, "stability": 6.5, "activation": 7.0 },
+      "traits": ["finance", "discipline"]
+    },
+    {
+      "name": "Thiên Đồng",
+      "axes": { "support": 6.0, "pressure": 3.0, "stability": 6.0, "activation": 4.5 },
+      "traits": ["nurture", "adaptability"]
+    },
+    {
+      "name": "Liêm Trinh",
+      "axes": { "support": 4.5, "pressure": 6.0, "stability": 4.5, "activation": 7.0 },
+      "traits": ["discipline", "desire"]
+    },
+    {
+      "name": "Thiên Phủ",
+      "axes": { "support": 8.0, "pressure": 2.0, "stability": 8.5, "activation": 4.5 },
+      "traits": ["resource", "protection"]
+    },
+    {
+      "name": "Thái Âm",
+      "axes": { "support": 7.0, "pressure": 3.5, "stability": 7.0, "activation": 4.5 },
+      "traits": ["nurture", "finance"]
+    },
+    {
+      "name": "Tham Lang",
+      "axes": { "support": 5.5, "pressure": 5.0, "stability": 4.0, "activation": 8.0 },
+      "traits": ["desire", "visibility"]
+    },
+    {
+      "name": "Cự Môn",
+      "axes": { "support": 4.5, "pressure": 6.0, "stability": 4.0, "activation": 7.0 },
+      "traits": ["communication", "discipline"]
+    },
+    {
+      "name": "Thiên Tướng",
+      "axes": { "support": 7.5, "pressure": 2.5, "stability": 7.5, "activation": 5.5 },
+      "traits": ["support", "authority"]
+    },
+    {
+      "name": "Thiên Lương",
+      "axes": { "support": 7.5, "pressure": 2.5, "stability": 8.0, "activation": 4.5 },
+      "traits": ["protection", "nurture"]
+    },
+    {
+      "name": "Thất Sát",
+      "axes": { "support": 4.5, "pressure": 6.5, "stability": 3.5, "activation": 8.5 },
+      "traits": ["decisiveness", "disruption"]
+    },
+    {
+      "name": "Phá Quân",
+      "axes": { "support": 4.0, "pressure": 7.0, "stability": 2.5, "activation": 9.0 },
+      "traits": ["disruption", "decisiveness"]
+    }
+  ]
+}

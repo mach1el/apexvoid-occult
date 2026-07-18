@@ -1,0 +1,94 @@
+{
+  "sources": [
+    {
+      "id": "src-semantic-menh-than-v1-2",
+      "version": "1.2.0-experimental",
+      "status": "experimental",
+      "schoolProfiles": [
+        "nam-phai-v1",
+        "trung-chau-v1"
+      ],
+      "sourceIds": [
+        "src-semantic-menh-than-v1-2"
+      ],
+      "confidence": 0.65,
+      "effectiveFrom": "2026-07-18",
+      "title": "Mệnh–Thân semantic context V1.2",
+      "kind": "expert-synthesis",
+      "citationStatus": "needs-source-review",
+      "notes": "Semantic annotations only; no numeric effects."
+    },
+    {
+      "id": "src-semantic-minor-pairs-v1-2",
+      "version": "1.2.0-experimental",
+      "status": "experimental",
+      "schoolProfiles": [
+        "nam-phai-v1",
+        "trung-chau-v1"
+      ],
+      "sourceIds": [
+        "src-semantic-minor-pairs-v1-2"
+      ],
+      "confidence": 0.55,
+      "effectiveFrom": "2026-07-18",
+      "title": "Minor-star pair/group semantics V1.2",
+      "kind": "expert-synthesis",
+      "citationStatus": "needs-source-review",
+      "notes": "Pair detection is annotation-only."
+    },
+    {
+      "id": "src-semantic-transform-target-v1-2",
+      "version": "1.2.0-experimental",
+      "status": "experimental",
+      "schoolProfiles": [
+        "nam-phai-v1",
+        "trung-chau-v1"
+      ],
+      "sourceIds": [
+        "src-semantic-transform-target-v1-2"
+      ],
+      "confidence": 0.55,
+      "effectiveFrom": "2026-07-18",
+      "title": "Transformation target-trait semantics V1.2",
+      "kind": "expert-synthesis",
+      "citationStatus": "needs-source-review",
+      "notes": "Maps Tứ Hóa and target traits to explanatory tags only."
+    },
+    {
+      "id": "src-semantic-domain-projection-v1-2",
+      "version": "1.2.0-experimental",
+      "status": "experimental",
+      "schoolProfiles": [
+        "nam-phai-v1",
+        "trung-chau-v1"
+      ],
+      "sourceIds": [
+        "src-semantic-domain-projection-v1-2"
+      ],
+      "confidence": 0.55,
+      "effectiveFrom": "2026-07-18",
+      "title": "Trait-to-palace domain projection V1.2",
+      "kind": "expert-synthesis",
+      "citationStatus": "needs-source-review",
+      "notes": "Projection affects explanation only, not score."
+    },
+    {
+      "id": "src-engineering-annotation-only-v1-2",
+      "version": "1.2.0-experimental",
+      "status": "experimental",
+      "schoolProfiles": [
+        "nam-phai-v1",
+        "trung-chau-v1"
+      ],
+      "sourceIds": [
+        "src-engineering-annotation-only-v1-2"
+      ],
+      "confidence": 1.0,
+      "effectiveFrom": "2026-07-18",
+      "title": "Annotation-only engineering policy",
+      "kind": "engineering-policy",
+      "citationStatus": "internal",
+      "notes": "Annotations must never be read by aggregation or normalization."
+    }
+  ]
+}

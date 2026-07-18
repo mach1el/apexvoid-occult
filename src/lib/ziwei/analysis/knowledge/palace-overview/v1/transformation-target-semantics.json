@@ -1,0 +1,232 @@
+{
+  "id": "palace-overview-transformation-target-semantics-v1-2",
+  "version": "1.2.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": [
+    "nam-phai-v1",
+    "trung-chau-v1"
+  ],
+  "sourceIds": [
+    "src-semantic-transform-target-v1-2"
+  ],
+  "confidence": 0.55,
+  "effectiveFrom": "2026-07-18",
+  "notes": "Annotation-only semantic mapping. A match never modifies transformation axes.",
+  "rules": [
+    {
+      "id": "loc-resource",
+      "transformation": "Lộc",
+      "targetTraitsAny": [
+        "resource",
+        "finance",
+        "accumulation"
+      ],
+      "tags": [
+        "resource-opportunity",
+        "resource-expansion"
+      ],
+      "explanationKey": "transform-target.loc.resource",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "loc-visibility",
+      "transformation": "Lộc",
+      "targetTraitsAny": [
+        "visibility",
+        "recognition",
+        "attraction"
+      ],
+      "tags": [
+        "visibility-opportunity",
+        "social-gain"
+      ],
+      "explanationKey": "transform-target.loc.visibility",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "loc-communication",
+      "transformation": "Lộc",
+      "targetTraitsAny": [
+        "communication",
+        "expression",
+        "documentation"
+      ],
+      "tags": [
+        "communication-opportunity",
+        "expression-flow"
+      ],
+      "explanationKey": "transform-target.loc.communication",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "quyen-authority",
+      "transformation": "Quyền",
+      "targetTraitsAny": [
+        "authority",
+        "discipline",
+        "organization"
+      ],
+      "tags": [
+        "responsibility",
+        "control",
+        "decision-power"
+      ],
+      "explanationKey": "transform-target.quyen.authority",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "quyen-planning",
+      "transformation": "Quyền",
+      "targetTraitsAny": [
+        "planning",
+        "adaptability",
+        "execution"
+      ],
+      "tags": [
+        "decision-pressure",
+        "active-planning"
+      ],
+      "explanationKey": "transform-target.quyen.planning",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "quyen-communication",
+      "transformation": "Quyền",
+      "targetTraitsAny": [
+        "communication",
+        "expression",
+        "debate"
+      ],
+      "tags": [
+        "assertive-communication",
+        "voice-control"
+      ],
+      "explanationKey": "transform-target.quyen.communication",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "khoa-learning",
+      "transformation": "Khoa",
+      "targetTraitsAny": [
+        "learning",
+        "planning",
+        "documentation",
+        "expression"
+      ],
+      "tags": [
+        "clarity",
+        "method",
+        "recognition"
+      ],
+      "explanationKey": "transform-target.khoa.learning",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "khoa-protection",
+      "transformation": "Khoa",
+      "targetTraitsAny": [
+        "protection",
+        "support",
+        "mentorship"
+      ],
+      "tags": [
+        "reputational-protection",
+        "structured-support"
+      ],
+      "explanationKey": "transform-target.khoa.protection",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "ky-communication",
+      "transformation": "Kỵ",
+      "targetTraitsAny": [
+        "communication",
+        "expression",
+        "documentation",
+        "debate"
+      ],
+      "tags": [
+        "communication-friction",
+        "documentation-pressure"
+      ],
+      "explanationKey": "transform-target.ky.communication",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "ky-visibility",
+      "transformation": "Kỵ",
+      "targetTraitsAny": [
+        "visibility",
+        "authority",
+        "recognition"
+      ],
+      "tags": [
+        "visibility-pressure",
+        "reputation-friction"
+      ],
+      "explanationKey": "transform-target.ky.visibility",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "ky-resource",
+      "transformation": "Kỵ",
+      "targetTraitsAny": [
+        "resource",
+        "finance",
+        "accumulation",
+        "turnover"
+      ],
+      "tags": [
+        "resource-friction",
+        "allocation-pressure"
+      ],
+      "explanationKey": "transform-target.ky.resource",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "ky-desire",
+      "transformation": "Kỵ",
+      "targetTraitsAny": [
+        "desire",
+        "attraction",
+        "connection"
+      ],
+      "tags": [
+        "attachment-complexity",
+        "relationship-friction"
+      ],
+      "explanationKey": "transform-target.ky.desire",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "ky-planning",
+      "transformation": "Kỵ",
+      "targetTraitsAny": [
+        "planning",
+        "adaptability",
+        "change"
+      ],
+      "tags": [
+        "planning-obstruction",
+        "adaptation-pressure"
+      ],
+      "explanationKey": "transform-target.ky.planning",
+      "scoreMode": "annotation-only"
+    },
+    {
+      "id": "ky-disruption",
+      "transformation": "Kỵ",
+      "targetTraitsAny": [
+        "disruption",
+        "decisiveness",
+        "activation"
+      ],
+      "tags": [
+        "conflict-intensification",
+        "change-pressure"
+      ],
+      "explanationKey": "transform-target.ky.disruption",
+      "scoreMode": "annotation-only"
+    }
+  ]
+}

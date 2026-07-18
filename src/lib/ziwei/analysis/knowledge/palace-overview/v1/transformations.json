@@ -1,0 +1,28 @@
+{
+  "id": "palace-overview-transformations-v1",
+  "version": "1.0.0-experimental",
+  "status": "experimental",
+  "schoolProfiles": ["nam-phai-v1", "trung-chau-v1"],
+  "sourceIds": ["src-heuristic-palace-overview-v1", "src-calculation-core"],
+  "confidence": 0.55,
+  "effectiveFrom": "2026-07-18",
+  "notes": "Natal Tứ Hóa only; tied to targetStar from Calculation Core.",
+  "transformations": [
+    {
+      "transformation": "Lộc",
+      "axes": { "support": 3.0, "pressure": 0.0, "stability": 0.5, "activation": 1.0 }
+    },
+    {
+      "transformation": "Quyền",
+      "axes": { "support": 2.0, "pressure": 1.0, "stability": 0.5, "activation": 2.0 }
+    },
+    {
+      "transformation": "Khoa",
+      "axes": { "support": 2.5, "pressure": 0.0, "stability": 1.0, "activation": 0.8 }
+    },
+    {
+      "transformation": "Kỵ",
+      "axes": { "support": 0.0, "pressure": 3.5, "stability": -1.0, "activation": 2.0 }
+    }
+  ]
+}

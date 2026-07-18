@@ -60,8 +60,9 @@ describe("legacy trend scoring absence", () => {
 
     const hits: string[] = [];
     for (const file of readSrcProduction()) {
-      // Absence tests may mention symbols; skip this file.
+      // Absence tests may mention symbols; skip this file and similar guards.
       if (file.path.includes("legacy-trend-absence")) continue;
+      if (file.path.includes("invariants.test")) continue;
       for (const token of forbidden) {
         if (file.text.includes(token)) {
           hits.push(`${file.path}: ${token}`);
@@ -73,13 +74,19 @@ describe("legacy trend scoring absence", () => {
 });
 
 describe("analysis availability after reset", () => {
-  it("marks every module unavailable/rebuilding", () => {
+  it("marks every non-palace-overview module unavailable/rebuilding", () => {
     for (const module of ANALYSIS_MODULES) {
+      if (module === "palace-overview") continue;
       expect(getAnalysisStatus(module)).toEqual({
         status: "unavailable",
         module,
         reason: "rebuilding",
       });
     }
+  });
+
+  it("marks palace-overview available (default-on since the chart UI publish)", () => {
+    const status = getAnalysisStatus("palace-overview");
+    expect(status.status).toBe("available");
   });
 });

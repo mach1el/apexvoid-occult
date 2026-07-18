@@ -20,10 +20,15 @@ Mỗi data record tương lai phải có:
 ## Rule production
 
 ```text
-draft / experimental không chạy production.
+draft không chạy production.
+deprecated không chạy production.
 ```
 
-Chỉ `approved` (và còn hiệu lực) được load runtime.
+Module experimental (ví dụ palace-overview V1) **được phép** load record
+`experimental` khi chính module đó đang ở trạng thái experimental.
+Chỉ `approved` mới là mặc định cho module production ổn định.
+
+Không silent fallback sang hard-coded numbers khi knowledge invalid.
 
 ## Cấm
 

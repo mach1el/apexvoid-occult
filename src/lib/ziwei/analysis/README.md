@@ -1,6 +1,6 @@
 # Zi Wei Analysis
 
-Phase 0 skeleton — **no scoring implementation**.
+Analysis modules interpret facts from Calculation Core. They do **not** an sao.
 
 ## Calculation vs Analysis
 
@@ -18,42 +18,20 @@ Analysis Modules:
 - độc lập theo từng scope;
 - có version;
 - có school policy;
-- có data governance;
-- chưa được triển khai trong Phase 0.
+- có data governance.
 ```
 
-## Bốn module độc lập
+## Modules
 
-```text
-palace-overview   — Khí vận tổng thể 12 cung
-annual-axes       — 6 trục khí vận theo năm xem
-major-fortune     — Đại vận
-monthly-flow      — Lưu nguyệt từng tháng
-```
+| Module | Status |
+|--------|--------|
+| palace-overview | V1 experimental (`ziweiPalaceOverviewV1`, default OFF) |
+| annual-axes | rebuilding |
+| major-fortune | rebuilding |
+| monthly-flow | rebuilding |
 
-## Quy tắc không chia sẻ tùy tiện
+## Share rules
 
-Các module **có thể** chia sẻ:
+May share: typed facts, frame geometry, source registry, school profile, explanation primitives.
 
-```text
-- typed facts;
-- frame geometry;
-- source registry;
-- school profile;
-- explanation primitives.
-```
-
-Các module **không được** chia sẻ trực tiếp:
-
-```text
-- weights;
-- normalization scale;
-- final score formula;
-- acceptance ranges;
-- domain projection.
-```
-
-## Status
-
-Mọi module hiện trả `status: "unavailable"`, `reason: "rebuilding"` qua
-`getAnalysisStatus()` trong `contracts/common.ts`.
+Must not share directly: weights, normalization scale, final score formula, acceptance ranges, domain projection.
