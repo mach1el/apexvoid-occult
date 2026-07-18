@@ -215,6 +215,7 @@ export function evaluateStructuralRules(input: {
       explanationKey: `rule.${rule.id}`,
       sourceIds: knowledge.structuralRules.sourceIds,
       knowledgeStatus: status,
+      sourceKind: "rule",
     });
   }
 

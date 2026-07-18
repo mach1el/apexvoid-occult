@@ -151,6 +151,9 @@ function collectMajorEvidence(
           sourceIds: knowledge.majorStars.sourceIds,
           knowledgeStatus: status,
           borrowedFromOpposite: true,
+          starName: name,
+          starBrightness: brightness,
+          sourceKind: "borrowed-opposite",
         });
       }
       out.push({
@@ -165,6 +168,7 @@ function collectMajorEvidence(
         explanationKey: "void.borrow-context",
         sourceIds: knowledge.voidEnvironment.sourceIds,
         knowledgeStatus: status,
+        sourceKind: "context",
       });
     } else {
       out.push({
@@ -179,6 +183,7 @@ function collectMajorEvidence(
         explanationKey: "void.double-empty",
         sourceIds: knowledge.voidEnvironment.sourceIds,
         knowledgeStatus: status,
+        sourceKind: "context",
       });
     }
   }
@@ -215,6 +220,9 @@ function collectMajorEvidence(
         explanationKey: `major.${name}`,
         sourceIds: knowledge.majorStars.sourceIds,
         knowledgeStatus: status,
+        starName: name,
+        starBrightness: brightness,
+        sourceKind: "natal",
       });
     }
   }
@@ -264,6 +272,8 @@ function collectTransformationEvidence(
         explanationKey: `transform.${fact.transformation}`,
         sourceIds: knowledge.transformations.sourceIds,
         knowledgeStatus: status,
+        starName: target,
+        sourceKind: "natal",
       });
     }
   }
@@ -358,6 +368,7 @@ function collectMinorFamilyEvidence(
       if (factor === 0) return;
       const axes = multiplyAxes(c.axes, factor);
       const name = c.fact.canonicalStarName!;
+      const family = familyById.get(c.record.familyId);
       out.push({
         id: `ev:minor:${c.record.familyId}:${c.node.palaceIndex}:${name}`,
         category: "minor-star-family",
@@ -370,6 +381,15 @@ function collectMinorFamilyEvidence(
         explanationKey: c.record.explanationKey,
         sourceIds: knowledge.minorStars.sourceIds,
         knowledgeStatus: status,
+        starName: name,
+        starBrightness: c.fact.brightness,
+        familyId: c.record.familyId,
+        familyLabel: family?.label,
+        traitTags: c.record.traitTags,
+        diminishingGroup: family?.diminishingGroup,
+        diminishingRank: index,
+        diminishingFactor: factor,
+        sourceKind: "natal",
       });
     });
   }
@@ -407,6 +427,7 @@ function collectChangShengEvidence(
         explanationKey: `chang-sheng.${fact.changShengStage}`,
         sourceIds: knowledge.changSheng.sourceIds,
         knowledgeStatus: status,
+        sourceKind: "natal",
       });
     }
   }
@@ -488,6 +509,7 @@ export function applyLocalVoidAttenuation(
         explanationKey: "void.local-attenuation",
         sourceIds: knowledge.voidEnvironment.sourceIds,
         knowledgeStatus: status,
+        sourceKind: "context",
       });
     }
   }

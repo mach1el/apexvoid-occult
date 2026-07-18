@@ -16,6 +16,16 @@ export type PalaceEvidenceCategory =
   | "chang-sheng"
   | "structural-rule";
 
+/**
+ * Descriptive provenance for display grouping only. Aggregation and
+ * normalization must never read this — it carries no numeric weight.
+ */
+export type PalaceEvidenceSourceKind =
+  | "natal"
+  | "borrowed-opposite"
+  | "context"
+  | "rule";
+
 export interface PalaceEvidence {
   id: string;
   category: PalaceEvidenceCategory;
@@ -31,6 +41,18 @@ export interface PalaceEvidence {
   knowledgeStatus: "experimental" | "approved";
   /** VCD borrow marker — not double-counted as opposite major. */
   borrowedFromOpposite?: boolean;
+
+  // --- Display-only metadata below. Descriptive, never read by
+  // aggregation/normalization; safe to extend without touching scoring. ---
+  starName?: string;
+  starBrightness?: ZiweiBrightness;
+  familyId?: string;
+  familyLabel?: string;
+  traitTags?: string[];
+  diminishingGroup?: string;
+  diminishingRank?: number;
+  diminishingFactor?: number;
+  sourceKind?: PalaceEvidenceSourceKind;
 }
 
 export type PalaceOverviewBand =
