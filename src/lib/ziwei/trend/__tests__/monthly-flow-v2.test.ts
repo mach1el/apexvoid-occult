@@ -45,7 +45,7 @@ describe("nam-phai-monthly-v2 experimental", () => {
     expect(a).toBe(b);
     expect(a.profileId).toBe(PROFILE);
     expect(a.version).toBe("0.1.0");
-    expect(regressionCases.version).toBe("0.1.1");
+    expect(regressionCases.version).toBe("0.1.2");
     expect(loadFramePatternRules().length).toBeGreaterThan(0);
   });
 
