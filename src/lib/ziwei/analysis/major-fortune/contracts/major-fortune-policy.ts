@@ -7,6 +7,7 @@ export interface PolicyRule {
 
 export interface MajorFortunePolicy {
   policyId: string;
+  ruleId: string;
   topic: MajorFortunePolicyTopic;
   label: string;
   school: "bac-phai" | "nam-phai" | "mixed" | "custom" | "trung-chau" | "unresolved";
@@ -15,9 +16,11 @@ export interface MajorFortunePolicy {
   interpretationImpact: boolean;
   rule: PolicyRule;
   sourceRefs: string[];
+  claimRefs: string[];
   conflictsWith: string[];
   defaultReason?: string;
   overrideAllowed: boolean;
   implementationStatus: "not_started" | "implemented" | "tested";
+  legacyRuntimeRefs?: string[];
   notes?: string;
 }

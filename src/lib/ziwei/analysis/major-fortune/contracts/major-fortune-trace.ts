@@ -5,9 +5,9 @@ export interface CalculationTraceEntry {
 
   inputRefs: string[];
   policyId: string;
-  ruleId?: string;
+  ruleId: string;
   sourceRefs: string[];
-  claimRefs?: string[];
+  claimRefs: string[];
 
   outputPath: string;
   outputValue: unknown;

@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Major Fortune Policy Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "profileId": { "type": "string" },
+    "version": { "type": "string" },
+    "profileType": { "type": "string", "enum": ["research", "runtime"] },
+    "executable": { "type": "boolean" },
+    "unresolvedPolicyBehavior": { "type": "string", "enum": ["preserve", "fail_fast"] },
+    "policies": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "direction": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "yin_yang_and_gender_interaction": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "starting_palace": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "starting_age": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "nominal_versus_actual_age": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "age_boundary": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "calendar_year_boundary": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "birthday_boundary": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "solar_term_boundary": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "twelve_palace_traversal": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "first_cycle": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "partial_first_cycle": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "major_fortune_heavenly_stem": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "major_fortune_transformations": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "natal_transformation_inheritance": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "tuan_triet_treatment": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "phi_hoa_availability": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "tu_hoa_availability": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "annual_interaction": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+        "monthly_interaction": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" }
+      },
+      "required": [
+        "direction",
+        "yin_yang_and_gender_interaction",
+        "starting_palace",
+        "starting_age",
+        "nominal_versus_actual_age",
+        "age_boundary",
+        "calendar_year_boundary",
+        "birthday_boundary",
+        "solar_term_boundary",
+        "twelve_palace_traversal",
+        "first_cycle",
+        "partial_first_cycle",
+        "major_fortune_heavenly_stem",
+        "major_fortune_transformations",
+        "natal_transformation_inheritance",
+        "tuan_triet_treatment",
+        "phi_hoa_availability",
+        "tu_hoa_availability",
+        "annual_interaction",
+        "monthly_interaction"
+      ]
+    }
+  },
+  "required": [
+    "profileId", "version", "profileType", "executable", "unresolvedPolicyBehavior", "policies"
+  ]
+}

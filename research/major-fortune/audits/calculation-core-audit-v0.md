@@ -1,4 +1,8 @@
-# Calculation Core Audit V0
+# Calculation Core Audit V0.2
+
+## Context: Implementation Status
+This audit documents the current state of the existing Zi Wei Calculation Core (the `engine-nam-phai.ts`, `engine-trung-chau.ts`, and `annual-flow.ts` runtime code) as it relates to the new `major-fortune` module boundaries. 
+Currently, the legacy engine contains hardcoded arithmetic that mimics Major Fortune calculations. However, the true **policy-aware Major Fortune Calculation Core integration has not started**. Therefore, all policies in the matrix remain with `implementationStatus` as `not_started`, and the legacy behaviors are documented via `legacyRuntimeRefs` purely for context. Current engine code remains unchanged in this PR and deleted scoring code (`trend/score.ts`) is no longer treated as a production blocker.
 
 ## MF-AUDIT-001
 **Severity:** high  
@@ -51,7 +55,7 @@
 **Why it is a problem:** Prevents accurate fractional age tracking or solar-term boundary policies.  
 **Affected policies:** `POL-MF-AGE-BOUNDARY`  
 **Affected sources:** N/A  
-**Recommended change:** Introduce `target` (TargetByAge / TargetByDate) into `MajorFortuneInput` and support boundary resolution in the Calculation Core.  
+**Recommended change:** Support boundary resolution in the Calculation Core using the new target union contract.  
 **Required tests:** Starting-age boundary tests.  
 **Breaking change:** yes  
 **Status:** open  

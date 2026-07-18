@@ -1,6 +1,9 @@
 {
-  "profileId": "major-fortune-default-v0",
-  "version": "0.1.0",
+  "profileId": "major-fortune-research-v0",
+  "version": "0.2.0",
+  "profileType": "research",
+  "executable": false,
+  "unresolvedPolicyBehavior": "preserve",
   "policies": {
     "direction": "POL-MF-DIRECTION",
     "yin_yang_and_gender_interaction": "POL-MF-YIN-YANG-GENDER",

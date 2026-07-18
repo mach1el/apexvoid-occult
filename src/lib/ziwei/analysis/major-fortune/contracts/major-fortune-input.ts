@@ -22,6 +22,9 @@ export type MajorFortunePolicyTopic =
 
 export interface MajorFortunePolicyProfile {
   profileId: string;
+  profileType: "research" | "runtime";
+  executable: boolean;
+  unresolvedPolicyBehavior: "preserve" | "fail_fast";
   policies: Record<MajorFortunePolicyTopic, string>;
 }
 
@@ -60,9 +63,9 @@ export interface MajorFortuneInput {
   /** The school-specific policy profile */
   policyProfile: MajorFortunePolicyProfile;
 
-  /** Strict feature toggles for analysis context */
-  enabledFeatures: {
-    tuanTrietDecay: boolean;
+  /** Strict feature requests */
+  requestedFeatures: {
+    fortuneTransformations: boolean;
     phiHoa: boolean;
   };
 }

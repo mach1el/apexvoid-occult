@@ -52,7 +52,15 @@
                 "description": { "type": "string", "minLength": 1 },
                 "confidenceStatus": { "type": "string", "enum": ["high", "conditional", "unverified"] },
                 "conflictNotes": { "type": "string" },
-                "policyLink": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+                "policyLink": {
+                  "anyOf": [
+                    { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+                    {
+                      "type": "array",
+                      "items": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" }
+                    }
+                  ]
+                },
                 "locator": {
                   "type": "object",
                   "additionalProperties": false,

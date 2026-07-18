@@ -18,7 +18,7 @@
           "description": "Đại vận khởi từ cục số.",
           "confidenceStatus": "conditional",
           "conflictNotes": "",
-          "policyLink": "POL-MF-STARTING-AGE",
+          "policyLink": ["POL-MF-STARTING-AGE", "POL-MF-FIRST-CYCLE"],
           "locator": {
             "volumeOrChapter": "Chương Đại Vận",
             "pageOrInternalLocator": "Unknown"
@@ -29,7 +29,7 @@
           "description": "Mỗi cung đại vận kéo dài 10 tuổi.",
           "confidenceStatus": "conditional",
           "conflictNotes": "",
-          "policyLink": "POL-MF-STARTING-AGE",
+          "policyLink": ["POL-MF-STARTING-AGE", "POL-MF-FIRST-CYCLE"],
           "locator": {
             "volumeOrChapter": "Chương Đại Vận",
             "pageOrInternalLocator": "Unknown"
@@ -40,7 +40,7 @@
           "description": "Hướng đi thuận nghịch theo Âm Dương của năm sinh và Giới tính.",
           "confidenceStatus": "conditional",
           "conflictNotes": "",
-          "policyLink": "POL-MF-DIRECTION",
+          "policyLink": ["POL-MF-DIRECTION", "POL-MF-YIN-YANG-GENDER"],
           "locator": {
             "volumeOrChapter": "Chương Đại Vận",
             "pageOrInternalLocator": "Unknown"
@@ -102,7 +102,7 @@
           "description": "Đại vận sử dụng Tứ Hóa Đại vận dựa trên thiên can của cung Đại Hạn.",
           "confidenceStatus": "conditional",
           "conflictNotes": "",
-          "policyLink": "POL-MF-FORTUNE-TRANSFORMATIONS",
+          "policyLink": ["POL-MF-FORTUNE-TRANSFORMATIONS", "POL-MF-FORTUNE-STEM"],
           "locator": {
             "volumeOrChapter": "Chương Vận Hạn",
             "pageOrInternalLocator": "Unknown"
