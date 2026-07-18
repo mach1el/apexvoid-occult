@@ -47,8 +47,11 @@ describe("ChartPage profile form", () => {
     expect(container.querySelector(".shell > .chat-section")).not.toBeNull();
     expect(container.querySelector(".shell > .trend-section")).not.toBeNull();
     expect(
-      screen.getByText(/Module vận khí đang được tái cấu trúc/i),
-    ).toBeInTheDocument();
+      screen.getAllByText(/Module vận khí đang được tái cấu trúc/i).length,
+    ).toBeGreaterThanOrEqual(4);
+    expect(container.querySelectorAll("[data-status='unavailable']")).toHaveLength(
+      4,
+    );
     // Header "Lá số 12 cung" đã bỏ — Copy/TXT/Ảnh nằm trên thanh nhập liệu.
     expect(screen.queryByRole("heading", { name: "Lá số 12 cung" })).not.toBeInTheDocument();
     expect(container.querySelector(".chart-workspace > .panel-head")).toBeNull();

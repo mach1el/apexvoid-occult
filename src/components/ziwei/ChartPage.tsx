@@ -25,6 +25,7 @@ import type {
 import { AiChat } from "./ai-chat/AiChat";
 import { CompactChart } from "./chart/CompactChart";
 import { MobileChart } from "./chart/MobileChart";
+import { ZiweiAnalysisRebuilding } from "./analysis/ZiweiAnalysisRebuilding";
 
 const HOUR_BRANCHES = [
   "Tý",
@@ -668,11 +669,11 @@ export function ChartPage() {
             className="trend-section"
             aria-label="Module vận khí đang tái cấu trúc"
           >
-            <div className="trend-analysis-grid" role="status" aria-live="polite">
-              <p>
-                Module vận khí đang được tái cấu trúc. Lá số và dữ liệu an sao
-                không bị ảnh hưởng.
-              </p>
+            <div className="trend-analysis-grid">
+              <ZiweiAnalysisRebuilding module="palace-overview" />
+              <ZiweiAnalysisRebuilding module="annual-axes" />
+              <ZiweiAnalysisRebuilding module="major-fortune" />
+              <ZiweiAnalysisRebuilding module="monthly-flow" />
             </div>
           </section>
         </main>
