@@ -42,13 +42,10 @@ function stripVolatile(results: ReturnType<typeof analyzeAllPalaces>["results"])
 }
 
 describe("palace-overview invariants", () => {
-  it("feature flag defaults OFF → unavailable/rebuilding", () => {
-    expect(isPalaceOverviewV1Enabled()).toBe(false);
-    expect(getAnalysisStatus("palace-overview")).toEqual({
-      status: "unavailable",
-      module: "palace-overview",
-      reason: "rebuilding",
-    });
+  it("feature flag defaults ON → available", () => {
+    expect(isPalaceOverviewV1Enabled()).toBe(true);
+    const status = getAnalysisStatus("palace-overview");
+    expect(status.status).toBe("available");
   });
 
   it("annualYear isolation — all 12 results deep-equal", () => {
