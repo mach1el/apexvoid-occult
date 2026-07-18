@@ -1,6 +1,6 @@
 # Current Implementation Inventory
 
-This document maps all existing code related to Đại Vận (Major Fortune).
+This document maps all existing code related to Đại Vận (Major Fortune) on the current branch (`research/major-fortune-pack`).
 
 ## 1. `src/lib/ziwei/engine-nam-phai.ts` & `src/lib/ziwei/engine-trung-chau.ts`
 - **Responsibility:** Calculates the `majorFortune` (Đại Vận) properties for each palace and identifies the active `majorFortunePalace` based on `nominalAge`. Also calculates `luuNienDaiVanIndex` (Lưu Niên Đại Vận) for the given year.
@@ -14,7 +14,7 @@ This document maps all existing code related to Đại Vận (Major Fortune).
 - **Provenance Status:** Classical Nam Phái / Trung Châu.
 - **Test Coverage:** Tested indirectly via `golden.test.ts` and `chart.test.ts`.
 - **Risks:** 
-  - Mutation of the `palaces` array. 
+  - **Mutation:** The `assignMajorFortunes` function directly mutates natal palace objects in both engines, which violates layer isolation.
   - `luuNienDaiVanIndex` relies on a legacy interpretation of zigzag movement, though it appears decoupled from the core T1 start.
 - **Recommended Disposition:** Extract into pure `major-fortune` module. Separate the mutation of `palaces` from the calculation of the active cycle. Mark as `accepted-calculation` but needing refactoring.
 - **Rule Classification:** `accepted-calculation` (for basic decades), `school-dependent` (for Tứ Hóa and LNDV).
@@ -60,15 +60,14 @@ This document maps all existing code related to Đại Vận (Major Fortune).
 - **Recommended Disposition:** Replace with new robust contracts in `src/lib/ziwei/analysis/major-fortune/contracts/`.
 - **Rule Classification:** `accepted-calculation` (architectural constraint).
 
-## 5. `src/lib/ziwei/trend/` (Scoring Engine)
-- **Responsibility:** Scores the fortune frames.
-- **Inputs:** Frame rules, major/annual/monthly overlays.
-- **Outputs:** `cat`, `hung` numeric scores.
-- **Calculation Rules Found:** Assigns numerical weights to stars, combinations.
-- **Implicit Assumptions:** Uses Tam Phương Tứ Chính logic implicitly.
-- **School-dependent Behavior:** Hardcoded to a specific weighting heuristic.
-- **Provenance Status:** Legacy heuristic engine.
-- **Test Coverage:** Unit tests exist in `trend/__tests__/`.
-- **Risks:** Semantic concepts (good/bad, risk, benefit) are calculated into numeric values. Strictly forbidden to expand in the calculation core.
-- **Recommended Disposition:** Isolate completely from the new Major Fortune Calculation Core.
-- **Rule Classification:** `legacy` / `unsupported`.
+---
+
+## Archived / Historical Code
+
+### Legacy Scoring (`src/lib/ziwei/trend/score.ts`)
+- **Status:** Deleted on production.
+- **Historical Note:** Previously, the `score.ts` module illicitly merged Major Fortune overlays into deterministic Good/Bad scoring. This has been fully removed from the codebase and is not a current production blocker. 
+
+### Monthly Flow Start (`calculateThang1` & `input.flowBase`)
+- **Status:** Handled via Monthly Flow architecture (out of scope for Major Fortune Core).
+- **Historical Note:** The `calculateThang1` fallback logic (`input.flowBase`) was previously audited here but actually pertains to Monthly Flow dependencies, not the Major Fortune decade calculation itself.

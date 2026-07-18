@@ -2,15 +2,17 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Major Fortune Source Registry",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
     "sources": {
       "type": "array",
       "items": {
         "type": "object",
+        "additionalProperties": false,
         "properties": {
-          "sourceId": { "type": "string", "pattern": "^SRC-MF-[0-0009]+$" },
-          "title": { "type": "string" },
-          "author": { "type": "string" },
+          "sourceId": { "type": "string", "pattern": "^SRC-MF-[0-9]{3}$" },
+          "title": { "type": "string", "minLength": 1 },
+          "author": { "type": "string", "minLength": 1 },
           "publication": { "type": "string" },
           "sourceType": {
             "type": "string",
@@ -22,11 +24,11 @@
           },
           "schoolAlignment": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": { "type": "string", "minLength": 1 }
           },
           "scope": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": { "type": "string", "minLength": 1 }
           },
           "qualityTier": {
             "type": "string",
@@ -34,25 +36,36 @@
           },
           "allowedUsage": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": { "type": "string", "minLength": 1 }
           },
           "prohibitedUsage": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": { "type": "string", "minLength": 1 }
           },
-          "citationLocator": { "type": "string" },
           "claims": {
             "type": "array",
             "items": {
               "type": "object",
+              "additionalProperties": false,
               "properties": {
-                "claimId": { "type": "string" },
-                "description": { "type": "string" },
-                "confidenceStatus": { "type": "string" },
+                "claimId": { "type": "string", "pattern": "^CLM-MF-[0-9]{3}$" },
+                "description": { "type": "string", "minLength": 1 },
+                "confidenceStatus": { "type": "string", "enum": ["high", "conditional", "unverified"] },
                 "conflictNotes": { "type": "string" },
-                "policyLink": { "type": "string" }
+                "policyLink": { "type": "string", "pattern": "^POL-MF-[A-Z0-9-]+$" },
+                "locator": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "edition": { "type": "string" },
+                    "volumeOrChapter": { "type": "string" },
+                    "subsection": { "type": "string" },
+                    "pageOrInternalLocator": { "type": "string" }
+                  },
+                  "required": ["volumeOrChapter"]
+                }
               },
-              "required": ["claimId", "description"]
+              "required": ["claimId", "description", "confidenceStatus", "policyLink", "locator"]
             }
           },
           "knownConflicts": {
@@ -66,7 +79,7 @@
           "notes": { "type": "string" }
         },
         "required": [
-          "sourceId", "title", "author", "sourceType", "language", "qualityTier", "reviewStatus"
+          "sourceId", "title", "author", "sourceType", "language", "schoolAlignment", "qualityTier", "claims", "reviewStatus"
         ]
       }
     }

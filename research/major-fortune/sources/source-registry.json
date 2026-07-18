@@ -12,26 +12,66 @@
       "qualityTier": "primary",
       "allowedUsage": ["calculation_core", "policy_reference"],
       "prohibitedUsage": ["semantic_override"],
-      "citationLocator": "Chương Đại Vận / Lưu Niên",
       "claims": [
         {
           "claimId": "CLM-MF-001",
-          "description": "Đại vận khởi từ cục số, mỗi cung cộng thêm 10 tuổi. Hướng đi thuận nghịch theo Âm Dương của năm sinh và Giới tính.",
-          "confidenceStatus": "high",
-          "conflictNotes": "Trùng khớp với Trung Châu phái ở mức cơ bản",
-          "policyLink": "POL-MF-TOPIC-001"
+          "description": "Đại vận khởi từ cục số.",
+          "confidenceStatus": "conditional",
+          "conflictNotes": "",
+          "policyLink": "POL-MF-STARTING-AGE",
+          "locator": {
+            "volumeOrChapter": "Chương Đại Vận",
+            "pageOrInternalLocator": "Unknown"
+          }
         },
         {
           "claimId": "CLM-MF-002",
-          "description": "Tiểu Hạn 1 tuổi tính từ cung theo chi năm sinh và tam hợp phái, còn Lưu Niên thì tính theo Thái Tuế (chi năm xem).",
-          "confidenceStatus": "high",
-          "conflictNotes": "Trung Châu phái không dùng Tiểu Hạn, chỉ dùng Lưu niên Thái Tuế.",
-          "policyLink": "POL-MF-TOPIC-003"
+          "description": "Mỗi cung đại vận kéo dài 10 tuổi.",
+          "confidenceStatus": "conditional",
+          "conflictNotes": "",
+          "policyLink": "POL-MF-STARTING-AGE",
+          "locator": {
+            "volumeOrChapter": "Chương Đại Vận",
+            "pageOrInternalLocator": "Unknown"
+          }
+        },
+        {
+          "claimId": "CLM-MF-003",
+          "description": "Hướng đi thuận nghịch theo Âm Dương của năm sinh và Giới tính.",
+          "confidenceStatus": "conditional",
+          "conflictNotes": "",
+          "policyLink": "POL-MF-DIRECTION",
+          "locator": {
+            "volumeOrChapter": "Chương Đại Vận",
+            "pageOrInternalLocator": "Unknown"
+          }
+        },
+        {
+          "claimId": "CLM-MF-004",
+          "description": "Tiểu Hạn 1 tuổi tính từ cung theo chi năm sinh và tam hợp phái.",
+          "confidenceStatus": "conditional",
+          "conflictNotes": "Trung Châu phái không dùng Tiểu Hạn.",
+          "policyLink": "POL-MF-ANNUAL-INTERACTION-NAM-PHAI",
+          "locator": {
+            "volumeOrChapter": "Chương Vận Hạn",
+            "pageOrInternalLocator": "Unknown"
+          }
+        },
+        {
+          "claimId": "CLM-MF-005",
+          "description": "Lưu Niên tính theo Thái Tuế (chi năm xem).",
+          "confidenceStatus": "conditional",
+          "conflictNotes": "",
+          "policyLink": "POL-MF-ANNUAL-INTERACTION-NAM-PHAI",
+          "locator": {
+            "volumeOrChapter": "Chương Vận Hạn",
+            "pageOrInternalLocator": "Unknown"
+          }
         }
       ],
       "knownConflicts": ["Trung Châu Phái Tiểu Hạn"],
       "reviewStatus": "accepted",
-      "notes": "Base document for traditional Nam Phái calculation."
+      "notes": "Base document for traditional Nam Phái calculation. Exact pages need verification."
     },
     {
       "sourceId": "SRC-MF-002",
@@ -45,26 +85,33 @@
       "qualityTier": "primary",
       "allowedUsage": ["calculation_core", "policy_reference"],
       "prohibitedUsage": ["semantic_override"],
-      "citationLocator": "Chương Vận Hạn",
       "claims": [
         {
-          "claimId": "CLM-MF-003",
-          "description": "Tuyệt đối không dùng Tiểu Hạn, chỉ dùng Lưu niên (Thái Tuế).",
-          "confidenceStatus": "high",
+          "claimId": "CLM-MF-006",
+          "description": "Tuyệt đối không dùng Tiểu Hạn.",
+          "confidenceStatus": "conditional",
           "conflictNotes": "Xung đột trực tiếp với Nam Phái.",
-          "policyLink": "POL-MF-TOPIC-003"
+          "policyLink": "POL-MF-ANNUAL-INTERACTION-TRUNG-CHAU",
+          "locator": {
+            "volumeOrChapter": "Chương Vận Hạn",
+            "pageOrInternalLocator": "Unknown"
+          }
         },
         {
-          "claimId": "CLM-MF-004",
-          "description": "Đại vận (Đại Hạn) sử dụng Tứ Hóa Đại vận dựa trên thiên can của cung Đại Hạn, không dùng thiên can gốc.",
-          "confidenceStatus": "high",
-          "conflictNotes": "Một số phái Nam Phái không dùng Tứ Hóa phi từ cung hạn, nhưng đa số chấp nhận.",
-          "policyLink": "POL-MF-TOPIC-014"
+          "claimId": "CLM-MF-007",
+          "description": "Đại vận sử dụng Tứ Hóa Đại vận dựa trên thiên can của cung Đại Hạn.",
+          "confidenceStatus": "conditional",
+          "conflictNotes": "",
+          "policyLink": "POL-MF-FORTUNE-TRANSFORMATIONS",
+          "locator": {
+            "volumeOrChapter": "Chương Vận Hạn",
+            "pageOrInternalLocator": "Unknown"
+          }
         }
       ],
       "knownConflicts": ["Nam Phái Tiểu Hạn"],
       "reviewStatus": "accepted",
-      "notes": "Primary structural source for Trung Châu Phái."
+      "notes": "Primary structural source for Trung Châu Phái. Exact pages need verification."
     }
   ]
 }

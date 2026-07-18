@@ -1,7 +1,7 @@
 {
   "policies": [
     {
-      "policyId": "POL-MF-TOPIC-001",
+      "policyId": "POL-MF-DIRECTION",
       "topic": "direction",
       "label": "Major Fortune Direction",
       "school": "mixed",
@@ -10,6 +10,25 @@
       "interpretationImpact": false,
       "rule": {
         "type": "yin_yang_gender",
+        "parameters": {}
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": [],
+      "defaultReason": "Universally accepted across Nam Phái and Trung Châu.",
+      "overrideAllowed": false,
+      "implementationStatus": "implemented",
+      "notes": "Direction determines the +1 or -1 iteration."
+    },
+    {
+      "policyId": "POL-MF-YIN-YANG-GENDER",
+      "topic": "yin_yang_and_gender_interaction",
+      "label": "Yin/Yang and Gender Interaction",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "forward_reverse_mapping",
         "parameters": {
           "yang_male": "forward",
           "yin_female": "forward",
@@ -19,14 +38,33 @@
       },
       "sourceRefs": ["SRC-MF-001"],
       "conflictsWith": [],
-      "defaultReason": "Universally accepted across Nam Phái and Trung Châu.",
+      "defaultReason": "Standard structural behavior.",
       "overrideAllowed": false,
       "implementationStatus": "implemented",
-      "notes": "Direction determines the +1 or -1 iteration through the 12 palaces."
+      "notes": ""
     },
     {
-      "policyId": "POL-MF-TOPIC-002",
-      "topic": "startingAge",
+      "policyId": "POL-MF-STARTING-PALACE",
+      "topic": "starting_palace",
+      "label": "Starting Palace",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "natal_menh_palace",
+        "parameters": {}
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": [],
+      "defaultReason": "Standard starting point for the first decade.",
+      "overrideAllowed": false,
+      "implementationStatus": "implemented",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-STARTING-AGE",
+      "topic": "starting_age",
       "label": "Starting Age (Cục số)",
       "school": "mixed",
       "status": "default",
@@ -34,13 +72,7 @@
       "interpretationImpact": false,
       "rule": {
         "type": "cuc_number",
-        "parameters": {
-          "ThuyNhiCuc": 2,
-          "MocTamCuc": 3,
-          "KimTuCuc": 4,
-          "ThoNguCuc": 5,
-          "HoaLucCuc": 6
-        }
+        "parameters": {}
       },
       "sourceRefs": ["SRC-MF-001"],
       "conflictsWith": [],
@@ -50,52 +82,179 @@
       "notes": "Each cycle adds 10 years."
     },
     {
-      "policyId": "POL-MF-TOPIC-003",
-      "topic": "interactionWithAnnual",
-      "label": "Annual Fortune Overlay Alignment",
-      "school": "nam-phai",
-      "status": "supported",
+      "policyId": "POL-MF-NOMINAL-VS-ACTUAL",
+      "topic": "nominal_versus_actual_age",
+      "label": "Nominal vs Actual Age",
+      "school": "mixed",
+      "status": "default",
       "calculationImpact": true,
       "interpretationImpact": false,
       "rule": {
-        "type": "annual_layering",
-        "parameters": {
-          "useTieuHan": true,
-          "useLuuNienDaiVan": true
-        }
+        "type": "nominal_age",
+        "parameters": {}
       },
       "sourceRefs": ["SRC-MF-001"],
-      "conflictsWith": ["POL-MF-TOPIC-004"],
-      "defaultReason": "Traditional Nam Phái uses Tieu Han and Luu Nien Dai Van.",
-      "overrideAllowed": true,
+      "conflictsWith": [],
+      "defaultReason": "Classical calculation uses Tuổi Mụ.",
+      "overrideAllowed": false,
       "implementationStatus": "implemented",
       "notes": ""
     },
     {
-      "policyId": "POL-MF-TOPIC-004",
-      "topic": "interactionWithAnnual",
-      "label": "Annual Fortune Overlay Alignment (Trung Châu)",
-      "school": "trung-chau",
-      "status": "supported",
+      "policyId": "POL-MF-AGE-BOUNDARY",
+      "topic": "age_boundary",
+      "label": "General Age Boundary Resolution",
+      "school": "unresolved",
+      "status": "unresolved",
       "calculationImpact": true,
       "interpretationImpact": false,
       "rule": {
-        "type": "annual_layering",
-        "parameters": {
-          "useTieuHan": false,
-          "useLuuNienDaiVan": true
-        }
+        "type": "unresolved",
+        "parameters": {}
       },
-      "sourceRefs": ["SRC-MF-002"],
-      "conflictsWith": ["POL-MF-TOPIC-003"],
-      "defaultReason": "Trung Chau strictly rejects Tieu Han.",
+      "sourceRefs": [],
+      "conflictsWith": [],
+      "defaultReason": "Missing consensus on exactly when an age increments relative to dates.",
       "overrideAllowed": true,
+      "implementationStatus": "not_started",
+      "notes": "Requires further research into classical boundary vs modern calendar boundaries."
+    },
+    {
+      "policyId": "POL-MF-CALENDAR-BOUNDARY",
+      "topic": "calendar_year_boundary",
+      "label": "Calendar Year Boundary",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "lunar_new_year",
+        "parameters": {}
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": ["POL-MF-SOLAR-TERM-BOUNDARY"],
+      "defaultReason": "Lunar New Year is widely used as the transition for annual changes in Nam Phai.",
+      "overrideAllowed": true,
+      "implementationStatus": "not_started",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-BIRTHDAY-BOUNDARY",
+      "topic": "birthday_boundary",
+      "label": "Birthday Boundary",
+      "school": "unresolved",
+      "status": "unresolved",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "unresolved",
+        "parameters": {}
+      },
+      "sourceRefs": [],
+      "conflictsWith": [],
+      "defaultReason": "Some modern practitioners transition on exact birthday, but evidence is lacking.",
+      "overrideAllowed": true,
+      "implementationStatus": "not_started",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-SOLAR-TERM-BOUNDARY",
+      "topic": "solar_term_boundary",
+      "label": "Solar Term Boundary (Lập Xuân)",
+      "school": "unresolved",
+      "status": "unresolved",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "unresolved",
+        "parameters": {}
+      },
+      "sourceRefs": [],
+      "conflictsWith": ["POL-MF-CALENDAR-BOUNDARY"],
+      "defaultReason": "Often used in BaZi, heavily debated in Ziwei.",
+      "overrideAllowed": true,
+      "implementationStatus": "not_started",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-PALACE-TRAVERSAL",
+      "topic": "twelve_palace_traversal",
+      "label": "Palace Traversal Mechanism",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "modulo_12_sequential",
+        "parameters": {}
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": [],
+      "defaultReason": "Standard structural behavior.",
+      "overrideAllowed": false,
       "implementationStatus": "implemented",
       "notes": ""
     },
     {
-      "policyId": "POL-MF-TOPIC-014",
-      "topic": "fortuneTransformations",
+      "policyId": "POL-MF-FIRST-CYCLE",
+      "topic": "first_cycle",
+      "label": "First Cycle Treatment",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "standard_decade",
+        "parameters": {}
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": [],
+      "defaultReason": "The first major fortune spans [Cục Số] to [Cục Số + 9].",
+      "overrideAllowed": false,
+      "implementationStatus": "implemented",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-PARTIAL-FIRST-CYCLE",
+      "topic": "partial_first_cycle",
+      "label": "Partial First Cycle (Childhood)",
+      "school": "unresolved",
+      "status": "unresolved",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "unresolved",
+        "parameters": {}
+      },
+      "sourceRefs": [],
+      "conflictsWith": [],
+      "defaultReason": "Treatment of ages before Cục Số (Đồng Hạn / Tiểu Hạn) lacks unified structure.",
+      "overrideAllowed": true,
+      "implementationStatus": "not_started",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-FORTUNE-STEM",
+      "topic": "major_fortune_heavenly_stem",
+      "label": "Major Fortune Heavenly Stem",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "palace_stem",
+        "parameters": {}
+      },
+      "sourceRefs": ["SRC-MF-002"],
+      "conflictsWith": [],
+      "defaultReason": "The stem of the palace hosting the Major Fortune is used.",
+      "overrideAllowed": false,
+      "implementationStatus": "not_started",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-FORTUNE-TRANSFORMATIONS",
+      "topic": "major_fortune_transformations",
       "label": "Major Fortune Transformations (Tứ Hóa)",
       "school": "mixed",
       "status": "default",
@@ -104,19 +263,19 @@
       "rule": {
         "type": "stem_derivation",
         "parameters": {
-          "sourceStem": "palace_stem"
+          "sourceStem": "fortune_stem"
         }
       },
       "sourceRefs": ["SRC-MF-002"],
       "conflictsWith": [],
-      "defaultReason": "Accepted by Trung Châu and most modern Nam Phái practitioners. Uses the stem of the current Major Fortune palace to cast Tứ Hóa.",
+      "defaultReason": "Uses the stem of the current Major Fortune.",
       "overrideAllowed": true,
-      "implementationStatus": "implemented",
-      "notes": "Some strictly classical Nam Phái do not use Đại Vận Tứ Hóa, but it's a standard feature now."
+      "implementationStatus": "not_started",
+      "notes": "Some strictly classical Nam Phái do not use Đại Vận Tứ Hóa."
     },
     {
-      "policyId": "POL-MF-TOPIC-015",
-      "topic": "natalTransformationInheritance",
+      "policyId": "POL-MF-NATAL-TRANSFORMATION-INHERITANCE",
+      "topic": "natal_transformation_inheritance",
       "label": "Natal Transformation Inheritance",
       "school": "mixed",
       "status": "default",
@@ -130,10 +289,130 @@
       },
       "sourceRefs": ["SRC-MF-001", "SRC-MF-002"],
       "conflictsWith": [],
-      "defaultReason": "Natal Tứ Hóa are permanent structural modifiers. They stack with Major Fortune Tứ Hóa.",
+      "defaultReason": "Natal Tứ Hóa stack with Major Fortune Tứ Hóa.",
       "overrideAllowed": false,
+      "implementationStatus": "not_started",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-VOID-TREATMENT",
+      "topic": "tuan_triet_treatment",
+      "label": "Tuần/Triệt Treatment in Major Fortune",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": false,
+      "interpretationImpact": true,
+      "rule": {
+        "type": "structural_only",
+        "parameters": {}
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": [],
+      "defaultReason": "Maintained purely as structural indicators in Calculation Core.",
+      "overrideAllowed": false,
+      "implementationStatus": "not_started",
+      "notes": "Semantic decay (e.g., after age 30) belongs to interpretation, not calculation."
+    },
+    {
+      "policyId": "POL-MF-PHI-HOA-AVAILABILITY",
+      "topic": "phi_hoa_availability",
+      "label": "Phi Hóa Availability",
+      "school": "unresolved",
+      "status": "unresolved",
+      "calculationImpact": true,
+      "interpretationImpact": true,
+      "rule": {
+        "type": "unresolved",
+        "parameters": {}
+      },
+      "sourceRefs": [],
+      "conflictsWith": [],
+      "defaultReason": "Associated with Bac Phai, needs deeper source tracking before implementation.",
+      "overrideAllowed": true,
+      "implementationStatus": "not_started",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-TU-HOA-AVAILABILITY",
+      "topic": "tu_hoa_availability",
+      "label": "Tự Hóa Availability",
+      "school": "unresolved",
+      "status": "unresolved",
+      "calculationImpact": true,
+      "interpretationImpact": true,
+      "rule": {
+        "type": "unresolved",
+        "parameters": {}
+      },
+      "sourceRefs": [],
+      "conflictsWith": [],
+      "defaultReason": "Needs deeper source tracking.",
+      "overrideAllowed": true,
+      "implementationStatus": "not_started",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-ANNUAL-INTERACTION-NAM-PHAI",
+      "topic": "annual_interaction",
+      "label": "Annual Fortune Overlay Alignment (Nam Phái)",
+      "school": "nam-phai",
+      "status": "supported",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "annual_layering",
+        "parameters": {
+          "useTieuHan": true,
+          "useLuuNienDaiVan": true
+        }
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": ["POL-MF-ANNUAL-INTERACTION-TRUNG-CHAU"],
+      "defaultReason": "Traditional Nam Phái uses Tieu Han.",
+      "overrideAllowed": true,
       "implementationStatus": "implemented",
-      "notes": "Major Fortune does NOT overwrite Natal."
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-ANNUAL-INTERACTION-TRUNG-CHAU",
+      "topic": "annual_interaction",
+      "label": "Annual Fortune Overlay Alignment (Trung Châu)",
+      "school": "trung-chau",
+      "status": "supported",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "annual_layering",
+        "parameters": {
+          "useTieuHan": false,
+          "useLuuNienDaiVan": true
+        }
+      },
+      "sourceRefs": ["SRC-MF-002"],
+      "conflictsWith": ["POL-MF-ANNUAL-INTERACTION-NAM-PHAI"],
+      "defaultReason": "Trung Chau strictly rejects Tieu Han.",
+      "overrideAllowed": true,
+      "implementationStatus": "implemented",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-MONTHLY-INTERACTION",
+      "topic": "monthly_interaction",
+      "label": "Monthly Interaction Overlay",
+      "school": "unresolved",
+      "status": "unresolved",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "unresolved",
+        "parameters": {}
+      },
+      "sourceRefs": [],
+      "conflictsWith": [],
+      "defaultReason": "Subject to the monthly flow module configuration.",
+      "overrideAllowed": true,
+      "implementationStatus": "not_started",
+      "notes": ""
     }
   ]
 }
