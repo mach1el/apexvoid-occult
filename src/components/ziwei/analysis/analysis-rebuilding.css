@@ -27,6 +27,12 @@
 .trend-analysis-grid {
   display: grid;
   gap: 0.75rem;
+  /* Grid items default to stretch — without this, opening the palace
+     detail panel (which grows .palace-overview-radar taller) would also
+     visually stretch its unrelated sibling card (e.g. the annual-axes
+     placeholder) to match the row height. Each card should size to its
+     own content only. */
+  align-items: start;
 }
 
 @media (min-width: 900px) {

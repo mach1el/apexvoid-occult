@@ -78,9 +78,15 @@ export function PalaceOverviewRadar({ chart, school }: PalaceOverviewRadarProps)
 
   const ordered = useMemo(() => {
     if (!analysis.knowledgeValid || results.length === 0) return [];
-    return chart.palaces.map(
+    const byBranch = chart.palaces.map(
       (p) => results.find((r) => r.palaceIndex === p.index)!,
     );
+    // Mệnh always sits at the top of the radar (index 0 → 12 o'clock),
+    // regardless of which branch it lands on for this chart — rotate the
+    // ring rather than reorder scores.
+    const menhIndex = byBranch.findIndex((r) => r.palaceName === "Mệnh");
+    if (menhIndex <= 0) return byBranch;
+    return [...byBranch.slice(menhIndex), ...byBranch.slice(0, menhIndex)];
   }, [analysis.knowledgeValid, chart.palaces, results]);
 
   if (!analysis.knowledgeValid || ordered.length === 0) {
