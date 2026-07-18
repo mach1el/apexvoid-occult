@@ -63,6 +63,9 @@ describe("legacy trend scoring absence", () => {
       // Absence tests may mention symbols; skip this file and similar guards.
       if (file.path.includes("legacy-trend-absence")) continue;
       if (file.path.includes("invariants.test")) continue;
+      // The annual-axes import-boundary guard is its own dedicated
+      // legacy-symbol denylist test — it mentions the tokens on purpose.
+      if (file.path.includes("import-boundary.test")) continue;
       for (const token of forbidden) {
         if (file.text.includes(token)) {
           hits.push(`${file.path}: ${token}`);
