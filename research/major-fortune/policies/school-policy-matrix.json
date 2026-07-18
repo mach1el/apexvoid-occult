@@ -1,0 +1,139 @@
+{
+  "policies": [
+    {
+      "policyId": "POL-MF-TOPIC-001",
+      "topic": "direction",
+      "label": "Major Fortune Direction",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "yin_yang_gender",
+        "parameters": {
+          "yang_male": "forward",
+          "yin_female": "forward",
+          "yin_male": "reverse",
+          "yang_female": "reverse"
+        }
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": [],
+      "defaultReason": "Universally accepted across Nam Phái and Trung Châu.",
+      "overrideAllowed": false,
+      "implementationStatus": "implemented",
+      "notes": "Direction determines the +1 or -1 iteration through the 12 palaces."
+    },
+    {
+      "policyId": "POL-MF-TOPIC-002",
+      "topic": "startingAge",
+      "label": "Starting Age (Cục số)",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "cuc_number",
+        "parameters": {
+          "ThuyNhiCuc": 2,
+          "MocTamCuc": 3,
+          "KimTuCuc": 4,
+          "ThoNguCuc": 5,
+          "HoaLucCuc": 6
+        }
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": [],
+      "defaultReason": "Standard starting age logic.",
+      "overrideAllowed": false,
+      "implementationStatus": "implemented",
+      "notes": "Each cycle adds 10 years."
+    },
+    {
+      "policyId": "POL-MF-TOPIC-003",
+      "topic": "interactionWithAnnual",
+      "label": "Annual Fortune Overlay Alignment",
+      "school": "nam-phai",
+      "status": "supported",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "annual_layering",
+        "parameters": {
+          "useTieuHan": true,
+          "useLuuNienDaiVan": true
+        }
+      },
+      "sourceRefs": ["SRC-MF-001"],
+      "conflictsWith": ["POL-MF-TOPIC-004"],
+      "defaultReason": "Traditional Nam Phái uses Tieu Han and Luu Nien Dai Van.",
+      "overrideAllowed": true,
+      "implementationStatus": "implemented",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-TOPIC-004",
+      "topic": "interactionWithAnnual",
+      "label": "Annual Fortune Overlay Alignment (Trung Châu)",
+      "school": "trung-chau",
+      "status": "supported",
+      "calculationImpact": true,
+      "interpretationImpact": false,
+      "rule": {
+        "type": "annual_layering",
+        "parameters": {
+          "useTieuHan": false,
+          "useLuuNienDaiVan": true
+        }
+      },
+      "sourceRefs": ["SRC-MF-002"],
+      "conflictsWith": ["POL-MF-TOPIC-003"],
+      "defaultReason": "Trung Chau strictly rejects Tieu Han.",
+      "overrideAllowed": true,
+      "implementationStatus": "implemented",
+      "notes": ""
+    },
+    {
+      "policyId": "POL-MF-TOPIC-014",
+      "topic": "fortuneTransformations",
+      "label": "Major Fortune Transformations (Tứ Hóa)",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": true,
+      "rule": {
+        "type": "stem_derivation",
+        "parameters": {
+          "sourceStem": "palace_stem"
+        }
+      },
+      "sourceRefs": ["SRC-MF-002"],
+      "conflictsWith": [],
+      "defaultReason": "Accepted by Trung Châu and most modern Nam Phái practitioners. Uses the stem of the current Major Fortune palace to cast Tứ Hóa.",
+      "overrideAllowed": true,
+      "implementationStatus": "implemented",
+      "notes": "Some strictly classical Nam Phái do not use Đại Vận Tứ Hóa, but it's a standard feature now."
+    },
+    {
+      "policyId": "POL-MF-TOPIC-015",
+      "topic": "natalTransformationInheritance",
+      "label": "Natal Transformation Inheritance",
+      "school": "mixed",
+      "status": "default",
+      "calculationImpact": true,
+      "interpretationImpact": true,
+      "rule": {
+        "type": "layer_stacking",
+        "parameters": {
+          "stackNatal": true
+        }
+      },
+      "sourceRefs": ["SRC-MF-001", "SRC-MF-002"],
+      "conflictsWith": [],
+      "defaultReason": "Natal Tứ Hóa are permanent structural modifiers. They stack with Major Fortune Tứ Hóa.",
+      "overrideAllowed": false,
+      "implementationStatus": "implemented",
+      "notes": "Major Fortune does NOT overwrite Natal."
+    }
+  ]
+}

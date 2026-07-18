@@ -1,0 +1,16 @@
+{
+  "profileId": "major-fortune-default-v0",
+  "version": "0.1.0",
+  "policies": {
+    "direction": "POL-MF-TOPIC-001",
+    "startingPalace": "POL-MF-TOPIC-002",
+    "startingAge": "POL-MF-TOPIC-002",
+    "ageBoundary": "lunar_new_year",
+    "palaceTraversal": "modulo_12_sequential",
+    "fortuneStem": "palace_stem",
+    "fortuneTransformations": "POL-MF-TOPIC-014",
+    "natalTransformationInheritance": "POL-MF-TOPIC-015",
+    "voidHandling": "structural_only",
+    "interactionWithAnnual": "POL-MF-TOPIC-003"
+  }
+}

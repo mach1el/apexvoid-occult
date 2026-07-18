@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Major Fortune Source Registry",
+  "type": "object",
+  "properties": {
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "sourceId": { "type": "string", "pattern": "^SRC-MF-[0-0009]+$" },
+          "title": { "type": "string" },
+          "author": { "type": "string" },
+          "publication": { "type": "string" },
+          "sourceType": {
+            "type": "string",
+            "enum": ["classical_text", "modern_book", "school_material", "academic", "public_article", "video", "internal_synthesis"]
+          },
+          "language": {
+            "type": "string",
+            "enum": ["vi", "zh", "en"]
+          },
+          "schoolAlignment": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "scope": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "qualityTier": {
+            "type": "string",
+            "enum": ["primary", "secondary", "reference_only", "unverified"]
+          },
+          "allowedUsage": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "prohibitedUsage": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "citationLocator": { "type": "string" },
+          "claims": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "claimId": { "type": "string" },
+                "description": { "type": "string" },
+                "confidenceStatus": { "type": "string" },
+                "conflictNotes": { "type": "string" },
+                "policyLink": { "type": "string" }
+              },
+              "required": ["claimId", "description"]
+            }
+          },
+          "knownConflicts": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "reviewStatus": {
+            "type": "string",
+            "enum": ["accepted", "conditional", "disputed", "unreviewed"]
+          },
+          "notes": { "type": "string" }
+        },
+        "required": [
+          "sourceId", "title", "author", "sourceType", "language", "qualityTier", "reviewStatus"
+        ]
+      }
+    }
+  },
+  "required": ["sources"]
+}

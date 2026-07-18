@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "School Policy Matrix",
+  "type": "object",
+  "properties": {
+    "policies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "policyId": { "type": "string", "pattern": "^POL-MF-TOPIC-[0-0009]+$" },
+          "topic": { "type": "string" },
+          "label": { "type": "string" },
+          "school": {
+            "type": "string",
+            "enum": ["bac-phai", "nam-phai", "mixed", "custom", "trung-chau"]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["default", "supported", "experimental", "rejected", "unresolved"]
+          },
+          "calculationImpact": { "type": "boolean" },
+          "interpretationImpact": { "type": "boolean" },
+          "rule": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "parameters": { "type": "object" }
+            }
+          },
+          "sourceRefs": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "conflictsWith": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "defaultReason": { "type": "string" },
+          "overrideAllowed": { "type": "boolean" },
+          "implementationStatus": {
+            "type": "string",
+            "enum": ["not_started", "implemented", "tested"]
+          },
+          "notes": { "type": "string" }
+        },
+        "required": [
+          "policyId", "topic", "label", "school", "status", "calculationImpact", "rule", "sourceRefs", "implementationStatus"
+        ]
+      }
+    }
+  },
+  "required": ["policies"]
+}
