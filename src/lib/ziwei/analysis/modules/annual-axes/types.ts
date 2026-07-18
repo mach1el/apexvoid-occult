@@ -30,6 +30,11 @@ export interface AnnualAxisEvidence {
   ruleId: string;
   targetPalaceIndex: number;
   targetPalaceName: string;
+  /** The target palace's own resolved annual label — distinct from
+   * `anchorPalaceName` (the anchor's label), since opposite/trine nodes
+   * carry a different annual label than their anchor. Null only if the
+   * physical palace genuinely has no annual label. */
+  targetAnnualPalaceName: string | null;
   frameRole: AnnualAxisFrameRole;
   /** Annual label of the anchor palace whose frame collected this evidence. */
   anchorPalaceName: string;
@@ -46,18 +51,28 @@ export interface AnnualAxisEvidence {
   knowledgeStatus: "experimental" | "approved";
 }
 
-export interface AnnualAxisResult {
-  domain: AnnualAxisDomain;
-  score: number;
-  band: AnnualAxisBand;
-  rawAxes: AnnualAxisRawAxes;
-  normalizedAxes: AnnualAxisRawAxes;
-  intensity: number;
-  conflict: number;
-  evidence: AnnualAxisEvidence[];
-  topSupportDrivers: AnnualAxisEvidence[];
-  topPressureDrivers: AnnualAxisEvidence[];
-}
+export type AnnualAxisResult =
+  | {
+      domain: AnnualAxisDomain;
+      status: "available";
+      score: number;
+      band: AnnualAxisBand;
+      rawAxes: AnnualAxisRawAxes;
+      normalizedAxes: AnnualAxisRawAxes;
+      intensity: number;
+      conflict: number;
+      evidence: AnnualAxisEvidence[];
+      topSupportDrivers: AnnualAxisEvidence[];
+      topPressureDrivers: AnnualAxisEvidence[];
+    }
+  | {
+      domain: AnnualAxisDomain;
+      status: "unavailable";
+      score: null;
+      band: null;
+      evidence: [];
+      reasonCodes: string[];
+    };
 
 export interface AnnualAxesDiagnostics {
   invalidKnowledge: string[];
@@ -81,7 +96,7 @@ export interface AnnualAxesResult {
     engineVersion: string;
     knowledgeVersion: string;
   };
-  status: "available" | "unavailable";
+  status: "available" | "partial" | "unavailable";
   axes: Record<AnnualAxisDomain, AnnualAxisResult>;
   diagnostics: AnnualAxesDiagnostics;
 }
