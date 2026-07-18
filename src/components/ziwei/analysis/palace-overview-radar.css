@@ -1,0 +1,140 @@
+.palace-overview-radar {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--ink, #1a1520) 16%, transparent);
+  background: color-mix(in srgb, var(--paper, #f7f2ea) 88%, #c9b89a);
+}
+
+.palace-overview-radar__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+}
+
+.palace-overview-radar__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.palace-overview-radar__badge {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid color-mix(in srgb, var(--ink, #1a1520) 35%, transparent);
+  padding: 0.12rem 0.4rem;
+}
+
+.palace-overview-radar__disclaimer {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  opacity: 0.88;
+  max-width: 42rem;
+}
+
+.palace-overview-radar__body {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .palace-overview-radar__body {
+    grid-template-columns: minmax(240px, 320px) 1fr;
+    align-items: start;
+  }
+}
+
+.palace-overview-radar__svg-wrap {
+  position: relative;
+  width: min(100%, 320px);
+  margin-inline: auto;
+}
+
+.palace-overview-radar__svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.palace-overview-radar__point {
+  cursor: pointer;
+}
+
+.palace-overview-radar__point.is-active circle {
+  stroke-width: 2.5;
+}
+
+.palace-overview-radar__tooltip {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--ink, #1a1520) 14%, transparent);
+  background: color-mix(in srgb, var(--paper, #f7f2ea) 96%, #ddd0bc);
+}
+
+.palace-overview-radar__tooltip dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.2rem 0.75rem;
+  margin: 0.35rem 0 0;
+}
+
+.palace-overview-radar__tooltip dt {
+  opacity: 0.75;
+}
+
+.palace-overview-radar__tooltip dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.palace-overview-detail {
+  margin-top: 0.25rem;
+  padding: 0.75rem 0.85rem;
+  border-top: 1px solid color-mix(in srgb, var(--ink, #1a1520) 14%, transparent);
+}
+
+.palace-overview-detail__title {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+}
+
+.palace-overview-detail__meta {
+  margin: 0 0 0.65rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.palace-overview-detail__section {
+  margin: 0.55rem 0 0;
+}
+
+.palace-overview-detail__section h5 {
+  margin: 0 0 0.25rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.palace-overview-detail__section ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.palace-overview-detail__close {
+  margin-top: 0.65rem;
+  font: inherit;
+  font-size: 0.82rem;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--ink, #1a1520) 28%, transparent);
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+}

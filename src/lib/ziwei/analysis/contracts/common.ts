@@ -1,4 +1,7 @@
-/** Shared contracts for Zi Wei analysis modules (Phase 0 — no scoring). */
+/** Shared contracts for Zi Wei analysis modules. */
+
+import { isPalaceOverviewV1Enabled } from "../feature-flags";
+import { loadPalaceOverviewKnowledgeV1 } from "../knowledge";
 
 export type ZiweiAnalysisModule =
   | "palace-overview"
@@ -10,7 +13,7 @@ export type ZiweiAnalysisStatus =
   | {
       status: "unavailable";
       module: ZiweiAnalysisModule;
-      reason: "rebuilding";
+      reason: "rebuilding" | "invalid-knowledge";
     }
   | {
       status: "available";
@@ -18,11 +21,33 @@ export type ZiweiAnalysisStatus =
       version: string;
     };
 
-/** Phase 0: every module reports rebuilding. */
 export function getAnalysisStatus(
   module: ZiweiAnalysisModule,
 ): ZiweiAnalysisStatus {
-  return { status: "unavailable", module, reason: "rebuilding" };
+  if (module !== "palace-overview") {
+    return { status: "unavailable", module, reason: "rebuilding" };
+  }
+
+  if (!isPalaceOverviewV1Enabled()) {
+    return { status: "unavailable", module, reason: "rebuilding" };
+  }
+
+  const loaded = loadPalaceOverviewKnowledgeV1();
+  if (!loaded.ok) {
+    if (import.meta.env.DEV) {
+      console.warn(
+        "[palace-overview] invalid knowledge",
+        loaded.issues,
+      );
+    }
+    return { status: "unavailable", module, reason: "invalid-knowledge" };
+  }
+
+  return {
+    status: "available",
+    module,
+    version: loaded.knowledge.profile.version,
+  };
 }
 
 export const ANALYSIS_MODULES: ZiweiAnalysisModule[] = [

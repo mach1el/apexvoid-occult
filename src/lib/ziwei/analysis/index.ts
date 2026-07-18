@@ -33,3 +33,7 @@ export * from "./facts";
 export * from "./frame";
 export * from "./knowledge";
 export * from "./modules/palace-overview";
+export {
+  isPalaceOverviewV1Enabled,
+  PALACE_OVERVIEW_FEATURE_FLAG,
+} from "./feature-flags";

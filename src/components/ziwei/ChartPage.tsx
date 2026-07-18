@@ -26,6 +26,8 @@ import { AiChat } from "./ai-chat/AiChat";
 import { CompactChart } from "./chart/CompactChart";
 import { MobileChart } from "./chart/MobileChart";
 import { ZiweiAnalysisRebuilding } from "./analysis/ZiweiAnalysisRebuilding";
+import { PalaceOverviewRadar } from "./analysis/PalaceOverviewRadar";
+import { getAnalysisStatus } from "@/lib/ziwei/analysis";
 
 const HOUR_BRANCHES = [
   "Tý",
@@ -667,10 +669,15 @@ export function ChartPage() {
 
           <section
             className="trend-section"
-            aria-label="Module vận khí đang tái cấu trúc"
+            aria-label="Module vận khí"
           >
             <div className="trend-analysis-grid">
-              <ZiweiAnalysisRebuilding module="palace-overview" />
+              {chartData &&
+              getAnalysisStatus("palace-overview").status === "available" ? (
+                <PalaceOverviewRadar chart={chartData} school={school} />
+              ) : (
+                <ZiweiAnalysisRebuilding module="palace-overview" />
+              )}
               <ZiweiAnalysisRebuilding module="annual-axes" />
               <ZiweiAnalysisRebuilding module="major-fortune" />
               <ZiweiAnalysisRebuilding module="monthly-flow" />
