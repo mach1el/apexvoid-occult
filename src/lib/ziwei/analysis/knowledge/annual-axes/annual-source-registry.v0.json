@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "0.1.0",
+  "registryId": "annual-axes-source-registry-v0",
+  "status": "incomplete",
+  "sources": [
+    {
+      "sourceId": "SRC-AA-ARCH-001",
+      "title": "ApexVoid Annual Axes Engineering Model V0",
+      "sourceType": "internal_architecture",
+      "allowedUsage": [
+        "formula_design",
+        "calibration",
+        "implementation_contract"
+      ],
+      "prohibitedUsage": [
+        "claim_as_classical_doctrine"
+      ],
+      "claims": [
+        {
+          "claimId": "CLM-AA-ARCH-001",
+          "description": "Activation is separated from positive or negative quality.",
+          "policyLinks": [
+            "annual-scoring-profile-v0"
+          ]
+        },
+        {
+          "claimId": "CLM-AA-ARCH-002",
+          "description": "The six annual axes are computed from annual facts and domain frames, not mechanically from twelve normalized palace scores.",
+          "policyLinks": [
+            "annual-axis-definitions-v0",
+            "annual-scoring-profile-v0"
+          ]
+        }
+      ]
+    }
+  ],
+  "researchQueue": [
+    {
+      "researchId": "RQ-AA-001",
+      "topic": "annual domain anchors",
+      "priority": "P0",
+      "question": "Verify or amend each domain's annual palace anchors and relative importance."
+    },
+    {
+      "researchId": "RQ-AA-002",
+      "topic": "annual Tứ Hóa numeric vectors",
+      "priority": "P0",
+      "question": "Calibrate support, pressure, stability and activation vectors against expert-reviewed cases."
+    },
+    {
+      "researchId": "RQ-AA-003",
+      "topic": "cross-layer interactions",
+      "priority": "P1",
+      "question": "Identify source-backed same-target interaction modifiers."
+    }
+  ]
+}

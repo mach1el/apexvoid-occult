@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "0.1.0",
+  "catalogId": "annual-axis-definitions-v0",
+  "status": "experimental",
+  "domains": [
+    {
+      "domain": "health",
+      "labelVi": "Sức khỏe",
+      "anchors": [
+        {
+          "annualPalaceName": "Tật Ách",
+          "weight": 0.7
+        },
+        {
+          "annualPalaceName": "Mệnh",
+          "weight": 0.3
+        }
+      ]
+    },
+    {
+      "domain": "family",
+      "labelVi": "Gia đạo",
+      "anchors": [
+        {
+          "annualPalaceName": "Điền Trạch",
+          "weight": 0.4
+        },
+        {
+          "annualPalaceName": "Phúc Đức",
+          "weight": 0.3
+        },
+        {
+          "annualPalaceName": "Phụ Mẫu",
+          "weight": 0.2
+        },
+        {
+          "annualPalaceName": "Tử Tức",
+          "weight": 0.1
+        }
+      ]
+    },
+    {
+      "domain": "wealth",
+      "labelVi": "Tài lộc",
+      "anchors": [
+        {
+          "annualPalaceName": "Tài Bạch",
+          "weight": 0.75
+        },
+        {
+          "annualPalaceName": "Điền Trạch",
+          "weight": 0.15
+        },
+        {
+          "annualPalaceName": "Phúc Đức",
+          "weight": 0.1
+        }
+      ]
+    },
+    {
+      "domain": "career",
+      "labelVi": "Công việc",
+      "anchors": [
+        {
+          "annualPalaceName": "Quan Lộc",
+          "weight": 0.7
+        },
+        {
+          "annualPalaceName": "Thiên Di",
+          "weight": 0.15
+        },
+        {
+          "annualPalaceName": "Phụ Mẫu",
+          "weight": 0.15
+        }
+      ]
+    },
+    {
+      "domain": "social",
+      "labelVi": "Giao hữu",
+      "anchors": [
+        {
+          "annualPalaceName": "Nô Bộc",
+          "weight": 0.6
+        },
+        {
+          "annualPalaceName": "Huynh Đệ",
+          "weight": 0.25
+        },
+        {
+          "annualPalaceName": "Thiên Di",
+          "weight": 0.15
+        }
+      ]
+    },
+    {
+      "domain": "romance",
+      "labelVi": "Tình duyên",
+      "anchors": [
+        {
+          "annualPalaceName": "Phu Thê",
+          "weight": 0.7
+        },
+        {
+          "annualPalaceName": "Mệnh",
+          "weight": 0.15
+        },
+        {
+          "annualPalaceName": "Phúc Đức",
+          "weight": 0.15
+        }
+      ]
+    }
+  ],
+  "validationRules": {
+    "anchorWeightsMustSumTo": 1.0,
+    "allowedPalaceNames": [
+      "Mệnh",
+      "Phụ Mẫu",
+      "Phúc Đức",
+      "Điền Trạch",
+      "Quan Lộc",
+      "Nô Bộc",
+      "Thiên Di",
+      "Tật Ách",
+      "Tài Bạch",
+      "Tử Tức",
+      "Phu Thê",
+      "Huynh Đệ"
+    ],
+    "missingAnnualPalaceBehavior": "diagnostic_and_no_score"
+  }
+}

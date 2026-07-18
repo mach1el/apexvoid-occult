@@ -33,6 +33,7 @@ export * from "./facts";
 export * from "./frame";
 export * from "./knowledge";
 export * from "./modules/palace-overview";
+export * from "./modules/annual-axes";
 export {
   isPalaceOverviewV1Enabled,
   PALACE_OVERVIEW_FEATURE_FLAG,

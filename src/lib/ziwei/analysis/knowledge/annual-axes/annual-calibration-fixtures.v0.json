@@ -1,0 +1,298 @@
+{
+  "schemaVersion": "0.1.0",
+  "fixtureSetId": "annual-axes-calibration-v0",
+  "status": "synthetic_golden",
+  "formulaProfileId": "annual-axes-experimental-v0",
+  "cases": [
+    {
+      "fixtureId": "AA-CAL-001",
+      "label": "neutral",
+      "rawAxes": {
+        "support": 0,
+        "pressure": 0,
+        "stability": 0,
+        "activation": 0
+      },
+      "expected": {
+        "score": 50.0,
+        "intensity": 0,
+        "conflict": 0,
+        "normalized": {
+          "support": 0.0,
+          "pressure": 0.0,
+          "stability": 0.0,
+          "activation": 0.0
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-002",
+      "label": "activation-only",
+      "rawAxes": {
+        "support": 0,
+        "pressure": 0,
+        "stability": 0,
+        "activation": 3
+      },
+      "expected": {
+        "score": 50.0,
+        "intensity": 63,
+        "conflict": 0,
+        "normalized": {
+          "support": 0.0,
+          "pressure": 0.0,
+          "stability": 0.0,
+          "activation": 0.632121
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-003",
+      "label": "moderate-support",
+      "rawAxes": {
+        "support": 2,
+        "pressure": 0,
+        "stability": 0.5,
+        "activation": 2
+      },
+      "expected": {
+        "score": 62.7,
+        "intensity": 49,
+        "conflict": 0,
+        "normalized": {
+          "support": 0.486583,
+          "pressure": 0.0,
+          "stability": 0.16514,
+          "activation": 0.486583
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-004",
+      "label": "strong-support",
+      "rawAxes": {
+        "support": 5,
+        "pressure": 0,
+        "stability": 1,
+        "activation": 4
+      },
+      "expected": {
+        "score": 74.6,
+        "intensity": 74,
+        "conflict": 0,
+        "normalized": {
+          "support": 0.811124,
+          "pressure": 0.0,
+          "stability": 0.321513,
+          "activation": 0.736403
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-005",
+      "label": "moderate-pressure",
+      "rawAxes": {
+        "support": 0,
+        "pressure": 2,
+        "stability": -0.5,
+        "activation": 2
+      },
+      "expected": {
+        "score": 37.3,
+        "intensity": 49,
+        "conflict": 0,
+        "normalized": {
+          "support": 0.0,
+          "pressure": 0.486583,
+          "stability": -0.16514,
+          "activation": 0.486583
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-006",
+      "label": "strong-pressure",
+      "rawAxes": {
+        "support": 0,
+        "pressure": 5,
+        "stability": -1,
+        "activation": 4
+      },
+      "expected": {
+        "score": 25.4,
+        "intensity": 74,
+        "conflict": 0,
+        "normalized": {
+          "support": 0.0,
+          "pressure": 0.811124,
+          "stability": -0.321513,
+          "activation": 0.736403
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-007",
+      "label": "high-conflict",
+      "rawAxes": {
+        "support": 4,
+        "pressure": 4,
+        "stability": 0,
+        "activation": 5
+      },
+      "expected": {
+        "score": 50.0,
+        "intensity": 81,
+        "conflict": 60,
+        "normalized": {
+          "support": 0.736403,
+          "pressure": 0.736403,
+          "stability": 0.0,
+          "activation": 0.811124
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-008",
+      "label": "support-with-instability",
+      "rawAxes": {
+        "support": 3,
+        "pressure": 0.5,
+        "stability": -2,
+        "activation": 3
+      },
+      "expected": {
+        "score": 57.5,
+        "intensity": 63,
+        "conflict": 10,
+        "normalized": {
+          "support": 0.632121,
+          "pressure": 0.153518,
+          "stability": -0.582783,
+          "activation": 0.632121
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-009",
+      "label": "pressure-with-stability",
+      "rawAxes": {
+        "support": 0.5,
+        "pressure": 3,
+        "stability": 2,
+        "activation": 3
+      },
+      "expected": {
+        "score": 42.5,
+        "intensity": 63,
+        "conflict": 10,
+        "normalized": {
+          "support": 0.153518,
+          "pressure": 0.632121,
+          "stability": 0.582783,
+          "activation": 0.632121
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-010",
+      "label": "annual-loc-only",
+      "rawAxes": {
+        "support": 1,
+        "pressure": 0,
+        "stability": 0.1,
+        "activation": 0.7
+      },
+      "expected": {
+        "score": 55.1,
+        "intensity": 21,
+        "conflict": 0,
+        "normalized": {
+          "support": 0.283469,
+          "pressure": 0.0,
+          "stability": 0.033321,
+          "activation": 0.20811
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-011",
+      "label": "annual-ky-only",
+      "rawAxes": {
+        "support": 0,
+        "pressure": 1,
+        "stability": -0.75,
+        "activation": 0.8
+      },
+      "expected": {
+        "score": 43.4,
+        "intensity": 23,
+        "conflict": 0,
+        "normalized": {
+          "support": 0.0,
+          "pressure": 0.283469,
+          "stability": -0.244919,
+          "activation": 0.234072
+        }
+      }
+    },
+    {
+      "fixtureId": "AA-CAL-012",
+      "label": "khoa-plus-ky-base-no-interaction",
+      "rawAxes": {
+        "support": 0.75,
+        "pressure": 1,
+        "stability": 0.05,
+        "activation": 1.2
+      },
+      "expected": {
+        "score": 48.9,
+        "intensity": 33,
+        "conflict": 7,
+        "normalized": {
+          "support": 0.221199,
+          "pressure": 0.283469,
+          "stability": 0.016665,
+          "activation": 0.32968
+        }
+      }
+    }
+  ],
+  "behavioralFixtures": [
+    {
+      "fixtureId": "AA-BEH-001",
+      "description": "Duplicate physical fact across two anchors is counted once using the highest effective weight.",
+      "expected": {
+        "numericEvidenceCount": 1
+      }
+    },
+    {
+      "fixtureId": "AA-BEH-002",
+      "description": "Semantic annotation never changes raw axes.",
+      "expected": {
+        "rawAxesUnchanged": true
+      }
+    },
+    {
+      "fixtureId": "AA-BEH-003",
+      "description": "Nam Phái permits Tiểu Hạn focal evidence; Trung Châu rejects it with a diagnostic.",
+      "expected": {
+        "namPhaiAccepted": true,
+        "trungChauAccepted": false
+      }
+    },
+    {
+      "fixtureId": "AA-BEH-004",
+      "description": "Changing annualYear while all natal facts stay constant must change the result when annual facts differ.",
+      "expected": {
+        "resultsDiffer": true
+      }
+    },
+    {
+      "fixtureId": "AA-BEH-005",
+      "description": "Same input, annualYear, school and knowledge versions produce byte-stable results.",
+      "expected": {
+        "deterministic": true
+      }
+    }
+  ]
+}

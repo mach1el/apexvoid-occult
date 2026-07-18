@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "0.1.0",
+  "catalogId": "annual-star-overrides-v0",
+  "status": "experimental",
+  "inheritance": {
+    "sourceCatalog": "palace-overview canonical star knowledge",
+    "reuseFields": [
+      "coreAxes",
+      "brightnessModel",
+      "familyId",
+      "sourceIds"
+    ],
+    "forbiddenReuseFields": [
+      "score",
+      "band",
+      "normalizedAxes",
+      "topDrivers"
+    ]
+  },
+  "records": [],
+  "notes": "Keep empty in V0. Add only annual-specific numeric deviations with ruleId and sourceRefs."
+}
