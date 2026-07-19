@@ -92,6 +92,29 @@ export interface FactSnapshotResult {
  * or unresolved date returns `namPhai: null, trungChau: null` rather than
  * guessing one of several candidate years.
  */
+function buildSnapshotsForSolarDate(
+  solarDate: string,
+  parsed: Pick<ParsedBirthTitle, "hourBranch" | "gender">,
+): { namPhai: HuyenKhiChartFactSnapshot; trungChau: HuyenKhiChartFactSnapshot } {
+  const [yearStr] = solarDate.split("-");
+  const input: BirthInput = {
+    solarDate,
+    birthHour: parsed.hourBranch,
+    gender: parsed.gender,
+    timezone: "7",
+    annualYear: yearStr ?? solarDate.slice(0, 4),
+    flowBase: "luu-nien",
+  };
+
+  const namPhaiChart = calculateNamPhai(input);
+  const trungChauChart = calculateTrungChau(input);
+
+  return {
+    namPhai: buildSnapshotForSchool(namPhaiChart, "nam-phai"),
+    trungChau: buildSnapshotForSchool(trungChauChart, "trung-chau"),
+  };
+}
+
 export function buildHuyenKhiChartFactSnapshots(parsed: ParsedBirthTitle): FactSnapshotResult {
   const resolved = resolveSolarDateForLunar(parsed);
   if (resolved.yearResolution !== "unique") {
@@ -109,22 +132,28 @@ export function buildHuyenKhiChartFactSnapshots(parsed: ParsedBirthTitle): FactS
   }
 
   const solarDate = `${candidate.solarYear}-${pad2(candidate.solarMonth)}-${pad2(candidate.solarDay)}`;
-  const input: BirthInput = {
-    solarDate,
-    birthHour: parsed.hourBranch,
-    gender: parsed.gender,
-    timezone: "7",
-    annualYear: String(candidate.solarYear),
-    flowBase: "luu-nien",
-  };
-
-  const namPhaiChart = calculateNamPhai(input);
-  const trungChauChart = calculateTrungChau(input);
+  const built = buildSnapshotsForSolarDate(solarDate, parsed);
 
   return {
     status: "resolved",
     yearCandidateCount: 1,
-    namPhai: buildSnapshotForSchool(namPhaiChart, "nam-phai"),
-    trungChau: buildSnapshotForSchool(trungChauChart, "trung-chau"),
+    namPhai: built.namPhai,
+    trungChau: built.trungChau,
   };
+}
+
+/**
+ * V0.2 — for a record whose absolute date was confirmed by *external*
+ * evidence (a live calendar-page cross-match via `recover-v01-dates.ts`),
+ * not by `resolveSolarDateForLunar`'s own (possibly ambiguous) search.
+ * Bypasses the ambiguity gate deliberately — the caller is responsible
+ * for having genuinely confirmed the date (see
+ * `research/huyen-khi/v0.2/reports/v01-date-recovery-report.json` for the
+ * evidence behind every date passed here).
+ */
+export function buildHuyenKhiChartFactSnapshotsForConfirmedDate(
+  confirmedSolarDate: string,
+  parsed: Pick<ParsedBirthTitle, "hourBranch" | "gender">,
+): { namPhai: HuyenKhiChartFactSnapshot; trungChau: HuyenKhiChartFactSnapshot } {
+  return buildSnapshotsForSolarDate(confirmedSolarDate, parsed);
 }

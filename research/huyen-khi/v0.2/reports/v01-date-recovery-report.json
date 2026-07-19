@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "0.2.0",
+  "reportId": "huyen-khi-v01-date-recovery-v0-2",
+  "generatedAt": "2026-07-19T16:00:00Z",
+  "method": "For each V0.1 record's candidate absolute years (from resolveSolarDateForLunar), the corresponding calendar day page was fetched live (rate-limited, 1 req/20s per source-access-policy.v0.2.json) and cross-checked on lunar month/day, yin/yang, gender, displayed Mệnh score and displayed whole-chart total. A record is 'recovered' only when all captured fields agree exactly — text stem-branch labels are not trusted alone (see the 1994-05-20 lunar-date edge case in source-access-review.md).",
+  "totalV01Records": 18,
+  "attempted": 2,
+  "notAttemptedThisPass": 16,
+  "notAttemptedReason": "Session fetch budget — each candidate requires a live, rate-limited request; only a small subset was attempted this pass to prove the methodology end-to-end. Tooling (checkV01RecoveryCandidate) is reusable for the remaining 16 in a follow-up pass.",
+  "recovered": [
+    {
+      "sampleId": "HK-PUB-002",
+      "recoveredSolarDate": "1997-02-01",
+      "hourBranch": "Dần",
+      "evidence": "calendar-page-url-and-heading + v01-numeric-cross-match",
+      "matchedFields": ["lunarMonth", "lunarDay", "yinYang", "gender", "displayedWholeChartTotal", "displayedMenhScore"],
+      "verificationTier": "machine-diff-verified",
+      "note": "Two independent WebFetch passes of https://tuvi.cohoc.net/lich-la-so-tu-vi-ngay-1-2-1997.html agreed exactly on all four numeric fields (lunar month 12, lunar day 24, Mệnh 0.25, whole-chart total 7.09) plus gender/yin-yang. This is machine-diff-verified, not human-double-entry-verified — see limitations.md."
+    }
+  ],
+  "ambiguousOrMismatched": [
+    {
+      "sampleId": "HK-PUB-001",
+      "candidateSolarDate": "1994-05-20",
+      "outcome": "mismatch",
+      "mismatchedFields": ["lunarDay", "gender", "displayedWholeChartTotal"],
+      "note": "The live calendar page only exposed the male ('Dương Nam') row for all 12 hours (HK-PUB-001 is 'Dương Nữ'/female), and its own stated lunar day (10) differs from the engine's candidate (11) — a real new-moon-boundary edge case, not a recovery. The other candidate year for this record (1934-05-23) was not attempted this pass."
+    }
+  ],
+  "notAttemptedSampleIds": [
+    "HK-PUB-003", "HK-PUB-004", "HK-PUB-005", "HK-PUB-006", "HK-PUB-007",
+    "HK-PUB-008", "HK-PUB-009", "HK-PUB-010", "HK-PUB-011", "HK-PUB-012",
+    "HK-PUB-013", "HK-PUB-014", "HK-PUB-015", "HK-PUB-016", "HK-PUB-017", "HK-PUB-018"
+  ]
+}

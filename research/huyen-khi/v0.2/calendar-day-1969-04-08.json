@@ -1,0 +1,37 @@
+{
+  "calendarPageUrl": "https://tuvi.cohoc.net/lich-la-so-tu-vi-ngay-8-4-1969.html",
+  "solarDate": "1969-04-08",
+  "lunarDate": {
+    "year": 1969,
+    "yearStemBranch": "Kỷ Dậu",
+    "month": 2,
+    "day": 22,
+    "isLeapMonth": false
+  },
+  "sexShown": "male",
+  "entries": [
+    { "hourBranch": "Tý", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": -3.5, "displayedWholeChartTotal": 6.61, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Sửu", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": 1.5, "displayedWholeChartTotal": 6.6, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Dần", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": -2.34, "displayedWholeChartTotal": -11.14, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Mão", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": -2, "displayedWholeChartTotal": -10.4, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Thìn", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": 2.5, "displayedWholeChartTotal": 7.1, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Tỵ", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": -0.5, "displayedWholeChartTotal": 6.05, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Ngọ", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": 1, "displayedWholeChartTotal": -1.9, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Mùi", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": 0.5, "displayedWholeChartTotal": -2.39, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Thân", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": 1.25, "displayedWholeChartTotal": -4.22, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Dậu", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": 2.5, "displayedWholeChartTotal": -3.82, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Tuất", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": -2.5, "displayedWholeChartTotal": -1.03, "detailLinks": {}, "sourceLid": null },
+    { "hourBranch": "Hợi", "yinYangSexLabel": "Âm Nam", "displayedMenhScore": 0.66, "displayedWholeChartTotal": -0.51, "detailLinks": {}, "sourceLid": null }
+  ],
+  "capturedAt": "2026-07-19T15:50:00Z",
+  "verification": {
+    "firstEntryBy": "claude-webfetch-pass-1",
+    "firstEntryAt": "2026-07-19T15:50:00Z",
+    "secondEntryBy": null,
+    "secondEntryAt": null,
+    "agreement": "pending",
+    "disputeNotes": [
+      "Single-pass extraction only — not independently re-verified. detailLinks omitted: the calendar page's own hyperlinks use a session-specific TokenID query param (confirmed ephemeral-looking, see source-access-review.md); not stored as stable identity."
+    ]
+  }
+}

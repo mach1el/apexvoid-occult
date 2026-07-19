@@ -1,0 +1,35 @@
+{
+  "calendarPageUrl": "https://tuvi.cohoc.net/lich-la-so-tu-vi-ngay-1-2-1997.html",
+  "solarDate": "1997-02-01",
+  "lunarDate": {
+    "year": 1996,
+    "yearStemBranch": null,
+    "month": 12,
+    "day": 24,
+    "isLeapMonth": false
+  },
+  "sexShown": "male",
+  "entries": [
+    {
+      "hourBranch": "Dần",
+      "yinYangSexLabel": "Dương Nam",
+      "displayedMenhScore": 0.25,
+      "displayedWholeChartTotal": 7.09,
+      "detailLinks": {},
+      "sourceLid": null
+    }
+  ],
+  "capturedAt": "2026-07-19T15:53:00Z",
+  "verification": {
+    "firstEntryBy": "claude-webfetch-pass-1",
+    "firstEntryAt": "2026-07-19T15:52:00Z",
+    "secondEntryBy": "claude-webfetch-pass-2-independent",
+    "secondEntryAt": "2026-07-19T15:53:00Z",
+    "agreement": "exact",
+    "disputeNotes": [
+      "Two independent WebFetch calls (separate requests, second call did not reference the first call's extracted values) agreed exactly on hourBranch, yinYangSexLabel, displayedMenhScore, displayedWholeChartTotal, lunar month and lunar day.",
+      "The first pass's summarized year stem-branch label ('Giáp Tuất') was almost certainly a WebFetch extraction error — Giáp Tuất years (1934/1994) are chronologically inconsistent with solar date 1997-02-01 falling in lunar year 1996 (whose correct stem-branch is Bính Tý, matching the search that produced this candidate in the first place). Year stem-branch is therefore recorded as null here rather than trusting either pass's text label; the exact numeric match (month/day/Mệnh/total) is the actual evidence for this recovery, not the text label.",
+      "Only hour Dần was captured in this session (this was a targeted V0.1 date-recovery check, not a full 12-hour panel pull) — the other 11 hours for this date are not yet captured."
+    ]
+  }
+}

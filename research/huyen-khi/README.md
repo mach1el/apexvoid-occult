@@ -41,7 +41,24 @@ records carry (or an operator confirms) an absolute birth year.
 See `limitations.md` for the full list of what's proven vs. hypothesis vs.
 unresolved, and `docs/RESEARCH-MEMO.md` for the original research memo.
 
+## V0.2 — absolute-date gold corpus (real, rate-limited data collection)
+
+`v0.2/` adds thầy-approved, rate-limited (1 req/20s) live collection —
+the first pass in this program with real network access. Key results:
+
+- Recovered **HK-PUB-002**'s absolute date (1997-02-01, hour Dần) via
+  live calendar-page cross-matching, double-verified — this program's
+  **first non-null chart-fact snapshot**.
+- Discovered a hard blocker: detail/result pages render via client-side
+  JS that `WebFetch` cannot execute, so full 12-palace data cannot be
+  collected for *new* records — the 60-gold-record target is not
+  reachable this way. See `v0.2/source-access-review.md` and
+  `limitations.md` for the full findings (including a real ~1-day lunar
+  calendar edge case near month boundaries).
+
 ## Ethics boundary
 
-No automated collection was performed. Production runtime never depends on
-the source site. See `v0.1/extraction-contract.v0.1.json`.
+V0.1 performed no automated collection. V0.2 performs a small, explicitly
+approved, rate-limited amount (see `v0.2/source-access-review.md` and
+`v0.2/source-access-policy.v0.2.json`). Production runtime never depends
+on the source site in either phase. See `v0.1/extraction-contract.v0.1.json`.

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "0.2.0",
+  "policyId": "huyen-khi-source-access-policy-v0-2",
+  "reviewDate": "2026-07-19",
+  "reviewer": "thầy (repository owner) — decision; Claude Sonnet 5 — robots.txt/technical findings",
+  "robotsTxtResult": {
+    "checkedUrl": "https://tuvi.cohoc.net/robots.txt",
+    "blanketDisallow": false,
+    "namedScraperToolsBlocked": true,
+    "crawlDelaySeconds": 20,
+    "disallowedPaths": ["/bin/", "/control/", "/cache/", "gss.xsl"],
+    "sitemap": "https://tuvi.cohoc.net/sitemap.xml"
+  },
+  "termsOfUseResult": {
+    "machineReadableTermsFound": false,
+    "publisherStatedPosition": "Full Huyền Khí theory not public; publisher warns imitation scores may be inaccurate."
+  },
+  "decision": "limited-automation-approved",
+  "rateLimit": {
+    "requestsPerMinute": 3,
+    "minSecondsBetweenRequests": 20,
+    "concurrency": 1
+  },
+  "stopConditions": ["http-403", "http-429", "captcha-page", "robot-processing-interstitial", "explicit-block-page"],
+  "cachingPolicy": "cache-extracted-facts-not-raw-html",
+  "userAgentPolicy": "delegated-to-webfetch-tool-not-independently-configurable-disclosed-limitation",
+  "runtimeDependencyForbidden": true,
+  "liveNetworkInTestsForbidden": true,
+  "knownTechnicalLimitations": [
+    "Detail/result pages (la-so-tu-vi-*.html, including lid-suffixed and TokenID query-param variants) render via client-side JavaScript/AJAX and return only a loading interstitial to a non-JS fetch — full twelve-palace data cannot be collected for new records this way.",
+    "Calendar day pages (lich-la-so-tu-vi-ngay-D-M-YYYY.html) render server-side and do expose real Mệnh score + whole-chart total per hour, but not the other eleven palace scores.",
+    "solarToLunar (this repo's Calculation Core) can disagree with the site's own stated lunar date by up to 1 day near lunar-month boundaries — every resolved date must be cross-verified against the site's own calendar page, not trusted from the engine alone."
+  ]
+}
