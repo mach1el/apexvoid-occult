@@ -5,6 +5,7 @@ import {
   loadAnnualAxesKnowledgeV04NamPhai,
   type AnnualAxesKnowledgeV04NamPhai,
 } from "../../../knowledge/annual-axes/v0.4";
+import { loadAnnualAxesKnowledgeV042NamPhai } from "../../../knowledge/annual-axes/v0.4.2";
 import { buildAnnualFocusFrame } from "../build-annual-focus-frame";
 import { resolveAnnualFocus } from "../resolvers/resolve-annual-focus";
 import { dedupeAnnualAxesDiagnostics, emptyAnnualAxesDiagnostics } from "../diagnostics";
@@ -23,7 +24,7 @@ import { normalizeAnnualDeltaV04 } from "./normalize-delta";
 import { computeDomainRoutingsV04 } from "./routing";
 
 const CONTRACT_VERSION = "0.4.0";
-const ENGINE_VERSION = "0.4.0";
+const ENGINE_VERSION = "0.4.2";
 const TOP_DRIVER_COUNT = 3;
 
 function topDrivers(
@@ -98,6 +99,15 @@ export function analyzeAnnualAxesNamPhaiV04(chart: ChartData): AnnualAxesResult 
     return invalidKnowledgeResult(chart.annualYear, diagnostics, "unavailable");
   }
   const knowledge: AnnualAxesKnowledgeV04NamPhai = knowledgeResult.knowledge;
+
+  const knowledge042Result = loadAnnualAxesKnowledgeV042NamPhai();
+  if (!knowledge042Result.ok) {
+    for (const issue of knowledge042Result.issues) {
+      diagnostics.invalidKnowledge.push(`v0.4.2:${issue.path}: ${issue.message}`);
+    }
+    return invalidKnowledgeResult(chart.annualYear, diagnostics, "unavailable");
+  }
+  const knowledge042 = knowledge042Result.knowledge;
 
   const numericResult = loadPalaceOverviewKnowledgeV1();
   if (!numericResult.ok) {
@@ -175,6 +185,7 @@ export function analyzeAnnualAxesNamPhaiV04(chart: ChartData): AnnualAxesResult 
       chart,
       domain,
       knowledge,
+      knowledge042,
       numericKnowledge,
       headFrame,
       routing,

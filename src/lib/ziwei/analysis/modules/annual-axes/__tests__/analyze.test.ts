@@ -123,7 +123,7 @@ describe("analyzeAnnualAxes — Nam Phái V0.4 annual-delta", () => {
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
 
     expect(result.status).not.toBe("unavailable");
-    expect(result.versions.engineVersion).toBe("0.4.0");
+    expect(result.versions.engineVersion).toBe("0.4.2");
     expect(result.capabilities.domainAnchorCoordinate).toBe("natal-palace-name");
     expect(result.capabilities.domainAnchorProvenance).toBe("nam-phai-natal-domain-anchor");
     expect(result.capabilities.primaryAnnualFocus).toBe("annual-major-fortune");

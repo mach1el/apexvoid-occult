@@ -63,11 +63,22 @@ export interface AnnualAxisEvidence {
   localShare?: number;
   /** V0.4 — annual triggers that activated this natal-derived fact. */
   annualTriggerIds?: string[];
-  /** V0.4 — domain affinity weight applied to this evidence. */
+  /** V0.4 — domain affinity weight applied to this evidence.
+   * @deprecated V0.4.2 replaced affinity-as-eligibility with physical
+   * palace ownership (`ownershipWeight` below) — no longer populated by
+   * `nam-phai-v04/collect-evidence.ts`. */
   affinityWeight?: number;
-  /** V0.4.1 — provenance of the affinity value above (§3 ResolvedDomainAffinity). */
+  /** @deprecated see `affinityWeight`. */
   affinitySource?: "exact-star" | "star-family" | "transformation" | "moving-marker";
+  /** @deprecated see `affinityWeight`. */
   affinityRecordId?: string;
+  /** V0.4.2 — exact physical target palace's ownership weight for this
+   * domain (1.0 primary / ≤0.4 secondary, from the strict physical
+   * domain-ownership catalog). This, not star/Tứ Hóa identity, is what
+   * made the fact eligible for this domain. */
+  ownershipWeight?: number;
+  ownershipRole?: "primary" | "secondary";
+  ownershipRecordId?: string;
   /** V0.4 — activation paths after channel assignment. V0.4.1: each path
    * carries its own independent `boundedPathWeight` (no cross-channel
    * combine-then-split; see §6). */
@@ -83,35 +94,51 @@ export type AnnualEvidenceChannel =
 export interface AnnualEvidenceActivationPath {
   triggerId: string;
   channel: AnnualEvidenceChannel;
+  /** Temporal channel geometry — head-role weight for routed-head, 1 for
+   * direct-domain/major-background/global (no head-routing involved). */
   geometryWeight: number;
+  /** V0.4.1: semantic star/transformation affinity value. V0.4.2: exact
+   * physical target palace's ownership weight for this domain (the field
+   * name is kept for shape stability; the value's *source* changed from
+   * affinity to physical ownership — see `AnnualAxisEvidence.ownershipWeight`
+   * for the same value with clearer naming at the evidence level). */
   affinityWeight: number;
   effectivePathWeight: number;
-  /** V0.4.1 — the weight actually applied to this path's channel
-   * contribution, computed independently of any other path on the same
-   * physical fact (`min(1, geometryWeight * affinityWeight)`). */
+  /** The weight actually applied to this path's channel contribution,
+   * computed independently of any other path on the same physical fact
+   * (`min(1, geometryWeight * affinityWeight)`). */
   boundedPathWeight: number;
 }
 
-/** V0.4.1 — Nam Phái evidence-collection instrumentation for one domain.
+/** V0.4.2 — Nam Phái evidence-collection instrumentation for one domain.
  * Audit/debug only; cheap plain counters accumulated during the existing
- * collection loop (no extra pass over the chart). */
+ * collection loop (no extra pass over the chart). Field names reflect the
+ * V0.4.2 strict physical-ownership eligibility model (superseded the
+ * V0.4.1 semantic-affinity model — no runtime behavior change to these
+ * counters' consumers, only what they measure). */
 export interface NamPhaiV041CollectStats {
   candidateFacts: number;
   numericFacts: number;
   contextOnlyFacts: number;
   droppedByReason: {
     noAnnualTrigger: number;
-    noAffinity: number;
-    zeroAffinity: number;
-    noLocalDomainRelevance: number;
-    noEnabledGlobalRule: number;
+    /** Fact's exact physical palace has no ownership record at all
+     * (should be unreachable — the catalog covers all 12 palaces; kept
+     * as a fail-safe counter). */
+    noOwnershipRecord: number;
+    /** Ownership record exists for the palace, but it does not include
+     * this domain — the core §1 eligibility gate. */
+    domainNotOwned: number;
+    /** Ownership resolved and positive, trigger fired, but no channel
+     * path was eligible (e.g. outside head frame, no major-fortune
+     * context) — should be rare. */
+    noPathEligible: number;
     duplicatePhysicalFact: number;
   };
-  affinityResolution: {
-    exactStar: number;
-    starFamily: number;
-    transformation: number;
-    unmapped: number;
+  ownershipResolution: {
+    primary: number;
+    secondary: number;
+    noRecord: number;
   };
 }
 

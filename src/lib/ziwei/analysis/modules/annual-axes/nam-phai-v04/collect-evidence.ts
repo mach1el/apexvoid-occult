@@ -3,6 +3,7 @@ import { canonicalStarName } from "../../../facts";
 import type { PalaceOverviewKnowledgeV1 } from "../../../knowledge";
 import type { AnnualAxisDomain } from "../../../contracts/annual-axes";
 import type { AnnualAxesKnowledgeV04NamPhai } from "../../../knowledge/annual-axes/v0.4";
+import type { AnnualAxesKnowledgeV042NamPhai } from "../../../knowledge/annual-axes/v0.4.2";
 import mutagenImpactCatalog from "../../../knowledge/annual-axes/annual-mutagen-impact.v0.json";
 import type { AnnualFocusFrame } from "../build-annual-focus-frame";
 import type {
@@ -12,16 +13,10 @@ import type {
   AnnualAxisRawAxes,
   AnnualAxesDiagnostics,
   AnnualEvidenceActivationPath,
-  AnnualEvidenceChannel,
   NamPhaiV041CollectStats,
 } from "../types";
-import { resolveDomainAffinity, type ResolvedDomainAffinity } from "./affinity";
-import {
-  buildNamePalaceIndex,
-  domainFrameCoverage,
-  relationRole,
-  type DomainRoutingV04,
-} from "./routing";
+import { resolveOwnership, type ResolvedOwnership } from "./ownership";
+import { relationRole, type DomainRoutingV04 } from "./routing";
 
 const ARCH_SOURCE_ID = "SRC-AA-ENG-004";
 const ANNUAL_STAR_SOURCES = new Set(["annual"]);
@@ -118,44 +113,6 @@ function headFrameIndexes(headFrame: AnnualFocusFrame): Set<number> {
   return new Set(headFrame.nodes.map((n) => n.palaceIndex));
 }
 
-function domainLocalIndexes(
-  chart: ChartData,
-  knowledge: AnnualAxesKnowledgeV04NamPhai,
-  domain: AnnualAxisDomain,
-): Set<number> {
-  return new Set(domainFrameCoverage(chart, knowledge, domain).physicalPalaceIndexes);
-}
-
-function localGeometryWeight(
-  chart: ChartData,
-  knowledge: AnnualAxesKnowledgeV04NamPhai,
-  domain: AnnualAxisDomain,
-  targetPalaceIndex: number,
-): { weight: number; bestAnchorName: string | null; bestRole: AnnualAxisFrameRole | "outside" } {
-  const nameToIndex = buildNamePalaceIndex(chart);
-  const domainDefinition = knowledge.axisDefinitions.domains.find((d) => d.domain === domain);
-  if (!domainDefinition) return { weight: 0, bestAnchorName: null, bestRole: "outside" };
-
-  // Local role weights mirror head-frame role weights from the channel profile
-  // (V0.4 does not ship a separate local weight table).
-  const roleWeights = knowledge.channelProfile.routing.headFrameRoleWeights;
-  let best = 0;
-  let bestName: string | null = null;
-  let bestRole: AnnualAxisFrameRole | "outside" = "outside";
-  for (const anchor of domainDefinition.anchors) {
-    const anchorIndex = nameToIndex.get(anchor.palaceName);
-    if (anchorIndex === undefined) continue;
-    const role = relationRole(anchorIndex, targetPalaceIndex);
-    const weight = anchor.weight * roleWeights[role];
-    if (weight > best) {
-      best = weight;
-      bestName = anchor.palaceName;
-      bestRole = role === "outside" ? "outside" : (role as AnnualAxisFrameRole);
-    }
-  }
-  return { weight: best, bestAnchorName: bestName, bestRole };
-}
-
 interface CandidateFact {
   physicalFactId: string;
   category: AnnualAxisEvidence["category"];
@@ -170,12 +127,32 @@ interface CandidateFact {
   canonicalStarName?: string;
   familyId?: string;
   mutagen?: "Lộc" | "Quyền" | "Khoa" | "Kỵ";
+  starClass?: "major" | "minor";
+}
+
+/**
+ * §2 subject modifier — may only scale an already physically eligible
+ * domain, never create eligibility. Mutagens and major stars default to
+ * 1; minor stars default to 0 (see `annual-subject-modifiers.v0.4.2.json`
+ * for the rationale — without this, strict physical ownership alone lets
+ * every minor star sharing an owned/triggered palace flood each domain).
+ */
+function resolveSubjectModifier(
+  knowledge042: AnnualAxesKnowledgeV042NamPhai,
+  fact: CandidateFact,
+): number {
+  const m = knowledge042.subjectModifiers.categoryModifiers;
+  if (fact.category === "mutagen") return m.mutagen;
+  if (fact.starClass === "minor") return m.minorStar;
+  if (fact.starClass === "major") return m.majorStar;
+  return knowledge042.subjectModifiers.defaultModifier;
 }
 
 interface CollectInput {
   chart: ChartData;
   domain: AnnualAxisDomain;
   knowledge: AnnualAxesKnowledgeV04NamPhai;
+  knowledge042: AnnualAxesKnowledgeV042NamPhai;
   numericKnowledge: PalaceOverviewKnowledgeV1;
   headFrame: AnnualFocusFrame;
   routing: DomainRoutingV04;
@@ -194,159 +171,149 @@ function emptyStats(): NamPhaiV041CollectStats {
     contextOnlyFacts: 0,
     droppedByReason: {
       noAnnualTrigger: 0,
-      noAffinity: 0,
-      zeroAffinity: 0,
-      noLocalDomainRelevance: 0,
-      noEnabledGlobalRule: 0,
+      noOwnershipRecord: 0,
+      domainNotOwned: 0,
+      noPathEligible: 0,
       duplicatePhysicalFact: 0,
     },
-    affinityResolution: {
-      exactStar: 0,
-      starFamily: 0,
-      transformation: 0,
-      unmapped: 0,
+    ownershipResolution: {
+      primary: 0,
+      secondary: 0,
+      noRecord: 0,
     },
   };
 }
 
 /**
- * §2 direct-domain contract. Requires physical local-domain geometry > 0
- * AND an eligible annual trigger AND positive domain affinity. Annual
- * origin alone is never sufficient — this is the fix for the removed
- * `fact.origin.startsWith("annual") ? 1 : 0` bypass.
+ * V0.4.2 §5 direct-domain contract: an enabled annual trigger + the exact
+ * physical target palace's positive ownership of this domain. No TP4C
+ * geometry, no "annual origin ⇒ geometry 1" bypass — `temporalGeometryWeight`
+ * is always 1 here (the annual layer directly targeted this palace; no
+ * head-routing attenuation applies).
  */
 function resolveDirectDomainPath(
   triggerIds: string[],
-  localWeight: number,
-  affinity: ResolvedDomainAffinity,
+  ownership: ResolvedOwnership,
 ): AnnualEvidenceActivationPath | null {
-  if (localWeight <= 0) return null;
   const triggerId = triggerIds.find(
-    (t) =>
-      t === "annual-transformation-exact-target" ||
-      t === "annual-moving-star-palace" ||
-      t === "head-domain-frame-intersection",
+    (t) => t === "annual-transformation-exact-target" || t === "annual-moving-star-palace",
   );
   if (!triggerId) return null;
-  if (affinity.value <= 0) return null;
-  const effectivePathWeight = localWeight * affinity.value;
+  if (ownership.value <= 0) return null;
+  const effectivePathWeight = 1 * ownership.value;
   return {
     triggerId,
     channel: "direct-domain",
-    geometryWeight: localWeight,
-    affinityWeight: affinity.value,
+    geometryWeight: 1,
+    affinityWeight: ownership.value,
     effectivePathWeight,
     boundedPathWeight: Math.min(1, effectivePathWeight),
   };
 }
 
 /**
- * §4 routed-head contract. Requires physical head geometry > 0 AND domain
- * routing > 0 AND an eligible annual trigger AND positive domain affinity.
- * `routedStrength` (domain-routing attenuation) is applied exactly once,
- * later, at `normalize-delta.ts` channel weighting — not here (§5).
+ * V0.4.2 §4 routed-head contract: physical head-role geometry × the exact
+ * physical target palace's ownership of this domain. A fact at one
+ * head-frame palace fans out only to the (≤2) numeric domains owned by
+ * that exact palace — no additional broad domain-routing multiplier (§4:
+ * "do not additionally multiply this fact by a broad domain routing
+ * value"). The head ownership multiplier is applied exactly once, here.
  */
 function resolveRoutedHeadPath(
   triggerIds: string[],
   headGeometry: number,
   domainRouting: number,
-  affinity: ResolvedDomainAffinity,
+  ownership: ResolvedOwnership,
 ): AnnualEvidenceActivationPath | null {
   if (headGeometry <= 0) return null;
+  // Domain routing remains an eligibility *gate* (kept from V0.4.1) — not
+  // a multiplier (§4 forbids multiplying by a broad domain-routing value;
+  // it does not forbid using it to gate whether this domain's routed-head
+  // channel is reachable this year at all).
   if (domainRouting <= 0) return null;
-  const triggerId = triggerIds.find(
-    (t) => t === "annual-head-tp4c" || t === "head-domain-frame-intersection",
-  );
+  const triggerId = triggerIds.find((t) => t === "annual-head-tp4c");
   if (!triggerId) return null;
-  if (affinity.value <= 0) return null;
-  const effectivePathWeight = headGeometry * affinity.value;
+  if (ownership.value <= 0) return null;
+  const effectivePathWeight = headGeometry * ownership.value;
   return {
     triggerId,
     channel: "routed-head",
     geometryWeight: headGeometry,
-    affinityWeight: affinity.value,
+    affinityWeight: ownership.value,
     effectivePathWeight,
     boundedPathWeight: Math.min(1, effectivePathWeight),
   };
 }
 
 /**
- * §2 global contract. An annual-origin fact outside local domain geometry
- * may enter `global` only when explicitly listed in
- * `channelProfile.globalEligibility.annualMovingStarMarkerIds`. The catalog
- * is empty by default — empty catalog means zero global evidence, never a
- * silent promotion of rejected direct-domain evidence.
+ * V0.4.2 §6 global contract: default OFF. Only a subject explicitly listed
+ * in `globalPolicy.enabledGlobalSubjects` may enter `global`; the list is
+ * empty by default, so this always returns null — no rejected direct/
+ * routed evidence is ever implicitly promoted to global.
  */
 function resolveGlobalPath(
   fact: CandidateFact,
-  knowledge: AnnualAxesKnowledgeV04NamPhai,
-  affinity: ResolvedDomainAffinity,
+  knowledge042: AnnualAxesKnowledgeV042NamPhai,
+  ownership: ResolvedOwnership,
 ): AnnualEvidenceActivationPath | null {
-  const markerIds = knowledge.channelProfile.globalEligibility.annualMovingStarMarkerIds;
-  if (markerIds.length === 0) return null;
-  const markerId =
+  const subjects = knowledge042.globalPolicy.enabledGlobalSubjects;
+  if (subjects.length === 0) return null;
+  const subjectId =
     fact.category === "mutagen" ? `mutagen:${fact.mutagen}` : `star:${fact.canonicalStarName}`;
-  if (!markerIds.includes(markerId)) return null;
-  if (affinity.value <= 0) return null;
-  const effectivePathWeight = affinity.value;
+  if (!subjects.includes(subjectId)) return null;
+  if (ownership.value <= 0) return null;
+  const effectivePathWeight = ownership.value;
   return {
     triggerId: "global-eligibility",
     channel: "global",
     geometryWeight: 1,
-    affinityWeight: affinity.value,
+    affinityWeight: ownership.value,
     effectivePathWeight,
     boundedPathWeight: Math.min(1, effectivePathWeight),
   };
 }
 
 /**
- * Major-fortune background: major-mutagen origin always qualifies
- * (`major-fortune-context` trigger); a natal-derived fact that already
- * cleared a natal trigger and happens to sit in the active Major Fortune
- * palace (`layer === "major-fortune"`) also qualifies — unchanged from the
- * pre-V0.4.1 behavior, not one of the identified defects.
+ * V0.4.2 §7 Major Fortune background: major context coefficient (0.55,
+ * unchanged temporal-channel coefficient) × the exact physical Major
+ * Fortune target palace's ownership of this domain — never broadcast to
+ * all six domains.
  */
 function resolveMajorBackgroundPath(
   triggerIds: string[],
   inMajor: boolean,
   layer: AnnualAxisEvidenceLayer,
-  affinity: ResolvedDomainAffinity,
+  ownership: ResolvedOwnership,
 ): AnnualEvidenceActivationPath | null {
   const eligible = triggerIds.includes("major-fortune-context") || (inMajor && layer === "major-fortune");
   if (!eligible) return null;
-  if (affinity.value <= 0) return null;
+  if (ownership.value <= 0) return null;
   const geometryWeight = 0.55;
-  const effectivePathWeight = geometryWeight * affinity.value;
+  const effectivePathWeight = geometryWeight * ownership.value;
   return {
     triggerId: "major-fortune-context",
     channel: "major-background",
     geometryWeight,
-    affinityWeight: affinity.value,
+    affinityWeight: ownership.value,
     effectivePathWeight,
     boundedPathWeight: Math.min(1, effectivePathWeight),
   };
 }
 
 /**
- * Collect V0.4.1 triggered annual evidence. Natal physical stars contribute
- * numeric support/pressure only when at least one enabled annual trigger
- * applies AND the resolved domain affinity is positive. Each activation
- * path (§4/§6) carries its own independent `boundedPathWeight` — channels
- * are no longer combined into one blended weight and split back out.
+ * Collect V0.4.2 triggered annual evidence. Domain eligibility is decided
+ * exclusively by the exact physical target palace's ownership record
+ * (see `ownership.ts`) — star/Tứ Hóa knowledge only shapes polarity
+ * (rawAxes), never which domain(s) a fact may affect. The retired broad
+ * multi-anchor domain-TP4C-union and star/transformation affinity models
+ * are not referenced in this file anymore.
  */
 export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): CollectEvidenceResultV041 {
-  const { chart, domain, knowledge, numericKnowledge, headFrame, routing, diagnostics } = input;
+  const { chart, domain, knowledge, knowledge042, numericKnowledge, headFrame, routing, diagnostics } =
+    input;
   const stats = emptyStats();
 
-  const coverage = domainFrameCoverage(chart, knowledge, domain);
-  if (coverage.uniquePhysicalPalaceCount >= 11) {
-    diagnostics.domainFrameOvercoverage.push(
-      `${domain}:palaces=${coverage.uniquePhysicalPalaceCount}`,
-    );
-  }
-
   const headIndexes = headFrameIndexes(headFrame);
-  const localIndexes = domainLocalIndexes(chart, knowledge, domain);
   const annualStarPalaceIndexes = new Set(
     (chart.annualStars ?? []).map((s) => s.palace.index),
   );
@@ -390,6 +357,7 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
         origin: "natal-star",
         canonicalStarName: canonical,
         familyId: res.familyId,
+        starClass: res.starClass,
       });
     }
   }
@@ -411,6 +379,7 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
       origin: "annual-star",
       canonicalStarName: canonical,
       familyId: res.familyId,
+      starClass: res.starClass,
     });
   }
 
@@ -458,7 +427,6 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
     const triggerIds: string[] = [];
     const idx = fact.targetPalace.index;
     const inHead = headIndexes.has(idx);
-    const inLocal = localIndexes.has(idx);
     const inMajor =
       chart.majorFortunePalace != null && chart.majorFortunePalace.index === idx;
 
@@ -479,13 +447,11 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
       ) {
         triggerIds.push("annual-moving-star-palace");
       }
-      if (
-        isTriggerEnabled(knowledge, "head-domain-frame-intersection") &&
-        inHead &&
-        inLocal
-      ) {
-        triggerIds.push("head-domain-frame-intersection");
-      }
+      // V0.4.2: "head-domain-frame-intersection" is retired — it depended
+      // on the broad multi-anchor domain TP4C union, which no longer
+      // decides numeric eligibility (§3). A head-frame fact is routed via
+      // "annual-head-tp4c" alone; a same-palace annual-layer hit is routed
+      // via "annual-moving-star-palace"/"annual-transformation-exact-target".
 
       if (triggerIds.length === 0) {
         // Natal without trigger: sensitivity-only — skip numeric evidence.
@@ -510,58 +476,61 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
       continue;
     }
 
-    const affinity =
-      fact.category === "mutagen" && fact.mutagen
-        ? resolveDomainAffinity(knowledge, domain, {
-            kind: "transformation",
-            transformation: fact.mutagen,
-          })
-        : resolveDomainAffinity(knowledge, domain, {
-            kind: "star",
-            canonicalStarName: fact.canonicalStarName ?? "",
-            familyId: fact.familyId,
-          });
-
-    if (affinity == null) {
-      // Context-only: no exact/family/transformation mapping. Never falls
-      // back to a numeric default (§3).
+    // §1 core eligibility gate: the exact physical target palace's
+    // ownership record — never star/transformation identity — decides
+    // which domain(s) this fact may numerically affect.
+    const ownership = resolveOwnership(knowledge042, fact.targetPalace.name, domain);
+    if (ownership == null) {
+      const hasAnyRecord = knowledge042.ownership.records.some(
+        (r) => r.palaceName === fact.targetPalace.name,
+      );
+      if (hasAnyRecord) {
+        stats.droppedByReason.domainNotOwned += 1;
+      } else {
+        stats.droppedByReason.noOwnershipRecord += 1;
+        stats.ownershipResolution.noRecord += 1;
+      }
       stats.contextOnlyFacts += 1;
-      stats.droppedByReason.noAffinity += 1;
-      stats.affinityResolution.unmapped += 1;
       continue;
     }
-    if (affinity.source === "exact-star") stats.affinityResolution.exactStar += 1;
-    else if (affinity.source === "star-family") stats.affinityResolution.starFamily += 1;
-    else if (affinity.source === "transformation") stats.affinityResolution.transformation += 1;
+    if (ownership.role === "primary") stats.ownershipResolution.primary += 1;
+    else stats.ownershipResolution.secondary += 1;
 
-    if (affinity.value <= 0) {
-      // Mapped, but this record explicitly assigns zero relevance to this
-      // domain — distinct from "unmapped"; still produces no numeric path.
-      stats.droppedByReason.zeroAffinity += 1;
+    if (ownership.value <= 0) {
+      stats.droppedByReason.domainNotOwned += 1;
+      continue;
+    }
+
+    // §2 subject modifier — scales an already-eligible domain, never
+    // creates eligibility (applied to the ownership value once, here;
+    // every path below reads this single scaled value).
+    const subjectModifier = resolveSubjectModifier(knowledge042, fact);
+    const scaledOwnership: ResolvedOwnership = { ...ownership, value: ownership.value * subjectModifier };
+    if (scaledOwnership.value <= 0) {
+      stats.droppedByReason.domainNotOwned += 1;
       continue;
     }
 
     const headRole = relationRole(headFrame.focusPalaceIndex, idx);
     const headGeometry = knowledge.channelProfile.routing.headFrameRoleWeights[headRole];
-    const local = localGeometryWeight(chart, knowledge, domain, idx);
 
     const activationPaths: AnnualEvidenceActivationPath[] = [];
-    const direct = resolveDirectDomainPath(triggerIds, local.weight, affinity);
+    const direct = resolveDirectDomainPath(triggerIds, scaledOwnership);
     if (direct) activationPaths.push(direct);
-    const routed = resolveRoutedHeadPath(triggerIds, headGeometry, routing.routing, affinity);
+    const routed = resolveRoutedHeadPath(triggerIds, headGeometry, routing.routing, scaledOwnership);
     if (routed) activationPaths.push(routed);
-    const global = resolveGlobalPath(fact, knowledge, affinity);
+    const global = resolveGlobalPath(fact, knowledge042, scaledOwnership);
     if (global) activationPaths.push(global);
     const majorBackground = resolveMajorBackgroundPath(
       triggerIds,
       inMajor,
       fact.layer,
-      affinity,
+      scaledOwnership,
     );
     if (majorBackground) activationPaths.push(majorBackground);
 
     if (activationPaths.length === 0) {
-      stats.droppedByReason.noLocalDomainRelevance += 1;
+      stats.droppedByReason.noPathEligible += 1;
       continue;
     }
 
@@ -573,7 +542,7 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
     );
     // Display/sort-only aggregate (topDrivers, evidence list) — channel
     // math below reads `rawAxes` + `activationPaths` + `confidenceWeight`
-    // directly, not this blended value (§6).
+    // directly, not this blended value.
     const effectiveWeight = strongestPath.boundedPathWeight * confidenceWeight;
 
     const weightedAxes: AnnualAxisRawAxes = {
@@ -583,12 +552,10 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
       activation: fact.rawAxes.activation * effectiveWeight,
     };
 
-    const frameRole: AnnualAxisFrameRole =
-      local.bestRole !== "outside"
-        ? (local.bestRole as AnnualAxisFrameRole)
-        : headRole === "outside"
-          ? "focus"
-          : (headRole as AnnualAxisFrameRole);
+    // The exact physical palace is its own "anchor" under strict routing —
+    // there is no domain-anchor TP4C role anymore. `frameRole` falls back
+    // to the fact's role relative to the annual head when meaningful.
+    const frameRole: AnnualAxisFrameRole = headRole === "outside" ? "focus" : (headRole as AnnualAxisFrameRole);
 
     out.push({
       id: `ann-axis:${domain}:${fact.layer}:${fact.category}:${fact.physicalFactId}`,
@@ -601,7 +568,7 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
       targetPalaceName: fact.targetPalace.name,
       targetAnnualPalaceName: fact.targetPalace.annualPalaceName ?? null,
       frameRole,
-      anchorPalaceName: local.bestAnchorName ?? "annual-head",
+      anchorPalaceName: fact.targetPalace.name,
       stackingGroup: fact.stackingGroup,
       rawAxes: fact.rawAxes,
       effectiveWeight,
@@ -614,9 +581,9 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): Collect
       headShare: routing.headShare,
       localShare: routing.localShare,
       annualTriggerIds: [...new Set(triggerIds)],
-      affinityWeight: affinity.value,
-      affinitySource: affinity.source,
-      affinityRecordId: affinity.recordId,
+      ownershipWeight: ownership.value,
+      ownershipRole: ownership.role,
+      ownershipRecordId: ownership.recordId,
       activationPaths,
     } satisfies AnnualAxisEvidence);
   }
