@@ -13,8 +13,9 @@ import type {
   AnnualAxesDiagnostics,
   AnnualEvidenceActivationPath,
   AnnualEvidenceChannel,
+  NamPhaiV041CollectStats,
 } from "../types";
-import { resolveDomainAffinity } from "./affinity";
+import { resolveDomainAffinity, type ResolvedDomainAffinity } from "./affinity";
 import {
   buildNamePalaceIndex,
   domainFrameCoverage,
@@ -155,22 +156,6 @@ function localGeometryWeight(
   return { weight: best, bestAnchorName: bestName, bestRole };
 }
 
-function combinePathWeights(
-  paths: AnnualEvidenceActivationPath[],
-  knowledge: AnnualAxesKnowledgeV04NamPhai,
-): number {
-  if (paths.length === 0) return 0;
-  const sorted = [...paths].sort((a, b) => b.effectivePathWeight - a.effectivePathWeight);
-  const maxCounted = knowledge.channelProfile.pathCombination.maxPathsCounted;
-  const discount = knowledge.channelProfile.pathCombination.restDiscount;
-  const limited = sorted.slice(0, maxCounted);
-  let total = limited[0]?.effectivePathWeight ?? 0;
-  for (let i = 1; i < limited.length; i += 1) {
-    total += (limited[i]?.effectivePathWeight ?? 0) * discount;
-  }
-  return total;
-}
-
 interface CandidateFact {
   physicalFactId: string;
   category: AnnualAxisEvidence["category"];
@@ -197,14 +182,161 @@ interface CollectInput {
   diagnostics: AnnualAxesDiagnostics;
 }
 
+export interface CollectEvidenceResultV041 {
+  evidence: AnnualAxisEvidence[];
+  stats: NamPhaiV041CollectStats;
+}
+
+function emptyStats(): NamPhaiV041CollectStats {
+  return {
+    candidateFacts: 0,
+    numericFacts: 0,
+    contextOnlyFacts: 0,
+    droppedByReason: {
+      noAnnualTrigger: 0,
+      noAffinity: 0,
+      zeroAffinity: 0,
+      noLocalDomainRelevance: 0,
+      noEnabledGlobalRule: 0,
+      duplicatePhysicalFact: 0,
+    },
+    affinityResolution: {
+      exactStar: 0,
+      starFamily: 0,
+      transformation: 0,
+      unmapped: 0,
+    },
+  };
+}
+
 /**
- * Collect V0.4 triggered annual evidence. Natal physical stars contribute
- * numeric support/pressure only when at least one enabled annual trigger
- * applies. Affinity is applied per domain; multiple activation paths are
- * combined via the versioned path-combination policy.
+ * §2 direct-domain contract. Requires physical local-domain geometry > 0
+ * AND an eligible annual trigger AND positive domain affinity. Annual
+ * origin alone is never sufficient — this is the fix for the removed
+ * `fact.origin.startsWith("annual") ? 1 : 0` bypass.
  */
-export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): AnnualAxisEvidence[] {
+function resolveDirectDomainPath(
+  triggerIds: string[],
+  localWeight: number,
+  affinity: ResolvedDomainAffinity,
+): AnnualEvidenceActivationPath | null {
+  if (localWeight <= 0) return null;
+  const triggerId = triggerIds.find(
+    (t) =>
+      t === "annual-transformation-exact-target" ||
+      t === "annual-moving-star-palace" ||
+      t === "head-domain-frame-intersection",
+  );
+  if (!triggerId) return null;
+  if (affinity.value <= 0) return null;
+  const effectivePathWeight = localWeight * affinity.value;
+  return {
+    triggerId,
+    channel: "direct-domain",
+    geometryWeight: localWeight,
+    affinityWeight: affinity.value,
+    effectivePathWeight,
+    boundedPathWeight: Math.min(1, effectivePathWeight),
+  };
+}
+
+/**
+ * §4 routed-head contract. Requires physical head geometry > 0 AND domain
+ * routing > 0 AND an eligible annual trigger AND positive domain affinity.
+ * `routedStrength` (domain-routing attenuation) is applied exactly once,
+ * later, at `normalize-delta.ts` channel weighting — not here (§5).
+ */
+function resolveRoutedHeadPath(
+  triggerIds: string[],
+  headGeometry: number,
+  domainRouting: number,
+  affinity: ResolvedDomainAffinity,
+): AnnualEvidenceActivationPath | null {
+  if (headGeometry <= 0) return null;
+  if (domainRouting <= 0) return null;
+  const triggerId = triggerIds.find(
+    (t) => t === "annual-head-tp4c" || t === "head-domain-frame-intersection",
+  );
+  if (!triggerId) return null;
+  if (affinity.value <= 0) return null;
+  const effectivePathWeight = headGeometry * affinity.value;
+  return {
+    triggerId,
+    channel: "routed-head",
+    geometryWeight: headGeometry,
+    affinityWeight: affinity.value,
+    effectivePathWeight,
+    boundedPathWeight: Math.min(1, effectivePathWeight),
+  };
+}
+
+/**
+ * §2 global contract. An annual-origin fact outside local domain geometry
+ * may enter `global` only when explicitly listed in
+ * `channelProfile.globalEligibility.annualMovingStarMarkerIds`. The catalog
+ * is empty by default — empty catalog means zero global evidence, never a
+ * silent promotion of rejected direct-domain evidence.
+ */
+function resolveGlobalPath(
+  fact: CandidateFact,
+  knowledge: AnnualAxesKnowledgeV04NamPhai,
+  affinity: ResolvedDomainAffinity,
+): AnnualEvidenceActivationPath | null {
+  const markerIds = knowledge.channelProfile.globalEligibility.annualMovingStarMarkerIds;
+  if (markerIds.length === 0) return null;
+  const markerId =
+    fact.category === "mutagen" ? `mutagen:${fact.mutagen}` : `star:${fact.canonicalStarName}`;
+  if (!markerIds.includes(markerId)) return null;
+  if (affinity.value <= 0) return null;
+  const effectivePathWeight = affinity.value;
+  return {
+    triggerId: "global-eligibility",
+    channel: "global",
+    geometryWeight: 1,
+    affinityWeight: affinity.value,
+    effectivePathWeight,
+    boundedPathWeight: Math.min(1, effectivePathWeight),
+  };
+}
+
+/**
+ * Major-fortune background: major-mutagen origin always qualifies
+ * (`major-fortune-context` trigger); a natal-derived fact that already
+ * cleared a natal trigger and happens to sit in the active Major Fortune
+ * palace (`layer === "major-fortune"`) also qualifies — unchanged from the
+ * pre-V0.4.1 behavior, not one of the identified defects.
+ */
+function resolveMajorBackgroundPath(
+  triggerIds: string[],
+  inMajor: boolean,
+  layer: AnnualAxisEvidenceLayer,
+  affinity: ResolvedDomainAffinity,
+): AnnualEvidenceActivationPath | null {
+  const eligible = triggerIds.includes("major-fortune-context") || (inMajor && layer === "major-fortune");
+  if (!eligible) return null;
+  if (affinity.value <= 0) return null;
+  const geometryWeight = 0.55;
+  const effectivePathWeight = geometryWeight * affinity.value;
+  return {
+    triggerId: "major-fortune-context",
+    channel: "major-background",
+    geometryWeight,
+    affinityWeight: affinity.value,
+    effectivePathWeight,
+    boundedPathWeight: Math.min(1, effectivePathWeight),
+  };
+}
+
+/**
+ * Collect V0.4.1 triggered annual evidence. Natal physical stars contribute
+ * numeric support/pressure only when at least one enabled annual trigger
+ * applies AND the resolved domain affinity is positive. Each activation
+ * path (§4/§6) carries its own independent `boundedPathWeight` — channels
+ * are no longer combined into one blended weight and split back out.
+ */
+export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): CollectEvidenceResultV041 {
   const { chart, domain, knowledge, numericKnowledge, headFrame, routing, diagnostics } = input;
+  const stats = emptyStats();
 
   const coverage = domainFrameCoverage(chart, knowledge, domain);
   if (coverage.uniquePhysicalPalaceCount >= 11) {
@@ -228,6 +360,7 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): AnnualA
   const pushFact = (fact: CandidateFact) => {
     if (factsByKey.has(fact.physicalFactId)) {
       diagnostics.duplicatePhysicalFacts.push(`${domain}:${fact.physicalFactId}`);
+      stats.droppedByReason.duplicatePhysicalFact += 1;
       return;
     }
     factsByKey.set(fact.physicalFactId, fact);
@@ -320,6 +453,8 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): AnnualA
   const out: AnnualAxisEvidence[] = [];
 
   for (const fact of factsByKey.values()) {
+    stats.candidateFacts += 1;
+
     const triggerIds: string[] = [];
     const idx = fact.targetPalace.index;
     const inHead = headIndexes.has(idx);
@@ -354,6 +489,7 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): AnnualA
 
       if (triggerIds.length === 0) {
         // Natal without trigger: sensitivity-only — skip numeric evidence.
+        stats.droppedByReason.noAnnualTrigger += 1;
         continue;
       }
     } else if (fact.origin === "annual-star") {
@@ -369,7 +505,10 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): AnnualA
       triggerIds.push("major-fortune-context");
     }
 
-    if (triggerIds.length === 0) continue;
+    if (triggerIds.length === 0) {
+      stats.droppedByReason.noAnnualTrigger += 1;
+      continue;
+    }
 
     const affinity =
       fact.category === "mutagen" && fact.mutagen
@@ -383,84 +522,60 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): AnnualA
             familyId: fact.familyId,
           });
 
-    if (affinity == null || affinity <= 0) continue;
-
-    const headRole = relationRole(headFrame.focusPalaceIndex, idx);
-    const headGeometry =
-      knowledge.channelProfile.routing.headFrameRoleWeights[headRole];
-    const local = localGeometryWeight(chart, knowledge, domain, idx);
-
-    const pathCandidates: Array<{
-      triggerId: string;
-      channel: AnnualEvidenceChannel;
-      geometryWeight: number;
-    }> = [];
-
-    for (const triggerId of triggerIds) {
-      if (triggerId === "annual-head-tp4c" || triggerId === "head-domain-frame-intersection") {
-        if (headGeometry > 0) {
-          pathCandidates.push({
-            triggerId,
-            channel: "routed-head",
-            geometryWeight: headGeometry,
-          });
-        }
-      }
-      if (
-        triggerId === "annual-transformation-exact-target" ||
-        triggerId === "annual-moving-star-palace" ||
-        triggerId === "head-domain-frame-intersection"
-      ) {
-        if (local.weight > 0 || fact.origin === "annual-star" || fact.origin === "annual-mutagen") {
-          pathCandidates.push({
-            triggerId,
-            channel: "direct-domain",
-            geometryWeight: Math.max(local.weight, fact.origin.startsWith("annual") ? 1 : 0),
-          });
-        }
-      }
-      if (triggerId === "major-fortune-context" || (inMajor && fact.layer === "major-fortune")) {
-        pathCandidates.push({
-          triggerId: triggerId === "major-fortune-context" ? triggerId : "major-fortune-context",
-          channel: "major-background",
-          geometryWeight: 0.55,
-        });
-      }
+    if (affinity == null) {
+      // Context-only: no exact/family/transformation mapping. Never falls
+      // back to a numeric default (§3).
+      stats.contextOnlyFacts += 1;
+      stats.droppedByReason.noAffinity += 1;
+      stats.affinityResolution.unmapped += 1;
+      continue;
     }
+    if (affinity.source === "exact-star") stats.affinityResolution.exactStar += 1;
+    else if (affinity.source === "star-family") stats.affinityResolution.starFamily += 1;
+    else if (affinity.source === "transformation") stats.affinityResolution.transformation += 1;
 
-    // Deduplicate paths by channel — keep strongest geometry per channel.
-    const byChannel = new Map<AnnualEvidenceChannel, (typeof pathCandidates)[number]>();
-    for (const path of pathCandidates) {
-      const existing = byChannel.get(path.channel);
-      if (!existing || path.geometryWeight > existing.geometryWeight) {
-        byChannel.set(path.channel, path);
-      }
-    }
-
-    const activationPaths: AnnualEvidenceActivationPath[] = [...byChannel.values()].map((p) => ({
-      triggerId: p.triggerId,
-      channel: p.channel,
-      geometryWeight: p.geometryWeight,
-      affinityWeight: affinity,
-      effectivePathWeight: p.geometryWeight * affinity,
-    }));
-
-    if (activationPaths.length === 0) continue;
-
-    if (
-      (fact.origin === "natal-star" || fact.origin === "natal-mutagen") &&
-      triggerIds.length === 0
-    ) {
-      diagnostics.natalEvidenceMissingTriggers.push(`${domain}:${fact.physicalFactId}`);
+    if (affinity.value <= 0) {
+      // Mapped, but this record explicitly assigns zero relevance to this
+      // domain — distinct from "unmapped"; still produces no numeric path.
+      stats.droppedByReason.zeroAffinity += 1;
       continue;
     }
 
-    const confidence = knowledge.deltaProfile.confidenceWeights[fact.knowledgeStatus];
-    const combinedPathWeight = combinePathWeights(activationPaths, knowledge);
-    const effectiveWeight = combinedPathWeight * confidence;
+    const headRole = relationRole(headFrame.focusPalaceIndex, idx);
+    const headGeometry = knowledge.channelProfile.routing.headFrameRoleWeights[headRole];
+    const local = localGeometryWeight(chart, knowledge, domain, idx);
 
-    // Stability never feeds signed quality in V0.4 — zero it in weighted axes
-    // while retaining activation for the gate.
+    const activationPaths: AnnualEvidenceActivationPath[] = [];
+    const direct = resolveDirectDomainPath(triggerIds, local.weight, affinity);
+    if (direct) activationPaths.push(direct);
+    const routed = resolveRoutedHeadPath(triggerIds, headGeometry, routing.routing, affinity);
+    if (routed) activationPaths.push(routed);
+    const global = resolveGlobalPath(fact, knowledge, affinity);
+    if (global) activationPaths.push(global);
+    const majorBackground = resolveMajorBackgroundPath(
+      triggerIds,
+      inMajor,
+      fact.layer,
+      affinity,
+    );
+    if (majorBackground) activationPaths.push(majorBackground);
+
+    if (activationPaths.length === 0) {
+      stats.droppedByReason.noLocalDomainRelevance += 1;
+      continue;
+    }
+
+    stats.numericFacts += 1;
+
+    const confidenceWeight = knowledge.deltaProfile.confidenceWeights[fact.knowledgeStatus];
+    const strongestPath = activationPaths.reduce((a, b) =>
+      b.boundedPathWeight > a.boundedPathWeight ? b : a,
+    );
+    // Display/sort-only aggregate (topDrivers, evidence list) — channel
+    // math below reads `rawAxes` + `activationPaths` + `confidenceWeight`
+    // directly, not this blended value (§6).
+    const effectiveWeight = strongestPath.boundedPathWeight * confidenceWeight;
+
     const weightedAxes: AnnualAxisRawAxes = {
       support: fact.rawAxes.support * effectiveWeight,
       pressure: fact.rawAxes.pressure * effectiveWeight,
@@ -491,6 +606,7 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): AnnualA
       rawAxes: fact.rawAxes,
       effectiveWeight,
       weightedAxes,
+      confidenceWeight,
       factIds: [fact.physicalFactId],
       sourceIds: fact.sourceIds.length > 0 ? fact.sourceIds : [ARCH_SOURCE_ID],
       knowledgeStatus: fact.knowledgeStatus,
@@ -498,10 +614,12 @@ export function collectNamPhaiV04TriggeredEvidence(input: CollectInput): AnnualA
       headShare: routing.headShare,
       localShare: routing.localShare,
       annualTriggerIds: [...new Set(triggerIds)],
-      affinityWeight: affinity,
+      affinityWeight: affinity.value,
+      affinitySource: affinity.source,
+      affinityRecordId: affinity.recordId,
       activationPaths,
-    });
+    } satisfies AnnualAxisEvidence);
   }
 
-  return out;
+  return { evidence: out, stats };
 }

@@ -207,6 +207,25 @@ export function computeDistributionReport(
 
   const sortedRanges = [...ranges].sort((a, b) => a - b);
 
+  const numericCounts: number[] = [];
+  const contextOnlyCounts: number[] = [];
+  for (const obs of observations) {
+    if (!obs.collectStats) continue;
+    for (const domain of ANNUAL_AXIS_DOMAINS) {
+      const s = obs.collectStats[domain];
+      if (!s) continue;
+      numericCounts.push(s.numericFacts);
+      contextOnlyCounts.push(s.contextOnlyFacts);
+    }
+  }
+  const affinityCoverage =
+    numericCounts.length === 0
+      ? undefined
+      : {
+          meanNumericEvidenceCountPerDomainYear: mean(numericCounts),
+          medianContextOnlyCountPerDomainYear: median(contextOnlyCounts),
+        };
+
   return {
     profileId,
     school,
@@ -238,5 +257,6 @@ export function computeDistributionReport(
     },
     unavailableRate,
     partialRate,
+    affinityCoverage,
   };
 }

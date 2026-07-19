@@ -15,6 +15,8 @@ const DOMAINS: AnnualAxisDomainId[] = [
   "romance",
 ];
 
+const REQUIRED_TRANSFORMATIONS = ["Lộc", "Quyền", "Khoa", "Kỵ"] as const;
+
 function issue(path: string, message: string): AnnualKnowledgeV04ValidationIssue {
   return { path, message };
 }
@@ -71,16 +73,35 @@ export function validateAnnualAxesKnowledgeV04NamPhai(
     seenRecordIds.add(record.id);
 
     let anyNonZero = false;
+    let anyZero = false;
     for (const domain of DOMAINS) {
       const v = record.affinities[domain];
       if (!isUnitInterval(v)) {
         issues.push(issue(`domainAffinity.records.${record.id}.affinities.${domain}`, "affinity must be in [0,1]"));
       } else if (v > 0) {
         anyNonZero = true;
+      } else {
+        anyZero = true;
       }
     }
     if (!anyNonZero) {
       issues.push(issue(`domainAffinity.records.${record.id}`, "at least one affinity must be non-zero"));
+    }
+    // Sparsity requirement applies to star / star-family records (prompt §3);
+    // transformations are not required to carry a zero.
+    if (
+      !anyZero &&
+      (record.subject.kind === "star" || record.subject.kind === "star-family")
+    ) {
+      issues.push(
+        issue(
+          `domainAffinity.records.${record.id}`,
+          "at least one affinity must be exactly zero — records may not be universally positive",
+        ),
+      );
+    }
+    if (!record.rationale || record.rationale.trim().length === 0) {
+      issues.push(issue(`domainAffinity.records.${record.id}.rationale`, "rationale must be non-empty"));
     }
 
     for (const sid of record.sourceIds) {
@@ -105,11 +126,42 @@ export function validateAnnualAxesKnowledgeV04NamPhai(
     }
   }
 
-  for (const domain of DOMAINS) {
-    const starDefault = knowledge.domainAffinity.categoryDefaults.star[domain];
-    const mutagenDefault = knowledge.domainAffinity.categoryDefaults.mutagen[domain];
-    if (!isUnitInterval(starDefault) || !isUnitInterval(mutagenDefault)) {
-      issues.push(issue(`domainAffinity.categoryDefaults.${domain}`, "defaults must be in [0,1]"));
+  // V0.4.1 — no universal numeric fallback. A subject with no exact/family/
+  // transformation record must resolve to an explicit disposition, never a
+  // number that quietly makes it eligible for all six domains.
+  const fallback = knowledge.domainAffinity.fallbackPolicy;
+  const dispositions: Array<[string, unknown]> = [
+    ["unmappedStar", fallback?.unmappedStar],
+    ["unmappedStarFamily", fallback?.unmappedStarFamily],
+    ["unmappedTransformation", fallback?.unmappedTransformation],
+    ["unmappedMovingMarker", fallback?.unmappedMovingMarker],
+  ];
+  for (const [key, value] of dispositions) {
+    if (value !== "context-only" && value !== "invalid-knowledge") {
+      issues.push(
+        issue(`domainAffinity.fallbackPolicy.${key}`, 'must be "context-only" or "invalid-knowledge"'),
+      );
+    }
+  }
+  if (fallback?.unmappedTransformation !== "invalid-knowledge") {
+    issues.push(
+      issue(
+        "domainAffinity.fallbackPolicy.unmappedTransformation",
+        "transformation coverage must be 100% — unmapped transformation must fail closed as invalid-knowledge",
+      ),
+    );
+  }
+
+  // Required 100% transformation coverage — the four Tứ Hóa must each have
+  // an exact record so `unmappedTransformation` is structurally unreachable.
+  for (const tf of REQUIRED_TRANSFORMATIONS) {
+    const hasExact = knowledge.domainAffinity.records.some(
+      (r) => r.subject.kind === "transformation" && r.subject.transformation === tf,
+    );
+    if (!hasExact) {
+      issues.push(
+        issue("domainAffinity.records", `missing required exact transformation affinity record for ${tf}`),
+      );
     }
   }
 

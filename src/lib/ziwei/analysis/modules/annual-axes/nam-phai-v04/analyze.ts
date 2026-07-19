@@ -171,7 +171,7 @@ export function analyzeAnnualAxesNamPhaiV04(chart: ChartData): AnnualAxesResult 
       continue;
     }
 
-    const evidence = collectNamPhaiV04TriggeredEvidence({
+    const { evidence, stats } = collectNamPhaiV04TriggeredEvidence({
       chart,
       domain,
       knowledge,
@@ -212,6 +212,7 @@ export function analyzeAnnualAxesNamPhaiV04(chart: ChartData): AnnualAxesResult 
       routedStrength: routing.routedStrength,
       natalResponse,
       channels: aggregated.channels,
+      collectStats: stats,
     };
   }
 

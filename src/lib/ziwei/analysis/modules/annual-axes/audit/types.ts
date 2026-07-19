@@ -9,6 +9,10 @@ export interface AnnualAxesAuditObservation {
   annualHeadPalaceIndex: number | null;
   status: "available" | "partial" | "unavailable";
   scores: Record<AnnualAxisDomain, number | null>;
+  /** V0.4.1 §12 — Nam Phái evidence-collection counters per domain, when
+   * available (`analyzeAnnualAxesNamPhaiV04` only; undefined for Trung
+   * Châu observations). */
+  collectStats?: Partial<Record<AnnualAxisDomain, { numericFacts: number; contextOnlyFacts: number }>>;
 }
 
 export interface DomainScoreSummary {
@@ -59,6 +63,14 @@ export interface AnnualAxesDistributionReport {
 
   unavailableRate: number;
   partialRate: number;
+
+  /** V0.4.1 §12 — evidence-collection coverage, when the underlying
+   * observations carried `collectStats` (Nam Phái only). Undefined for
+   * Trung Châu reports. */
+  affinityCoverage?: {
+    meanNumericEvidenceCountPerDomainYear: number;
+    medianContextOnlyCountPerDomainYear: number;
+  };
 }
 
 export interface AuditCorpusContract {

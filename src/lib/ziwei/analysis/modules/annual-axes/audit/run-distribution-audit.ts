@@ -31,9 +31,18 @@ function toObservation(
 ): AnnualAxesAuditObservation {
   const result = analyzeAnnualAxes(chart, { school });
   const scores = {} as AnnualAxesAuditObservation["scores"];
+  const collectStats: NonNullable<AnnualAxesAuditObservation["collectStats"]> = {};
+  let hasCollectStats = false;
   for (const domain of ANNUAL_AXIS_DOMAINS) {
     const axis = result.axes[domain];
     scores[domain] = axis.status === "available" ? axis.score : null;
+    if (axis.status === "available" && axis.collectStats) {
+      hasCollectStats = true;
+      collectStats[domain] = {
+        numericFacts: axis.collectStats.numericFacts,
+        contextOnlyFacts: axis.collectStats.contextOnlyFacts,
+      };
+    }
   }
   return {
     chartId,
@@ -44,6 +53,7 @@ function toObservation(
       null,
     status: result.status,
     scores,
+    collectStats: hasCollectStats ? collectStats : undefined,
   };
 }
 

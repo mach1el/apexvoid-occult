@@ -10,7 +10,11 @@ import axisDefinitions from "./annual-axis-definitions.nam-phai.v0.4.json";
 import channelProfile from "./annual-channel-profile.v0.4.json";
 import deltaProfile from "./annual-delta-profile.v0.4.json";
 import triggerPolicy from "./annual-trigger-policy.v0.4.json";
-import domainAffinity from "./annual-domain-affinity.v0.4.json";
+// V0.4.1 signal-recovery: sparse, fallback-explicit affinity catalog.
+// The original `annual-domain-affinity.v0.4.json` (universal category
+// defaults) stays on disk untouched — never mutated silently — but is no
+// longer loaded.
+import domainAffinity from "./annual-domain-affinity.v0.4.1.json";
 import distributionGates from "./annual-distribution-gates.v0.4.json";
 import sourceRegistry from "./annual-source-registry.v0.4.json";
 import dynamicResolutionGuard from "./annual-dynamic-resolution-guard.v0.4.json";

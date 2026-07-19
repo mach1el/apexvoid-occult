@@ -114,18 +114,31 @@ export interface AnnualDomainAffinityRecordV04 {
   id: string;
   subject: AnnualAffinitySubject;
   affinities: Record<AnnualAxisDomain, number>;
+  /** Short explanation of the domain relationship. Required — records may
+   * not be sparse merely to pass distribution gates; the rationale must
+   * justify each zero and each non-zero value. */
+  rationale: string;
   sourceIds: string[];
   knowledgeStatus: "approved" | "experimental";
 }
+
+/** V0.4.1 — what happens when a subject has no exact/family/transformation
+ * affinity record. Never a numeric default: "context-only" means the fact
+ * carries no numeric evidence for the domain (still visible as
+ * context in diagnostics); "invalid-knowledge" means the pack is missing
+ * required coverage (e.g. an unmapped transformation) and must fail closed. */
+export type AnnualAffinityFallbackDisposition = "context-only" | "invalid-knowledge";
 
 export interface AnnualDomainAffinityCatalogV04 {
   schemaVersion: string;
   catalogId: string;
   status: string;
   requiresCalibration: boolean;
-  categoryDefaults: {
-    star: Record<AnnualAxisDomain, number>;
-    mutagen: Record<AnnualAxisDomain, number>;
+  fallbackPolicy: {
+    unmappedStar: AnnualAffinityFallbackDisposition;
+    unmappedStarFamily: AnnualAffinityFallbackDisposition;
+    unmappedTransformation: AnnualAffinityFallbackDisposition;
+    unmappedMovingMarker: AnnualAffinityFallbackDisposition;
   };
   records: AnnualDomainAffinityRecordV04[];
 }

@@ -47,6 +47,9 @@ export interface AnnualAxisEvidence {
   rawAxes: AnnualAxisRawAxes;
   effectiveWeight: number;
   weightedAxes: AnnualAxisRawAxes;
+  /** V0.4.1 — confidence weight kept separate from `effectiveWeight` so
+   * channel aggregation can apply it once, independently per path (§6). */
+  confidenceWeight?: number;
   factIds: string[];
   sourceIds: string[];
   knowledgeStatus: "experimental" | "approved";
@@ -62,7 +65,12 @@ export interface AnnualAxisEvidence {
   annualTriggerIds?: string[];
   /** V0.4 — domain affinity weight applied to this evidence. */
   affinityWeight?: number;
-  /** V0.4 — activation paths after channel assignment + path combination. */
+  /** V0.4.1 — provenance of the affinity value above (§3 ResolvedDomainAffinity). */
+  affinitySource?: "exact-star" | "star-family" | "transformation" | "moving-marker";
+  affinityRecordId?: string;
+  /** V0.4 — activation paths after channel assignment. V0.4.1: each path
+   * carries its own independent `boundedPathWeight` (no cross-channel
+   * combine-then-split; see §6). */
   activationPaths?: AnnualEvidenceActivationPath[];
 }
 
@@ -78,6 +86,33 @@ export interface AnnualEvidenceActivationPath {
   geometryWeight: number;
   affinityWeight: number;
   effectivePathWeight: number;
+  /** V0.4.1 — the weight actually applied to this path's channel
+   * contribution, computed independently of any other path on the same
+   * physical fact (`min(1, geometryWeight * affinityWeight)`). */
+  boundedPathWeight: number;
+}
+
+/** V0.4.1 — Nam Phái evidence-collection instrumentation for one domain.
+ * Audit/debug only; cheap plain counters accumulated during the existing
+ * collection loop (no extra pass over the chart). */
+export interface NamPhaiV041CollectStats {
+  candidateFacts: number;
+  numericFacts: number;
+  contextOnlyFacts: number;
+  droppedByReason: {
+    noAnnualTrigger: number;
+    noAffinity: number;
+    zeroAffinity: number;
+    noLocalDomainRelevance: number;
+    noEnabledGlobalRule: number;
+    duplicatePhysicalFact: number;
+  };
+  affinityResolution: {
+    exactStar: number;
+    starFamily: number;
+    transformation: number;
+    unmapped: number;
+  };
 }
 
 export interface AnnualChannelSummary {
@@ -132,6 +167,8 @@ export type AnnualAxisResult =
         directDomainImpact: AnnualChannelSummary;
         majorFortuneBackground: AnnualChannelSummary;
       };
+      /** V0.4.1 — Nam Phái evidence-collection instrumentation. */
+      collectStats?: NamPhaiV041CollectStats;
     }
   | {
       domain: AnnualAxisDomain;
