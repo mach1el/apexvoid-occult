@@ -1,14 +1,33 @@
 {
+  "schemaVersion": "0.2.0",
+  "catalogId": "huyen-khi-major-star-dossiers-v0-2",
   "dossiers": [
     {
-      "topicId": "HK-TOPIC-MAJOR-TỬ-VI",
+      "topicId": "major-star-tu-vi",
+      "canonicalSubject": "Tử Vi",
       "aliases": [],
-      "candidatePassages": [],
-      "witnessVerificationStatus": "unresolved",
-      "paraphrasedClaims": [],
+      "candidateExtractionIds": [
+        "HK-EXT-V02-MAJOR-TU-VI-001"
+      ],
+      "witnessVerificationStatus": "candidate-located",
+      "paraphrasedClaims": [
+        "The located transcription treats Tử Vi through a bundled brightness, transformation-polarity, and surrounding-context condition."
+      ],
       "supportedDimensions": [],
-      "unsupportedDimensions": [],
-      "conditionsAndLimitations": [],
+      "proposedDimensions": [
+        "capacity"
+      ],
+      "unsupportedDimensions": [
+        "coherence",
+        "expression",
+        "regulation",
+        "tendency"
+      ],
+      "conditionsAndLimitations": [
+        "The proposed capacity mapping is a non-effective research hypothesis.",
+        "No brightness-only rule is supported by the passage.",
+        "Physical-witness verification and expert review remain pending."
+      ],
       "contradictions": [],
       "candidateRuleIds": [
         "HK-RULE-V02-MAJOR-001"
@@ -18,12 +37,14 @@
       ]
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THIÊN-CƠ",
+      "topicId": "major-star-thien-co",
+      "canonicalSubject": "Thiên Cơ",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -31,12 +52,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THÁI-DƯƠNG",
+      "topicId": "major-star-thai-duong",
+      "canonicalSubject": "Thái Dương",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -44,12 +67,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-VŨ-KHÚC",
+      "topicId": "major-star-vu-khuc",
+      "canonicalSubject": "Vũ Khúc",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -57,12 +82,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THIÊN-ĐỒNG",
+      "topicId": "major-star-thien-dong",
+      "canonicalSubject": "Thiên Đồng",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -70,12 +97,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-LIÊM-TRINH",
+      "topicId": "major-star-liem-trinh",
+      "canonicalSubject": "Liêm Trinh",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -83,12 +112,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THIÊN-PHỦ",
+      "topicId": "major-star-thien-phu",
+      "canonicalSubject": "Thiên Phủ",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -96,12 +127,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THÁI-ÂM",
+      "topicId": "major-star-thai-am",
+      "canonicalSubject": "Thái Âm",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -109,12 +142,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THAM-LANG",
+      "topicId": "major-star-tham-lang",
+      "canonicalSubject": "Tham Lang",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -122,12 +157,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-CỰ-MÔN",
+      "topicId": "major-star-cu-mon",
+      "canonicalSubject": "Cự Môn",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -135,12 +172,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THIÊN-TƯỚNG",
+      "topicId": "major-star-thien-tuong",
+      "canonicalSubject": "Thiên Tướng",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -148,12 +187,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THIÊN-LƯƠNG",
+      "topicId": "major-star-thien-luong",
+      "canonicalSubject": "Thiên Lương",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -161,12 +202,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-THẤT-SÁT",
+      "topicId": "major-star-that-sat",
+      "canonicalSubject": "Thất Sát",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
@@ -174,12 +217,14 @@
       "fixtureIds": []
     },
     {
-      "topicId": "HK-TOPIC-MAJOR-PHÁ-QUÂN",
+      "topicId": "major-star-pha-quan",
+      "canonicalSubject": "Phá Quân",
       "aliases": [],
-      "candidatePassages": [],
+      "candidateExtractionIds": [],
       "witnessVerificationStatus": "unresolved",
       "paraphrasedClaims": [],
       "supportedDimensions": [],
+      "proposedDimensions": [],
       "unsupportedDimensions": [],
       "conditionsAndLimitations": [],
       "contradictions": [],
