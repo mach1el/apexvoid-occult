@@ -25,6 +25,28 @@ function requiredGateNumber(
   return value;
 }
 
+function requiredGateBoolean(
+  gates: Readonly<Record<string, unknown>>,
+  key: string,
+): boolean {
+  const value = gates[key];
+  if (typeof value !== "boolean") {
+    throw new Error(`Promotion gate '${key}' must be a boolean`);
+  }
+  return value;
+}
+
+function requiredGateStrings(
+  gates: Readonly<Record<string, unknown>>,
+  key: string,
+): string[] {
+  const value = gates[key];
+  if (!Array.isArray(value) || !value.every((item) => typeof item === "string")) {
+    throw new Error(`Promotion gate '${key}' must be a string array`);
+  }
+  return value;
+}
+
 export function generateReports(data: any) {
   const loaded = loadHuyenKhiOntology();
   if (!loaded.ok) {
@@ -43,6 +65,7 @@ export function generateReports(data: any) {
   const rules = data.rules.rules as any[];
   const fixtures = data.fixtures as HuyenKhiExpertFixturePlan;
   const batches = data.batches.batches as any[];
+  const transformationDossiers = data.transformations.dossiers as any[];
 
   const candidateLocatedTopics = topics.filter(
     (topic) => topic.evidenceStatus === "candidate-located",
@@ -58,6 +81,13 @@ export function generateReports(data: any) {
       topic.topicId.startsWith("major-star-") &&
       topic.evidenceStatus === "source-reviewed",
   ).length;
+  const sourceReviewedTransformations = transformationDossiers.reduce(
+    (count, dossier) =>
+      dossier.witnessVerificationStatus === "source-reviewed"
+        ? count + (dossier.subtopics?.length ?? 0)
+        : count,
+    0,
+  );
 
   write("topic-coverage-report.v0.2.json", {
     schemaVersion: "0.2.0",
@@ -92,11 +122,12 @@ export function generateReports(data: any) {
       rule.sourceIds.length > 0 &&
       rule.sourceIds.every((sourceId: string) => extractedSources.has(sourceId)),
   ).length;
+  const traceabilityRate = rules.length === 0 ? 0 : traceableRules / rules.length;
   write("candidate-rule-report.v0.2.json", {
     schemaVersion: "0.2.0",
     totalRules: rules.length,
     traceableRules,
-    traceabilityRate: rules.length === 0 ? 0 : traceableRules / rules.length,
+    traceabilityRate,
     effectiveRules: 0,
     catalogEffective: data.rules.effective,
     note: "Candidate rules are research records only and are never loaded as effective ontology knowledge.",
@@ -134,6 +165,20 @@ export function generateReports(data: any) {
     gates,
     "sourceReviewedMajorStarCoverageMin",
   );
+  const sourceReviewedTransformationMinimum = requiredGateNumber(
+    gates,
+    "sourceReviewedTransformationCoverageMin",
+  );
+  const traceabilityMinimum = requiredGateNumber(gates, "ruleTraceabilityRateMin");
+  const requiredVoidMechanisms = requiredGateStrings(
+    gates,
+    "voidMechanismCoverageRequired",
+  );
+  const requiresVoChinhDieu = requiredGateBoolean(
+    gates,
+    "voChinhDieuCoverageRequired",
+  );
+
   const blockers: string[] = [];
   if (status.approvedForPromotion < approvedMinimum) {
     blockers.push(
@@ -150,6 +195,33 @@ export function generateReports(data: any) {
       `source-reviewed major-star topics ${sourceReviewedMajorStars}/${sourceReviewedMajorMinimum}`,
     );
   }
+  if (sourceReviewedTransformations < sourceReviewedTransformationMinimum) {
+    blockers.push(
+      `source-reviewed transformations ${sourceReviewedTransformations}/${sourceReviewedTransformationMinimum}`,
+    );
+  }
+  if (traceabilityRate < traceabilityMinimum) {
+    blockers.push(`rule traceability rate ${traceabilityRate}/${traceabilityMinimum}`);
+  }
+
+  const voidTopicByLabel: Record<string, string> = {
+    "Tuần": "void-tuan",
+    "Triệt": "void-triet",
+  };
+  for (const mechanism of requiredVoidMechanisms) {
+    const topicId = voidTopicByLabel[mechanism];
+    const statusValue = topics.find((topic) => topic.topicId === topicId)?.evidenceStatus;
+    if (statusValue !== "source-reviewed") {
+      blockers.push(`${mechanism} mechanism is not source-reviewed`);
+    }
+  }
+  if (
+    requiresVoChinhDieu &&
+    topics.find((topic) => topic.topicId === "vo-chinh-dieu")?.evidenceStatus !==
+      "source-reviewed"
+  ) {
+    blockers.push("Vô Chính Diệu mechanism is not source-reviewed");
+  }
 
   write("promotion-gate-snapshot.v0.2.json", {
     schemaVersion: "0.2.0",
@@ -159,6 +231,8 @@ export function generateReports(data: any) {
       entry.verificationFlags.includes("witness-verified"),
     ).length,
     sourceReviewedTopicCount: sourceReviewedTopics,
+    sourceReviewedTransformationCount: sourceReviewedTransformations,
+    ruleTraceabilityRate: traceabilityRate,
     symbolicEvaluatorPhaseUnlocked: blockers.length === 0,
     blockers,
     productionRuntimeUnlocked: false,
