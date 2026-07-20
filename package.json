@@ -27,7 +27,8 @@
     "research:huyen-khi:review-fixture": "npx tsx src/lib/ziwei/research/huyen-khi/ontology/cli/review-fixture.ts",
     "research:huyen-khi:validate-rule-seed-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/validate-rule-seed.ts",
     "research:huyen-khi:report-rule-seed-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/report-rule-seed.ts",
-    "research:huyen-khi:export-review-workbook-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/export-review-workbook.ts"
+    "research:huyen-khi:export-review-workbook-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/export-review-workbook.ts",
+    "research:huyen-khi:review-rule-seed-fixture-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/review-rule-seed-fixture.ts"
   },
   "dependencies": {
     "html-to-image": "1.11.13",
