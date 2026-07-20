@@ -1,52 +1,27 @@
 {
+  "schemaVersion": "0.2.0",
+  "catalogId": "huyen-khi-transformation-dossiers-v0-2",
   "dossiers": [
     {
-      "topicId": "HK-TOPIC-TRANSFORMATION-LỘC",
-      "transformationType": "Hóa Lộc",
-      "exactTargetStar": "Cự Môn",
-      "school": "nam-phai",
-      "residentPalaceContext": "Mệnh",
+      "topicId": "transformations",
+      "canonicalSubject": "Four transformations (Lộc/Quyền/Khoa/Kỵ)",
+      "subtopics": [
+        "Hóa Lộc",
+        "Hóa Quyền",
+        "Hóa Khoa",
+        "Hóa Kỵ"
+      ],
+      "witnessVerificationStatus": "unresolved",
+      "candidateExtractionIds": [],
       "sourceIds": [],
       "claimIds": [],
       "candidateRuleIds": [],
       "fixtureIds": [],
-      "limitations": []
-    },
-    {
-      "topicId": "HK-TOPIC-TRANSFORMATION-QUYỀN",
-      "transformationType": "Hóa Quyền",
-      "exactTargetStar": "Cự Môn",
-      "school": "nam-phai",
-      "residentPalaceContext": "Mệnh",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": [],
-      "limitations": []
-    },
-    {
-      "topicId": "HK-TOPIC-TRANSFORMATION-KHOA",
-      "transformationType": "Hóa Khoa",
-      "exactTargetStar": "Cự Môn",
-      "school": "nam-phai",
-      "residentPalaceContext": "Mệnh",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": [],
-      "limitations": []
-    },
-    {
-      "topicId": "HK-TOPIC-TRANSFORMATION-KỴ",
-      "transformationType": "Hóa Kỵ",
-      "exactTargetStar": "Cự Môn",
-      "school": "nam-phai",
-      "residentPalaceContext": "Mệnh",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": [],
-      "limitations": []
+      "limitations": [
+        "No exact-target transformation doctrine has been source-located in this pack.",
+        "No resident-palace context, school mapping, dimension effect, or magnitude is asserted.",
+        "Transformation fixtures remain planned in ontology V0.1 until sourced extraction exists."
+      ]
     }
   ]
 }
