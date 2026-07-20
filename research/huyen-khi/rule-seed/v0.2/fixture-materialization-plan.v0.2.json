@@ -1,0 +1,506 @@
+[
+  {
+    "fixtureId": "FIX-1",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-2",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-3",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-4",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-5",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-6",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-7",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-8",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-9",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-10",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-11",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-12",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-13",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-14",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-15",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-16",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-17",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-18",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-19",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-20",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-21",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-22",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-23",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-24",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-25",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-26",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-27",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-28",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-29",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-30",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-31",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-32",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-33",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-34",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-35",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  },
+  {
+    "fixtureId": "FIX-36",
+    "researchReady": true,
+    "reviewable": false,
+    "approved": false,
+    "minimalFactSet": [
+      "fact1"
+    ],
+    "researchQuestion": "Test",
+    "schoolProfile": "shared",
+    "candidateSourceIds": [],
+    "expectedEvidenceRequirements": [],
+    "limitations": []
+  }
+]
