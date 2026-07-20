@@ -1,0 +1,188 @@
+/*
+ * Huyền Khí Research Preview — natal factual structure only.
+ * Visual density matches sibling Zi Wei analysis sections.
+ */
+.huyen-khi-preview {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem 1rem;
+  color: var(--ash, #d4ccdf);
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.38));
+  border-radius: 22px;
+  background: linear-gradient(150deg, rgba(27, 23, 52, 0.82), rgba(9, 7, 20, 0.76));
+  box-shadow:
+    0 28px 64px -34px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.huyen-khi-preview__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem 0.75rem;
+}
+
+.huyen-khi-preview__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.huyen-khi-preview__badge {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.38));
+  padding: 0.12rem 0.4rem;
+}
+
+.huyen-khi-preview__subtitle {
+  margin: 0;
+  flex: 1 1 100%;
+  font-size: 0.88rem;
+  opacity: 0.9;
+}
+
+.huyen-khi-preview__disclaimer,
+.huyen-khi-preview__natal-note {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  opacity: 0.92;
+}
+
+.huyen-khi-preview__disclaimer {
+  padding: 0.55rem 0.7rem;
+  border-left: 2px solid var(--amber-soft, #f6e0a4);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.huyen-khi-preview__unavailable {
+  margin: 0;
+  opacity: 0.85;
+}
+
+.huyen-khi-preview__palaces {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: 0.4rem;
+}
+
+.huyen-khi-preview__palace {
+  appearance: none;
+  margin: 0;
+  padding: 0.4rem 0.45rem;
+  font: inherit;
+  font-size: 0.78rem;
+  line-height: 1.25;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.38));
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.huyen-khi-preview__palace:hover,
+.huyen-khi-preview__palace:focus-visible {
+  border-color: rgba(246, 224, 164, 0.55);
+  outline: none;
+}
+
+.huyen-khi-preview__palace.is-selected {
+  border-color: var(--amber-soft, #f6e0a4);
+  background: rgba(246, 224, 164, 0.08);
+}
+
+.huyen-khi-preview__detail {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.huyen-khi-preview__block h4,
+.huyen-khi-preview__collapse summary {
+  margin: 0 0 0.35rem;
+  font-size: 0.86rem;
+  font-weight: 650;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.huyen-khi-preview__block ul,
+.huyen-khi-preview__collapse ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.huyen-khi-preview__block p,
+.huyen-khi-preview__collapse p {
+  margin: 0.25rem 0;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.huyen-khi-preview__hint {
+  opacity: 0.8;
+  font-size: 0.8rem !important;
+}
+
+.huyen-khi-preview__collapse {
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.38));
+  border-radius: 12px;
+  padding: 0.55rem 0.7rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.huyen-khi-preview__collapse summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.huyen-khi-preview__collapse summary::-webkit-details-marker {
+  display: none;
+}
+
+.huyen-khi-preview__more {
+  appearance: none;
+  margin-top: 0.4rem;
+  padding: 0.25rem 0.5rem;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--amber-soft, #f6e0a4);
+  cursor: pointer;
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.38));
+  border-radius: 8px;
+  background: transparent;
+}
+
+.huyen-khi-preview__dimensions {
+  list-style: none;
+  padding-left: 0 !important;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.huyen-khi-preview__dimensions li {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.huyen-khi-preview__dim-state {
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.huyen-khi-preview__dim-reason {
+  opacity: 0.8;
+  font-size: 0.78rem !important;
+}
+
+@media (max-width: 480px) {
+  .huyen-khi-preview__palaces {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

@@ -96,3 +96,45 @@ export const ANNUAL_AXES_V02_FEATURE_FLAG = ANNUAL_AXES_V03_FEATURE_FLAG;
 
 /** @deprecated Use `isAnnualAxesV03Enabled` instead. */
 export const isAnnualAxesV02Enabled = isAnnualAxesV03Enabled;
+
+/**
+ * Feature flag for Huyền Khí Research Preview V0.1 (natal factual UI only).
+ * Default OFF — opt-in via VITE_ZIWEI_HUYEN_KHI_PREVIEW_V01=true, or
+ * `?ziweiHuyenKhiPreviewV01=1` (persisted in sessionStorage).
+ */
+export const HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG = "ziweiHuyenKhiPreviewV01";
+
+export function isHuyenKhiPreviewV01Enabled(): boolean {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  if (import.meta.env.VITE_ZIWEI_HUYEN_KHI_PREVIEW_V01 === "false") {
+    return false;
+  }
+
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const queryValue = params.get(HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG);
+
+    if (queryValue === "0" || queryValue === "1") {
+      window.sessionStorage.setItem(
+        HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG,
+        queryValue,
+      );
+    }
+
+    const stored = window.sessionStorage.getItem(
+      HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG,
+    );
+
+    if (stored === "0") return false;
+    if (stored === "1") return true;
+
+    return (
+      import.meta.env.VITE_ZIWEI_HUYEN_KHI_PREVIEW_V01 === "true"
+    );
+  } catch {
+    return false;
+  }
+}

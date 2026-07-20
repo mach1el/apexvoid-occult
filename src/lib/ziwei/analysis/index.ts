@@ -42,6 +42,26 @@ export * from "./modules/palace-overview";
 export * from "./modules/annual-axes";
 export * from "./modules/major-fortune";
 export {
+  buildHuyenKhiPreview,
+  emptyDimensionStates,
+  HUYEN_KHI_DIMENSION_IDS,
+  makeDiagnostic,
+  sortDiagnostics,
+  oppositePalaceIndex as huyenKhiOppositePalaceIndex,
+  trinePalaceIndexes as huyenKhiTrinePalaceIndexes,
+} from "./modules/huyen-khi-preview";
+export type {
+  HuyenKhiDimensionId,
+  HuyenKhiDimensionStates,
+  HuyenKhiPreviewDiagnostic,
+  HuyenKhiPreviewDiagnosticCode,
+  HuyenKhiPreviewPalace,
+  HuyenKhiPreviewResult,
+  HuyenKhiPreviewStar,
+  HuyenKhiPreviewTransformation,
+  HuyenKhiPreviewVoidMarker,
+} from "./modules/huyen-khi-preview";
+export {
   isPalaceOverviewV1Enabled,
   PALACE_OVERVIEW_FEATURE_FLAG,
   isAnnualAxesV04Enabled,
@@ -50,4 +70,6 @@ export {
   ANNUAL_AXES_V03_FEATURE_FLAG,
   isAnnualAxesV02Enabled,
   ANNUAL_AXES_V02_FEATURE_FLAG,
+  isHuyenKhiPreviewV01Enabled,
+  HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG,
 } from "./feature-flags";
