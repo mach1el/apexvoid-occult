@@ -3,10 +3,10 @@
  *
  * Covers exactly the draft-2020 features used by the supplied Huyền Khí
  * schemas: `type`, `required`, `enum`, `pattern`, `minLength`, `minItems`,
- * `properties`, nested object `required`/`properties`, `items`, and
- * `additionalProperties: false`. Deterministic and transparent — chosen over
- * ajv so the governance validator is fully reviewable and produces structured,
- * ordered issue paths.
+ * `uniqueItems`, `properties`, nested object `required`/`properties`, `items`,
+ * and `additionalProperties: false`. Deterministic and transparent — chosen
+ * over ajv so the governance validator is fully reviewable and produces
+ * structured, ordered issue paths.
  */
 
 export interface JsonSchema {
@@ -16,6 +16,7 @@ export interface JsonSchema {
   readonly pattern?: string;
   readonly minLength?: number;
   readonly minItems?: number;
+  readonly uniqueItems?: boolean;
   readonly properties?: Readonly<Record<string, JsonSchema>>;
   readonly items?: JsonSchema;
   readonly additionalProperties?: boolean | JsonSchema;
@@ -106,6 +107,19 @@ export function validateAgainstSchema(
       out.push({
         path: basePath,
         message: `array shorter than minItems ${schema.minItems}`,
+      });
+    }
+    if (schema.uniqueItems === true) {
+      const seen = new Set<string>();
+      value.forEach((item, index) => {
+        const key = JSON.stringify(item);
+        if (seen.has(key)) {
+          out.push({
+            path: `${basePath}[${index}]`,
+            message: `duplicate array item ${key} (uniqueItems)`,
+          });
+        }
+        seen.add(key);
       });
     }
     if (schema.items) {

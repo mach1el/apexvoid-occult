@@ -26,17 +26,17 @@
         "type": "object",
         "required": ["reviewerId", "role", "schoolProfile", "decision", "rationale", "reviewedAt"],
         "properties": {
-          "reviewerId": { "type": "string", "minLength": 1 },
+          "reviewerId": { "type": "string", "minLength": 2, "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
           "role": { "enum": ["researcher", "source-reviewer", "school-expert", "adjudicator"] },
           "schoolProfile": { "enum": ["shared", "nam-phai", "trung-chau"] },
           "decision": { "enum": ["reviewed", "approved", "disputed"] },
-          "rationale": { "type": "string", "minLength": 1 },
-          "reviewedAt": { "type": "string", "minLength": 1 },
+          "rationale": { "type": "string", "minLength": 10 },
+          "reviewedAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{3})?Z$" },
           "expectedState": { "type": "object" },
-          "expectedEffectiveRuleIds": { "type": "array", "items": { "type": "string" } },
-          "forbiddenRuleIds": { "type": "array", "items": { "type": "string" } },
-          "sourceIds": { "type": "array", "items": { "type": "string" } },
-          "claimIds": { "type": "array", "items": { "type": "string" } }
+          "expectedEffectiveRuleIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "pattern": "^HK-RULE-" } },
+          "forbiddenRuleIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "pattern": "^HK-RULE-" } },
+          "sourceIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "pattern": "^HK-SRC-" } },
+          "claimIds": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1, "pattern": "^HK-CLM-" } }
         },
         "additionalProperties": false
       }
