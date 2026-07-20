@@ -1,46 +1,6 @@
 {
-  "dossiers": [
-    {
-      "topicId": "HK-TOPIC-PAIR-1",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": []
-    },
-    {
-      "topicId": "HK-TOPIC-PAIR-2",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": []
-    },
-    {
-      "topicId": "HK-TOPIC-PAIR-3",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": []
-    },
-    {
-      "topicId": "HK-TOPIC-PAIR-4",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": []
-    },
-    {
-      "topicId": "HK-TOPIC-PAIR-5",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": []
-    },
-    {
-      "topicId": "HK-TOPIC-PAIR-6",
-      "sourceIds": [],
-      "claimIds": [],
-      "candidateRuleIds": [],
-      "fixtureIds": []
-    }
-  ]
+  "schemaVersion": "0.2.0",
+  "catalogId": "huyen-khi-pair-dossiers-v0-2",
+  "note": "No named pair or combination dossier is materialized in V0.2. Placeholder Pair 1..6 records were removed because they had no canonical subject, source, claim, or review value.",
+  "dossiers": []
 }
