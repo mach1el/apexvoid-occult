@@ -56,9 +56,13 @@ export function validateExtractions(data: any): ValidationResult {
   const knownSources = new Set(
     loaded.ontology.sourceRegistry.sources.map((source) => source.sourceId),
   );
+  const knownClaims = new Set(
+    loaded.ontology.claimRegistry.claims.map((claim) => claim.claimId),
+  );
   const knownTopics = new Set(
     loaded.ontology.researchTopicCoverage.topics.map((topic) => topic.topicId),
   );
+  const allowedSchools = new Set(["shared", "nam-phai", "trung-chau", "unresolved"]);
   const ids = new Set<string>();
 
   extractions.forEach((entry: any, index: number) => {
@@ -101,6 +105,15 @@ export function validateExtractions(data: any): ValidationResult {
         ),
       );
     }
+    if (typeof entry?.schoolProfile !== "string" || !allowedSchools.has(entry.schoolProfile)) {
+      issues.push(
+        error(
+          "EXT_INVALID_SCHOOL",
+          `${base}.schoolProfile`,
+          `unsupported school profile '${String(entry?.schoolProfile)}'`,
+        ),
+      );
+    }
 
     for (const violation of validateAgainstSchema(
       entry?.locator,
@@ -140,6 +153,28 @@ export function validateExtractions(data: any): ValidationResult {
           "candidate extraction requires a careful paraphrase",
         ),
       );
+    }
+
+    if (!Array.isArray(entry?.candidateClaimIds)) {
+      issues.push(
+        error(
+          "EXT_CLAIM_ARRAY",
+          `${base}.candidateClaimIds`,
+          "candidateClaimIds must be an array",
+        ),
+      );
+    } else {
+      entry.candidateClaimIds.forEach((claimId: unknown, claimIndex: number) => {
+        if (typeof claimId !== "string" || !knownClaims.has(claimId)) {
+          issues.push(
+            error(
+              "EXT_UNRESOLVED_CLAIM",
+              `${base}.candidateClaimIds[${claimIndex}]`,
+              `claim '${String(claimId)}' is not registered in ontology V0.1`,
+            ),
+          );
+        }
+      });
     }
 
     const flags = entry?.verificationFlags;
