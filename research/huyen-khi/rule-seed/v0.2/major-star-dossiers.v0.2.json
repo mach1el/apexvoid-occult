@@ -1,226 +1,190 @@
-[
-  {
-    "canonicalId": "Tử Vi",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Thiên Cơ",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Thái Dương",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Vũ Khúc",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Thiên Đồng",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Liêm Trinh",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Thiên Phủ",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Thái Âm",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Tham Lang",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Cự Môn",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Thiên Tướng",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Thiên Lương",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Thất Sát",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Phá Quân",
-    "aliases": [],
-    "schoolApplicability": [
-      "shared"
-    ],
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "supportedDimensions": [],
-    "unsupportedDimensions": [],
-    "conditionsAndLimitations": [],
-    "contradictions": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  }
-]
+{
+  "dossiers": [
+    {
+      "topicId": "HK-TOPIC-MAJOR-TỬ-VI",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [
+        "HK-RULE-V02-MAJOR-001"
+      ],
+      "fixtureIds": [
+        "HK-FIX-001-MAJOR-MIEU-SUPPORT"
+      ]
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THIÊN-CƠ",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THÁI-DƯƠNG",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-VŨ-KHÚC",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THIÊN-ĐỒNG",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-LIÊM-TRINH",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THIÊN-PHỦ",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THÁI-ÂM",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THAM-LANG",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-CỰ-MÔN",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THIÊN-TƯỚNG",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THIÊN-LƯƠNG",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-THẤT-SÁT",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MAJOR-PHÁ-QUÂN",
+      "aliases": [],
+      "candidatePassages": [],
+      "witnessVerificationStatus": "unresolved",
+      "paraphrasedClaims": [],
+      "supportedDimensions": [],
+      "unsupportedDimensions": [],
+      "conditionsAndLimitations": [],
+      "contradictions": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    }
+  ]
+}

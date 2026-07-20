@@ -1,506 +1,483 @@
-[
-  {
-    "fixtureId": "FIX-1",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-2",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-3",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-4",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-5",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-6",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-7",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-8",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-9",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-10",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-11",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-12",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-13",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-14",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-15",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-16",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-17",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-18",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-19",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-20",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-21",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-22",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-23",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-24",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-25",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-26",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-27",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-28",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-29",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-30",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-31",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-32",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-33",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-34",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-35",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  },
-  {
-    "fixtureId": "FIX-36",
-    "researchReady": true,
-    "reviewable": false,
-    "approved": false,
-    "minimalFactSet": [
-      "fact1"
-    ],
-    "researchQuestion": "Test",
-    "schoolProfile": "shared",
-    "candidateSourceIds": [],
-    "expectedEvidenceRequirements": [],
-    "limitations": []
-  }
-]
+{
+  "fixtures": [
+    {
+      "fixtureId": "HK-FIX-001-MAJOR-MIEU-SUPPORT",
+      "maturity": "research-ready",
+      "inputFacts": {
+        "minimalFactSet": [
+          {
+            "kind": "star",
+            "layer": "natal",
+            "school": "nam-phai",
+            "canonicalStarName": "Tử Vi",
+            "starClass": "major",
+            "brightness": "Miếu"
+          }
+        ],
+        "notes": "Test"
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [
+        "Does Tu Vi Mieu strengthen capacity?"
+      ],
+      "rationale": "Testing Tu Vi Mieu capacity."
+    },
+    {
+      "fixtureId": "HK-FIX-002-MAJOR-HAM-CONFLICT",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-003-MAJOR-BINH-STRONG-SUPPORT",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-004-MAJOR-MIEU-BLOCKED",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-005-VCD-SUPPORTIVE-OPPOSITE",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-006-VCD-DESTRUCTIVE-OPPOSITE",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-007-VCD-GOOD-MINORS",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-008-VCD-DISPERSED",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-009-TUAN-GOOD-STAR",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-010-TUAN-DISRUPTIVE-STAR",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-011-TRIET-GOOD-STAR",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-012-TRIET-DISRUPTIVE-STAR",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-013-TUAN-TRIET-VCD",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-014-LOC-EXACT-TARGET",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-015-QUYEN-EXACT-TARGET",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-016-KHOA-EXACT-TARGET",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-017-KY-EXACT-TARGET",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-018-LOC-WITH-BLOCK",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-019-KY-WITH-REGULATION",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-020-TOA-VS-XUNG",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-021-TAMHOP-VS-NHIHOP",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-022-GIAP-SUPPORT",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-023-GIAP-CONFLICT",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-024-SAME-STAR-DIFFERENT-RELATION",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-025-GOOD-BAD-COLOCATED",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-026-REGULATOR-STRONG-ENOUGH",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-027-REGULATOR-INSUFFICIENT",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-028-MULTIPLE-DISRUPTORS",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-029-SUPPORT-WITHOUT-COHERENCE",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-030-LOW-CAPACITY-HIGH-EXPRESSION",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-031-HIGH-CAPACITY-BLOCKED",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-032-COHERENT-PRESSURING",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-033-MIXED-EFFECTS",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-034-MENH-CUC-SUPPORT",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-035-MENH-CUC-CONTROL",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    },
+    {
+      "fixtureId": "HK-FIX-036-NAP-AM-UNRESOLVED",
+      "maturity": "planned",
+      "inputFacts": {
+        "minimalFactSet": [],
+        "notes": ""
+      },
+      "expectedState": {},
+      "expectedEffectiveRuleIds": [],
+      "forbiddenRuleIds": [],
+      "reviewQuestions": [],
+      "rationale": ""
+    }
+  ]
+}

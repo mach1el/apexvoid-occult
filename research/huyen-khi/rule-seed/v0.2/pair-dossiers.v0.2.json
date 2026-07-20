@@ -1,92 +1,46 @@
-[
-  {
-    "canonicalId": "Tả Phù - Hữu Bật",
-    "participants": [
-      "Tả Phù",
-      "Hữu Bật"
-    ],
-    "coPresenceEffects": [],
-    "splitPresenceEffects": [],
-    "schoolProfile": "shared",
-    "claimProvenance": "unresolved",
-    "proposedEffects": [],
-    "limitations": [],
-    "stackingGroup": "none",
-    "fixtureCoverage": []
-  },
-  {
-    "canonicalId": "Văn Xương - Văn Khúc",
-    "participants": [
-      "Văn Xương",
-      "Văn Khúc"
-    ],
-    "coPresenceEffects": [],
-    "splitPresenceEffects": [],
-    "schoolProfile": "shared",
-    "claimProvenance": "unresolved",
-    "proposedEffects": [],
-    "limitations": [],
-    "stackingGroup": "none",
-    "fixtureCoverage": []
-  },
-  {
-    "canonicalId": "Thiên Khôi - Thiên Việt",
-    "participants": [
-      "Thiên Khôi",
-      "Thiên Việt"
-    ],
-    "coPresenceEffects": [],
-    "splitPresenceEffects": [],
-    "schoolProfile": "shared",
-    "claimProvenance": "unresolved",
-    "proposedEffects": [],
-    "limitations": [],
-    "stackingGroup": "none",
-    "fixtureCoverage": []
-  },
-  {
-    "canonicalId": "Kình Dương - Đà La",
-    "participants": [
-      "Kình Dương",
-      "Đà La"
-    ],
-    "coPresenceEffects": [],
-    "splitPresenceEffects": [],
-    "schoolProfile": "shared",
-    "claimProvenance": "unresolved",
-    "proposedEffects": [],
-    "limitations": [],
-    "stackingGroup": "none",
-    "fixtureCoverage": []
-  },
-  {
-    "canonicalId": "Hỏa Tinh - Linh Tinh",
-    "participants": [
-      "Hỏa Tinh",
-      "Linh Tinh"
-    ],
-    "coPresenceEffects": [],
-    "splitPresenceEffects": [],
-    "schoolProfile": "shared",
-    "claimProvenance": "unresolved",
-    "proposedEffects": [],
-    "limitations": [],
-    "stackingGroup": "none",
-    "fixtureCoverage": []
-  },
-  {
-    "canonicalId": "Địa Không - Địa Kiếp",
-    "participants": [
-      "Địa Không",
-      "Địa Kiếp"
-    ],
-    "coPresenceEffects": [],
-    "splitPresenceEffects": [],
-    "schoolProfile": "shared",
-    "claimProvenance": "unresolved",
-    "proposedEffects": [],
-    "limitations": [],
-    "stackingGroup": "none",
-    "fixtureCoverage": []
-  }
-]
+{
+  "dossiers": [
+    {
+      "topicId": "HK-TOPIC-PAIR-1",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-PAIR-2",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-PAIR-3",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-PAIR-4",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-PAIR-5",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-PAIR-6",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    }
+  ]
+}

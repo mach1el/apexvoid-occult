@@ -1,1 +1,23 @@
-[]
+{
+  "extractions": [
+    {
+      "extractionId": "EXT-001-TUVI-MIEU",
+      "topicId": "HK-TOPIC-MAJOR-TỬ-VI",
+      "sourceId": "SRC-TTL-01",
+      "schoolProfile": "nam-phai",
+      "locator": {
+        "chapter": "2",
+        "section": "Tử Vi"
+      },
+      "excerpt": "Tử Vi cư Ngọ...",
+      "claimIds": [
+        "CLAIM-001"
+      ],
+      "verificationFlags": [
+        "candidate-located"
+      ],
+      "ambiguities": [],
+      "limitations": "Needs review"
+    }
+  ]
+}

@@ -1,38 +1,52 @@
-[
-  {
-    "transformationType": "Hóa Lộc",
-    "targetStar": "Any",
-    "school": "shared",
-    "residentPalaceContext": "Any",
-    "sourceBackedClaim": "unresolved",
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "transformationType": "Hóa Quyền",
-    "targetStar": "Any",
-    "school": "shared",
-    "residentPalaceContext": "Any",
-    "sourceBackedClaim": "unresolved",
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "transformationType": "Hóa Khoa",
-    "targetStar": "Any",
-    "school": "shared",
-    "residentPalaceContext": "Any",
-    "sourceBackedClaim": "unresolved",
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "transformationType": "Hóa Kỵ",
-    "targetStar": "Any",
-    "school": "shared",
-    "residentPalaceContext": "Any",
-    "sourceBackedClaim": "unresolved",
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  }
-]
+{
+  "dossiers": [
+    {
+      "topicId": "HK-TOPIC-TRANSFORMATION-LỘC",
+      "transformationType": "Hóa Lộc",
+      "exactTargetStar": "Cự Môn",
+      "school": "nam-phai",
+      "residentPalaceContext": "Mệnh",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": [],
+      "limitations": []
+    },
+    {
+      "topicId": "HK-TOPIC-TRANSFORMATION-QUYỀN",
+      "transformationType": "Hóa Quyền",
+      "exactTargetStar": "Cự Môn",
+      "school": "nam-phai",
+      "residentPalaceContext": "Mệnh",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": [],
+      "limitations": []
+    },
+    {
+      "topicId": "HK-TOPIC-TRANSFORMATION-KHOA",
+      "transformationType": "Hóa Khoa",
+      "exactTargetStar": "Cự Môn",
+      "school": "nam-phai",
+      "residentPalaceContext": "Mệnh",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": [],
+      "limitations": []
+    },
+    {
+      "topicId": "HK-TOPIC-TRANSFORMATION-KỴ",
+      "transformationType": "Hóa Kỵ",
+      "exactTargetStar": "Cự Môn",
+      "school": "nam-phai",
+      "residentPalaceContext": "Mệnh",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": [],
+      "limitations": []
+    }
+  ]
+}

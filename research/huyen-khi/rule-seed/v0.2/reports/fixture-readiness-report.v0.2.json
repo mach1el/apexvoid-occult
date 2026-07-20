@@ -1,3 +1,5 @@
 {
-  "ready": 30
+  "planned": 35,
+  "researchReady": 1,
+  "reviewable": 0
 }

@@ -1,8 +1,38 @@
 {
-  "schemaVersion": "0.2.0",
-  "catalogId": "huyen-khi-candidate-rule-seed-v0-2",
-  "ontologyContractVersion": "0.1.0",
-  "effective": false,
-  "notes": "Research candidates only. Never loaded by production or preview UI.",
-  "rules": []
+  "rules": [
+    {
+      "ruleId": "HK-RULE-V02-MAJOR-001",
+      "version": "0.2.0",
+      "status": "draft",
+      "schoolProfile": "nam-phai",
+      "specificity": "general",
+      "subject": "Tử Vi",
+      "effective": false,
+      "conditions": [
+        {
+          "type": "brightness",
+          "value": "Miếu"
+        }
+      ],
+      "effects": [
+        {
+          "dimension": "capacity",
+          "operation": "strengthen",
+          "magnitude": "strong",
+          "description": "Tăng năng lực"
+        }
+      ],
+      "stackingGroup": "major-brightness",
+      "suppressesRuleIds": [],
+      "sourceIds": [
+        "SRC-TTL-01"
+      ],
+      "claimIds": [
+        "CLAIM-001"
+      ],
+      "limitations": [
+        "Needs more research"
+      ]
+    }
+  ]
 }

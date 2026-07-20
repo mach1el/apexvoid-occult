@@ -1,6 +1,5 @@
 {
-  "catalogId": "huyen-khi-rule-seed-v0-2",
-  "schemaVersion": "0.2.0",
-  "ontologyContractVersion": "0.1.0",
-  "notes": "Research candidates only. Never loaded by production or preview UI."
+  "version": "0.2.0",
+  "description": "Huyền Khí Rule Seed V0.2",
+  "timestamp": "2026-07-20T15:53:48.431Z"
 }

@@ -1,34 +1,32 @@
-[
-  {
-    "canonicalId": "Tuần",
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Triệt",
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Vô Chính Diệu",
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  },
-  {
-    "canonicalId": "Mệnh - Thân",
-    "candidatePassages": [],
-    "witnessVerificationStatus": "unresolved",
-    "paraphrasedClaims": [],
-    "candidateRuleIds": [],
-    "fixtureIds": []
-  }
-]
+{
+  "dossiers": [
+    {
+      "topicId": "HK-TOPIC-MECH-TUAN",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MECH-TRIET",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MECH-VCD",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    },
+    {
+      "topicId": "HK-TOPIC-MECH-MENH-THAN",
+      "sourceIds": [],
+      "claimIds": [],
+      "candidateRuleIds": [],
+      "fixtureIds": []
+    }
+  ]
+}

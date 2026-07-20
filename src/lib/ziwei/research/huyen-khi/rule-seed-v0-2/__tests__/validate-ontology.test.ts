@@ -3,6 +3,6 @@ import { validateTopicCoverage } from "../validate-topic-coverage";
 
 describe("Rule Seed Validation", () => {
   it("requires exactly 28 topics", () => {
-    expect(() => validateTopicCoverage({ topics: [] })).toThrow();
+    expect(validateTopicCoverage({ topics: [] }).valid).toBe(false);
   });
 });
