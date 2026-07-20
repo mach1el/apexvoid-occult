@@ -111,7 +111,7 @@ function run() {
       lines.push("forbiddenRuleIds: []");
       lines.push("```", "");
       lines.push(
-        "> Use the canonical `research:huyen-khi:review-fixture` CLI to append a validated review. Do not edit derived approval status by hand.",
+        "> Append reviews with `npm run research:huyen-khi:review-rule-seed-fixture-v02 -- --fixture <id> ...`. The CLI validates and atomically appends to the V0.2 ledger; never edit derived approval status by hand.",
         "",
       );
     }
