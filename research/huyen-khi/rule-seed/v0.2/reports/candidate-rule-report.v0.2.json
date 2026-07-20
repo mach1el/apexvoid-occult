@@ -1,4 +1,9 @@
 {
+  "schemaVersion": "0.2.0",
   "totalRules": 1,
-  "effectiveRules": 0
+  "traceableRules": 1,
+  "traceabilityRate": 1,
+  "effectiveRules": 0,
+  "catalogEffective": false,
+  "note": "Candidate rules are research records only and are never loaded as effective ontology knowledge."
 }
