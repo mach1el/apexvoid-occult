@@ -114,12 +114,12 @@
   /* Same compact face as palace-radar / star-minor labels — fits full axis
    * names (Tình duyên, Giao hữu) without clipping the card edge. */
   font-family: var(--font-stars-minor, "Be Vietnam Pro", system-ui, sans-serif);
-  font-size: 11.5px;
+  font-size: 14px;
   font-weight: 600;
   letter-spacing: 0;
   paint-order: stroke;
   stroke: rgba(9, 7, 20, 0.75);
-  stroke-width: 2.75px;
+  stroke-width: 1.5px;
   stroke-linejoin: round;
 }
 

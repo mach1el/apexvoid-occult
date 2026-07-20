@@ -188,7 +188,7 @@
   letter-spacing: 0.25px;
   paint-order: stroke fill;
   stroke: rgb(8 9 28 / 78%);
-  stroke-width: 2.4px;
+  stroke-width: 1.5px;
   stroke-linejoin: round;
 }
 
@@ -523,11 +523,11 @@
   }
 
   .compact-phi-flow {
-    font-family: "Be Vietnam Pro", system-ui, sans-serif;
-    font-size: 11px;
+    font-family: var(--font-stars-minor, "Be Vietnam Pro", system-ui, sans-serif);
+    font-size: 14px;
     font-weight: 700;
     letter-spacing: 0;
-    stroke-width: 2.8px;
+    stroke-width: 1.5px;
   }
 
   .compact-tam-hop {
