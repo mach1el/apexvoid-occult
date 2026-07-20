@@ -18,7 +18,7 @@ dimensions, expected/forbidden rules, rationale, timestamp.
 
 ## Promotion gate
 
-PR #95 (symbolic evaluator) may not begin until **≥ 30 fixtures are approved**.
+The symbolic evaluator phase must not begin until **≥ 30 fixtures are approved** (derived from the review ledger).
 V0.1 ships 36 draft scenarios.
 
 Append a review with:
@@ -29,3 +29,11 @@ npm run research:huyen-khi:review-fixture -- \
   --reviewer expert-a --role school-expert --school shared \
   --decision reviewed --rationale "locator confirmed"
 ```
+
+## Maturity levels
+
+Authoring stages (set by hand): `planned` → `research-ready` → `reviewable`.
+Derived from the review ledger (never set by hand): `reviewed` / `approved` /
+`disputed`. See `fixture-maturity-policy.v0.1.json` for per-level requirements.
+`fixtureTemplateCountMin` counts templates and never implies approval; only
+`approvedExpertFixtureCountMin` may unlock the symbolic evaluator phase.

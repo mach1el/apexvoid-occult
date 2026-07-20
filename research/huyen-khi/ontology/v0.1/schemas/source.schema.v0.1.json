@@ -21,6 +21,7 @@
       "enum": [
         "calculation-core",
         "classical-primary",
+        "classical-transcription",
         "modern-vietnamese-reference",
         "modern-chinese-reference",
         "expert-review",
@@ -30,6 +31,13 @@
     },
     "status": {
       "type": "string"
+    },
+    "witnessKind": {
+      "enum": ["physical-scan", "searchable-transcription", "bibliography-only", "not-applicable"]
+    },
+    "derivedFromSourceId": {
+      "type": "string",
+      "pattern": "^HK-SRC-"
     },
     "allowedUsage": {
       "type": "array",

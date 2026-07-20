@@ -12,8 +12,8 @@ import path from "node:path";
 
 import { ONTOLOGY_REPORTS_DIR } from "../paths";
 import { validateOntology } from "../validate-ontology";
-import { analyzeRuleConflicts } from "../validate-ontology";
-import { countFixtureStatuses } from "../validate-fixture";
+import { analyzeConflictsInActivationContexts } from "../validate-ontology";
+import { countFixtureMaturity, countFixtureStatuses } from "../validate-fixture";
 import { scanNamespaceBoundary } from "../namespace-scan";
 import type { HuyenKhiOntology, HuyenKhiValidationIssue } from "../types";
 
@@ -134,9 +134,10 @@ function ruleCoverageReport(ontology: HuyenKhiOntology): unknown {
 }
 
 function ruleConflictReport(ontology: HuyenKhiOntology): unknown {
-  const conflicts = analyzeRuleConflicts(ontology.rules);
+  const conflicts = analyzeConflictsInActivationContexts(ontology.rules);
   return {
     reportId: "huyen-khi-rule-conflict-report-v0-1",
+    activationContexts: ["shared+nam-phai", "shared+trung-chau"],
     unresolvedConflictCount: conflicts.unresolved.length,
     suppressedConflictCount: conflicts.suppressed.length,
     silentResolutionCount: 0,
@@ -146,15 +147,25 @@ function ruleConflictReport(ontology: HuyenKhiOntology): unknown {
 }
 
 function fixtureCoverageReport(ontology: HuyenKhiOntology): unknown {
-  const counts = countFixtureStatuses(ontology.fixturePlan);
+  const status = countFixtureStatuses(ontology.fixturePlan);
+  const maturity = countFixtureMaturity(ontology.fixturePlan);
   const byCategory = countBy(ontology.fixturePlan.fixtures.map((f) => f.category));
   const bySchool = countBy(ontology.fixturePlan.fixtures.map((f) => f.schoolProfile));
   return {
     reportId: "huyen-khi-fixture-coverage-report-v0-1",
-    ...counts,
+    note: "derivedStatus counts come only from the append-only review ledger; maturity is the authoring stage",
+    templateCount: status.total,
+    derivedStatus: {
+      draft: status.draft,
+      reviewed: status.reviewed,
+      approved: status.approved,
+      disputed: status.disputed,
+      approvedForPromotion: status.approvedForPromotion,
+    },
+    maturity,
     minimumApprovedRequiredForNextPhase: ontology.fixturePlan.minimumApprovedRequiredForNextPhase,
-    meetsScenarioMinimum: counts.total >= 30,
-    meetsApprovedPromotionGate: counts.approvedForPromotion >= ontology.fixturePlan.minimumApprovedRequiredForNextPhase,
+    meetsTemplateMinimum: status.total >= 30,
+    meetsApprovedPromotionGate: status.approvedForPromotion >= ontology.fixturePlan.minimumApprovedRequiredForNextPhase,
     byCategory,
     bySchool,
   };

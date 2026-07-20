@@ -20,7 +20,7 @@ describe("Huyền Khí ontology — load & schema (§12, §14)", () => {
     const result = loadHuyenKhiOntology();
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.ontology.sourceRegistry.sources.length).toBe(6);
+    expect(result.ontology.sourceRegistry.sources.length).toBe(8);
     expect(result.ontology.claimRegistry.claims.length).toBe(5);
     expect(result.ontology.fixturePlan.fixtures.length).toBe(36);
     // V0.1 loads no effective rules.

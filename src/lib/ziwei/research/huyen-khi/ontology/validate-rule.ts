@@ -13,7 +13,9 @@ import path from "node:path";
 import { ONTOLOGY_SCHEMAS_DIR } from "./paths";
 import { validateAgainstSchema, type JsonSchema } from "./schema-validator";
 import { scanForbiddenScoringKeys } from "./numeric-key-scan";
+import { isCompatible } from "./validate-compatibility";
 import type {
+  HuyenKhiDimensionOperationCompatibility,
   HuyenKhiRule,
   HuyenKhiSymbolicDimensions,
   HuyenKhiValidationIssue,
@@ -31,6 +33,7 @@ function getRuleSchema(): JsonSchema {
 
 export interface ValidateRuleContext {
   readonly symbolicDimensions: HuyenKhiSymbolicDimensions;
+  readonly compatibility: HuyenKhiDimensionOperationCompatibility;
   /** Rule IDs known in the catalog — for suppression-target resolution. */
   readonly knownRuleIds?: ReadonlySet<string>;
   readonly file?: string;
@@ -70,6 +73,14 @@ export function validateRule(
     }
     if (!validMags.has(effect.magnitude)) {
       issues.push({ severity: "error", code: "unknown-magnitude", file, path: `$.effects[${index}].magnitude`, message: `magnitude '${effect.magnitude}' not in catalog` });
+    }
+    // Phase D: reject incompatible (dimension, operation) — never coerce.
+    if (
+      validDims.has(effect.dimension) &&
+      validOps.has(effect.operation) &&
+      !isCompatible(ctx.compatibility, effect.dimension, effect.operation)
+    ) {
+      issues.push({ severity: "error", code: "incompatible-operation-dimension", file, path: `$.effects[${index}]`, message: `operation '${effect.operation}' is not compatible with dimension '${effect.dimension}'` });
     }
   });
 

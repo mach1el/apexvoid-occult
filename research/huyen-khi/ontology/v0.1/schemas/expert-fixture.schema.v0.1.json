@@ -2,73 +2,43 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "huyen-khi-expert-fixture.schema.v0.1.json",
   "type": "object",
-  "required": [
-    "fixtureId",
-    "title",
-    "category",
-    "schoolProfile",
-    "inputFacts",
-    "reviewQuestions",
-    "reviewerStatus"
-  ],
+  "required": ["fixtureId", "title", "category", "schoolProfile", "maturity", "inputFacts", "reviewQuestions"],
   "properties": {
-    "fixtureId": {
-      "type": "string",
-      "pattern": "^HK-FIX-"
-    },
-    "title": {
-      "type": "string"
-    },
-    "category": {
-      "type": "string"
-    },
-    "schoolProfile": {
-      "enum": [
-        "shared",
-        "nam-phai",
-        "trung-chau"
-      ]
-    },
-    "inputFacts": {
-      "type": "object"
-    },
-    "expectedState": {
-      "type": "object"
-    },
-    "expectedEffectiveRuleIds": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "forbiddenRuleIds": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "reviewQuestions": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "string"
-      }
-    },
-    "rationale": {
-      "type": "string"
-    },
-    "reviewerStatus": {
-      "enum": [
-        "draft",
-        "reviewed",
-        "approved",
-        "disputed"
-      ]
-    },
+    "fixtureId": { "type": "string", "pattern": "^HK-FIX-" },
+    "title": { "type": "string" },
+    "category": { "type": "string" },
+    "schoolProfile": { "enum": ["shared", "nam-phai", "trung-chau"] },
+    "maturity": { "enum": ["planned", "research-ready", "reviewable"] },
+    "inputFacts": { "type": "object" },
+    "researchQuestion": { "type": "string" },
+    "candidateSourceIds": { "type": "array", "items": { "type": "string" } },
+    "expectedEvidence": { "type": "array", "items": { "type": "string" } },
+    "expectedState": { "type": "object" },
+    "expectedEffectiveRuleIds": { "type": "array", "items": { "type": "string" } },
+    "forbiddenRuleIds": { "type": "array", "items": { "type": "string" } },
+    "limitations": { "type": "array", "items": { "type": "string" } },
+    "knownContradictions": { "type": "array", "items": { "type": "string" } },
+    "reviewQuestions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "rationale": { "type": "string" },
     "reviews": {
       "type": "array",
       "items": {
-        "type": "object"
+        "type": "object",
+        "required": ["reviewerId", "role", "schoolProfile", "decision", "rationale", "reviewedAt"],
+        "properties": {
+          "reviewerId": { "type": "string", "minLength": 1 },
+          "role": { "enum": ["researcher", "source-reviewer", "school-expert", "adjudicator"] },
+          "schoolProfile": { "enum": ["shared", "nam-phai", "trung-chau"] },
+          "decision": { "enum": ["reviewed", "approved", "disputed"] },
+          "rationale": { "type": "string", "minLength": 1 },
+          "reviewedAt": { "type": "string", "minLength": 1 },
+          "expectedState": { "type": "object" },
+          "expectedEffectiveRuleIds": { "type": "array", "items": { "type": "string" } },
+          "forbiddenRuleIds": { "type": "array", "items": { "type": "string" } },
+          "sourceIds": { "type": "array", "items": { "type": "string" } },
+          "claimIds": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
       }
     }
   },

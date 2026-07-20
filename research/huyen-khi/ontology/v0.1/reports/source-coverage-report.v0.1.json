@@ -1,12 +1,14 @@
 {
   "reportId": "huyen-khi-source-coverage-report-v0-1",
-  "sourceCount": 6,
+  "sourceCount": 8,
   "byKind": {
     "calculation-core": 1,
     "classical-primary": 1,
+    "classical-transcription": 1,
     "expert-review": 1,
     "external-output-benchmark": 1,
     "internal-specification": 1,
+    "modern-chinese-reference": 1,
     "modern-vietnamese-reference": 1
   },
   "externalBenchmarkIsRuntimeForbidden": true,
@@ -16,6 +18,14 @@
       "kind": "classical-primary",
       "status": "candidate-primary",
       "referencedByClaimCount": 1,
+      "hasAllowedUsage": true,
+      "hasProhibitedUsage": true
+    },
+    {
+      "sourceId": "HK-SRC-CLASSIC-TRANSCRIPTION-001",
+      "kind": "classical-transcription",
+      "status": "manual-review-required",
+      "referencedByClaimCount": 0,
       "hasAllowedUsage": true,
       "hasProhibitedUsage": true
     },
@@ -50,6 +60,14 @@
       "referencedByClaimCount": 5,
       "hasAllowedUsage": false,
       "hasProhibitedUsage": false
+    },
+    {
+      "sourceId": "HK-SRC-TC-001",
+      "kind": "modern-chinese-reference",
+      "status": "unavailable-manual-review-required",
+      "referencedByClaimCount": 0,
+      "hasAllowedUsage": true,
+      "hasProhibitedUsage": true
     },
     {
       "sourceId": "HK-SRC-VN-001",

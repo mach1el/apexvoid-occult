@@ -3,8 +3,9 @@ import { describe, expect, it } from "vitest";
 import { loadHuyenKhiOntology } from "../load-ontology";
 import {
   appendFixtureReview,
+  countFixtureMaturity,
   countFixtureStatuses,
-  deriveReviewerStatus,
+  deriveFixtureStatus,
   validateFixture,
 } from "../validate-fixture";
 import type {
@@ -34,36 +35,57 @@ function review(
   };
 }
 
-describe("Huyền Khí ontology — expert fixtures (§9, §14)", () => {
-  it("ships at least 30 scenarios (36 supplied)", () => {
+describe("Huyền Khí ontology — expert fixtures (A1, A2, G)", () => {
+  it("ships at least 30 scenario templates (36 supplied), all planned maturity", () => {
     const loaded = loadHuyenKhiOntology();
     if (!loaded.ok) throw new Error("expected load");
     const counts = countFixtureStatuses(loaded.ontology.fixturePlan);
     expect(counts.total).toBe(36);
-    expect(counts.total).toBeGreaterThanOrEqual(30);
+    const maturity = countFixtureMaturity(loaded.ontology.fixturePlan);
+    expect(maturity.planned).toBe(36);
+  });
+
+  it("all derived statuses are draft (no reviews yet)", () => {
+    const loaded = loadHuyenKhiOntology();
+    if (!loaded.ok) throw new Error("expected load");
+    const counts = countFixtureStatuses(loaded.ontology.fixturePlan);
+    expect(counts.draft).toBe(36);
+    expect(counts.approvedForPromotion).toBe(0);
   });
 
   it("no fixture contains personal birth data", () => {
     const loaded = loadHuyenKhiOntology();
     if (!loaded.ok) throw new Error("expected load");
     loaded.ontology.fixturePlan.fixtures.forEach((f, index) => {
-      const issues = validateFixture(f, "plan", index).filter((i) => i.code === "personal-data");
-      expect(issues).toEqual([]);
+      expect(validateFixture(f, "plan", index).filter((i) => i.code === "personal-data")).toEqual([]);
     });
   });
 
-  it("flags injected personal-chart data (guard is real)", () => {
+  it("flags injected personal-chart data", () => {
     const personal = { ...fixture(), inputFacts: { solarDate: "1991-09-21" } };
-    const issues = validateFixture(personal, "plan", 0);
-    expect(issues.some((i) => i.code === "personal-data")).toBe(true);
+    expect(validateFixture(personal, "plan", 0).some((i) => i.code === "personal-data")).toBe(true);
+  });
+
+  it("A1: a manually injected status field cannot satisfy the promotion gate", () => {
+    // Schema rejects the unknown field, AND the derived count ignores it.
+    const forged = { ...fixture(), reviewerStatus: "approved", maturity: "planned" as const };
+    const issues = validateFixture(forged, "plan", 0);
+    expect(issues.some((i) => i.code === "schema-invalid")).toBe(true);
+
+    const loaded = loadHuyenKhiOntology();
+    if (!loaded.ok) throw new Error("expected load");
+    const counts = countFixtureStatuses({
+      ...loaded.ontology.fixturePlan,
+      fixtures: [{ ...fixture(), reviews: [] }],
+    });
+    expect(counts.approved).toBe(0);
+    expect(counts.approvedForPromotion).toBe(0);
   });
 
   it("reviews append rather than overwrite", () => {
-    const f0 = fixture();
-    const f1 = appendFixtureReview(f0, review("expert-a", "reviewed"));
-    const f2 = appendFixtureReview(f1, review("expert-b", "reviewed"));
+    const f2 = appendFixtureReview(appendFixtureReview(fixture(), review("expert-a", "reviewed")), review("expert-b", "reviewed"));
     expect(f2.reviews).toHaveLength(2);
-    expect(f2.reviews!.map((r) => r.reviewerId).sort()).toEqual(["expert-a", "expert-b"]);
+    expect(deriveFixtureStatus(f2.reviews)).toBe("reviewed");
   });
 
   it("review order does not affect stored result", () => {
@@ -71,45 +93,47 @@ describe("Huyền Khí ontology — expert fixtures (§9, §14)", () => {
     const a = appendFixtureReview(appendFixtureReview(f0, review("expert-a", "approved")), review("expert-b", "approved"));
     const b = appendFixtureReview(appendFixtureReview(f0, review("expert-b", "approved")), review("expert-a", "approved"));
     expect(a.reviews).toEqual(b.reviews);
-    expect(a.reviewerStatus).toBe(b.reviewerStatus);
+    expect(deriveFixtureStatus(a.reviews)).toBe(deriveFixtureStatus(b.reviews));
   });
 
   it("disagreement is retained as disputed and excluded from approved count", () => {
-    const status = deriveReviewerStatus([
-      review("expert-a", "approved"),
-      review("expert-b", "disputed"),
-    ]);
-    expect(status).toBe("disputed");
-
+    expect(deriveFixtureStatus([review("a", "approved"), review("b", "disputed")])).toBe("disputed");
     const loaded = loadHuyenKhiOntology();
     if (!loaded.ok) throw new Error("expected load");
-    // Build a plan with one disputed fixture; it must not count as approved.
-    const disputed = { ...fixture(), reviewerStatus: "disputed" as const };
-    const counts = countFixtureStatuses({
-      ...loaded.ontology.fixturePlan,
-      fixtures: [disputed],
-    });
+    const disputed = appendFixtureReview(appendFixtureReview(fixture(), review("a", "approved")), review("b", "disputed"));
+    const counts = countFixtureStatuses({ ...loaded.ontology.fixturePlan, fixtures: [disputed] });
     expect(counts.disputed).toBe(1);
     expect(counts.approvedForPromotion).toBe(0);
   });
 
-  it("approval requires two independent approvals (not one)", () => {
-    expect(deriveReviewerStatus([review("expert-a", "approved")])).toBe("reviewed");
-    expect(
-      deriveReviewerStatus([review("expert-a", "approved"), review("expert-b", "approved")]),
-    ).toBe("approved");
-    // Two approvals from the SAME reviewer do not count as independent.
-    expect(
-      deriveReviewerStatus([review("expert-a", "approved"), review("expert-a", "approved")]),
-    ).toBe("reviewed");
+  it("approval requires two INDEPENDENT approvals (not one, not the same twice)", () => {
+    expect(deriveFixtureStatus([review("a", "approved")])).toBe("reviewed");
+    expect(deriveFixtureStatus([review("a", "approved"), review("b", "approved")])).toBe("approved");
+    expect(deriveFixtureStatus([review("a", "approved"), review("a", "approved")])).toBe("reviewed");
   });
 
   it("expert + adjudicator approval also promotes", () => {
     expect(
-      deriveReviewerStatus([
-        review("expert-a", "approved", { role: "school-expert" }),
-        review("adj-1", "approved", { role: "adjudicator" }),
+      deriveFixtureStatus([
+        review("a", "approved", { role: "school-expert" }),
+        review("adj", "approved", { role: "adjudicator" }),
       ]),
     ).toBe("approved");
+  });
+
+  it("A2: a review missing required fields fails validation", () => {
+    const badReviewFixture = {
+      ...fixture(),
+      reviews: [{ reviewerId: "a", decision: "approved" }],
+    };
+    expect(validateFixture(badReviewFixture, "plan", 0).some((i) => i.code === "schema-invalid")).toBe(true);
+  });
+
+  it("A2: a review with an unknown enum value fails validation", () => {
+    const badRole = {
+      ...fixture(),
+      reviews: [{ ...review("a", "approved"), role: "hacker" }],
+    };
+    expect(validateFixture(badRole, "plan", 0).some((i) => i.code === "schema-invalid")).toBe(true);
   });
 });

@@ -12,18 +12,19 @@
     "personalFixtureCountMax": 0,
     "silentRuleConflictResolutionCountMax": 0,
     "nonEffectiveExampleLoadedCountMax": 0,
-    "fixtureScenarioCountMin": 30
+    "incompatibleOperationDimensionCountMax": 0,
+    "hardCodedPrNumberCountMax": 0,
+    "fixtureTemplateCountMin": 30
   },
-  "nextPhasePromotionGates": {
+  "symbolicEvaluatorPhasePromotionGates": {
     "approvedExpertFixtureCountMin": 30,
+    "researchReadyFixtureCountMin": 30,
     "sourceReviewedMajorStarCoverageMin": 14,
     "sourceReviewedTransformationCoverageMin": 4,
-    "voidMechanismCoverageRequired": [
-      "Tuần",
-      "Triệt"
-    ],
+    "voidMechanismCoverageRequired": ["Tuần", "Triệt"],
     "voChinhDieuCoverageRequired": true,
-    "ruleTraceabilityRateMin": 1.0
+    "ruleTraceabilityRateMin": 1.0,
+    "note": "Only approvedExpertFixtureCountMin (derived from the append-only review ledger) may unlock the symbolic evaluator phase. fixtureTemplateCountMin never implies approval. Gate language is capability/phase based, never a mutable PR number."
   },
-  "productionGate": "No production scorer or UI in V0.1."
+  "productionGate": "No production scorer or UI exists in this ontology phase."
 }

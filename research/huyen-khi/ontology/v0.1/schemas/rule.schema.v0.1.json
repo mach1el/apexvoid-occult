@@ -106,12 +106,15 @@
               "stabilize",
               "destabilize",
               "block",
+              "restrict",
               "release",
               "nourish",
               "deplete",
               "regulate",
               "overwhelm",
-              "transform"
+              "transform",
+              "classify",
+              "orient"
             ]
           },
           "magnitude": {

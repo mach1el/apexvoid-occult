@@ -1,6 +1,7 @@
 {
   "schemaVersion": "0.1.0",
   "catalogId": "huyen-khi-terminology-v0-1",
+  "dimensionEpistemicNote": "The five dimensions (capacity, coherence, expression, regulation, tendency) are ApexVoid engineered analytical constructs, not traditional canonical Tử Vi terms. They carry no numeric mapping and cross-dimension aggregation is deferred. `tendency` in particular is NOT the old support/pressure axis and must not import its scores, drivers, deltas or vectors.",
   "terms": [
     {
       "termId": "capacity",

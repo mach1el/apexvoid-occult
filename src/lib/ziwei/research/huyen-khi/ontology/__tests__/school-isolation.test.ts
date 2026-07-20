@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { loadHuyenKhiOntology } from "../load-ontology";
 import { rulesVisibleToSchool } from "../validate-ontology";
-import { validateRule } from "../validate-rule";
-import type { HuyenKhiRule, HuyenKhiSymbolicDimensions } from "../types";
+import { validateRule, type ValidateRuleContext } from "../validate-rule";
+import type { HuyenKhiRule } from "../types";
 
 function syntheticRule(
   ruleId: string,
@@ -23,10 +23,13 @@ function syntheticRule(
   };
 }
 
-function dims(): HuyenKhiSymbolicDimensions {
+function ruleCtx(): ValidateRuleContext {
   const loaded = loadHuyenKhiOntology();
   if (!loaded.ok) throw new Error("expected load");
-  return loaded.ontology.symbolicDimensions;
+  return {
+    symbolicDimensions: loaded.ontology.symbolicDimensions,
+    compatibility: loaded.ontology.dimensionOperationCompatibility,
+  };
 }
 
 describe("Huyền Khí ontology — school isolation (§7, §14)", () => {
@@ -55,7 +58,7 @@ describe("Huyền Khí ontology — school isolation (§7, §14)", () => {
   it("a rule with an invalid/missing school profile fails schema validation", () => {
     const bad = { ...syntheticRule("HK-RULE-BAD", "shared") } as Record<string, unknown>;
     delete bad.schoolProfile;
-    const issues = validateRule(bad, { symbolicDimensions: dims() });
+    const issues = validateRule(bad, ruleCtx());
     expect(issues.some((i) => i.code === "schema-invalid")).toBe(true);
   });
 

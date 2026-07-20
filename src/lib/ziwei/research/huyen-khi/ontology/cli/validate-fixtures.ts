@@ -38,7 +38,7 @@ function main(): void {
     process.exitCode = 1;
     return;
   }
-  process.stdout.write(`\nOK — ${counts.total} scenarios; ${counts.approvedForPromotion} approved (need 30 for PR #95).\n`);
+  process.stdout.write(`\nOK — ${counts.total} scenarios; ${counts.approvedForPromotion} approved (need 30 approved to unlock the symbolic evaluator phase).\n`);
 }
 
 main();

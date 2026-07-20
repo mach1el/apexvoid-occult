@@ -85,10 +85,18 @@ export function resolveRuleProvenance(
     directSources.length > 0 ||
     claims.some((c) => c.sources.length > 0 && c.missingSourceIds.length === 0);
 
+  // A4: a fully-traceable doctrinal rule must reach a LOCATOR. Every claim it
+  // cites must carry a locator whose sources resolve — a source alone is not
+  // enough. A rule with no claims cannot be fully traceable.
+  const allClaimsLocated =
+    claims.length > 0 &&
+    claims.every((c) => c.hasLocator && c.missingSourceIds.length === 0);
+
   const fullyTraceable =
     missingClaimIds.length === 0 &&
     missingSourceIds.length === 0 &&
-    hasResolvedSource;
+    hasResolvedSource &&
+    allClaimsLocated;
 
   return {
     rule,

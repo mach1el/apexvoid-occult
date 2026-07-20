@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { analyzeRuleConflicts } from "../validate-ontology";
+import {
+  analyzeConflictsInActivationContexts,
+  analyzeRuleConflicts,
+} from "../validate-ontology";
 import type { HuyenKhiRule, HuyenKhiRuleEffect } from "../types";
 
 function rule(
@@ -81,5 +84,33 @@ describe("Huyền Khí ontology — conflict policy (§8, §14)", () => {
     expect(analyzeRuleConflicts([a, b]).unresolved.length).toBe(
       analyzeRuleConflicts([b, a]).unresolved.length,
     );
+  });
+
+  describe("A3 — school-isolated activation context", () => {
+    const opp = (id: string, op: "strengthen" | "weaken", school: HuyenKhiRule["schoolProfile"]) =>
+      rule(id, { dimension: "capacity", operation: op, magnitude: "moderate", targetFactSelector: target }, { schoolProfile: school });
+
+    it("NEGATIVE: nam-phai-only vs trung-chau-only never co-activate → no conflict", () => {
+      const rules = [opp("HK-RULE-NP", "strengthen", "nam-phai"), opp("HK-RULE-TC", "weaken", "trung-chau")];
+      const analysis = analyzeConflictsInActivationContexts(rules);
+      expect(analysis.unresolved).toHaveLength(0);
+    });
+
+    it("POSITIVE: shared vs nam-phai conflict inside shared+nam-phai context", () => {
+      const rules = [opp("HK-RULE-SHARED", "strengthen", "shared"), opp("HK-RULE-NP", "weaken", "nam-phai")];
+      const analysis = analyzeConflictsInActivationContexts(rules);
+      expect(analysis.unresolved).toHaveLength(1);
+      expect([analysis.unresolved[0]!.ruleA, analysis.unresolved[0]!.ruleB].sort()).toEqual(["HK-RULE-NP", "HK-RULE-SHARED"]);
+    });
+
+    it("POSITIVE: shared vs trung-chau conflict inside shared+trung-chau context", () => {
+      const rules = [opp("HK-RULE-SHARED", "strengthen", "shared"), opp("HK-RULE-TC", "weaken", "trung-chau")];
+      expect(analyzeConflictsInActivationContexts(rules).unresolved).toHaveLength(1);
+    });
+
+    it("a shared vs shared conflict is counted once, not once per context", () => {
+      const rules = [opp("HK-RULE-A", "strengthen", "shared"), opp("HK-RULE-B", "weaken", "shared")];
+      expect(analyzeConflictsInActivationContexts(rules).unresolved).toHaveLength(1);
+    });
   });
 });

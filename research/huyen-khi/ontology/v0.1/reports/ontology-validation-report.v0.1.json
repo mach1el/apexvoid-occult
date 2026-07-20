@@ -10,7 +10,7 @@
   ],
   "ok": true,
   "summary": {
-    "sourceCount": 6,
+    "sourceCount": 8,
     "claimCount": 5,
     "fixtureCount": 36,
     "effectiveRuleCount": 0,
@@ -21,6 +21,10 @@
     "unresolvedConflictCount": 0,
     "silentConflictResolutionCount": 0,
     "nonEffectiveExampleLoadedCount": 0,
+    "claimLocatorViolationCount": 0,
+    "witnessSeparationViolationCount": 0,
+    "incompatibleOperationDimensionCount": 0,
+    "hardCodedPrNumberCount": 0,
     "manifestComplete": true,
     "versionConsistent": true
   },

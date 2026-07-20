@@ -1,9 +1,11 @@
 /**
  * Deterministic, fail-closed loader for the Huyền Khí ontology V0.1.
  *
- * Reads every manifest-declared file, schema-validates the record collections,
- * deep-freezes the result and returns a structured report. Invalid knowledge
- * fails closed — no file or record is silently skipped. It NEVER loads the
+ * Reads every manifest-declared file, validates registry WRAPPERS before
+ * dereferencing arrays (malformed shapes produce deterministic `schema-invalid`
+ * issues — never a TypeError), schema-validates the record collections, deep
+ * freezes the result and returns a structured report. Invalid knowledge fails
+ * closed — no file or record is silently skipped. It NEVER loads the
  * `example-rules.NON-EFFECTIVE` catalog as knowledge.
  *
  * V0.1 loads NO effective rules (no evaluator, no scorer).
@@ -20,23 +22,30 @@ import {
 } from "./paths";
 import { validateAgainstSchema, type JsonSchema } from "./schema-validator";
 import type {
+  HuyenKhiClaimProvenancePolicy,
   HuyenKhiClaimRegistry,
+  HuyenKhiDimensionOperationCompatibility,
   HuyenKhiExpertFixturePlan,
   HuyenKhiExpertReviewWorkflow,
+  HuyenKhiFixtureMaturityPolicy,
   HuyenKhiLoadResult,
   HuyenKhiOntology,
   HuyenKhiOntologyManifest,
   HuyenKhiReleaseGates,
+  HuyenKhiResearchTopicCoverage,
   HuyenKhiRuleConflictPolicy,
   HuyenKhiSchoolPolicy,
   HuyenKhiSourceExtractionQueue,
   HuyenKhiSourceRegistry,
+  HuyenKhiSourceWitnessMatrix,
   HuyenKhiSymbolicDimensions,
   HuyenKhiTerminology,
   HuyenKhiValidationIssue,
 } from "./types";
 
-function readJson(relPath: string): { ok: true; value: unknown } | { ok: false; issue: HuyenKhiValidationIssue } {
+function readJson(
+  relPath: string,
+): { ok: true; value: unknown } | { ok: false; issue: HuyenKhiValidationIssue } {
   const abs = path.join(ONTOLOGY_DIR, relPath);
   try {
     return { ok: true, value: JSON.parse(readFileSync(abs, "utf-8")) };
@@ -60,7 +69,31 @@ function readSchema(name: string): JsonSchema {
   ) as JsonSchema;
 }
 
-/** Recursively freeze — asserts immutability of loaded knowledge (§12). */
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/** Fail-closed wrapper check: object wrapper with an array collection. */
+function requireCollection(
+  raw: Record<string, unknown>,
+  role: keyof typeof ONTOLOGY_FILES,
+  collectionKey: string,
+  issues: HuyenKhiValidationIssue[],
+): boolean {
+  const file = ONTOLOGY_FILES[role];
+  const wrapper = raw[role];
+  if (!isPlainObject(wrapper)) {
+    issues.push({ severity: "error", code: "schema-invalid", file, path: "$", message: `top-level must be an object` });
+    return false;
+  }
+  if (!Array.isArray((wrapper as Record<string, unknown>)[collectionKey])) {
+    issues.push({ severity: "error", code: "schema-invalid", file, path: `$.${collectionKey}`, message: `'${collectionKey}' must be an array` });
+    return false;
+  }
+  return true;
+}
+
+/** Recursively freeze — asserts immutability of loaded knowledge. */
 export function deepFreeze<T>(value: T): T {
   if (value && typeof value === "object" && !Object.isFrozen(value)) {
     for (const key of Object.keys(value as Record<string, unknown>)) {
@@ -73,17 +106,12 @@ export function deepFreeze<T>(value: T): T {
 
 let cached: HuyenKhiLoadResult | null = null;
 
-/**
- * Load and validate the ontology. Cached after first success. Returns
- * `{ ok: false, issues }` when ANY file is missing/invalid — never partial.
- */
 export function loadHuyenKhiOntology(): HuyenKhiLoadResult {
   if (cached) return cached;
   cached = buildOntology();
   return cached;
 }
 
-/** Test-only cache reset for determinism / re-load assertions. */
 export function resetHuyenKhiOntologyCache(): void {
   cached = null;
 }
@@ -102,7 +130,16 @@ function buildOntology(): HuyenKhiLoadResult {
   }
   if (issues.length > 0) return { ok: false, issues };
 
-  // Per-record schema validation for the collections that ship a schema.
+  // Fail-closed wrapper validation BEFORE any array dereference (A5).
+  const wrappersOk =
+    requireCollection(raw as Record<string, unknown>, "sourceRegistry", "sources", issues) &&
+    requireCollection(raw as Record<string, unknown>, "claimRegistry", "claims", issues) &&
+    requireCollection(raw as Record<string, unknown>, "fixturePlan", "fixtures", issues) &&
+    requireCollection(raw as Record<string, unknown>, "researchTopicCoverage", "topics", issues) &&
+    requireCollection(raw as Record<string, unknown>, "sourceWitnessMatrix", "witnesses", issues);
+  if (!wrappersOk) return { ok: false, issues };
+
+  // Per-record schema validation.
   const sourceSchema = readSchema("source.schema.v0.1.json");
   const claimSchema = readSchema("claim.schema.v0.1.json");
   const fixtureSchema = readSchema("expert-fixture.schema.v0.1.json");
@@ -136,6 +173,11 @@ function buildOntology(): HuyenKhiLoadResult {
     claimRegistry,
     terminology: raw.terminology as HuyenKhiTerminology,
     symbolicDimensions: raw.symbolicDimensions as HuyenKhiSymbolicDimensions,
+    dimensionOperationCompatibility: raw.dimensionOperationCompatibility as HuyenKhiDimensionOperationCompatibility,
+    claimProvenancePolicy: raw.claimProvenancePolicy as HuyenKhiClaimProvenancePolicy,
+    sourceWitnessMatrix: raw.sourceWitnessMatrix as HuyenKhiSourceWitnessMatrix,
+    fixtureMaturityPolicy: raw.fixtureMaturityPolicy as HuyenKhiFixtureMaturityPolicy,
+    researchTopicCoverage: raw.researchTopicCoverage as HuyenKhiResearchTopicCoverage,
     schoolPolicy: raw.schoolPolicy as HuyenKhiSchoolPolicy,
     ruleConflictPolicy: raw.ruleConflictPolicy as HuyenKhiRuleConflictPolicy,
     sourceExtractionQueue: raw.sourceExtractionQueue as HuyenKhiSourceExtractionQueue,

@@ -21,3 +21,13 @@ rule may become effective. No numeric coefficient is ever "recovered" here.
 
 A claim reaches `primary-source-reviewed` / `expert-consensus` only with a
 resolved locator and review. Schema validity is **not** approval.
+
+## Witness vs transcription
+
+A physical scan witness and a searchable transcription are **separate source
+IDs**. A transcription declares `derivedFromSourceId` pointing at the scan and
+must be cross-checked against it before promotion. Claim locators use the strict
+`locator.schema.v0.1.json` (`locatorKind`, `sourceId`, edition/witness, volume,
+chapter/section, page/folio, stable URL, transcription anchor, verification
+status). Contradictions are linked (`supports` / `contradicts` / `qualifies`)
+and never auto-resolved.
