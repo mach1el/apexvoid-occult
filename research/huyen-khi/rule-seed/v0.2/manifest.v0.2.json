@@ -1,5 +1,42 @@
 {
-  "version": "0.2.0",
-  "description": "Huyền Khí Rule Seed V0.2",
-  "timestamp": "2026-07-20T15:53:48.431Z"
+  "schemaVersion": "0.2.0",
+  "packId": "apexvoid-huyen-khi-rule-seed-v0-2",
+  "ontologyContractVersion": "0.1.0",
+  "description": "Source-located Huyền Khí candidate-rule seed and expert-review work queue.",
+  "evidenceSummary": {
+    "candidateLocated": 1,
+    "witnessVerified": 0,
+    "sourceReviewed": 0,
+    "unresolvedTopics": 27
+  },
+  "candidateRuleSummary": {
+    "total": 1,
+    "effective": 0
+  },
+  "materializedFixtureSummary": {
+    "total": 1,
+    "researchReady": 1,
+    "reviewable": 0,
+    "derivedApproved": 0
+  },
+  "safetyBoundary": [
+    "No candidate rule is loaded by the canonical ontology as effective knowledge.",
+    "No evaluator, score, numeric coefficient, runtime analyzer, prediction prose, or UI change is included.",
+    "Searchable transcription evidence must be cross-checked against a physical witness before doctrinal promotion.",
+    "Expert approval is derived from the append-only review ledger and cannot be stored by hand.",
+    "No school fallback or fabricated source/claim identifier is permitted."
+  ],
+  "files": [
+    "topic-coverage-matrix.v0.2.json",
+    "source-extraction-records.v0.2.json",
+    "major-star-dossiers.v0.2.json",
+    "transformation-dossiers.v0.2.json",
+    "structural-mechanism-dossiers.v0.2.json",
+    "pair-dossiers.v0.2.json",
+    "candidate-rules.NON-EFFECTIVE.v0.2.json",
+    "fixture-materialization-plan.v0.2.json",
+    "expert-review-batches.v0.2.json",
+    "reviewer-workbook.md",
+    "limitations.md"
+  ]
 }
