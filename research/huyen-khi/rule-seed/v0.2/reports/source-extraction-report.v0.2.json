@@ -1,5 +1,10 @@
 {
+  "schemaVersion": "0.2.0",
+  "totalExtractions": 1,
   "candidateLocated": 1,
   "witnessVerified": 0,
-  "sourceReviewed": 0
+  "sourceReviewed": 0,
+  "sourceIds": [
+    "HK-SRC-CLASSIC-TRANSCRIPTION-001"
+  ]
 }
