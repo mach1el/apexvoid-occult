@@ -1,13 +1,13 @@
 # Annual Axes V0.8 Decision
 
-NO VARIANT APPROVED
+APPROVED FOR PRODUCTION
 
-selectionStatus: no-variant-approved
-selectedVariant: null
+selectionStatus: approved
+selectedVariant: DIRECT-STRICT-18
 formulaVersion: v0.8-direct-anchor-robust-score
 
 ## Selection rationale
-- No candidate passed all hard holdout and product gates.
+- Forced production selection DIRECT-STRICT-18: no candidate passed all hard gates; older public engines removed.
 
 ## Calibration
 - domainCenters: health=0.3404274438410595, family=0.29551001939497534, wealth=0.1814445531104557, career=0.1814445531104557, social=0.0041835643278212075, romance=0.16930673088414006

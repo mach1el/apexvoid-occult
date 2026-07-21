@@ -34,19 +34,7 @@ function engineBadgeLabel(result: AnnualAxesResult): string {
     return "Trung Châu · Experimental";
   }
   if (result.versions.engineVersion === "0.8.0") {
-    return "Nam Phái V0.8 · Experimental";
-  }
-  if (result.versions.engineVersion === "0.7.0") {
-    return "Nam Phái V0.7 · Experimental";
-  }
-  if (result.versions.engineVersion === "0.6.0") {
-    return "Nam Phái V0.6 · Experimental";
-  }
-  if (result.versions.engineVersion === "0.5.0") {
-    return "Nam Phái V0.5 · Fallback";
-  }
-  if (result.versions.engineVersion === "0.4.2") {
-    return "Nam Phái V0.4.2 · Fallback";
+    return "Nam Phái V0.8";
   }
   return "Experimental";
 }

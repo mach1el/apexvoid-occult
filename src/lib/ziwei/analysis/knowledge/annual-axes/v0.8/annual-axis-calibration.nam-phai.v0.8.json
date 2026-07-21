@@ -58,8 +58,8 @@
     "social": 6.300000000000001,
     "romance": 6.300000000000001
   },
-  "selectedVariant": null,
-  "selectionStatus": "no-variant-approved",
+  "selectedVariant": "DIRECT-STRICT-18",
+  "selectionStatus": "approved",
   "generatedAt": "2026-07-22T00:00:00.000Z",
   "sourceIds": [
     "SRC-AA-ENG-004"

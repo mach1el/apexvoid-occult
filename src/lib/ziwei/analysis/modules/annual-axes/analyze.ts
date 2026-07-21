@@ -25,14 +25,6 @@ import {
   type AnnualAxisResult,
   type AnnualFocusSummary,
 } from "./types";
-import {
-  isAnnualAxesV05Enabled,
-  isAnnualAxesV07Enabled,
-  isAnnualAxesV08Enabled,
-} from "../../feature-flags";
-import { analyzeAnnualAxesNamPhaiV04 } from "./nam-phai-v04/analyze";
-import { analyzeAnnualAxesNamPhaiV05 } from "./nam-phai-v05/analyze";
-import { analyzeAnnualAxesNamPhaiV07 } from "./nam-phai-v07/analyze";
 import { analyzeAnnualAxesNamPhaiV08 } from "./nam-phai-v08/analyze";
 
 const CONTRACT_VERSION = "0.2.0";
@@ -152,18 +144,8 @@ export function analyzeAnnualAxes(chart: ChartData, options: { school: ZiweiScho
   const { school } = options;
 
   if (school === "nam-phai") {
-    // Latest-version chain: V05 off → 0.4.2; V07 off → 0.5.0;
-    // V08 on → 0.8.0; else → 0.7.0 when V07 on.
-    if (!isAnnualAxesV05Enabled()) {
-      return analyzeAnnualAxesNamPhaiV04(chart);
-    }
-    if (!isAnnualAxesV07Enabled()) {
-      return analyzeAnnualAxesNamPhaiV05(chart);
-    }
-    if (isAnnualAxesV08Enabled()) {
-      return analyzeAnnualAxesNamPhaiV08(chart);
-    }
-    return analyzeAnnualAxesNamPhaiV07(chart);
+    // Nam Phái Annual Axes is V0.8-only. Older public engines removed.
+    return analyzeAnnualAxesNamPhaiV08(chart);
   }
 
   const diagnostics = emptyAnnualAxesDiagnostics();

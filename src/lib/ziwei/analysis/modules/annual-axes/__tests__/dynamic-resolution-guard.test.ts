@@ -9,7 +9,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { ChartData, ChartPalace } from "@/types/chart";
-import { analyzeAnnualAxes } from "../analyze";
+import { analyzeAnnualAxesNamPhaiV04 } from "../nam-phai-v04/analyze";
 import { buildAnnualFocusFrame } from "../build-annual-focus-frame";
 import { relationRole } from "../nam-phai-v03/routing";
 import { loadAnnualAxesKnowledgeV03NamPhai } from "../../../knowledge/annual-axes/v0.3";
@@ -66,7 +66,7 @@ describe("Annual Axes V0.3 · dynamic TP4C geometry (all 12 indexes)", () => {
     "focus=%i → opposite/trines via modulo-12 only",
     (focusIndex) => {
       const chart = chartWithHeadAt(focusIndex);
-      const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+      const result = analyzeAnnualAxesNamPhaiV04(chart);
       expect(result.annualFocus?.palaceIndex).toBe(focusIndex);
 
       const frame = buildAnnualFocusFrame(chart, {
@@ -97,7 +97,7 @@ describe("Annual Axes V0.3 · dynamic TP4C geometry (all 12 indexes)", () => {
   it("builds TP4C without requiring real branch names", () => {
     const chart = chartWithHeadAt(3);
     // Branches are synthetic B0..B11 — still resolves.
-    expect(analyzeAnnualAxes(chart, { school: "nam-phai" }).annualFocus?.palaceIndex).toBe(3);
+    expect(analyzeAnnualAxesNamPhaiV04(chart).annualFocus?.palaceIndex).toBe(3);
   });
 
   it("reordered palace array with same indexes yields identical routing", () => {
@@ -114,8 +114,8 @@ describe("Annual Axes V0.3 · dynamic TP4C geometry (all 12 indexes)", () => {
       isLuuNienDaiVan: p.index === 7,
     }));
 
-    const a = analyzeAnnualAxes(base, { school: "nam-phai" });
-    const b = analyzeAnnualAxes(reordered, { school: "nam-phai" });
+    const a = analyzeAnnualAxesNamPhaiV04(base);
+    const b = analyzeAnnualAxesNamPhaiV04(reordered);
     expect(a.annualFocus?.palaceIndex).toBe(b.annualFocus?.palaceIndex);
     for (const domain of ["health", "family", "wealth", "career", "social", "romance"] as const) {
       const aa = a.axes[domain];

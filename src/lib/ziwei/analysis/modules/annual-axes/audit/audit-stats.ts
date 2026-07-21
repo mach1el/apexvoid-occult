@@ -1,4 +1,4 @@
-/** Shared percentile / distribution helpers for V0.5.1 audits. */
+/** Shared percentile / distribution helpers for annual-axes audits. */
 
 export function percentile(sorted: number[], p: number): number {
   if (sorted.length === 0) return 0;

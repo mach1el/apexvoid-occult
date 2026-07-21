@@ -1,29 +1,7 @@
 {
   "proof": "annual-axes-v08-ui-dom",
-  "v05": {
-    "engine": "0.5.0",
-    "scores": {
-      "health": 41.9,
-      "family": 59.2,
-      "wealth": 47.5,
-      "career": 50,
-      "social": 53.7,
-      "romance": 58.9
-    }
-  },
-  "v07": {
-    "engine": "0.7.0",
-    "scores": {
-      "health": 16.4,
-      "family": 61.1,
-      "wealth": 38.2,
-      "career": 35.2,
-      "social": 44.4,
-      "romance": 56.5
-    }
-  },
   "v08": {
-    "badge": "Nam Phái V0.8 · Experimental",
+    "badge": "Nam Phái V0.8",
     "engine": "0.8.0",
     "scores": {
       "health": 30.3,

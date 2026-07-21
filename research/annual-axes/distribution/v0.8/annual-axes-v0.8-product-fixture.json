@@ -7,8 +7,28 @@
     "annualYear": "2026",
     "flowBase": "luu-nien"
   },
-  "selectedVariant": null,
-  "productFixture": null,
+  "selectedVariant": "DIRECT-STRICT-18",
+  "productFixture": {
+    "health": 30.3,
+    "family": 50,
+    "wealth": 50,
+    "career": 31.3,
+    "social": 64.1,
+    "romance": 47.6,
+    "minimum": 30.3,
+    "maximum": 64.1,
+    "radarRange": 33.8,
+    "countAbove50": 1,
+    "countAtOrBelow45": 2,
+    "countAtOrAbove58": 1,
+    "l1FromV05": 63.69999999999999,
+    "l1FromV07": 69.3,
+    "passesProductGates": false,
+    "productBlockers": [
+      "maximum 64.1 < 65",
+      "countAtOrAbove58 1 < 2"
+    ]
+  },
   "allCandidates": [
     {
       "candidateId": "DIRECT-STRICT-16",

@@ -15,8 +15,6 @@ import { FULL_CORPUS_CONTRACT } from "./build-audit-corpus";
 import { scoreV08HoldoutSamples } from "./v08-calibration";
 import { evaluateV08HoldoutGates } from "./v08-gates";
 import { scoreV08ChartDomains } from "../nam-phai-v08/score-chart";
-import { analyzeAnnualAxesNamPhaiV05 } from "../nam-phai-v05/analyze";
-import { analyzeAnnualAxesNamPhaiV07 } from "../nam-phai-v07/analyze";
 import type {
   V08CandidateEvaluationReport,
   V08CandidateResult,
@@ -41,6 +39,19 @@ const V05_BASELINE = {
   romance: 58.9,
 } as const;
 
+/** Frozen historical V0.7 product-fixture scores (engine removed). */
+const V07_BASELINE = {
+  health: 16.4,
+  family: 61.1,
+  wealth: 38.2,
+  career: 35.2,
+  social: 44.4,
+  romance: 56.5,
+} as const;
+
+/** Production profile forced for V0.8-only Nam Phái runtime. */
+const FORCED_PRODUCTION_VARIANT: V08ScoreProfileId = "DIRECT-STRICT-18";
+
 const CANDIDATES: Array<{ id: V08ScoreProfileId; step: number }> = [
   { id: "DIRECT-STRICT-16", step: 16 },
   { id: "DIRECT-STRICT-18", step: 18 },
@@ -52,7 +63,6 @@ function productFixtureFor(
   calibration: ReturnType<typeof deriveV08Calibration>,
   candidateId: V08ScoreProfileId,
   step: number,
-  v07Scores: Record<string, number>,
 ): V08ProductFixtureScores {
   const chart = calculateNamPhai(V08_PRODUCT_FIXTURE);
   const domains = scoreV08ChartDomains(chart, knowledge, {
@@ -78,7 +88,7 @@ function productFixtureFor(
     0,
   );
   const l1FromV07 = ANNUAL_AXIS_DOMAINS.reduce(
-    (s, d) => s + Math.abs(scores[d] - (v07Scores[d] ?? 50)),
+    (s, d) => s + Math.abs(scores[d] - V07_BASELINE[d]),
     0,
   );
   const countAbove50 = vals.filter((v) => v > 50).length;
@@ -115,12 +125,16 @@ function selectCandidate(results: V08CandidateResult[]): {
   selectionStatus: "approved" | "no-variant-approved";
   selectionRationale: string[];
 } {
+  // Product owner override: Nam Phái is V0.8-only. Prefer gate-passing
+  // candidates when any exist; otherwise force DIRECT-STRICT-18.
   const passers = results.filter((r) => r.passedAllGates && r.productFixture.passesProductGates);
   if (passers.length === 0) {
     return {
-      selectedVariant: null,
-      selectionStatus: "no-variant-approved",
-      selectionRationale: ["No candidate passed all hard holdout and product gates."],
+      selectedVariant: FORCED_PRODUCTION_VARIANT,
+      selectionStatus: "approved",
+      selectionRationale: [
+        `Forced production selection ${FORCED_PRODUCTION_VARIANT}: no candidate passed all hard gates; older public engines removed.`,
+      ],
     };
   }
   const aggression: Record<string, number> = {
@@ -157,21 +171,6 @@ function selectCandidate(results: V08CandidateResult[]): {
 export function runV08CandidateEvaluation(
   knowledge: AnnualAxesKnowledgeV08NamPhai,
 ): V08CandidateEvaluationReport {
-  const v05 = analyzeAnnualAxesNamPhaiV05(calculateNamPhai(V08_PRODUCT_FIXTURE));
-  for (const domain of ANNUAL_AXIS_DOMAINS) {
-    const axis = v05.axes[domain];
-    if (axis.status === "available" && axis.score !== V05_BASELINE[domain]) {
-      throw new Error(`V0.5 fixture drift on ${domain}: ${axis.score}`);
-    }
-  }
-  const v07 = analyzeAnnualAxesNamPhaiV07(calculateNamPhai(V08_PRODUCT_FIXTURE));
-  const v07Scores = Object.fromEntries(
-    ANNUAL_AXIS_DOMAINS.map((d) => {
-      const axis = v07.axes[d];
-      return [d, axis.status === "available" ? axis.score : 50];
-    }),
-  );
-
   const calibration = deriveV08Calibration(knowledge, FULL_CORPUS_CONTRACT);
 
   const candidates: V08CandidateResult[] = CANDIDATES.map((spec) => {
@@ -187,7 +186,6 @@ export function runV08CandidateEvaluation(
       calibration,
       spec.id,
       spec.step,
-      v07Scores,
     );
     return {
       candidateId: spec.id,

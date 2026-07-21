@@ -1,7 +1,7 @@
 import { ANNUAL_AXIS_DOMAINS, type AnnualAxisDomain } from "../../../contracts/annual-axes";
 import { computeDistributionReport } from "./compute-distribution-report";
 import type { AnnualAxesAuditObservation } from "./types";
-import { median, rate, scoreDistribution, stddev, percentile } from "./v051-stats";
+import { median, rate, scoreDistribution, stddev, percentile } from "./audit-stats";
 import type { V08GateResult } from "./v08-types";
 import type { V08HoldoutSample } from "./v08-calibration";
 

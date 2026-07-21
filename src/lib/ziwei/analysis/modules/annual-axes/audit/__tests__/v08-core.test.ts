@@ -41,8 +41,8 @@ describe("annual-axes v0.8 core", () => {
     expect(geo.contextOnly).toBe(0);
     expect(geo.adjacent).toBe(0);
     expect(loaded.knowledge.scoreProfile.scoreProfiles).toHaveLength(3);
-    expect(loaded.knowledge.calibration.selectedVariant).toBeNull();
-    expect(loaded.knowledge.calibration.selectionStatus).toBe("no-variant-approved");
+    expect(loaded.knowledge.calibration.selectedVariant).toBe("DIRECT-STRICT-18");
+    expect(loaded.knowledge.calibration.selectionStatus).toBe("approved");
   });
 
   it("classifies geometry relative to domain root", () => {

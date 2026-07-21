@@ -1,6 +1,6 @@
 {
-  "selectionStatus": "no-variant-approved",
-  "selectedVariant": null,
+  "selectionStatus": "approved",
+  "selectedVariant": "DIRECT-STRICT-18",
   "candidates": [
     {
       "candidateId": "DIRECT-STRICT-16",

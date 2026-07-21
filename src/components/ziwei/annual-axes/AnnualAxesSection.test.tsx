@@ -107,18 +107,20 @@ describe("AnnualAxesSection — Nam Phái available result", () => {
     expect(wealth.status).toBe("available");
     if (wealth.status !== "available") return;
     expect(container.textContent ?? "").toContain(`Điểm ${wealth.score.toFixed(1)}`);
-    expect(result.versions.engineVersion).toBe("0.5.0");
+    expect(result.versions.engineVersion).toBe("0.8.0");
+    expect(container.textContent ?? "").toContain("Nam Phái V0.8");
   });
 
-  it("shows V0.4.2 Fallback badge when rollback flag is set", () => {
-    window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0");
+  it("ignores legacy rollback query flags and stays on V0.8", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0&ziweiAnnualAxesV08=0");
     const chart = calculateNamPhai(REGRESSION);
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
     const { container } = render(
       <AnnualAxesSection chart={chart} school="nam-phai" result={result} />,
     );
-    expect(container.textContent ?? "").toContain("Nam Phái V0.4.2 · Fallback");
-    expect(container.textContent ?? "").not.toContain("Nam Phái V0.5");
+    expect(container.textContent ?? "").toContain("Nam Phái V0.8");
+    expect(container.textContent ?? "").toContain("Engine 0.8.0");
+    expect(result.versions.engineVersion).toBe("0.8.0");
   });
 });
 
