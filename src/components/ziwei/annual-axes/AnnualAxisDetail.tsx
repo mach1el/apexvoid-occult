@@ -87,7 +87,10 @@ export function AnnualAxisDetail({ domain, axis, onClose }: AnnualAxisDetailProp
             </section>
           ) : null}
 
-          {axis.natalResponse && axis.scoreTrace?.formulaVersion !== "v0.5-calibrated-core" && axis.scoreTrace?.formulaVersion !== "v0.6-annual-dominant-core" ? (
+          {axis.natalResponse &&
+          axis.scoreTrace?.formulaVersion !== "v0.5-calibrated-core" &&
+          axis.scoreTrace?.formulaVersion !== "v0.6-annual-dominant-core" &&
+          axis.scoreTrace?.formulaVersion !== "v0.7-robust-centered-annual-score" ? (
             <section className="annual-axis-detail__section" data-natal-response>
               <h5>Đáp ứng bản mệnh (biên độ, không phải điểm tốt/xấu)</h5>
               <ul>
@@ -98,6 +101,24 @@ export function AnnualAxisDetail({ domain, axis, onClose }: AnnualAxisDetailProp
             </section>
           ) : null}
 
+          {axis.scoreTrace?.formulaVersion === "v0.7-robust-centered-annual-score" ? (
+            <div className="annual-axis-detail__score-trace" aria-label="V0.7 score reconstruction">
+              <h5 className="annual-axis-detail__subtitle">V0.7 · Tái dựng điểm</h5>
+              <p className="annual-axis-detail__note">
+                Điểm 50 biểu thị mức vận khí điển hình của miền trong mô hình hiệu chỉnh V0.7.
+              </p>
+              <ul className="annual-axis-detail__list">
+                <li>spatialSignedRaw: {axis.scoreTrace.spatialSignedRaw.toFixed(4)}</li>
+                <li>domainCenter: {axis.scoreTrace.domainCenter.toFixed(4)}</li>
+                <li>centeredSpatial: {axis.scoreTrace.centeredSpatial.toFixed(4)}</li>
+                <li>activationGate: {axis.scoreTrace.activationGate.toFixed(4)}</li>
+                <li>natalGain: {axis.scoreTrace.natalGain.toFixed(4)}</li>
+                <li>strictLatent: {axis.scoreTrace.strictLatent.toFixed(4)}</li>
+                <li>domainScale: {axis.scoreTrace.domainScale.toFixed(4)}</li>
+                <li>absoluteScore: {axis.scoreTrace.absoluteScore}</li>
+              </ul>
+            </div>
+          ) : null}
           {axis.scoreTrace?.formulaVersion === "v0.6-annual-dominant-core" ? (
             <div className="annual-axis-detail__score-trace" aria-label="V0.6 score reconstruction">
               <h5 className="annual-axis-detail__subtitle">V0.6 · Tái dựng điểm</h5>

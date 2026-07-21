@@ -264,6 +264,27 @@ export interface AnnualAxisScoreTraceV06 {
   absoluteScore: number;
 }
 
+/** V0.7 robust-centered annual score — relative to training domain baseline. */
+export interface AnnualAxisScoreTraceV07 {
+  formulaVersion: "v0.7-robust-centered-annual-score";
+  signedLayerFactors: {
+    annual: number;
+    natalActivated: number;
+    majorFortune: number;
+    global: number;
+  };
+  spatialSignedRaw: number;
+  domainCenter: number;
+  centeredSpatial: number;
+  annualActivationRaw: number;
+  activationGate: number;
+  natalGain: number;
+  strictLatent: number;
+  domainScale: number;
+  scoreAmplitude: number;
+  absoluteScore: number;
+}
+
 /** V0.3 — head-centric routing exposure per domain. Undefined when the
  * domain result was produced by a non-head-centric school (currently
  * Trung Châu keeps the V0.2 path). */
@@ -307,8 +328,8 @@ export type AnnualAxisResult =
       activationGate?: number;
       /** V0.5 calibrated core latent signal (optional). */
       latent?: number;
-      /** V0.5 calibrated core score trace (optional). */
-      scoreTrace?: AnnualAxisScoreTraceV05 | AnnualAxisScoreTraceV06;
+      /** V0.5 / V0.6 / V0.7 calibrated core score trace (optional). */
+      scoreTrace?: AnnualAxisScoreTraceV05 | AnnualAxisScoreTraceV06 | AnnualAxisScoreTraceV07;
     }
   | {
       domain: AnnualAxisDomain;

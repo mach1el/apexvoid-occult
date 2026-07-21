@@ -38,6 +38,35 @@ describe("Annual Axes V0.5 production routing matrix", () => {
     expect(result.versions.engineVersion).toBe("0.5.0");
   });
 
+  it("Nam Phái ?ziweiAnnualAxesV07=1 → engine 0.7.0", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV07=1");
+    const chart = calculateNamPhai(REGRESSION);
+    const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+    expect(result.versions.engineVersion).toBe("0.7.0");
+  });
+
+  it("Nam Phái ?ziweiAnnualAxesV07=0 → engine 0.5.0", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV07=0");
+    const chart = calculateNamPhai(REGRESSION);
+    const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+    expect(result.versions.engineVersion).toBe("0.5.0");
+  });
+
+  it("Nam Phái V07=0 and V05=0 → engine 0.4.2", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV07=0&ziweiAnnualAxesV05=0");
+    const chart = calculateNamPhai(REGRESSION);
+    const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+    expect(result.versions.engineVersion).toBe("0.4.2");
+  });
+
+  it("V0.6 query cannot select engine 0.6.0", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV06=1");
+    const chart = calculateNamPhai(REGRESSION);
+    const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+    expect(result.versions.engineVersion).not.toBe("0.6.0");
+    expect(result.versions.engineVersion).toBe("0.5.0");
+  });
+
   it("Nam Phái ?ziweiAnnualAxesV05=1 → engine 0.5.0", () => {
     window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=1");
     const chart = calculateNamPhai(REGRESSION);
@@ -166,6 +195,7 @@ describe("Annual Axes V0.5 score trace and UI parity", () => {
       if (axis.status !== "available") continue;
       expect(axis.scoreTrace?.formulaVersion).toBe("v0.5-calibrated-core");
       const trace = axis.scoreTrace!;
+      if (trace.formulaVersion !== "v0.5-calibrated-core") return;
       expect(trace.absoluteScore).toBe(axis.score);
       expect(trace.activationGate).toBe(axis.activationGate);
       expect(trace.latent).toBe(axis.latent);
