@@ -285,6 +285,45 @@ export interface AnnualAxisScoreTraceV07 {
   absoluteScore: number;
 }
 
+/** V0.8 direct-anchor robust score. */
+export interface AnnualAxisScoreTraceV08 {
+  formulaVersion: "v0.8-direct-anchor-robust-score";
+  candidateId: string;
+  anchorPalaceIndex: number;
+  anchorPalaceName: string;
+  anchorBranch: string;
+  anchorProvenance: string;
+  retainedDirectFactCount: number;
+  excludedTp4cFactCount: number;
+  excludedOppositeFactCount: number;
+  excludedContextFactCount: number;
+  excludedAdjacentFactCount: number;
+  excludedCrossDomainFactCount: number;
+  directSupportRaw: number;
+  directPressureRaw: number;
+  directTotalRaw: number;
+  directIntensity: number;
+  directPolarity: number;
+  directSignedRaw: number;
+  domainCenter: number;
+  robustScale: number;
+  directZ: number;
+  clampedDirectZ: number;
+  annualActivationRaw: number;
+  activationScale: number;
+  activationGate: number;
+  activationModulator: number;
+  effectiveZ: number;
+  scoreStepPerRobustSigma: number;
+  rawScore: number;
+  absoluteScore: number;
+  conflictRatio: number;
+  coverage: number;
+  confidence: number;
+  tp4cSignedContribution: 0;
+  natalGainAppliedToScore: false;
+}
+
 /** V0.3 — head-centric routing exposure per domain. Undefined when the
  * domain result was produced by a non-head-centric school (currently
  * Trung Châu keeps the V0.2 path). */
@@ -328,8 +367,12 @@ export type AnnualAxisResult =
       activationGate?: number;
       /** V0.5 calibrated core latent signal (optional). */
       latent?: number;
-      /** V0.5 / V0.6 / V0.7 calibrated core score trace (optional). */
-      scoreTrace?: AnnualAxisScoreTraceV05 | AnnualAxisScoreTraceV06 | AnnualAxisScoreTraceV07;
+      /** V0.5 / V0.6 / V0.7 / V0.8 calibrated core score trace (optional). */
+      scoreTrace?:
+        | AnnualAxisScoreTraceV05
+        | AnnualAxisScoreTraceV06
+        | AnnualAxisScoreTraceV07
+        | AnnualAxisScoreTraceV08;
     }
   | {
       domain: AnnualAxisDomain;

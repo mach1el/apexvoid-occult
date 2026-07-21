@@ -3,6 +3,7 @@
 import {
   isAnnualAxesV05Enabled,
   isAnnualAxesV07Enabled,
+  isAnnualAxesV08Enabled,
   isPalaceOverviewV1Enabled,
 } from "../feature-flags";
 import { loadAnnualAxesKnowledgeV0 } from "../knowledge/annual-axes";
@@ -10,6 +11,7 @@ import { loadAnnualAxesKnowledgeV04NamPhai } from "../knowledge/annual-axes/v0.4
 import { loadAnnualAxesKnowledgeV042NamPhai } from "../knowledge/annual-axes/v0.4.2";
 import { loadAnnualAxesKnowledgeV05NamPhai } from "../knowledge/annual-axes/v0.5";
 import { loadAnnualAxesKnowledgeV07NamPhai } from "../knowledge/annual-axes/v0.7";
+import { loadAnnualAxesKnowledgeV08NamPhai } from "../knowledge/annual-axes/v0.8";
 import { loadPalaceOverviewKnowledgeV1 } from "../knowledge";
 import type { ZiweiSchool } from "../facts";
 
@@ -127,6 +129,42 @@ function annualAxesStatusForNamPhaiV07(): ZiweiAnalysisStatus {
   return { status: "available", module: "annual-axes", version: "0.7.0" };
 }
 
+function annualAxesStatusForNamPhaiV08(): ZiweiAnalysisStatus {
+  const knowledge08 = loadAnnualAxesKnowledgeV08NamPhai();
+  if (!knowledge08.ok) {
+    if (import.meta.env.DEV) {
+      console.warn("[annual-axes] invalid V0.8 knowledge", knowledge08.issues);
+    }
+    return { status: "unavailable", module: "annual-axes", reason: "invalid-knowledge" };
+  }
+
+  const knowledge04 = loadAnnualAxesKnowledgeV04NamPhai();
+  if (!knowledge04.ok) {
+    if (import.meta.env.DEV) {
+      console.warn("[annual-axes] invalid V0.4 knowledge", knowledge04.issues);
+    }
+    return { status: "unavailable", module: "annual-axes", reason: "invalid-knowledge" };
+  }
+
+  const knowledge042 = loadAnnualAxesKnowledgeV042NamPhai();
+  if (!knowledge042.ok) {
+    if (import.meta.env.DEV) {
+      console.warn("[annual-axes] invalid V0.4.2 knowledge", knowledge042.issues);
+    }
+    return { status: "unavailable", module: "annual-axes", reason: "invalid-knowledge" };
+  }
+
+  const numericKnowledge = loadPalaceOverviewKnowledgeV1();
+  if (!numericKnowledge.ok) {
+    if (import.meta.env.DEV) {
+      console.warn("[annual-axes] invalid palace-overview numeric knowledge", numericKnowledge.issues);
+    }
+    return { status: "unavailable", module: "annual-axes", reason: "invalid-knowledge" };
+  }
+
+  return { status: "available", module: "annual-axes", version: "0.8.0" };
+}
+
 function annualAxesStatusForNamPhaiV042Fallback(): ZiweiAnalysisStatus {
   const knowledge04 = loadAnnualAxesKnowledgeV04NamPhai();
   if (!knowledge04.ok) {
@@ -180,14 +218,17 @@ export function getAnalysisStatus(
       return annualAxesStatusForTrungChau();
     }
 
-    // Match analyzeAnnualAxes public routing (V0.6 removed from public selection).
+    // Match analyzeAnnualAxes latest-version chain.
     if (!isAnnualAxesV05Enabled()) {
       return annualAxesStatusForNamPhaiV042Fallback();
     }
-    if (isAnnualAxesV07Enabled()) {
-      return annualAxesStatusForNamPhaiV07();
+    if (!isAnnualAxesV07Enabled()) {
+      return annualAxesStatusForNamPhaiV05();
     }
-    return annualAxesStatusForNamPhaiV05();
+    if (isAnnualAxesV08Enabled()) {
+      return annualAxesStatusForNamPhaiV08();
+    }
+    return annualAxesStatusForNamPhaiV07();
   }
 
   // major-fortune and monthly-flow intentionally remain "rebuilding" —
