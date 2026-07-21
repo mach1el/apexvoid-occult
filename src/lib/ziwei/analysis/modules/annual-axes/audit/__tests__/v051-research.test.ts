@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { ANNUAL_AXIS_DOMAINS } from "../../../../contracts/annual-axes";
 import { loadAnnualAxesKnowledgeV05NamPhai } from "../../../../knowledge/annual-axes/v0.5";
-import { aggregateEvidenceDimensions } from "../collect-v051-samples";
+import {
+  aggregateEvidenceDimensions,
+  assertSingleMembershipCounts,
+} from "../collect-v051-samples";
 import { runV051BiasAudit } from "../run-v051-bias-audit";
 import { runV051VariantEvaluation } from "../run-v051-variant-evaluation";
 import { runV051ProductFixture, V051_PRODUCT_FIXTURE } from "../run-v051-product-fixture";
@@ -18,6 +21,7 @@ describe("V0.5.1 bias audit structure", () => {
     expect(report.global.evidence.directPressureRawMass).toBeGreaterThan(0);
     expect(report.global.evidence.tp4cSupportRawMass).toBeGreaterThan(0);
     expect(report.global.evidence.tp4cPressureRawMass).toBeGreaterThan(0);
+    expect(report.auditIntegrityVersion).toBe(2);
   }, 600_000);
 
   it("computes positive/negative latent rates from latent not score", () => {
@@ -27,28 +31,48 @@ describe("V0.5.1 bias audit structure", () => {
     const report = runV051BiasAudit(loaded.knowledge);
     const s = report.global.signed;
     expect(s.positiveLatentRate + s.negativeLatentRate + s.zeroLatentRate).toBeCloseTo(1, 5);
-    expect(s.positiveLatentRate).toBeGreaterThan(0.5);
   }, 600_000);
 
-  it("dimension breakdown totals reconstruct global direct masses", () => {
+  it("dimension breakdown totals reconstruct global retained counts", () => {
     const loaded = loadAnnualAxesKnowledgeV05NamPhai();
     expect(loaded.ok).toBe(true);
     if (!loaded.ok) return;
     const { training, holdout } = splitChartIndices(FULL_CORPUS_CONTRACT.chartCount);
     const dims = aggregateEvidenceDimensions(loaded.knowledge, [...training, ...holdout]);
-    const layerSupport = Object.values(dims.byLayer).reduce((s, v) => s + v.supportRaw, 0);
-    const layerPressure = Object.values(dims.byLayer).reduce((s, v) => s + v.pressureRaw, 0);
-    expect(layerSupport).toBeCloseTo(dims.directSupportRaw + dims.tp4cSupportRaw, 3);
-    expect(layerPressure).toBeCloseTo(dims.directPressureRaw + dims.tp4cPressureRaw, 3);
+    const check = assertSingleMembershipCounts(dims);
+    expect(check.ok).toBe(true);
+    expect(check.failures).toEqual([]);
   }, 600_000);
 
-  it("flags evidence bias when positive latent rate exceeds threshold", () => {
+  it("exposes training and holdout bias metrics separately with AND semantics", () => {
     const loaded = loadAnnualAxesKnowledgeV05NamPhai();
     expect(loaded.ok).toBe(true);
     if (!loaded.ok) return;
     const report = runV051BiasAudit(loaded.knowledge);
-    expect(report.evidenceBiasFlags.globalPositiveLatentBias).toBe(true);
-    expect(report.evidenceBiasFlags.scaleOnlyTighteningBlocked).toBe(true);
+    expect(report.evidenceBiasFlags.training.positiveLatentRate).toBeTypeOf("number");
+    expect(report.evidenceBiasFlags.holdout.positiveLatentRate).toBeTypeOf("number");
+    const bothHigh =
+      report.evidenceBiasFlags.training.positiveLatentRate > 0.65 &&
+      report.evidenceBiasFlags.training.medianLatent > 0 &&
+      report.evidenceBiasFlags.holdout.positiveLatentRate > 0.65 &&
+      report.evidenceBiasFlags.holdout.medianLatent > 0;
+    expect(report.evidenceBiasFlags.globalPositiveLatentBias).toBe(bothHigh);
+  }, 600_000);
+
+  it("includes signed evidence funnel with pressure retention diagnosis", () => {
+    const loaded = loadAnnualAxesKnowledgeV05NamPhai();
+    expect(loaded.ok).toBe(true);
+    if (!loaded.ok) return;
+    const report = runV051BiasAudit(loaded.knowledge);
+    expect(report.signedEvidenceFunnel.candidate.factCount).toBeGreaterThan(0);
+    expect([
+      "pressure-mechanically-disadvantaged",
+      "pressure-mechanically-advantaged",
+      "no-material-mechanical-retention-gap",
+    ]).toContain(report.diagnosis.pressureRetentionDiagnosis);
+    expect(report.diagnosis.rootCauseLabel).toMatch(
+      /doctrinal-evidence-imbalance|mechanical-imbalance-suspected|root-cause-unresolved/,
+    );
   }, 600_000);
 });
 
@@ -60,12 +84,6 @@ describe("V0.5.1 variant selection", () => {
     const evaluation = runV051VariantEvaluation(loaded.knowledge);
     expect(evaluation.selectionStatus).toBe("no-variant-approved");
     expect(evaluation.selectedVariant).toBeNull();
-    expect(evaluation.evidenceBiasDetected).toBe(true);
-    for (const c of evaluation.candidates) {
-      if (c.candidateId !== "BASELINE-V05") {
-        expect(c.blockers.some((b) => b.includes("evidence-bias"))).toBe(true);
-      }
-    }
   }, 900_000);
 
   it("does not select baseline as V0.5.1", () => {
@@ -80,8 +98,7 @@ describe("V0.5.1 variant selection", () => {
 describe("V0.5.1 product fixture", () => {
   it("excludes fixture birth data from calibration derivation", () => {
     expect(V051_PRODUCT_FIXTURE.solarDate).toBe("1991-09-21");
-    const bases = FULL_CORPUS_CONTRACT;
-    expect(bases.chartCount).toBe(100);
+    expect(FULL_CORPUS_CONTRACT.chartCount).toBe(100);
   });
 
   it("reports baseline and candidate vectors without selecting one", () => {

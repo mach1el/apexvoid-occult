@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 import { loadAnnualAxesKnowledgeV05NamPhai } from "../../../../knowledge/annual-axes/v0.5";
 import { runV051VariantEvaluation } from "../run-v051-variant-evaluation";
 import { runV051ProductFixture } from "../run-v051-product-fixture";
+import { runV051BiasAudit } from "../run-v051-bias-audit";
 
 const ENABLED = process.env.ANNUAL_AXES_V051_VARIANTS_WRITE === "1";
 const OUT_DIR = join(process.cwd(), "research/annual-axes/distribution/v0.5.1");
@@ -14,6 +15,7 @@ const OUT_DIR = join(process.cwd(), "research/annual-axes/distribution/v0.5.1");
 function renderDecisionMarkdown(
   evaluation: ReturnType<typeof runV051VariantEvaluation>,
   product: ReturnType<typeof runV051ProductFixture>,
+  bias: ReturnType<typeof runV051BiasAudit>,
 ): string {
   const status =
     evaluation.selectionStatus === "approved"
@@ -22,24 +24,41 @@ function renderDecisionMarkdown(
 
   return `# Annual Axes V0.5.1 Decision
 
+auditIntegrityVersion: ${evaluation.auditIntegrityVersion}
+
 ## Status: ${status}
 
 **Selected variant:** ${evaluation.selectedVariant ?? "null"}
-**Baseline reproduced:** ${evaluation.baselineReproduced}
-**Evidence bias detected:** ${evaluation.evidenceBiasDetected}
+**Baseline reproduced:** ${evaluation.baselineReproduction.reproduced} (${evaluation.baselineReproduction.checkedMetricCount} metrics)
+**Evidence bias detected (training AND holdout):** ${evaluation.evidenceBiasDetected}
 
-## Root cause of softness
+## A. Observed result
 
-Production V0.5 expanded score range versus V0.4.2 but annual vectors remain
-positively skewed: high \`fiveOrMoreAbove50Rate\` with low pressure-band reach.
-Primary driver is ${evaluation.evidenceBiasDetected ? "positive latent evidence bias — scale-only tightening would amplify bias" : "calibration amplitude / activation gate — not evidence mechanical defect"}.
+- Positive latent bias (both splits): ${bias.evidenceBiasFlags.globalPositiveLatentBias}
+- Training positive latent rate: ${(bias.evidenceBiasFlags.training.positiveLatentRate * 100).toFixed(1)}%
+- Holdout positive latent rate: ${(bias.evidenceBiasFlags.holdout.positiveLatentRate * 100).toFixed(1)}%
+- Retained support/pressure mass ratio: ${bias.global.evidence.supportPressureRawMassRatio.toFixed(3)}
+- Global score median: ${bias.global.score.median.toFixed(2)}
 
-## Candidate summary
+## B. Mechanical funnel finding
+
+- pressureRelativeRetentionGap: ${bias.signedEvidenceFunnel.retentionRates.pressureRelativeRetentionGap.toFixed(4)}
+- pressureRetentionDiagnosis: ${bias.diagnosis.pressureRetentionDiagnosis}
+- Support final retention: ${(bias.signedEvidenceFunnel.retentionRates.supportFinalRetentionRate * 100).toFixed(1)}%
+- Pressure final retention: ${(bias.signedEvidenceFunnel.retentionRates.pressureFinalRetentionRate * 100).toFixed(1)}%
+
+## C. Root-cause inference
+
+**${bias.diagnosis.rootCauseLabel}** (confidence: ${bias.diagnosis.rootCauseConfidence})
+
+${bias.diagnosis.rootCauseNotes.map((n) => `- ${n}`).join("\n")}
+
+## Candidate summary (generated)
 
 ${evaluation.candidates
   .map(
     (c) =>
-      `- **${c.candidateId}**: passedAllGates=${c.passedAllGates}, blockers=${c.blockers.length}, globalMedian=${c.holdoutMetrics.globalMedianScore?.toFixed(2)}, allSixAbove50=${((c.holdoutMetrics.allSixAbove50Rate ?? 0) * 100).toFixed(1)}%`,
+      `- **${c.candidateId}**: activationScale=${c.calibration.activationScale.toFixed(6)}, passedAllGates=${c.passedAllGates}, blockers=${c.blockers.length}, globalMedian=${c.holdoutMetrics.globalMedianScore?.toFixed(2)}, allSixAbove50=${((c.holdoutMetrics.allSixAbove50Rate ?? 0) * 100).toFixed(1)}%`,
   )
   .join("\n")}
 
@@ -65,8 +84,10 @@ describe.runIf(ENABLED)("annual-axes v0.5.1 variant evaluation write", () => {
     expect(loaded.ok).toBe(true);
     if (!loaded.ok) return;
 
+    const bias = runV051BiasAudit(loaded.knowledge);
     const evaluation = runV051VariantEvaluation(loaded.knowledge);
-    expect(evaluation.baselineReproduced).toBe(true);
+    expect(evaluation.baselineReproduction.reproduced).toBe(true);
+    expect(evaluation.auditIntegrityVersion).toBe(2);
 
     const product = runV051ProductFixture(
       loaded.knowledge,
@@ -84,7 +105,7 @@ describe.runIf(ENABLED)("annual-axes v0.5.1 variant evaluation write", () => {
     );
     writeFileSync(
       join(OUT_DIR, "ANNUAL-AXES-V0.5.1-DECISION.md"),
-      renderDecisionMarkdown(evaluation, product),
+      renderDecisionMarkdown(evaluation, product, bias),
     );
   }, 900_000);
 });

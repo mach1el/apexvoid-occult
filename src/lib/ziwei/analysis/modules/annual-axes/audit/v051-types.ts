@@ -1,4 +1,6 @@
 import type { AnnualAxisDomain } from "../../../contracts/annual-axes";
+import type { BaselineReproduction } from "./v051-baseline-reproduction";
+import type { SignedEvidenceFunnel } from "./v051-signed-funnel";
 
 export type V051CandidateId = "BASELINE-V05" | "STRICT-SCALE" | "STRICT-BALANCED" | "STRICT-ACTIVATION";
 
@@ -8,9 +10,7 @@ export interface V051CandidateSpec {
   id: V051CandidateId;
   targetMedianActivationGate: number;
   targetQ75ScoreDelta: number;
-  /** When set, derive activationScale from median positive raw / atanh(target). */
   activationFromTargetGate: boolean;
-  /** When set, domainScale = q75 / atanh(targetQ75/38) with clamp. */
   domainScaleFromQ75Delta: boolean;
   clampDomainScale: boolean;
 }
@@ -160,11 +160,44 @@ export interface V051CandidateEvaluation {
   blockers: string[];
 }
 
+export interface V051SplitLatentMetrics {
+  positiveLatentRate: number;
+  medianLatent: number;
+  negativeLatentRate: number;
+}
+
+export interface V051EvidenceBiasFlags {
+  globalPositiveLatentBias: boolean;
+  perDomainPositiveLatentBiasDomains: AnnualAxisDomain[];
+  scaleOnlyTighteningBlocked: boolean;
+  training: V051SplitLatentMetrics;
+  holdout: V051SplitLatentMetrics;
+  perDomain: Record<
+    AnnualAxisDomain,
+    {
+      training: V051SplitLatentMetrics;
+      holdout: V051SplitLatentMetrics;
+      biasedOnBothSplits: boolean;
+    }
+  >;
+}
+
+export type PressureRetentionDiagnosis =
+  | "pressure-mechanically-disadvantaged"
+  | "pressure-mechanically-advantaged"
+  | "no-material-mechanical-retention-gap";
+
+export type RootCauseLabel =
+  | "doctrinal-evidence-imbalance"
+  | "mechanical-imbalance-suspected"
+  | "root-cause-unresolved";
+
 export interface V051VariantEvaluationReport {
   profileId: "annual-axes-v0.5.1-variant-evaluation";
+  auditIntegrityVersion: 2;
   corpusId: string;
   generatedAt: string;
-  baselineReproduced: boolean;
+  baselineReproduction: BaselineReproduction;
   evidenceBiasDetected: boolean;
   evidenceBiasBlockers: string[];
   candidates: V051CandidateEvaluation[];
@@ -175,10 +208,14 @@ export interface V051VariantEvaluationReport {
 
 export interface V051BiasAuditReport {
   profileId: "annual-axes-v0.5.1-baseline-bias-audit";
+  auditIntegrityVersion: 2;
   corpusId: string;
   engineVersion: "0.5.0";
   generatedAt: string;
+  baselineReproduction: BaselineReproduction;
+  /** @deprecated use baselineReproduction.reproduced */
   baselineReproduced: boolean;
+  /** @deprecated use baselineReproduction.mismatches */
   baselineMismatchDetails: string[];
   global: {
     score: V051ScoreDistribution;
@@ -193,6 +230,8 @@ export interface V051BiasAuditReport {
       supportPressureRawMassRatio: number;
       retainedSignedFactCount: number;
       retainedActivationFactCount: number;
+      sourceMembershipCount: number;
+      meanSourceIdsPerRetainedFact: number;
     };
   };
   perDomain: Record<
@@ -221,18 +260,23 @@ export interface V051BiasAuditReport {
     byStackingGroup: Record<string, V051EvidenceMassBreakdown>;
     byOwnershipRole: Record<string, V051EvidenceMassBreakdown>;
   };
-  evidenceBiasFlags: {
-    globalPositiveLatentBias: boolean;
-    perDomainPositiveLatentBiasDomains: AnnualAxisDomain[];
-    scaleOnlyTighteningBlocked: boolean;
+  dimensionCountIntegrity: {
+    ok: boolean;
+    failures: string[];
   };
+  signedEvidenceFunnel: SignedEvidenceFunnel;
+  evidenceBiasFlags: V051EvidenceBiasFlags;
   diagnosis: {
     softnessInSpatialSigned: boolean;
     latentPositivelyBiased: boolean;
     supportLargerThanPressure: boolean;
     pressureDisproportionatelyTp4c: boolean;
-    pressureDroppedByEligibilityOrDedupe: boolean;
+    pressureRetentionDiagnosis: PressureRetentionDiagnosis;
+    pressureRelativeRetentionGap: number;
     activationTooWeak: boolean;
     calibrationWouldAmplifyPositiveBias: boolean;
+    rootCauseLabel: RootCauseLabel;
+    rootCauseConfidence: "high" | "medium" | "low";
+    rootCauseNotes: string[];
   };
 }

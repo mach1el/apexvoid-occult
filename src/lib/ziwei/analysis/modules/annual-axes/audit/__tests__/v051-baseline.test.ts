@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { loadAnnualAxesKnowledgeV05NamPhai } from "../../../../knowledge/annual-axes/v0.5";
-import { verifyV05BaselineReproduction } from "../run-v051-bias-audit";
+import { verifyV05BaselineReproduction } from "../v051-baseline-reproduction";
 import { runV051VariantEvaluation } from "../run-v051-variant-evaluation";
 import { V051_CANDIDATES } from "../v051-types";
 import { deriveV051Calibration } from "../v051-calibration";
@@ -15,6 +15,7 @@ describe("V0.5.1 baseline integrity", () => {
     const check = verifyV05BaselineReproduction(loaded.knowledge);
     expect(check.reproduced).toBe(true);
     expect(check.mismatches).toEqual([]);
+    expect(check.checkedMetricCount).toBeGreaterThanOrEqual(30);
   }, 600_000);
 
   it("BASELINE-V05 calibration matches committed production values", () => {
@@ -47,6 +48,7 @@ describe("V0.5.1 variant evaluation smoke", () => {
     const b = runV051VariantEvaluation(loaded.knowledge);
     expect(a).toEqual(b);
     expect(a.candidates).toHaveLength(4);
-    expect(a.baselineReproduced).toBe(true);
+    expect(a.baselineReproduction.reproduced).toBe(true);
+    expect(a.auditIntegrityVersion).toBe(2);
   }, 900_000);
 });

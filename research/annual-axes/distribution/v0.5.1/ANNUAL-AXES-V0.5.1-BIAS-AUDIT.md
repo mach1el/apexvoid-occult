@@ -1,8 +1,11 @@
 # Annual Axes V0.5.1 Baseline Bias Audit
 
+auditIntegrityVersion: 2
 Engine: V0.5.0 (production baseline)
 Corpus: annual-axes-audit-full-v0.4
 Baseline reproduced: true
+Checked metrics: 40
+Dimension count integrity: true
 
 ## Score distribution (global)
 
@@ -15,40 +18,54 @@ Baseline reproduced: true
 | scoreAtOrBelow45Rate | 15.6% |
 | scoreAtOrAbove60Rate | 38.2% |
 
-## Annual-vector distribution
+## Latent bias (training AND holdout)
 
-| Metric | Value |
-|--------|------:|
-| allSixAbove50Rate | 15.0% |
-| fiveOrMoreAbove50Rate | 47.0% |
-| allSixInside45To65Rate | 5.0% |
-| atLeastOneAtOrBelow45Rate | 68.8% |
-| atLeastOneAtOrAbove60Rate | 96.4% |
-| oneLowAndOneHighRate | 66.2% |
-| median intra-year range | 26.20 |
+| Split | positiveLatentRate | medianLatent | negativeLatentRate |
+|-------|-------------------:|-------------:|-------------------:|
+| Training | 73.3% | 0.1019 | 26.3% |
+| Holdout | 74.2% | 0.1092 | 25.3% |
 
-## Signed-signal distribution
+Global positive latent bias (both splits): true
+Per-domain bias (both splits): health, family, career
+Scale-only tightening blocked: true
 
-| Metric | Value |
-|--------|------:|
-| spatialSigned median | 0.1643 |
-| latent median | 0.1035 |
-| positive latent rate | 73.5% |
-| negative latent rate | 26.1% |
-| support/pressure raw mass ratio | 1.404 |
+## Support/pressure funnel (rawAxes stages)
 
-## Diagnosis (required answers)
+| Stage | factCount | supportRaw | pressureRaw | S/P ratio |
+|-------|----------:|-----------:|------------:|----------:|
+| candidate | 53557 | 234126.8 | 166944.9 | 1.402 |
+| eligible | 51544 | 221829.5 | 157864.6 | 1.405 |
+| dedupedWinner | 41029 | 169368.9 | 120032.6 | 1.411 |
+| retained | 41029 | 169368.9 | 120032.6 | 1.411 |
 
-1. **Softness in spatialSigned?** No — spatialSigned has spread
-2. **Latent positively biased?** Yes (global positive rate 73.5%)
-3. **Support raw mass > pressure?** Yes (ratio 1.404)
-4. **Pressure disproportionately TP4C?** No
-5. **Pressure dropped by eligibility/dedupe?** Not indicated
-6. **Activation too weak?** No (median gate 0.707)
-7. **Calibration-only would amplify positive bias?** Yes — blocker for scale-only tightening
+### Retention rates
 
-## Evidence bias flags
+| Metric | Support | Pressure |
+|--------|--------:|---------:|
+| Eligibility retention | 94.7% | 94.6% |
+| Dedupe retention | 76.4% | 76.0% |
+| Final retention | 72.3% | 71.9% |
 
-- Global positive latent bias: true
-- Per-domain bias domains (5): health, family, wealth, career, social
-- Scale-only tightening blocked: true
+pressureRelativeRetentionGap: -0.0044
+pressureRetentionDiagnosis: no-material-mechanical-retention-gap
+
+## Retained signed fact count
+
+41029
+
+## Diagnosis
+
+1. Softness in spatialSigned? false
+2. Latent positively biased (both splits)? true
+3. Support raw mass > pressure? true (ratio 1.404)
+4. Pressure disproportionately TP4C? false
+5. Pressure mechanical retention gap? no-material-mechanical-retention-gap
+6. Activation too weak? false
+7. Calibration-only would amplify positive bias? true
+
+### Root cause
+
+**doctrinal-evidence-imbalance** (confidence: medium)
+
+- Positive latent bias confirmed on both training and holdout with no material pressure retention disadvantage.
+- Retained evidence still shows material support/pressure mass imbalance — consistent with doctrinal knowledge imbalance.

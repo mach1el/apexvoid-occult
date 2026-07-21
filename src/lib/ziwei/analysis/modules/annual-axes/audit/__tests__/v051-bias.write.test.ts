@@ -12,11 +12,16 @@ const OUT_DIR = join(process.cwd(), "research/annual-axes/distribution/v0.5.1");
 
 function renderBiasMarkdown(report: ReturnType<typeof runV051BiasAudit>): string {
   const g = report.global;
+  const f = report.signedEvidenceFunnel;
+  const bias = report.evidenceBiasFlags;
   return `# Annual Axes V0.5.1 Baseline Bias Audit
 
+auditIntegrityVersion: ${report.auditIntegrityVersion}
 Engine: V0.5.0 (production baseline)
 Corpus: ${report.corpusId}
-Baseline reproduced: ${report.baselineReproduced}
+Baseline reproduced: ${report.baselineReproduction.reproduced}
+Checked metrics: ${report.baselineReproduction.checkedMetricCount}
+Dimension count integrity: ${report.dimensionCountIntegrity.ok}
 
 ## Score distribution (global)
 
@@ -29,43 +34,56 @@ Baseline reproduced: ${report.baselineReproduced}
 | scoreAtOrBelow45Rate | ${(g.score.scoreAtOrBelow45Rate * 100).toFixed(1)}% |
 | scoreAtOrAbove60Rate | ${(g.score.scoreAtOrAbove60Rate * 100).toFixed(1)}% |
 
-## Annual-vector distribution
+## Latent bias (training AND holdout)
 
-| Metric | Value |
-|--------|------:|
-| allSixAbove50Rate | ${(g.vector.allSixAbove50Rate * 100).toFixed(1)}% |
-| fiveOrMoreAbove50Rate | ${(g.vector.fiveOrMoreAbove50Rate * 100).toFixed(1)}% |
-| allSixInside45To65Rate | ${(g.vector.allSixInside45To65Rate * 100).toFixed(1)}% |
-| atLeastOneAtOrBelow45Rate | ${(g.vector.atLeastOneAtOrBelow45Rate * 100).toFixed(1)}% |
-| atLeastOneAtOrAbove60Rate | ${(g.vector.atLeastOneAtOrAbove60Rate * 100).toFixed(1)}% |
-| oneLowAndOneHighRate | ${(g.vector.oneLowAndOneHighRate * 100).toFixed(1)}% |
-| median intra-year range | ${g.vector.medianIntraYearRange.toFixed(2)} |
+| Split | positiveLatentRate | medianLatent | negativeLatentRate |
+|-------|-------------------:|-------------:|-------------------:|
+| Training | ${(bias.training.positiveLatentRate * 100).toFixed(1)}% | ${bias.training.medianLatent.toFixed(4)} | ${(bias.training.negativeLatentRate * 100).toFixed(1)}% |
+| Holdout | ${(bias.holdout.positiveLatentRate * 100).toFixed(1)}% | ${bias.holdout.medianLatent.toFixed(4)} | ${(bias.holdout.negativeLatentRate * 100).toFixed(1)}% |
 
-## Signed-signal distribution
+Global positive latent bias (both splits): ${bias.globalPositiveLatentBias}
+Per-domain bias (both splits): ${bias.perDomainPositiveLatentBiasDomains.join(", ") || "none"}
+Scale-only tightening blocked: ${bias.scaleOnlyTighteningBlocked}
 
-| Metric | Value |
-|--------|------:|
-| spatialSigned median | ${g.signed.spatialSignedMedian.toFixed(4)} |
-| latent median | ${g.signed.latentMedian.toFixed(4)} |
-| positive latent rate | ${(g.signed.positiveLatentRate * 100).toFixed(1)}% |
-| negative latent rate | ${(g.signed.negativeLatentRate * 100).toFixed(1)}% |
-| support/pressure raw mass ratio | ${g.evidence.supportPressureRawMassRatio.toFixed(3)} |
+## Support/pressure funnel (rawAxes stages)
 
-## Diagnosis (required answers)
+| Stage | factCount | supportRaw | pressureRaw | S/P ratio |
+|-------|----------:|-----------:|------------:|----------:|
+| candidate | ${f.candidate.factCount} | ${f.candidate.supportRaw.toFixed(1)} | ${f.candidate.pressureRaw.toFixed(1)} | ${f.candidate.supportPressureMassRatio.toFixed(3)} |
+| eligible | ${f.eligible.factCount} | ${f.eligible.supportRaw.toFixed(1)} | ${f.eligible.pressureRaw.toFixed(1)} | ${f.eligible.supportPressureMassRatio.toFixed(3)} |
+| dedupedWinner | ${f.dedupedWinner.factCount} | ${f.dedupedWinner.supportRaw.toFixed(1)} | ${f.dedupedWinner.pressureRaw.toFixed(1)} | ${f.dedupedWinner.supportPressureMassRatio.toFixed(3)} |
+| retained | ${f.retained.factCount} | ${f.retained.supportRaw.toFixed(1)} | ${f.retained.pressureRaw.toFixed(1)} | ${f.retained.supportPressureMassRatio.toFixed(3)} |
 
-1. **Softness in spatialSigned?** ${report.diagnosis.softnessInSpatialSigned ? "Yes — median near zero" : "No — spatialSigned has spread"}
-2. **Latent positively biased?** ${report.diagnosis.latentPositivelyBiased ? "Yes" : "No"} (global positive rate ${(g.signed.positiveLatentRate * 100).toFixed(1)}%)
-3. **Support raw mass > pressure?** ${report.diagnosis.supportLargerThanPressure ? "Yes" : "No"} (ratio ${g.evidence.supportPressureRawMassRatio.toFixed(3)})
-4. **Pressure disproportionately TP4C?** ${report.diagnosis.pressureDisproportionatelyTp4c ? "Yes" : "No"}
-5. **Pressure dropped by eligibility/dedupe?** ${report.diagnosis.pressureDroppedByEligibilityOrDedupe ? "Possible" : "Not indicated"}
-6. **Activation too weak?** ${report.diagnosis.activationTooWeak ? "Yes" : "No"} (median gate ${g.activation.activationGateMedian.toFixed(3)})
-7. **Calibration-only would amplify positive bias?** ${report.diagnosis.calibrationWouldAmplifyPositiveBias ? "Yes — blocker for scale-only tightening" : "No"}
+### Retention rates
 
-## Evidence bias flags
+| Metric | Support | Pressure |
+|--------|--------:|---------:|
+| Eligibility retention | ${(f.retentionRates.supportEligibilityRetentionRate * 100).toFixed(1)}% | ${(f.retentionRates.pressureEligibilityRetentionRate * 100).toFixed(1)}% |
+| Dedupe retention | ${(f.retentionRates.supportDedupeRetentionRate * 100).toFixed(1)}% | ${(f.retentionRates.pressureDedupeRetentionRate * 100).toFixed(1)}% |
+| Final retention | ${(f.retentionRates.supportFinalRetentionRate * 100).toFixed(1)}% | ${(f.retentionRates.pressureFinalRetentionRate * 100).toFixed(1)}% |
 
-- Global positive latent bias: ${report.evidenceBiasFlags.globalPositiveLatentBias}
-- Per-domain bias domains (${report.evidenceBiasFlags.perDomainPositiveLatentBiasDomains.length}): ${report.evidenceBiasFlags.perDomainPositiveLatentBiasDomains.join(", ") || "none"}
-- Scale-only tightening blocked: ${report.evidenceBiasFlags.scaleOnlyTighteningBlocked}
+pressureRelativeRetentionGap: ${f.retentionRates.pressureRelativeRetentionGap.toFixed(4)}
+pressureRetentionDiagnosis: ${report.diagnosis.pressureRetentionDiagnosis}
+
+## Retained signed fact count
+
+${g.evidence.retainedSignedFactCount}
+
+## Diagnosis
+
+1. Softness in spatialSigned? ${report.diagnosis.softnessInSpatialSigned}
+2. Latent positively biased (both splits)? ${report.diagnosis.latentPositivelyBiased}
+3. Support raw mass > pressure? ${report.diagnosis.supportLargerThanPressure} (ratio ${g.evidence.supportPressureRawMassRatio.toFixed(3)})
+4. Pressure disproportionately TP4C? ${report.diagnosis.pressureDisproportionatelyTp4c}
+5. Pressure mechanical retention gap? ${report.diagnosis.pressureRetentionDiagnosis}
+6. Activation too weak? ${report.diagnosis.activationTooWeak}
+7. Calibration-only would amplify positive bias? ${report.diagnosis.calibrationWouldAmplifyPositiveBias}
+
+### Root cause
+
+**${report.diagnosis.rootCauseLabel}** (confidence: ${report.diagnosis.rootCauseConfidence})
+
+${report.diagnosis.rootCauseNotes.map((n) => `- ${n}`).join("\n")}
 `;
 }
 
@@ -76,7 +94,9 @@ describe.runIf(ENABLED)("annual-axes v0.5.1 bias audit write", () => {
     if (!loaded.ok) return;
 
     const report = runV051BiasAudit(loaded.knowledge);
-    expect(report.baselineReproduced).toBe(true);
+    expect(report.baselineReproduction.reproduced).toBe(true);
+    expect(report.dimensionCountIntegrity.ok).toBe(true);
+    expect(report.auditIntegrityVersion).toBe(2);
 
     mkdirSync(OUT_DIR, { recursive: true });
     writeFileSync(

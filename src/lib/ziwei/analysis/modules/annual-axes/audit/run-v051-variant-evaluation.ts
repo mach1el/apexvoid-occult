@@ -1,33 +1,54 @@
 import type { AnnualAxesKnowledgeV05NamPhai } from "../../../knowledge/annual-axes/v0.5";
-import { splitChartIndices } from "../../../knowledge/annual-axes/v0.5/derive-calibration";
+import {
+  splitChartIndices,
+  V05_CALIBRATION_GENERATED_AT,
+} from "../../../knowledge/annual-axes/v0.5/derive-calibration";
 import { FULL_CORPUS_CONTRACT } from "./build-audit-corpus";
 import { deriveV051Calibration, rescoreSamplesWithCalibration } from "./v051-calibration";
 import { evaluateV051Gates, selectV051Candidate } from "./v051-gates";
-import { runV051BiasAudit, verifyV05BaselineReproduction } from "./run-v051-bias-audit";
+import { detectEvidenceBias } from "./run-v051-bias-audit";
+import { verifyV05BaselineReproduction } from "./v051-baseline-reproduction";
+import { collectV051Samples } from "./collect-v051-samples";
 import { V051_CANDIDATES, type V051VariantEvaluationReport } from "./v051-types";
-import { V05_CALIBRATION_GENERATED_AT } from "../../../knowledge/annual-axes/v0.5/derive-calibration";
 
 export function runV051VariantEvaluation(
   knowledge: AnnualAxesKnowledgeV05NamPhai,
 ): V051VariantEvaluationReport {
-  const baselineCheck = verifyV05BaselineReproduction(knowledge);
-  const biasAudit = runV051BiasAudit(knowledge);
-  const { holdout } = splitChartIndices(FULL_CORPUS_CONTRACT.chartCount);
-  const { training } = splitChartIndices(FULL_CORPUS_CONTRACT.chartCount);
+  const baselineReproduction = verifyV05BaselineReproduction(knowledge);
+  const allSamples = collectV051Samples(knowledge);
+  const trainingSamples = allSamples.filter((s) => s.split === "training");
+  const holdoutSamplesAll = allSamples.filter((s) => s.split === "holdout");
+  const biasFlags = detectEvidenceBias(trainingSamples, holdoutSamplesAll);
+  const { holdout, training } = splitChartIndices(FULL_CORPUS_CONTRACT.chartCount);
+
+  if (!baselineReproduction.reproduced) {
+    return {
+      profileId: "annual-axes-v0.5.1-variant-evaluation",
+      auditIntegrityVersion: 2,
+      corpusId: FULL_CORPUS_CONTRACT.contractId,
+      generatedAt: V05_CALIBRATION_GENERATED_AT,
+      baselineReproduction,
+      evidenceBiasDetected: biasFlags.scaleOnlyTighteningBlocked,
+      evidenceBiasBlockers: biasFlags.scaleOnlyTighteningBlocked
+        ? ["Positive latent evidence bias detected on both training and holdout"]
+        : [],
+      candidates: [],
+      selectedVariant: null,
+      selectionStatus: "no-variant-approved",
+      selectionRationale: ["baseline-reproduction-failed — candidate evaluation aborted"],
+    };
+  }
 
   const candidates = V051_CANDIDATES.map((spec) => {
     const calibration = deriveV051Calibration(spec, knowledge);
-    const trainingSamples = rescoreSamplesWithCalibration(knowledge, calibration, training);
-    const holdoutSamples = rescoreSamplesWithCalibration(knowledge, calibration, holdout);
-    const trainingEval = evaluateV051Gates(trainingSamples, knowledge);
-    const holdoutEval = evaluateV051Gates(holdoutSamples, knowledge);
+    const trainingRescored = rescoreSamplesWithCalibration(knowledge, calibration, training);
+    const holdoutRescored = rescoreSamplesWithCalibration(knowledge, calibration, holdout);
+    const trainingEval = evaluateV051Gates(trainingRescored, knowledge);
+    const holdoutEval = evaluateV051Gates(holdoutRescored, knowledge);
 
     const blockers = [...holdoutEval.blockers];
-    if (biasAudit.evidenceBiasFlags.scaleOnlyTighteningBlocked && spec.id !== "BASELINE-V05") {
-      blockers.push("evidence-bias: scale-only tightening blocked");
-    }
-    if (!baselineCheck.reproduced && spec.id === "BASELINE-V05") {
-      blockers.push("baseline-reproduction-failed");
+    if (biasFlags.scaleOnlyTighteningBlocked && spec.id !== "BASELINE-V05") {
+      blockers.push("evidence-bias: scale-only tightening blocked (training AND holdout)");
     }
 
     const passedAllGates =
@@ -55,12 +76,13 @@ export function runV051VariantEvaluation(
 
   return {
     profileId: "annual-axes-v0.5.1-variant-evaluation",
+    auditIntegrityVersion: 2,
     corpusId: FULL_CORPUS_CONTRACT.contractId,
     generatedAt: V05_CALIBRATION_GENERATED_AT,
-    baselineReproduced: baselineCheck.reproduced,
-    evidenceBiasDetected: biasAudit.evidenceBiasFlags.scaleOnlyTighteningBlocked,
-    evidenceBiasBlockers: biasAudit.evidenceBiasFlags.scaleOnlyTighteningBlocked
-      ? ["Positive latent evidence bias detected — scale-only tightening blocked"]
+    baselineReproduction,
+    evidenceBiasDetected: biasFlags.scaleOnlyTighteningBlocked,
+    evidenceBiasBlockers: biasFlags.scaleOnlyTighteningBlocked
+      ? ["Positive latent evidence bias detected on both training and holdout"]
       : [],
     candidates,
     selectedVariant: selection.selectedVariant as V051VariantEvaluationReport["selectedVariant"],

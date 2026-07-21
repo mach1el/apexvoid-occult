@@ -1,8 +1,14 @@
 {
   "profileId": "annual-axes-v0.5.1-baseline-bias-audit",
+  "auditIntegrityVersion": 2,
   "corpusId": "annual-axes-audit-full-v0.4",
   "engineVersion": "0.5.0",
   "generatedAt": "2026-07-21T00:00:00.000Z",
+  "baselineReproduction": {
+    "reproduced": true,
+    "checkedMetricCount": 40,
+    "mismatches": []
+  },
   "baselineReproduced": true,
   "baselineMismatchDetails": [],
   "global": {
@@ -64,7 +70,9 @@
       "tp4cPressureRawMass": 343.3517306591232,
       "supportPressureRawMassRatio": 1.4041823340037682,
       "retainedSignedFactCount": 41029,
-      "retainedActivationFactCount": 39016
+      "retainedActivationFactCount": 39016,
+      "sourceMembershipCount": 41029,
+      "meanSourceIdsPerRetainedFact": 1
     }
   },
   "perDomain": {
@@ -254,105 +262,209 @@
       "annual": {
         "supportRaw": 2122.7444347020814,
         "pressureRaw": 1359.8060101043523,
-        "count": 13151
+        "count": 8001
       },
       "natal-activated": {
         "supportRaw": 22891.871333253875,
         "pressureRaw": 16417.716417448348,
-        "count": 38170
+        "count": 31015
       },
       "major-fortune": {
         "supportRaw": 1315.396714074307,
         "pressureRaw": 973.6125528704681,
-        "count": 3481
+        "count": 2013
       }
     },
     "byCategory": {
       "mutagen": {
         "supportRaw": 2748.3652858400837,
         "pressureRaw": 1772.0955846289235,
-        "count": 21074
+        "count": 14858
       },
       "star": {
         "supportRaw": 23581.647196190104,
         "pressureRaw": 16979.03939579439,
-        "count": 33350
+        "count": 26171
       }
     },
     "byGeometryBucket": {
       "direct": {
         "supportRaw": 25769.79732352959,
         "pressureRaw": 18407.783249764056,
-        "count": 47404
+        "count": 40234
       },
       "tp4c": {
         "supportRaw": 560.2151585007344,
         "pressureRaw": 343.3517306591232,
-        "count": 1269
+        "count": 795
       }
     },
     "bySourceId": {
       "SRC-AA-ENG-004": {
         "supportRaw": 2748.3652858400837,
         "pressureRaw": 1772.0955846289235,
-        "count": 21074
+        "count": 14858
       },
       "src-heuristic-palace-overview-v1": {
         "supportRaw": 23581.647196190104,
         "pressureRaw": 16979.03939579439,
-        "count": 33350
+        "count": 26171
       }
     },
     "byRuleId": {
       "RULE-AA-MUTAGEN-LOC-V0": {
         "supportRaw": 1359.3173638433655,
         "pressureRaw": 0,
-        "count": 6872
+        "count": 3662
       },
       "RULE-AA-MUTAGEN-QUYEN-V0": {
         "supportRaw": 430.45515432106305,
         "pressureRaw": 307.46796737219603,
-        "count": 6832
+        "count": 3640
       },
       "RULE-AA-STAR-MAJOR-CANONICAL-V0": {
         "supportRaw": 23581.647196190104,
         "pressureRaw": 16979.03939579439,
-        "count": 33350
+        "count": 26171
       },
       "RULE-AA-MUTAGEN-KHOA-V0": {
         "supportRaw": 958.5927676756191,
         "pressureRaw": 0,
-        "count": 6893
+        "count": 3696
       },
       "RULE-AA-MUTAGEN-KY-V0": {
         "supportRaw": 0,
         "pressureRaw": 1464.6276172567707,
-        "count": 7177
+        "count": 3860
       }
     },
     "byStackingGroup": {
       "annual-mutagen": {
         "supportRaw": 2748.3652858400837,
         "pressureRaw": 1772.0955846289235,
-        "count": 21074
+        "count": 14858
       },
       "major-star": {
         "supportRaw": 23581.647196190104,
         "pressureRaw": 16979.03939579439,
-        "count": 33350
+        "count": 26171
       }
     },
     "byOwnershipRole": {
       "primary": {
         "supportRaw": 21613.925314309367,
         "pressureRaw": 15435.669295690594,
-        "count": 30967
+        "count": 24521
       },
       "secondary": {
         "supportRaw": 4716.087167720816,
         "pressureRaw": 3315.4656847327333,
-        "count": 21046
+        "count": 16508
       }
+    }
+  },
+  "dimensionCountIntegrity": {
+    "ok": true,
+    "failures": []
+  },
+  "signedEvidenceFunnel": {
+    "candidate": {
+      "factCount": 53557,
+      "supportRaw": 234126.7999999999,
+      "pressureRaw": 166944.8749999998,
+      "supportPressureMassRatio": 1.4024198107309385,
+      "supportRetentionOfCandidate": 1,
+      "pressureRetentionOfCandidate": 1
+    },
+    "eligible": {
+      "factCount": 51544,
+      "supportRaw": 221829.54999999984,
+      "pressureRaw": 157864.625,
+      "supportPressureMassRatio": 1.4051884644834132,
+      "supportRetentionOfCandidate": 0.94747611123545,
+      "pressureRetentionOfCandidate": 0.9456092916898479
+    },
+    "dedupedWinner": {
+      "factCount": 41029,
+      "supportRaw": 169368.92500000037,
+      "pressureRaw": 120032.59999999948,
+      "supportPressureMassRatio": 1.4110243800434308,
+      "supportRetentionOfCandidate": 0.7234068248487591,
+      "pressureRetentionOfCandidate": 0.7189954169003369
+    },
+    "retained": {
+      "factCount": 41029,
+      "supportRaw": 169368.92500000037,
+      "pressureRaw": 120032.59999999948,
+      "supportPressureMassRatio": 1.4110243800434308,
+      "supportRetentionOfCandidate": 0.7234068248487591,
+      "pressureRetentionOfCandidate": 0.7189954169003369
+    },
+    "losses": {
+      "support": {
+        "eligibilityLost": 12297.250000000016,
+        "dedupeLost": 52460.62499999996,
+        "finalLost": 64757.874999999956
+      },
+      "pressure": {
+        "eligibilityLost": 9080.249999999996,
+        "dedupeLost": 37832.02500000005,
+        "finalLost": 46912.27499999994
+      }
+    },
+    "retentionRates": {
+      "supportEligibilityRetentionRate": 0.94747611123545,
+      "supportDedupeRetentionRate": 0.7635093025252969,
+      "supportFinalRetentionRate": 0.7234068248487591,
+      "pressureEligibilityRetentionRate": 0.9456092916898479,
+      "pressureDedupeRetentionRate": 0.7603514720286415,
+      "pressureFinalRetentionRate": 0.7189954169003369,
+      "pressureRelativeRetentionGap": -0.004411407948422208
+    },
+    "rejectionByReason": {
+      "duplicate-signed-physical-fact": {
+        "candidateCount": 10515,
+        "supportRawLost": 52460.62499999996,
+        "pressureRawLost": 37832.02500000005
+      },
+      "not-signed-score-eligible": {
+        "candidateCount": 2013,
+        "supportRawLost": 12297.250000000016,
+        "pressureRawLost": 9080.249999999996
+      }
+    },
+    "physicalFactDedupe": {
+      "uniquePhysicalFactIdCountBeforeDedupe": 41029,
+      "duplicateCandidateCount": 10515,
+      "supportBearingRejectedByDedupe": 9960,
+      "pressureBearingRejectedByDedupe": 9438,
+      "supportRawRejectedByDedupe": 52460.62499999996,
+      "pressureRawRejectedByDedupe": 37832.02500000005,
+      "winnerPolarity": {
+        "supportOnly": 7358,
+        "pressureOnly": 3860,
+        "both": 29811,
+        "zeroSigned": 0
+      },
+      "loserPolarity": {
+        "supportOnly": 1077,
+        "pressureOnly": 555,
+        "both": 8883,
+        "zeroSigned": 0
+      },
+      "mixedPolarityCollisionCount": 8883,
+      "directTp4cCollisionCount": 7630,
+      "annualNatalMajorLayerCollisionCount": 0,
+      "mixedPolarityWinnerCarries": {
+        "supportOnly": 0,
+        "pressureOnly": 0,
+        "both": 8883,
+        "zeroSigned": 0
+      }
+    },
+    "retainedWeighted": {
+      "supportRaw": 26330.012482030244,
+      "pressureRaw": 18751.1349804232
     }
   },
   "evidenceBiasFlags": {
@@ -360,19 +472,114 @@
     "perDomainPositiveLatentBiasDomains": [
       "health",
       "family",
-      "wealth",
-      "career",
-      "social"
+      "career"
     ],
-    "scaleOnlyTighteningBlocked": true
+    "scaleOnlyTighteningBlocked": true,
+    "training": {
+      "positiveLatentRate": 0.7329861111111111,
+      "medianLatent": 0.10190448261650589,
+      "negativeLatentRate": 0.26284722222222223
+    },
+    "holdout": {
+      "positiveLatentRate": 0.7423611111111111,
+      "medianLatent": 0.10921417376298596,
+      "negativeLatentRate": 0.2534722222222222
+    },
+    "perDomain": {
+      "health": {
+        "training": {
+          "positiveLatentRate": 0.753125,
+          "medianLatent": 0.1553007930449362,
+          "negativeLatentRate": 0.23645833333333333
+        },
+        "holdout": {
+          "positiveLatentRate": 0.8458333333333333,
+          "medianLatent": 0.1832296196190892,
+          "negativeLatentRate": 0.15
+        },
+        "biasedOnBothSplits": true
+      },
+      "family": {
+        "training": {
+          "positiveLatentRate": 0.8104166666666667,
+          "medianLatent": 0.13669213685435247,
+          "negativeLatentRate": 0.18958333333333333
+        },
+        "holdout": {
+          "positiveLatentRate": 0.8333333333333334,
+          "medianLatent": 0.17354923232596076,
+          "negativeLatentRate": 0.16666666666666666
+        },
+        "biasedOnBothSplits": true
+      },
+      "wealth": {
+        "training": {
+          "positiveLatentRate": 0.7041666666666667,
+          "medianLatent": 0.07395149551832089,
+          "negativeLatentRate": 0.2916666666666667
+        },
+        "holdout": {
+          "positiveLatentRate": 0.5208333333333334,
+          "medianLatent": 0.007129318953028169,
+          "negativeLatentRate": 0.475
+        },
+        "biasedOnBothSplits": false
+      },
+      "career": {
+        "training": {
+          "positiveLatentRate": 0.7770833333333333,
+          "medianLatent": 0.09228512754237217,
+          "negativeLatentRate": 0.22291666666666668
+        },
+        "holdout": {
+          "positiveLatentRate": 0.75,
+          "medianLatent": 0.08446268442662967,
+          "negativeLatentRate": 0.25
+        },
+        "biasedOnBothSplits": true
+      },
+      "social": {
+        "training": {
+          "positiveLatentRate": 0.6916666666666667,
+          "medianLatent": 0.09721863029775558,
+          "negativeLatentRate": 0.30833333333333335
+        },
+        "holdout": {
+          "positiveLatentRate": 0.8166666666666667,
+          "medianLatent": 0.18126627299138948,
+          "negativeLatentRate": 0.18333333333333332
+        },
+        "biasedOnBothSplits": false
+      },
+      "romance": {
+        "training": {
+          "positiveLatentRate": 0.6614583333333334,
+          "medianLatent": 0.05259263516052962,
+          "negativeLatentRate": 0.328125
+        },
+        "holdout": {
+          "positiveLatentRate": 0.6875,
+          "medianLatent": 0.0752644690159015,
+          "negativeLatentRate": 0.29583333333333334
+        },
+        "biasedOnBothSplits": false
+      }
+    }
   },
   "diagnosis": {
     "softnessInSpatialSigned": false,
     "latentPositivelyBiased": true,
     "supportLargerThanPressure": true,
     "pressureDisproportionatelyTp4c": false,
-    "pressureDroppedByEligibilityOrDedupe": false,
+    "pressureRetentionDiagnosis": "no-material-mechanical-retention-gap",
+    "pressureRelativeRetentionGap": -0.004411407948422208,
     "activationTooWeak": false,
-    "calibrationWouldAmplifyPositiveBias": true
+    "calibrationWouldAmplifyPositiveBias": true,
+    "rootCauseLabel": "doctrinal-evidence-imbalance",
+    "rootCauseConfidence": "medium",
+    "rootCauseNotes": [
+      "Positive latent bias confirmed on both training and holdout with no material pressure retention disadvantage.",
+      "Retained evidence still shows material support/pressure mass imbalance — consistent with doctrinal knowledge imbalance."
+    ]
   }
 }

@@ -1,11 +1,16 @@
 {
   "profileId": "annual-axes-v0.5.1-variant-evaluation",
+  "auditIntegrityVersion": 2,
   "corpusId": "annual-axes-audit-full-v0.4",
   "generatedAt": "2026-07-21T00:00:00.000Z",
-  "baselineReproduced": true,
+  "baselineReproduction": {
+    "reproduced": true,
+    "checkedMetricCount": 40,
+    "mismatches": []
+  },
   "evidenceBiasDetected": true,
   "evidenceBiasBlockers": [
-    "Positive latent evidence bias detected — scale-only tightening blocked"
+    "Positive latent evidence bias detected on both training and holdout"
   ],
   "candidates": [
     {
@@ -948,7 +953,7 @@
         "domainMedianScoreMax_social: 65.4 vs <= 55",
         "domainPositiveLatentRateMax_social: 0.8166666666666667 vs <= 0.75",
         "domainMedianScoreMax_romance: 58.1 vs <= 55",
-        "evidence-bias: scale-only tightening blocked"
+        "evidence-bias: scale-only tightening blocked (training AND holdout)"
       ]
     },
     {
@@ -1420,7 +1425,7 @@
         "domainMedianScoreMax_social: 65.1 vs <= 55",
         "domainPositiveLatentRateMax_social: 0.8166666666666667 vs <= 0.75",
         "domainMedianScoreMax_romance: 58.05 vs <= 55",
-        "evidence-bias: scale-only tightening blocked"
+        "evidence-bias: scale-only tightening blocked (training AND holdout)"
       ]
     },
     {
@@ -1892,7 +1897,7 @@
         "domainMedianScoreMax_social: 66.2 vs <= 55",
         "domainPositiveLatentRateMax_social: 0.8166666666666667 vs <= 0.75",
         "domainMedianScoreMax_romance: 58.75 vs <= 55",
-        "evidence-bias: scale-only tightening blocked"
+        "evidence-bias: scale-only tightening blocked (training AND holdout)"
       ]
     }
   ],

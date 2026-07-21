@@ -14,27 +14,25 @@ import {
 import { scoreV05ChartDomains } from "../nam-phai-v05/score-chart";
 import type { AnnualAxisEvidence } from "../types";
 import type { V051DomainSample, V051EvidenceMassBreakdown, V051Split } from "./v051-types";
+import {
+  addEvidenceRow,
+  mergeEvidenceBreakdown,
+  sumBreakdownCount,
+  sumBreakdownPressure,
+  sumBreakdownSupport,
+} from "./v051-evidence-mass";
 
-function addMass(
-  map: Record<string, V051EvidenceMassBreakdown>,
-  key: string,
-  support: number,
-  pressure: number,
-): void {
-  const cur = map[key] ?? { supportRaw: 0, pressureRaw: 0, count: 0 };
-  cur.supportRaw += support;
-  cur.pressureRaw += pressure;
-  cur.count += 1;
-  map[key] = cur;
-}
-
-export function evidenceMassFromRows(evidence: AnnualAxisEvidence[]): {
+export interface EvidenceDimensionAggregate {
   directSupportRaw: number;
   directPressureRaw: number;
   tp4cSupportRaw: number;
   tp4cPressureRaw: number;
   retainedSignedCount: number;
   retainedActivationCount: number;
+  totalSupportRaw: number;
+  totalPressureRaw: number;
+  sourceMembershipCount: number;
+  meanSourceIdsPerRetainedFact: number;
   byLayer: Record<string, V051EvidenceMassBreakdown>;
   byCategory: Record<string, V051EvidenceMassBreakdown>;
   byGeometryBucket: Record<string, V051EvidenceMassBreakdown>;
@@ -42,13 +40,16 @@ export function evidenceMassFromRows(evidence: AnnualAxisEvidence[]): {
   byRuleId: Record<string, V051EvidenceMassBreakdown>;
   byStackingGroup: Record<string, V051EvidenceMassBreakdown>;
   byOwnershipRole: Record<string, V051EvidenceMassBreakdown>;
-} {
+}
+
+export function evidenceMassFromRows(evidence: AnnualAxisEvidence[]): EvidenceDimensionAggregate {
   let directSupportRaw = 0;
   let directPressureRaw = 0;
   let tp4cSupportRaw = 0;
   let tp4cPressureRaw = 0;
   let retainedSignedCount = 0;
   let retainedActivationCount = 0;
+  let sourceMembershipCount = 0;
   const byLayer: Record<string, V051EvidenceMassBreakdown> = {};
   const byCategory: Record<string, V051EvidenceMassBreakdown> = {};
   const byGeometryBucket: Record<string, V051EvidenceMassBreakdown> = {};
@@ -58,11 +59,13 @@ export function evidenceMassFromRows(evidence: AnnualAxisEvidence[]): {
   const byOwnershipRole: Record<string, V051EvidenceMassBreakdown> = {};
 
   for (const e of evidence) {
-    const support = e.weightedAxes.support;
-    const pressure = e.weightedAxes.pressure;
+    const support = Math.max(0, e.weightedAxes.support);
+    const pressure = Math.max(0, e.weightedAxes.pressure);
     const bucket = e.geometryBucket ?? "unknown";
     const isDirect = bucket === "direct";
     const isTp4c = bucket === "tp4c";
+
+    if (e.retainedForActivation) retainedActivationCount += 1;
 
     if (e.retainedForSignedScore) {
       retainedSignedCount += 1;
@@ -73,19 +76,22 @@ export function evidenceMassFromRows(evidence: AnnualAxisEvidence[]): {
         tp4cSupportRaw += support;
         tp4cPressureRaw += pressure;
       }
-    }
-    if (e.retainedForActivation) retainedActivationCount += 1;
 
-    if (e.retainedForSignedScore) {
-      addMass(byLayer, e.layer, support, pressure);
-      addMass(byCategory, e.category, support, pressure);
-      addMass(byGeometryBucket, bucket, support, pressure);
-      addMass(byRuleId, e.ruleId, support, pressure);
-      addMass(byStackingGroup, e.stackingGroup, support, pressure);
-      addMass(byOwnershipRole, e.ownershipRole ?? "unknown", support, pressure);
-      for (const sid of e.sourceIds) addMass(bySourceId, sid, support, pressure);
+      addEvidenceRow(byLayer, e.layer, support, pressure);
+      addEvidenceRow(byCategory, e.category, support, pressure);
+      addEvidenceRow(byGeometryBucket, bucket, support, pressure);
+      addEvidenceRow(byRuleId, e.ruleId, support, pressure);
+      addEvidenceRow(byStackingGroup, e.stackingGroup, support, pressure);
+      addEvidenceRow(byOwnershipRole, e.ownershipRole ?? "unknown", support, pressure);
+      for (const sid of e.sourceIds) {
+        addEvidenceRow(bySourceId, sid, support, pressure);
+        sourceMembershipCount += 1;
+      }
     }
   }
+
+  const totalSupportRaw = directSupportRaw + tp4cSupportRaw;
+  const totalPressureRaw = directPressureRaw + tp4cPressureRaw;
 
   return {
     directSupportRaw,
@@ -94,6 +100,11 @@ export function evidenceMassFromRows(evidence: AnnualAxisEvidence[]): {
     tp4cPressureRaw,
     retainedSignedCount,
     retainedActivationCount,
+    totalSupportRaw,
+    totalPressureRaw,
+    sourceMembershipCount,
+    meanSourceIdsPerRetainedFact:
+      retainedSignedCount > 0 ? sourceMembershipCount / retainedSignedCount : 0,
     byLayer,
     byCategory,
     byGeometryBucket,
@@ -183,10 +194,28 @@ export function collectV051Samples(
 export function aggregateEvidenceDimensions(
   knowledge: AnnualAxesKnowledgeV05NamPhai,
   chartIndices: number[],
-): ReturnType<typeof evidenceMassFromRows> {
+): EvidenceDimensionAggregate {
   const contract = FULL_CORPUS_CONTRACT;
   const bases = buildAuditBirthInputs(contract);
-  const merged = evidenceMassFromRows([]);
+  const merged: EvidenceDimensionAggregate = {
+    directSupportRaw: 0,
+    directPressureRaw: 0,
+    tp4cSupportRaw: 0,
+    tp4cPressureRaw: 0,
+    retainedSignedCount: 0,
+    retainedActivationCount: 0,
+    totalSupportRaw: 0,
+    totalPressureRaw: 0,
+    sourceMembershipCount: 0,
+    meanSourceIdsPerRetainedFact: 0,
+    byLayer: {},
+    byCategory: {},
+    byGeometryBucket: {},
+    bySourceId: {},
+    byRuleId: {},
+    byStackingGroup: {},
+    byOwnershipRole: {},
+  };
 
   for (const chartIndex of chartIndices) {
     const base = bases[chartIndex];
@@ -207,39 +236,78 @@ export function aggregateEvidenceDimensions(
         merged.tp4cPressureRaw += m.tp4cPressureRaw;
         merged.retainedSignedCount += m.retainedSignedCount;
         merged.retainedActivationCount += m.retainedActivationCount;
+        merged.sourceMembershipCount += m.sourceMembershipCount;
         for (const [k, v] of Object.entries(m.byLayer)) {
-          addMass(merged.byLayer, k, v.supportRaw, v.pressureRaw);
-          merged.byLayer[k]!.count += v.count;
+          mergeEvidenceBreakdown(merged.byLayer, k, v);
         }
         for (const [k, v] of Object.entries(m.byCategory)) {
-          addMass(merged.byCategory, k, v.supportRaw, v.pressureRaw);
-          merged.byCategory[k]!.count += v.count;
+          mergeEvidenceBreakdown(merged.byCategory, k, v);
         }
         for (const [k, v] of Object.entries(m.byGeometryBucket)) {
-          addMass(merged.byGeometryBucket, k, v.supportRaw, v.pressureRaw);
-          merged.byGeometryBucket[k]!.count += v.count;
+          mergeEvidenceBreakdown(merged.byGeometryBucket, k, v);
         }
         for (const [k, v] of Object.entries(m.bySourceId)) {
-          addMass(merged.bySourceId, k, v.supportRaw, v.pressureRaw);
-          merged.bySourceId[k]!.count += v.count;
+          mergeEvidenceBreakdown(merged.bySourceId, k, v);
         }
         for (const [k, v] of Object.entries(m.byRuleId)) {
-          addMass(merged.byRuleId, k, v.supportRaw, v.pressureRaw);
-          merged.byRuleId[k]!.count += v.count;
+          mergeEvidenceBreakdown(merged.byRuleId, k, v);
         }
         for (const [k, v] of Object.entries(m.byStackingGroup)) {
-          addMass(merged.byStackingGroup, k, v.supportRaw, v.pressureRaw);
-          merged.byStackingGroup[k]!.count += v.count;
+          mergeEvidenceBreakdown(merged.byStackingGroup, k, v);
         }
         for (const [k, v] of Object.entries(m.byOwnershipRole)) {
-          addMass(merged.byOwnershipRole, k, v.supportRaw, v.pressureRaw);
-          merged.byOwnershipRole[k]!.count += v.count;
+          mergeEvidenceBreakdown(merged.byOwnershipRole, k, v);
         }
       }
     }
   }
 
+  merged.totalSupportRaw = merged.directSupportRaw + merged.tp4cSupportRaw;
+  merged.totalPressureRaw = merged.directPressureRaw + merged.tp4cPressureRaw;
+  merged.meanSourceIdsPerRetainedFact =
+    merged.retainedSignedCount > 0
+      ? merged.sourceMembershipCount / merged.retainedSignedCount
+      : 0;
+
   return merged;
+}
+
+export function assertSingleMembershipCounts(
+  dims: EvidenceDimensionAggregate,
+): { ok: boolean; failures: string[] } {
+  const failures: string[] = [];
+  const expected = dims.retainedSignedCount;
+  const checks: Array<[string, Record<string, V051EvidenceMassBreakdown>]> = [
+    ["byLayer", dims.byLayer],
+    ["byCategory", dims.byCategory],
+    ["byGeometryBucket", dims.byGeometryBucket],
+    ["byRuleId", dims.byRuleId],
+    ["byStackingGroup", dims.byStackingGroup],
+    ["byOwnershipRole", dims.byOwnershipRole],
+  ];
+  for (const [name, map] of checks) {
+    const count = sumBreakdownCount(map);
+    if (count !== expected) {
+      failures.push(`${name}.count=${count} !== retainedSignedFactCount=${expected}`);
+    }
+    const support = sumBreakdownSupport(map);
+    const pressure = sumBreakdownPressure(map);
+    if (Math.abs(support - dims.totalSupportRaw) > 1e-6) {
+      failures.push(`${name}.supportRaw=${support} !== totalSupportRaw=${dims.totalSupportRaw}`);
+    }
+    if (Math.abs(pressure - dims.totalPressureRaw) > 1e-6) {
+      failures.push(
+        `${name}.pressureRaw=${pressure} !== totalPressureRaw=${dims.totalPressureRaw}`,
+      );
+    }
+  }
+  const sourceCount = sumBreakdownCount(dims.bySourceId);
+  if (sourceCount !== dims.sourceMembershipCount) {
+    failures.push(
+      `bySourceId.count=${sourceCount} !== sourceMembershipCount=${dims.sourceMembershipCount}`,
+    );
+  }
+  return { ok: failures.length === 0, failures };
 }
 
 export function samplesToVectors(samples: V051DomainSample[]): number[][] {
