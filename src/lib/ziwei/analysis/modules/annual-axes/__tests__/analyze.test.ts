@@ -114,13 +114,13 @@ describe("analyzeAnnualAxes — domain resolution (Trung Châu chart, real annua
   });
 });
 
-describe("analyzeAnnualAxes — Nam Phái V0.5 production default", () => {
+describe("analyzeAnnualAxes — Nam Phái V0.8 production default", () => {
   beforeEach(() => {
     window.sessionStorage.clear();
     window.history.replaceState({}, "", "/");
   });
 
-  it("defaults to V0.5 calibrated core with score traces", () => {
+  it("defaults to V0.8 direct-anchor core with score traces", () => {
     const chart = calculateNamPhai(REGRESSION);
     expect(chart.palaces.every((p) => p.annualPalaceName === undefined)).toBe(true);
     expect(chart.annualHeadPalace).toBeTruthy();
@@ -128,7 +128,7 @@ describe("analyzeAnnualAxes — Nam Phái V0.5 production default", () => {
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
 
     expect(result.status).not.toBe("unavailable");
-    expect(result.versions.engineVersion).toBe("0.5.0");
+    expect(result.versions.engineVersion).toBe("0.8.0");
     expect(result.capabilities.domainAnchorCoordinate).toBe("natal-palace-name");
     expect(result.capabilities.domainAnchorProvenance).toBe("nam-phai-natal-domain-anchor");
     expect(result.capabilities.primaryAnnualFocus).toBe("annual-major-fortune");
@@ -147,27 +147,18 @@ describe("analyzeAnnualAxes — Nam Phái V0.5 production default", () => {
       expect(axis.score).toBeGreaterThanOrEqual(0);
       expect(axis.score).toBeLessThanOrEqual(100);
       expect(axis.annualDelta).toBeDefined();
-      expect(axis.natalResponse).toBeDefined();
-      expect(axis.scoreTrace?.formulaVersion).toBe("v0.5-calibrated-core");
-      expect(axis.scoreTrace?.absoluteScore).toBe(axis.score);
+      expect(axis.scoreTrace?.formulaVersion).toBe("v0.8-direct-anchor-robust-score");
+      if (axis.scoreTrace?.formulaVersion === "v0.8-direct-anchor-robust-score") {
+        expect(axis.scoreTrace.absoluteScore).toBe(axis.score);
+      }
     }
   });
 
-  it("rolls back to V0.4.2 when ?ziweiAnnualAxesV05=0", () => {
-    window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0");
+  it("ignores legacy rollback query flags", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0&ziweiAnnualAxesV08=0");
     const chart = calculateNamPhai(REGRESSION);
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
-    expect(result.versions.engineVersion).toBe("0.4.2");
-
-    const availableDomains = ANNUAL_AXIS_DOMAINS.filter(
-      (d) => result.axes[d].status === "available",
-    );
-    for (const domain of availableDomains) {
-      const axis = result.axes[domain];
-      if (axis.status !== "available") continue;
-      expect(axis.routing?.routing).toBeGreaterThanOrEqual(0);
-      expect(axis.channels).toBeDefined();
-    }
+    expect(result.versions.engineVersion).toBe("0.8.0");
   });
 });
 

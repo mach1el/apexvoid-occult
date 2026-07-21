@@ -92,11 +92,11 @@ describe("analysis availability after reset", () => {
     expect(status.status).toBe("available");
   });
 
-  it("marks annual-axes available by default for Nam Phái V0.5", () => {
+  it("marks annual-axes available by default for Nam Phái V0.8", () => {
     const status = getAnalysisStatus("annual-axes", { school: "nam-phai" });
     expect(status.status).toBe("available");
     if (status.status === "available") {
-      expect(status.version).toBe("0.5.0");
+      expect(status.version).toBe("0.8.0");
     }
   });
 

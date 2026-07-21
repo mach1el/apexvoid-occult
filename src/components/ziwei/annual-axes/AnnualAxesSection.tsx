@@ -33,17 +33,8 @@ function engineBadgeLabel(result: AnnualAxesResult): string {
   if (result.school === "trung-chau") {
     return "Trung Châu · Experimental";
   }
-  if (result.versions.engineVersion === "0.7.0") {
-    return "Nam Phái V0.7 · Experimental";
-  }
-  if (result.versions.engineVersion === "0.6.0") {
-    return "Nam Phái V0.6 · Experimental";
-  }
-  if (result.versions.engineVersion === "0.5.0") {
-    return "Nam Phái V0.5 · Fallback";
-  }
-  if (result.versions.engineVersion === "0.4.2") {
-    return "Nam Phái V0.4.2 · Fallback";
+  if (result.versions.engineVersion === "0.8.0") {
+    return "Nam Phái V0.8";
   }
   return "Experimental";
 }
@@ -110,8 +101,21 @@ export function AnnualAxesSection({ chart, school, result }: AnnualAxesSectionPr
                   {activeAxis.annualDelta.toFixed(1)} (trung tính 50)
                 </>
               ) : null}
-              <br />
-              Cường độ {activeAxis.intensity} · Xung đột {activeAxis.conflict}
+              {activeAxis.scoreTrace?.formulaVersion === "v0.8-direct-anchor-robust-score" ? (
+                <>
+                  <br />
+                  Độ tin cậy {(activeAxis.scoreTrace.confidence * 100).toFixed(0)}%
+                  <br />
+                  Kích hoạt năm {activeAxis.scoreTrace.activationGate.toFixed(2)}
+                  <br />
+                  Cung gốc {activeAxis.scoreTrace.anchorPalaceName}
+                </>
+              ) : (
+                <>
+                  <br />
+                  Cường độ {activeAxis.intensity} · Xung đột {activeAxis.conflict}
+                </>
+              )}
             </p>
           </div>
         ) : (

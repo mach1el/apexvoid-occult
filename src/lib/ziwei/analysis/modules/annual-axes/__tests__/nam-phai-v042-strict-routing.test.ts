@@ -3,7 +3,7 @@ import { calculate as calculateNamPhai } from "@/lib/ziwei/engine-nam-phai";
 import type { ChartData } from "@/types/chart";
 import { loadAnnualAxesKnowledgeV042NamPhai } from "../../../knowledge/annual-axes/v0.4.2";
 import { loadAnnualAxesKnowledgeV04NamPhai } from "../../../knowledge/annual-axes/v0.4";
-import { analyzeAnnualAxes } from "../analyze";
+import { analyzeAnnualAxesNamPhaiV04 } from "../nam-phai-v04/analyze";
 import { domainFrameCoverage } from "../nam-phai-v04/routing";
 
 /**
@@ -57,7 +57,7 @@ describe("Annual Axes V0.4.2 · strict physical domain routing fixtures (correct
     expect(owned).toEqual(new Set(["wealth"]));
 
     const chart = stripped({ annualStars: [{ name: "Vũ Khúc", palace: taiBach }] });
-    const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+    const result = analyzeAnnualAxesNamPhaiV04(chart);
 
     for (const domain of DOMAINS) {
       const axis = result.axes[domain];
@@ -94,7 +94,7 @@ describe("Annual Axes V0.4.2 · strict physical domain routing fixtures (correct
     expect(ownedDomains("Tài Bạch").has("family")).toBe(false);
 
     const chart = stripped({ annualStars: [{ name: "Vũ Khúc", palace: taiBach }] });
-    const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+    const result = analyzeAnnualAxesNamPhaiV04(chart);
     const family = result.axes.family;
     expect(family.status).toBe("available");
     if (family.status !== "available") return;
@@ -117,7 +117,7 @@ describe("Annual Axes V0.4.2 · strict physical domain routing fixtures (correct
 
     // Quan Lộc: career=primary(1.0), wealth=secondary(0.4).
     const chart = stripped({ annualStars: [{ name: "Thái Dương", palace: quanLoc }] });
-    const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+    const result = analyzeAnnualAxesNamPhaiV04(chart);
 
     const career = result.axes.career;
     const wealth = result.axes.wealth;

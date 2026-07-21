@@ -76,8 +76,8 @@ describe("Annual Axes V0.4.3 · not publicly routed", () => {
       ],
     });
     const production = analyzeAnnualAxes(chart, { school: "nam-phai" });
-    expect(production.versions.engineVersion).toBe("0.5.0");
-    expect(production.versions.knowledgeVersion).toContain("v0.5");
+    expect(production.versions.engineVersion).toBe("0.8.0");
+    expect(production.versions.knowledgeVersion).toContain("v0.8");
   });
 });
 

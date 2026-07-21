@@ -90,7 +90,8 @@ export function AnnualAxisDetail({ domain, axis, onClose }: AnnualAxisDetailProp
           {axis.natalResponse &&
           axis.scoreTrace?.formulaVersion !== "v0.5-calibrated-core" &&
           axis.scoreTrace?.formulaVersion !== "v0.6-annual-dominant-core" &&
-          axis.scoreTrace?.formulaVersion !== "v0.7-robust-centered-annual-score" ? (
+          axis.scoreTrace?.formulaVersion !== "v0.7-robust-centered-annual-score" &&
+          axis.scoreTrace?.formulaVersion !== "v0.8-direct-anchor-robust-score" ? (
             <section className="annual-axis-detail__section" data-natal-response>
               <h5>Đáp ứng bản mệnh (biên độ, không phải điểm tốt/xấu)</h5>
               <ul>
@@ -101,6 +102,48 @@ export function AnnualAxisDetail({ domain, axis, onClose }: AnnualAxisDetailProp
             </section>
           ) : null}
 
+          {axis.scoreTrace?.formulaVersion === "v0.8-direct-anchor-robust-score" ? (
+            <div className="annual-axis-detail__score-trace" aria-label="V0.8 score reconstruction">
+              <h5 className="annual-axis-detail__subtitle">V0.8 · Cung gốc & tái dựng điểm</h5>
+              <p className="annual-axis-detail__note">
+                Điểm 50 là mức điển hình của miền sau hiệu chỉnh robust V0.8 (direct-anchor).
+              </p>
+              <h6>CUNG GỐC</h6>
+              <ul className="annual-axis-detail__list">
+                <li>Cung: {axis.scoreTrace.anchorPalaceName}</li>
+                <li>Chi: {axis.scoreTrace.anchorBranch}</li>
+                <li>Provenance: {axis.scoreTrace.anchorProvenance}</li>
+              </ul>
+              <h6>TÍN HIỆU TRỰC TIẾP</h6>
+              <ul className="annual-axis-detail__list">
+                <li>Support: {axis.scoreTrace.directSupportRaw.toFixed(4)}</li>
+                <li>Pressure: {axis.scoreTrace.directPressureRaw.toFixed(4)}</li>
+                <li>Intensity: {axis.scoreTrace.directIntensity.toFixed(4)}</li>
+                <li>Polarity: {axis.scoreTrace.directPolarity.toFixed(4)}</li>
+                <li>directSignedRaw: {axis.scoreTrace.directSignedRaw.toFixed(4)}</li>
+              </ul>
+              <h6>HIỆU CHỈNH MIỀN</h6>
+              <ul className="annual-axis-detail__list">
+                <li>domainCenter: {axis.scoreTrace.domainCenter.toFixed(4)}</li>
+                <li>robustScale: {axis.scoreTrace.robustScale.toFixed(4)}</li>
+                <li>directZ: {axis.scoreTrace.directZ.toFixed(4)}</li>
+                <li>effectiveZ: {axis.scoreTrace.effectiveZ.toFixed(4)}</li>
+              </ul>
+              <h6>KÍCH HOẠT NĂM</h6>
+              <ul className="annual-axis-detail__list">
+                <li>annualActivationRaw: {axis.scoreTrace.annualActivationRaw.toFixed(4)}</li>
+                <li>activationGate: {axis.scoreTrace.activationGate.toFixed(4)}</li>
+                <li>activationModulator: {axis.scoreTrace.activationModulator.toFixed(4)}</li>
+              </ul>
+              <h6>ĐỘ TIN CẬY</h6>
+              <ul className="annual-axis-detail__list">
+                <li>retainedDirectFacts: {axis.scoreTrace.retainedDirectFactCount}</li>
+                <li>coverage: {axis.scoreTrace.coverage.toFixed(4)}</li>
+                <li>conflictRatio: {axis.scoreTrace.conflictRatio.toFixed(4)}</li>
+                <li>confidence: {axis.scoreTrace.confidence.toFixed(4)}</li>
+              </ul>
+            </div>
+          ) : null}
           {axis.scoreTrace?.formulaVersion === "v0.7-robust-centered-annual-score" ? (
             <div className="annual-axis-detail__score-trace" aria-label="V0.7 score reconstruction">
               <h5 className="annual-axis-detail__subtitle">V0.7 · Tái dựng điểm</h5>
@@ -191,6 +234,32 @@ export function AnnualAxisDetail({ domain, axis, onClose }: AnnualAxisDetailProp
               )}
             </ul>
           </section>
+
+          {axis.scoreTrace?.formulaVersion === "v0.8-direct-anchor-robust-score" ? (
+            <section className="annual-axis-detail__section" data-v08-reference-only>
+              <h5>Tham khảo ngoài điểm số</h5>
+              <ul>
+                {(() => {
+                  const refs = axis.evidence.filter(
+                    (e) =>
+                      e.retainedForSignedScore !== true &&
+                      (e.geometryBucket === "tp4c" ||
+                        e.geometryBucket === "context-only" ||
+                        e.geometryClass === "tp4c-opposite" ||
+                        e.geometryClass === "tp4c-trine" ||
+                        e.geometryClass === "context-only"),
+                  );
+                  if (refs.length === 0) return <li>—</li>;
+                  return refs.slice(0, 6).map((e) => (
+                    <li key={`ref-${e.id}`}>
+                      <strong>{e.targetPalaceName}</strong> · {CATEGORY_LABEL_VI[e.category]} ·{" "}
+                      {ROLE_LABEL_VI[e.frameRole]} — Không tham gia điểm V0.8.
+                    </li>
+                  ));
+                })()}
+              </ul>
+            </section>
+          ) : null}
         </>
       ) : (
         <section className="annual-axis-detail__section">

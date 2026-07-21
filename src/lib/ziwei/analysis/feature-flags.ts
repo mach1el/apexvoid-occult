@@ -28,158 +28,46 @@ export function isPalaceOverviewV1Enabled(): boolean {
   }
 }
 
-/**
- * Feature flag for Annual Axes V0.4 (annual-delta model).
- * Default ON. Kill-switch via VITE_ZIWEI_ANNUAL_AXES_V04=false, or
- * `?ziweiAnnualAxesV04=0` (persisted in sessionStorage).
- */
+/** @deprecated Nam Phái Annual Axes is V0.8-only; no longer gates routing. */
 export const ANNUAL_AXES_V04_FEATURE_FLAG = "ziweiAnnualAxesV04";
-
 export function isAnnualAxesV04Enabled(): boolean {
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V04 === "true") {
-    return true;
-  }
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V04 === "false") {
-    return false;
-  }
-  if (typeof window === "undefined") {
-    return true;
-  }
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const queryValue = params.get(ANNUAL_AXES_V04_FEATURE_FLAG);
-    if (queryValue === "0" || queryValue === "1") {
-      window.sessionStorage.setItem(ANNUAL_AXES_V04_FEATURE_FLAG, queryValue);
-    }
-    const stored = window.sessionStorage.getItem(ANNUAL_AXES_V04_FEATURE_FLAG);
-    if (stored === "0") return false;
-    if (stored === "1") return true;
-    return true;
-  } catch {
-    return true;
-  }
+  return true;
 }
 
-/**
- * Feature flag for Annual Axes V0.4.3 (90/10 spatial budget, experimental).
- * Default OFF. Opt-in via VITE_ZIWEI_ANNUAL_AXES_V043=true, or
- * `?ziweiAnnualAxesV043=1` (persisted in sessionStorage).
- */
+/** @deprecated Removed from public routing. */
 export const ANNUAL_AXES_V043_FEATURE_FLAG = "ziweiAnnualAxesV043";
-
 export function isAnnualAxesV043Enabled(): boolean {
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V043 === "true") {
-    return true;
-  }
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V043 === "false") {
-    return false;
-  }
-  if (typeof window === "undefined") {
-    return false;
-  }
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const queryValue = params.get(ANNUAL_AXES_V043_FEATURE_FLAG);
-    if (queryValue === "0" || queryValue === "1") {
-      window.sessionStorage.setItem(ANNUAL_AXES_V043_FEATURE_FLAG, queryValue);
-    }
-    const stored = window.sessionStorage.getItem(ANNUAL_AXES_V043_FEATURE_FLAG);
-    if (stored === "0") return false;
-    if (stored === "1") return true;
-    return false;
-  } catch {
-    return false;
-  }
+  return false;
 }
 
+/** @deprecated Removed from public routing. */
+export const ANNUAL_AXES_V05_FEATURE_FLAG = "ziweiAnnualAxesV05";
+export function isAnnualAxesV05Enabled(): boolean {
+  return false;
+}
 
-/**
- * Feature flag for Annual Axes V0.6 (annual-dominant signed core).
- * Historical experimental only — removed from public runtime selection.
- * Source/research artifacts remain. Opt-in env is ignored by public router.
- */
+/** @deprecated Removed from public routing. */
 export const ANNUAL_AXES_V06_FEATURE_FLAG = "ziweiAnnualAxesV06";
-
-/** @deprecated V0.6 is not publicly selectable; always returns false. */
 export function isAnnualAxesV06Enabled(): boolean {
   return false;
 }
 
-/**
- * Feature flag for Annual Axes V0.7 (robust-centered annual score).
- * Default OFF until holdout + product gates approve production.
- * Kill-switch: VITE_ZIWEI_ANNUAL_AXES_V07=false
- * Opt-in preview: ?ziweiAnnualAxesV07=1 (session)
- * Explicit rollback: ?ziweiAnnualAxesV07=0 (session) → V0.5/V0.4.2 chain
- */
+/** @deprecated Removed from public routing. */
 export const ANNUAL_AXES_V07_FEATURE_FLAG = "ziweiAnnualAxesV07";
-
 export function isAnnualAxesV07Enabled(): boolean {
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07 === "false") {
-    return false;
-  }
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07 === "true") {
-    // Build-time force-on still respects session rollback to 0.
-  }
-  if (typeof window === "undefined") {
-    return import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07 === "true";
-  }
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const queryValue = params.get(ANNUAL_AXES_V07_FEATURE_FLAG);
-    if (queryValue === "0" || queryValue === "1") {
-      window.sessionStorage.setItem(ANNUAL_AXES_V07_FEATURE_FLAG, queryValue);
-    }
-    const stored = window.sessionStorage.getItem(ANNUAL_AXES_V07_FEATURE_FLAG);
-    if (stored === "0") return false;
-    if (stored === "1") return true;
-    return import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07 === "true";
-  } catch {
-    return false;
-  }
+  return false;
 }
 
-/**
- * Feature flag for Annual Axes V0.5 (calibrated scoring core, Nam Phái).
- * Default ON as rollback target when V0.7 is disabled.
- * Emergency kill-switch via VITE_ZIWEI_ANNUAL_AXES_V05=false, or
- * `?ziweiAnnualAxesV05=0` (persisted in sessionStorage) for a per-session
- * rollback to V0.4.2; `?ziweiAnnualAxesV05=1` persists a per-session opt-in
- * override when the build-time kill-switch is not false.
- */
-export const ANNUAL_AXES_V05_FEATURE_FLAG = "ziweiAnnualAxesV05";
-
-export function isAnnualAxesV05Enabled(): boolean {
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V05 === "false") {
-    return false;
-  }
-  if (typeof window === "undefined") {
-    return true;
-  }
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const queryValue = params.get(ANNUAL_AXES_V05_FEATURE_FLAG);
-    if (queryValue === "0" || queryValue === "1") {
-      window.sessionStorage.setItem(ANNUAL_AXES_V05_FEATURE_FLAG, queryValue);
-    }
-    const stored = window.sessionStorage.getItem(ANNUAL_AXES_V05_FEATURE_FLAG);
-    if (stored === "0") return false;
-    if (stored === "1") return true;
-    if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V05 === "true") {
-      return true;
-    }
-    return true;
-  } catch {
-    return true;
-  }
+/** @deprecated Nam Phái always runs V0.8; kept for URL compatibility. */
+export const ANNUAL_AXES_V08_FEATURE_FLAG = "ziweiAnnualAxesV08";
+export function isAnnualAxesV08Enabled(): boolean {
+  return true;
 }
 
 /**
  * Feature flag for Annual Axes V0.3 (head-centric Nam Phái + preserved
  * V0.2 Trung Châu). Default ON while PR #90 remains experimental.
  * Kill-switch via VITE_ZIWEI_ANNUAL_AXES_V03=false, or `?ziweiAnnualAxesV03=0`.
- *
- * Release decision for V0.4: prefer `isAnnualAxesV04Enabled()` (default off).
  */
 export const ANNUAL_AXES_V03_FEATURE_FLAG = "ziweiAnnualAxesV03";
 
@@ -245,9 +133,7 @@ export function isHuyenKhiPreviewV01Enabled(): boolean {
     if (stored === "0") return false;
     if (stored === "1") return true;
 
-    return (
-      import.meta.env.VITE_ZIWEI_HUYEN_KHI_PREVIEW_V01 === "true"
-    );
+    return import.meta.env.VITE_ZIWEI_HUYEN_KHI_PREVIEW_V01 === "true";
   } catch {
     return false;
   }

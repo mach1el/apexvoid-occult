@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "0.8.0",
+  "catalogId": "annual-distribution-gates-v0-8",
+  "hardGates": {
+    "meanIntraYearAxisStandardDeviationMin": 11,
+    "medianIntraYearAxisRangeMin": 30,
+    "p25IntraYearRangeMin": 20,
+    "p10IntraYearRangeMin": 14,
+    "medianPerDomainTwelveYearRangeMin": 12,
+    "medianAdjacentYearAbsoluteDeltaMin": 2.5,
+    "exactDuplicateVectorRateMax": 0.01,
+    "nearDuplicateVectorRateMax": 0.05,
+    "unavailableRateMax": 0.02,
+    "absoluteInterAxisCorrelationMax": 0.88,
+    "boundaryScoreRateMax": 0.04,
+    "atLeastTwoOutside42To58RateMin": 0.7,
+    "atLeastOneAtOrBelow40RateMin": 0.6,
+    "atLeastOneAtOrAbove60RateMin": 0.6,
+    "oneLowAndOneHighRateMin": 0.55,
+    "allSixAbove50RateMax": 0.08,
+    "fiveOrMoreAbove50RateMax": 0.25,
+    "allSixInside45To65RateMax": 0.25
+  },
+  "sourceIds": ["SRC-AA-ENG-004"]
+}
