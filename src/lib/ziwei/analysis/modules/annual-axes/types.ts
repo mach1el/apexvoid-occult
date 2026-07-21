@@ -225,6 +225,18 @@ export interface NatalDomainResponseProfile {
   provenance: string[];
 }
 
+/** V0.5 calibrated core — deterministic score reconstruction trace. */
+export interface AnnualAxisScoreTraceV05 {
+  formulaVersion: "v0.5-calibrated-core";
+  annualActivationRaw: number;
+  activationGate: number;
+  natalGain: number;
+  spatialSigned: number;
+  latent: number;
+  domainScale: number;
+  absoluteScore: number;
+}
+
 /** V0.3 — head-centric routing exposure per domain. Undefined when the
  * domain result was produced by a non-head-centric school (currently
  * Trung Châu keeps the V0.2 path). */
@@ -266,6 +278,10 @@ export type AnnualAxisResult =
       spatialBudgetTrace?: AnnualSpatialBudgetTrace;
       dedupeTrace?: AnnualEvidenceDedupeTrace;
       activationGate?: number;
+      /** V0.5 calibrated core latent signal (optional). */
+      latent?: number;
+      /** V0.5 calibrated core score trace (optional). */
+      scoreTrace?: AnnualAxisScoreTraceV05;
     }
   | {
       domain: AnnualAxisDomain;

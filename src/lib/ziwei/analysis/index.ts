@@ -72,4 +72,6 @@ export {
   ANNUAL_AXES_V02_FEATURE_FLAG,
   isHuyenKhiPreviewV01Enabled,
   HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG,
+  isAnnualAxesV05Enabled,
+  ANNUAL_AXES_V05_FEATURE_FLAG,
 } from "./feature-flags";

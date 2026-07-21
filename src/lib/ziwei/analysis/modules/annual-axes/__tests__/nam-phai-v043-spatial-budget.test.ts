@@ -64,8 +64,8 @@ function scoresSnapshot(result: ReturnType<typeof analyzeAnnualAxesNamPhaiV043>)
   });
 }
 
-describe("Annual Axes V0.4.3 · feature flag default OFF", () => {
-  it("keeps production on V0.4.2 when the experimental flag is unset", () => {
+describe("Annual Axes V0.4.3 · not publicly routed", () => {
+  it("keeps production on V0.5 when the V0.4.3 flag is unset", () => {
     expect(isAnnualAxesV043Enabled()).toBe(false);
     const chart = stripped({
       annualStars: [
@@ -76,8 +76,8 @@ describe("Annual Axes V0.4.3 · feature flag default OFF", () => {
       ],
     });
     const production = analyzeAnnualAxes(chart, { school: "nam-phai" });
-    expect(production.versions.engineVersion).toBe("0.4.2");
-    expect(production.versions.knowledgeVersion).not.toContain("spatial-budget");
+    expect(production.versions.engineVersion).toBe("0.5.0");
+    expect(production.versions.knowledgeVersion).toContain("v0.5");
   });
 });
 

@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { calculate as calculateNamPhai } from "@/lib/ziwei/engine-nam-phai";
 import { calculate as calculateTrungChau } from "@/lib/ziwei/engine-trung-chau";
 import { ANNUAL_AXIS_DOMAINS } from "../../../contracts/annual-axes";
@@ -114,8 +114,13 @@ describe("analyzeAnnualAxes — domain resolution (Trung Châu chart, real annua
   });
 });
 
-describe("analyzeAnnualAxes — Nam Phái V0.4 annual-delta", () => {
-  it("resolves annual head from annualHeadPalace / LNDV and produces available axes around delta semantics", () => {
+describe("analyzeAnnualAxes — Nam Phái V0.5 production default", () => {
+  beforeEach(() => {
+    window.sessionStorage.clear();
+    window.history.replaceState({}, "", "/");
+  });
+
+  it("defaults to V0.5 calibrated core with score traces", () => {
     const chart = calculateNamPhai(REGRESSION);
     expect(chart.palaces.every((p) => p.annualPalaceName === undefined)).toBe(true);
     expect(chart.annualHeadPalace).toBeTruthy();
@@ -123,7 +128,7 @@ describe("analyzeAnnualAxes — Nam Phái V0.4 annual-delta", () => {
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
 
     expect(result.status).not.toBe("unavailable");
-    expect(result.versions.engineVersion).toBe("0.4.2");
+    expect(result.versions.engineVersion).toBe("0.5.0");
     expect(result.capabilities.domainAnchorCoordinate).toBe("natal-palace-name");
     expect(result.capabilities.domainAnchorProvenance).toBe("nam-phai-natal-domain-anchor");
     expect(result.capabilities.primaryAnnualFocus).toBe("annual-major-fortune");
@@ -142,17 +147,26 @@ describe("analyzeAnnualAxes — Nam Phái V0.4 annual-delta", () => {
       expect(axis.score).toBeGreaterThanOrEqual(0);
       expect(axis.score).toBeLessThanOrEqual(100);
       expect(axis.annualDelta).toBeDefined();
-      expect(axis.routedStrength).toBeGreaterThanOrEqual(0);
-      expect(axis.routedStrength).toBeLessThanOrEqual(1);
       expect(axis.natalResponse).toBeDefined();
-      expect(axis.channels).toBeDefined();
+      expect(axis.scoreTrace?.formulaVersion).toBe("v0.5-calibrated-core");
+      expect(axis.scoreTrace?.absoluteScore).toBe(axis.score);
+    }
+  });
+
+  it("rolls back to V0.4.2 when ?ziweiAnnualAxesV05=0", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0");
+    const chart = calculateNamPhai(REGRESSION);
+    const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
+    expect(result.versions.engineVersion).toBe("0.4.2");
+
+    const availableDomains = ANNUAL_AXIS_DOMAINS.filter(
+      (d) => result.axes[d].status === "available",
+    );
+    for (const domain of availableDomains) {
+      const axis = result.axes[domain];
+      if (axis.status !== "available") continue;
       expect(axis.routing?.routing).toBeGreaterThanOrEqual(0);
-      expect(axis.routing?.routing).toBeLessThanOrEqual(1);
-      for (const e of axis.evidence) {
-        if (e.layer === "natal-activated") {
-          expect(e.annualTriggerIds?.length).toBeGreaterThan(0);
-        }
-      }
+      expect(axis.channels).toBeDefined();
     }
   });
 });

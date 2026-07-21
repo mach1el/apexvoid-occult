@@ -1,4 +1,4 @@
-import type { ZiweiAnalysisModule } from "@/lib/ziwei/analysis";
+import type { ZiweiAnalysisModule, ZiweiAnalysisStatus } from "@/lib/ziwei/analysis";
 import { getAnalysisStatus } from "@/lib/ziwei/analysis";
 import "./analysis-rebuilding.css";
 
@@ -12,6 +12,8 @@ const TITLES: Record<ZiweiAnalysisModule, string> = {
 export interface ZiweiAnalysisRebuildingProps {
   module: ZiweiAnalysisModule;
   title?: string;
+  /** Pre-resolved status from the parent (e.g. school-aware annual-axes). */
+  status?: ZiweiAnalysisStatus;
 }
 
 /**
@@ -20,8 +22,9 @@ export interface ZiweiAnalysisRebuildingProps {
 export function ZiweiAnalysisRebuilding({
   module,
   title,
+  status: resolvedStatus,
 }: ZiweiAnalysisRebuildingProps) {
-  const status = getAnalysisStatus(module);
+  const status = resolvedStatus ?? getAnalysisStatus(module);
   const heading = title ?? TITLES[module];
 
   return (

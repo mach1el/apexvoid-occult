@@ -59,7 +59,7 @@ describe("AnnualAxesSection — Trung Châu available result", () => {
     const { container } = render(
       <AnnualAxesSection chart={chart} school="trung-chau" result={result} />,
     );
-    expect(container.textContent ?? "").not.toContain("Nam Phái V0.5 Preview");
+    expect(container.textContent ?? "").not.toContain("Nam Phái V0.5");
   });
 
   it("opens the detail panel when a radar point is clicked", () => {
@@ -95,7 +95,6 @@ describe("AnnualAxesSection — Nam Phái available result", () => {
   });
 
   it("renders the exact core score without React-side rescaling", () => {
-    window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=1");
     const chart = calculateNamPhai(REGRESSION);
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
     const { container } = render(
@@ -111,13 +110,15 @@ describe("AnnualAxesSection — Nam Phái available result", () => {
     expect(result.versions.engineVersion).toBe("0.5.0");
   });
 
-  it("does not show V0.5 preview badge for Nam Phái V0.4.2 result", () => {
+  it("shows V0.4.2 Fallback badge when rollback flag is set", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0");
     const chart = calculateNamPhai(REGRESSION);
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
     const { container } = render(
       <AnnualAxesSection chart={chart} school="nam-phai" result={result} />,
     );
-    expect(container.textContent ?? "").not.toContain("Nam Phái V0.5 Preview");
+    expect(container.textContent ?? "").toContain("Nam Phái V0.4.2 · Fallback");
+    expect(container.textContent ?? "").not.toContain("Nam Phái V0.5");
   });
 });
 

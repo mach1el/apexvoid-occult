@@ -101,6 +101,7 @@ describe("Annual Axes V0.3 · dynamic TP4C geometry (all 12 indexes)", () => {
   });
 
   it("reordered palace array with same indexes yields identical routing", () => {
+    window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0");
     const base = chartWithHeadAt(7);
     const reordered: ChartData = {
       ...base,

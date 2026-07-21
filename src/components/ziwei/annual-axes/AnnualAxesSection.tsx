@@ -29,6 +29,19 @@ export interface AnnualAxesSectionProps {
  * header, then radar | tooltip, then an optional detail block. Emits no
  * prediction prose.
  */
+function engineBadgeLabel(result: AnnualAxesResult): string {
+  if (result.school === "trung-chau") {
+    return "Trung Châu · Experimental";
+  }
+  if (result.versions.engineVersion === "0.5.0") {
+    return "Nam Phái V0.5 · Experimental";
+  }
+  if (result.versions.engineVersion === "0.4.2") {
+    return "Nam Phái V0.4.2 · Fallback";
+  }
+  return "Experimental";
+}
+
 export function AnnualAxesSection({ chart, school, result }: AnnualAxesSectionProps) {
   const computed = useMemo(() => {
     if (result) return result;
@@ -55,18 +68,13 @@ export function AnnualAxesSection({ chart, school, result }: AnnualAxesSectionPr
     setSelectedDomain((cur) => (cur === domain ? null : (domain as AnnualAxisDomain)));
   }
 
-  const isNamPhaiV05 =
-    computed.school === "nam-phai" && computed.versions.engineVersion === "0.5.0";
+  const badgeLabel = engineBadgeLabel(computed);
 
   return (
     <section className="annual-axes-section" data-module="annual-axes" aria-label="Sáu trục khí vận năm">
       <header className="annual-axes-section__head">
         <h3 className="annual-axes-section__title">Sáu trục khí vận năm</h3>
-        <span className="annual-axes-section__badge">
-          {isNamPhaiV05
-            ? "Annual Axes Engine: Nam Phái V0.5 Preview"
-            : "Experimental"}
-        </span>
+        <span className="annual-axes-section__badge">{badgeLabel}</span>
         <span className="annual-axes-section__year">Năm {computed.annualYear}</span>
         <span className="annual-axes-section__engine">
           Engine {computed.versions.engineVersion}

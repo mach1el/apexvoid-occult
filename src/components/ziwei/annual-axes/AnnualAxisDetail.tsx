@@ -87,13 +87,27 @@ export function AnnualAxisDetail({ domain, axis, onClose }: AnnualAxisDetailProp
             </section>
           ) : null}
 
-          {axis.natalResponse ? (
+          {axis.natalResponse && axis.scoreTrace?.formulaVersion !== "v0.5-calibrated-core" ? (
             <section className="annual-axis-detail__section" data-natal-response>
               <h5>Đáp ứng bản mệnh (biên độ, không phải điểm tốt/xấu)</h5>
               <ul>
                 <li>Sensitivity: {axis.natalResponse.sensitivity.toFixed(3)}</li>
                 <li>Resilience: {axis.natalResponse.resilience.toFixed(3)}</li>
                 <li>Amplitude: {axis.natalResponse.amplitudeMultiplier.toFixed(3)}</li>
+              </ul>
+            </section>
+          ) : null}
+
+          {axis.scoreTrace?.formulaVersion === "v0.5-calibrated-core" ? (
+            <section className="annual-axis-detail__section" data-v05-score-trace>
+              <h5>Thành phần điểm V0.5 (xác định, không dự đoán)</h5>
+              <ul>
+                <li>Kích hoạt năm: {axis.scoreTrace.activationGate.toFixed(4)}</li>
+                <li>Tổng kích hoạt: {axis.scoreTrace.annualActivationRaw.toFixed(4)}</li>
+                <li>Độ nhạy bản mệnh: {axis.scoreTrace.natalGain.toFixed(4)}</li>
+                <li>Tín hiệu không gian: {axis.scoreTrace.spatialSigned.toFixed(4)}</li>
+                <li>Tín hiệu hiệu lực: {axis.scoreTrace.latent.toFixed(4)}</li>
+                <li>Thang chuẩn hóa miền: {axis.scoreTrace.domainScale.toFixed(4)}</li>
               </ul>
             </section>
           ) : null}
