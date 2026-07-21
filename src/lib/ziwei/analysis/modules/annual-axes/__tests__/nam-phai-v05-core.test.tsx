@@ -604,20 +604,20 @@ describe("Nam Phái Annual Axes V0.5 calibrated core", () => {
     expect(g2).toBeLessThanOrEqual(knowledgeV05.natalGain.maximum);
   });
 
-  describe("V0.5 preview flag wiring", () => {
+  describe("V0.5 production flag wiring", () => {
     beforeEach(() => {
       window.sessionStorage.clear();
       window.history.replaceState({}, "", "/");
     });
 
-    it("routes Nam Phái engine to V0.5 when ?ziweiAnnualAxesV05=1", () => {
-      window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=1");
+    it("routes Nam Phái engine to V0.5 by default", () => {
       const chart = calculateNamPhai(REGRESSION);
       const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
       expect(result.versions.engineVersion).toBe("0.5.0");
     });
 
-    it("keeps Nam Phái on V0.4.2 when preview flag is OFF", () => {
+    it("rolls Nam Phái back to V0.4.2 when ?ziweiAnnualAxesV05=0", () => {
+      window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0");
       const chart = calculateNamPhai(REGRESSION);
       const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
       expect(result.versions.engineVersion).toBe("0.4.2");
@@ -637,35 +637,29 @@ describe("Nam Phái Annual Axes V0.5 calibrated core", () => {
       window.history.replaceState({}, "", "/");
     });
 
-    it("Nam Phái V0.5 result shows V0.5 Preview badge", () => {
-      window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=1");
+    it("Nam Phái V0.5 result shows production badge", () => {
       const chart = calculateNamPhai(REGRESSION);
       const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
       render(<AnnualAxesSection chart={chart} school="nam-phai" result={result} />);
-      expect(
-        screen.getByText(/Annual Axes Engine: Nam Phái V0.5 Preview/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText("Nam Phái V0.5 · Experimental")).toBeInTheDocument();
       expect(screen.getByText(/Engine 0\.5\.0/)).toBeInTheDocument();
     });
 
-    it("Nam Phái V0.4.2 result does not show V0.5 Preview badge", () => {
+    it("Nam Phái V0.4.2 rollback shows Fallback badge", () => {
+      window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=0");
       const chart = calculateNamPhai(REGRESSION);
       const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
       render(<AnnualAxesSection chart={chart} school="nam-phai" result={result} />);
-      expect(
-        screen.queryByText(/Annual Axes Engine: Nam Phái V0.5 Preview/i),
-      ).toBeNull();
+      expect(screen.getByText("Nam Phái V0.4.2 · Fallback")).toBeInTheDocument();
       expect(screen.getByText(/Engine 0\.4\.2/)).toBeInTheDocument();
     });
 
-    it("Trung Châu with ?ziweiAnnualAxesV05=1 does not show Nam Phái V0.5 badge", () => {
+    it("Trung Châu with ?ziweiAnnualAxesV05=1 does not show Nam Phái badge", () => {
       window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=1");
       const chart = calculateTrungChau(REGRESSION);
       const result = analyzeAnnualAxes(chart, { school: "trung-chau" });
       render(<AnnualAxesSection chart={chart} school="trung-chau" result={result} />);
-      expect(
-        screen.queryByText(/Annual Axes Engine: Nam Phái V0.5 Preview/i),
-      ).toBeNull();
+      expect(screen.queryByText(/Nam Phái/)).toBeNull();
     });
   });
 });

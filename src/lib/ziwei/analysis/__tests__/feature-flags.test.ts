@@ -1,5 +1,6 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import {
+  ANNUAL_AXES_V05_FEATURE_FLAG,
   isHuyenKhiPreviewV01Enabled,
   HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG,
   isAnnualAxesV043Enabled,
@@ -8,6 +9,40 @@ import {
 describe("isAnnualAxesV043Enabled", () => {
   it("defaults OFF in non-browser / unset env", () => {
     expect(isAnnualAxesV043Enabled()).toBe(false);
+  });
+});
+
+describe("isAnnualAxesV05Enabled", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    window.sessionStorage.clear();
+    window.history.replaceState({}, "", "/");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
+  });
+
+  it("defaults ON in browser with no overrides", async () => {
+    const { isAnnualAxesV05Enabled: enabled } = await import("../feature-flags");
+    expect(enabled()).toBe(true);
+  });
+
+  it("env false always returns false even with query 1", async () => {
+    vi.stubEnv("VITE_ZIWEI_ANNUAL_AXES_V05", "false");
+    const { isAnnualAxesV05Enabled: enabled } = await import("../feature-flags");
+    window.history.replaceState({}, "", `/?${ANNUAL_AXES_V05_FEATURE_FLAG}=1`);
+    expect(enabled()).toBe(false);
+  });
+
+  it("query 0 persists session rollback", async () => {
+    const { isAnnualAxesV05Enabled: enabled, ANNUAL_AXES_V05_FEATURE_FLAG: flag } =
+      await import("../feature-flags");
+    window.history.replaceState({}, "", `/?${flag}=0`);
+    expect(enabled()).toBe(false);
+    window.history.replaceState({}, "", "/");
+    expect(enabled()).toBe(false);
   });
 });
 

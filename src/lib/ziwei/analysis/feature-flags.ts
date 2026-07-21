@@ -93,20 +93,20 @@ export function isAnnualAxesV043Enabled(): boolean {
 }
 
 /**
- * Feature flag for Annual Axes V0.5 (calibrated scoring core, Nam Phái preview).
- * Default OFF — opt-in via `?ziweiAnnualAxesV05=1` (persisted in sessionStorage).
+ * Feature flag for Annual Axes V0.5 (calibrated scoring core, Nam Phái production).
+ * Default ON. Emergency kill-switch via VITE_ZIWEI_ANNUAL_AXES_V05=false, or
+ * `?ziweiAnnualAxesV05=0` (persisted in sessionStorage) for a per-session
+ * rollback to V0.4.2; `?ziweiAnnualAxesV05=1` persists a per-session opt-in
+ * override when the build-time kill-switch is not false.
  */
 export const ANNUAL_AXES_V05_FEATURE_FLAG = "ziweiAnnualAxesV05";
 
 export function isAnnualAxesV05Enabled(): boolean {
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V05 === "true") {
-    return true;
-  }
   if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V05 === "false") {
     return false;
   }
   if (typeof window === "undefined") {
-    return false;
+    return true;
   }
   try {
     const params = new URLSearchParams(window.location.search);
@@ -117,9 +117,12 @@ export function isAnnualAxesV05Enabled(): boolean {
     const stored = window.sessionStorage.getItem(ANNUAL_AXES_V05_FEATURE_FLAG);
     if (stored === "0") return false;
     if (stored === "1") return true;
-    return false;
+    if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V05 === "true") {
+      return true;
+    }
+    return true;
   } catch {
-    return false;
+    return true;
   }
 }
 

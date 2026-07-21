@@ -5,6 +5,17 @@ name: Build & Deploy
 # this repo needs DOCKERHUB_TOKEN + ANSIBLE_VAULT_PASSWORD.
 
 on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "backend/**"
+      - "src/**"
+      - "deploy/**"
+      - "deployment-template/**"
+      - "index.html"
+      - "package*.json"
+      - "vite.config.ts"
+      - ".github/workflows/deploy.yml"
   push:
     branches: [master]
     paths:
@@ -26,11 +37,17 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Install Node deps
         run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
       - name: Test Frontend
-        run: npm run typecheck && npm test
+        run: npm test
+      - name: Build Frontend
+        run: npm run build
+      - name: Annual Axes V0.5 holdout
+        run: npm run test:annual-axes-v05-holdout
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -42,6 +59,7 @@ jobs:
 
   release:
     needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     permissions:
       contents: read
     uses: st-mich43l/action-library/.github/workflows/build-push-deploy.yml@e9594acd93befdd1020ad06687ba05d03b14c80e

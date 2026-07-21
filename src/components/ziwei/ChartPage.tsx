@@ -254,10 +254,37 @@ export function ChartPage() {
   // deterministic and byte-stable for identical (chart, school) inputs,
   // and `AnnualAxesSection` re-renders on every parent state change
   // otherwise. Skipping when chartData is null keeps null-branch behavior.
+  const [locationSearch, setLocationSearch] = useState(
+    () => (typeof window !== "undefined" ? window.location.search : ""),
+  );
+
+  useEffect(() => {
+    const syncSearch = () => setLocationSearch(window.location.search);
+    window.addEventListener("popstate", syncSearch);
+    return () => window.removeEventListener("popstate", syncSearch);
+  }, []);
+
+  const annualAxesStatus = useMemo(
+    () => getAnalysisStatus("annual-axes", { school }),
+    [school, locationSearch],
+  );
+
   const annualAxesResult = useMemo(() => {
     if (!chartData) return null;
-    return analyzeAnnualAxes(chartData, { school });
-  }, [chartData, school]);
+    if (annualAxesStatus.status !== "available") return null;
+    const result = analyzeAnnualAxes(chartData, { school });
+    if (
+      annualAxesStatus.status === "available" &&
+      result.versions.engineVersion !== annualAxesStatus.version
+    ) {
+      console.warn(
+        "[annual-axes] status version mismatch:",
+        annualAxesStatus.version,
+        result.versions.engineVersion,
+      );
+    }
+    return result;
+  }, [chartData, school, annualAxesStatus, locationSearch]);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -693,16 +720,17 @@ export function ChartPage() {
               ) : (
                 <ZiweiAnalysisRebuilding module="palace-overview" />
               )}
-              {chartData &&
-              annualAxesResult &&
-              getAnalysisStatus("annual-axes").status === "available" ? (
+              {chartData && annualAxesResult ? (
                 <AnnualAxesSection
                   chart={chartData}
                   school={school}
                   result={annualAxesResult}
                 />
               ) : (
-                <ZiweiAnalysisRebuilding module="annual-axes" />
+                <ZiweiAnalysisRebuilding
+                  module="annual-axes"
+                  status={annualAxesStatus}
+                />
               )}
             </div>
           </section>
