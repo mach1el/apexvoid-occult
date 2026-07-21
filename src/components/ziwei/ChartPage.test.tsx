@@ -119,10 +119,19 @@ describe("ChartPage profile form", () => {
   it("keeps desktop page shell and compact chart fit under min-width 1201", () => {
     expect(chartCss).toMatch(/\.wrap\{[^}]*width:min\(2100px,100%\)/);
     expect(chartCss).toMatch(
-      /@media\s*\(\s*min-width:\s*1201px\s*\)[\s\S]*?\.shell\{[\s\S]*?--ziwei-chart-fit:\s*min\(1280px,\s*calc\(\(100svh\s*-\s*80px\)\s*\*\s*880\s*\/\s*992\)\)/,
+      /@media\s*\(\s*min-width:\s*1201px\s*\)[\s\S]*?\.shell\{[\s\S]*?--ziwei-chart-fit:\s*min\(1280px,\s*max\(780px,\s*calc\(\(100svh\s*-\s*80px\)\s*\*\s*880\s*\/\s*992\)\)\)/,
     );
     expect(chartCss).toMatch(
-      /@media\s*\(\s*min-width:\s*1201px\s*\)[\s\S]*?grid-template-columns:minmax\(780px,var\(--ziwei-chart-fit\)\)\s+minmax\(400px,1fr\)/,
+      /@media\s*\(\s*min-width:\s*1201px\s*\)[\s\S]*?\.shell\{[\s\S]*?--ziwei-chart-height:\s*calc\(var\(--ziwei-chart-fit\)\s*\*\s*992\s*\/\s*880\)/,
+    );
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*min-width:\s*1201px\s*\)[\s\S]*?grid-template-columns:var\(--ziwei-chart-fit\)\s+minmax\(400px,1fr\)/,
+    );
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*min-width:\s*1201px\s*\)[\s\S]*?\.shell\s*>\s*\.chat-section\{[\s\S]*?height:\s*var\(--ziwei-chart-height\)/,
+    );
+    expect(chartCss).toMatch(
+      /@media\s*\(\s*min-width:\s*1201px\s*\)[\s\S]*?\.shell\s*>\s*\.chat-section\{[\s\S]*?max-height:\s*var\(--ziwei-chart-height\)/,
     );
     expect(compactChartCss).toMatch(
       /@media\s*\(\s*min-width:\s*1201px\s*\)[\s\S]*?\.compact-chart-capture\s*\{[^}]*width:\s*100%/,

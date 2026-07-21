@@ -567,7 +567,8 @@ body{
   display:grid;
   gap:16px;
   margin-top:16px;
-  --ziwei-chart-fit:min(1280px, calc((100svh - 80px) * 880 / 992));
+  --ziwei-chart-fit:min(1280px, max(780px, calc((100svh - 80px) * 880 / 992)));
+  --ziwei-chart-height:calc(var(--ziwei-chart-fit) * 992 / 880);
 }
 .shell > aside{
   position:static;
@@ -854,17 +855,20 @@ body{
 }
 .ai-chat-panel{border-radius:22px}
 
-/* ── Desktop page shell (≥1201): 2 cột chart + chat, stretch cùng hàng ── */
+/* ── Desktop page shell (≥1201): 2 cột chart + chat, chat khóa đúng cao lá số ── */
 @media(min-width:1201px){
   .shell{
     width:100%;
     max-width:2100px;
     margin-inline:auto;
-    --ziwei-chart-fit:min(1280px, calc((100svh - 80px) * 880 / 992));
-    grid-template-columns:minmax(780px,var(--ziwei-chart-fit)) minmax(400px,1fr);
+    /* Cột lá số = fit viewport (tỉ lệ 880×992), sàn 780 / trần 1280. */
+    --ziwei-chart-fit:min(1280px, max(780px, calc((100svh - 80px) * 880 / 992)));
+    --ziwei-chart-height:calc(var(--ziwei-chart-fit) * 992 / 880);
+    grid-template-columns:var(--ziwei-chart-fit) minmax(400px,1fr);
     grid-template-rows:auto auto auto auto auto;
     gap:16px;
-    align-items:stretch;
+    /* start — không để chat stretch cao hơn lá số */
+    align-items:start;
     justify-content:stretch;
   }
   .shell > aside{
@@ -875,9 +879,10 @@ body{
   .shell > .chart-section{
     grid-column:1;
     grid-row:2;
-    align-self:stretch;
+    align-self:start;
     display:flex;
     flex-direction:column;
+    width:100%;
     min-height:0;
   }
   .shell > .chart-section > .chart-workspace{
@@ -890,9 +895,12 @@ body{
     grid-row:2;
     margin:0;
     padding:0;
-    align-self:stretch;
+    align-self:start;
     display:flex;
     flex-direction:column;
+    width:100%;
+    height:var(--ziwei-chart-height);
+    max-height:var(--ziwei-chart-height);
     min-height:0;
   }
   .shell > .chat-section > .ai-chat{
@@ -900,14 +908,15 @@ body{
     display:flex;
     flex-direction:column;
     min-height:0;
-    height:auto;
+    height:100%;
+    max-height:100%;
     align-self:stretch;
   }
   .shell > .chat-section .ai-chat-panel{
     flex:1 1 0;
     min-height:0;
-    height:auto;
-    max-height:none;
+    height:100%;
+    max-height:100%;
     align-self:stretch;
   }
   .shell > .chat-section .ai-chat-msgs{
