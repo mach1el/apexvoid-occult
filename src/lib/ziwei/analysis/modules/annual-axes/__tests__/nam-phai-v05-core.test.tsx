@@ -14,6 +14,7 @@ import {
 } from "../nam-phai-v05/bucket-formula";
 import { computeNatalGainV05 } from "../nam-phai-v05/natal-gain";
 import { scoreV05Domain } from "../nam-phai-v05/score-domain";
+import { scoreV05ChartToAxes } from "../nam-phai-v05/score-chart";
 import { isAnnualActivationCandidate } from "../nam-phai-v05/annual-activation";
 import { dedupeV05SpatialPaths } from "../nam-phai-v05/dedupe";
 import { aggregateV05Buckets } from "../nam-phai-v05/aggregate-buckets";
@@ -29,6 +30,7 @@ import {
   loadAnnualAxesKnowledgeV05NamPhai,
   validateAnnualAxesKnowledgeV05NamPhai,
 } from "../../../knowledge/annual-axes/v0.5";
+import { loadAnnualAxesKnowledgeV04NamPhai } from "../../../knowledge/annual-axes/v0.4";
 
 const REGRESSION: BirthInput = {
   solarDate: "1991-09-21",
@@ -665,6 +667,26 @@ describe("Nam Phái Annual Axes V0.5 calibrated core", () => {
         screen.queryByText(/Annual Axes Engine: Nam Phái V0.5 Preview/i),
       ).toBeNull();
     });
+  });
+});
+
+describe("V0.5 calibrated score trace preservation", () => {
+  it("keeps axis score/latent/activationGate aligned with the first-pass trace", () => {
+    const knowledge04 = loadAnnualAxesKnowledgeV04NamPhai();
+    expect(knowledge04.ok).toBe(true);
+    if (!knowledge04.ok) return;
+
+    const chart = calculateNamPhai(REGRESSION);
+    const axes = scoreV05ChartToAxes(chart, knowledgeV05, knowledge04.knowledge);
+    expect(axes).not.toBeNull();
+    if (!axes) return;
+
+    expect(axes.length).toBeGreaterThan(0);
+    for (const axis of axes) {
+      expect(axis.trace.absoluteScore).toBe(axis.score);
+      expect(axis.trace.latent).toBe(axis.latent);
+      expect(axis.trace.activationGate).toBe(axis.activationGate);
+    }
   });
 });
 

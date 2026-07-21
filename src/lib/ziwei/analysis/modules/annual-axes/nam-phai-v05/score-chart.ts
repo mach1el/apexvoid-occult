@@ -14,7 +14,7 @@ import { computeDomainRoutingsV04 } from "../nam-phai-v04/routing";
 import { classifyEvidencePaths } from "../nam-phai-v043/classify-paths";
 import { dedupeV05SpatialPaths } from "./dedupe";
 import { aggregateV05Buckets } from "./aggregate-buckets";
-import { scoreV05Domain } from "./score-domain";
+import { scoreV05Domain, type V05DomainScoreTrace } from "./score-domain";
 import type { V05BucketAggregateResult } from "./aggregate-buckets";
 
 export interface V05DomainIntermediate {
@@ -26,6 +26,8 @@ export interface V05DomainIntermediate {
   activationGate: number;
   latent: number;
   score: number;
+  /** Calibrated score trace from the first (and only) `scoreV05Domain` pass. */
+  trace: V05DomainScoreTrace;
 }
 
 function resolveBand(score: number, knowledge04: AnnualAxesKnowledgeV04NamPhai) {
@@ -115,12 +117,14 @@ export function scoreV05ChartDomains(
       activationGate: scored.activationGate,
       latent: scored.latent,
       score: scored.score,
+      trace: scored.trace,
     });
   }
 
   return out;
 }
 
+/** Map chart domain intermediates to axis rows — never re-scores domains. */
 export function scoreV05ChartToAxes(
   chart: ChartData,
   knowledge05: AnnualAxesKnowledgeV05NamPhai,
@@ -130,30 +134,13 @@ export function scoreV05ChartToAxes(
   const domains = scoreV05ChartDomains(chart, knowledge05, options);
   if (!domains) return null;
 
-  return domains.map((d) => {
-    const scored = scoreV05Domain({
-      aggregate: d.aggregate,
-      natalResponse: {
-        sensitivity: 0.5,
-        resilience: 0.5,
-        amplitudeMultiplier: 1,
-        provenance: [],
-      },
-      domain: d.domain,
-      knowledge: knowledge05,
-      activationScaleOverride: options?.activationScaleOverride,
-      domainScaleOverride: options?.domainScaleOverride?.[d.domain],
-    });
-    // Re-score with real natal — scoreV05ChartDomains already computed; use stored values
-    const axisScore = d.score;
-    return {
-      domain: d.domain,
-      score: axisScore,
-      band: resolveBand(axisScore, knowledge04),
-      activationGate: d.activationGate,
-      latent: d.latent,
-      aggregate: d.aggregate,
-      trace: scored.trace,
-    };
-  });
+  return domains.map((d) => ({
+    domain: d.domain,
+    score: d.score,
+    band: resolveBand(d.score, knowledge04),
+    activationGate: d.activationGate,
+    latent: d.latent,
+    aggregate: d.aggregate,
+    trace: d.trace,
+  }));
 }
