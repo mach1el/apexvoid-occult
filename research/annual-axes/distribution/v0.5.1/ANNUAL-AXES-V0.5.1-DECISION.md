@@ -5,7 +5,7 @@ auditIntegrityVersion: 2
 ## Status: NO VARIANT APPROVED
 
 **Selected variant:** null
-**Baseline reproduced:** true (40 metrics)
+**Baseline reproduced:** true (51 metrics)
 **Evidence bias detected (training AND holdout):** true
 
 ## A. Observed result

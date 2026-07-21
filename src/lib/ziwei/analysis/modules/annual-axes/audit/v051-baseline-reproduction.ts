@@ -1,5 +1,8 @@
 /**
  * Full V0.5 baseline reproduction against committed holdout + calibration artifacts.
+ *
+ * Calibration values are recomputed from the training corpus via deriveV05Calibration —
+ * never compared only against the already-loaded knowledge.calibration artifact.
  */
 
 import { readFileSync } from "node:fs";
@@ -7,7 +10,10 @@ import { join } from "node:path";
 import { calculate as calculateNamPhai } from "@/lib/ziwei/engine-nam-phai";
 import { ANNUAL_AXIS_DOMAINS } from "../../../contracts/annual-axes";
 import type { AnnualAxesKnowledgeV05NamPhai } from "../../../knowledge/annual-axes/v0.5";
-import { splitChartIndices } from "../../../knowledge/annual-axes/v0.5/derive-calibration";
+import {
+  deriveV05Calibration,
+  splitChartIndices,
+} from "../../../knowledge/annual-axes/v0.5/derive-calibration";
 import { analyzeAnnualAxesNamPhaiV05 } from "../nam-phai-v05/analyze";
 import {
   FULL_CORPUS_CONTRACT,
@@ -66,14 +72,23 @@ export function verifyV05BaselineReproduction(
   const committedHoldout = JSON.parse(readFileSync(HOLDOUT_REPORT_PATH, "utf8"));
   const committedCal = JSON.parse(readFileSync(CALIBRATION_PATH, "utf8"));
   const mismatches: BaselineMismatch[] = [];
-  const cal = knowledge.calibration;
 
-  check(mismatches, "calibration.activationScale", committedCal.activationScale, cal.activationScale, 1e-12, 1e-12);
+  // Independently recompute calibration from the training corpus.
+  const reproducedCal = deriveV05Calibration(knowledge, FULL_CORPUS_CONTRACT);
+
+  check(
+    mismatches,
+    "calibration.activationScale",
+    committedCal.activationScale,
+    reproducedCal.activationScale,
+    1e-12,
+    1e-12,
+  );
   check(
     mismatches,
     "calibration.medianPositiveAnnualActivationRaw",
     committedCal.medianPositiveAnnualActivationRaw,
-    cal.medianPositiveAnnualActivationRaw,
+    reproducedCal.medianPositiveAnnualActivationRaw,
     1e-12,
     1e-12,
   );
@@ -82,7 +97,7 @@ export function verifyV05BaselineReproduction(
       mismatches,
       `calibration.domainScales.${domain}`,
       committedCal.domainScales[domain],
-      cal.domainScales[domain],
+      reproducedCal.domainScales[domain],
       1e-12,
       1e-12,
     );
@@ -90,7 +105,7 @@ export function verifyV05BaselineReproduction(
       mismatches,
       `calibration.q75AbsLatent.${domain}`,
       committedCal.q75AbsLatent[domain],
-      cal.q75AbsLatent[domain],
+      reproducedCal.q75AbsLatent[domain],
       1e-12,
       1e-12,
     );
@@ -99,7 +114,7 @@ export function verifyV05BaselineReproduction(
     mismatches,
     "calibration.trainingDiagnostics.medianActivationGate",
     committedCal.trainingDiagnostics.medianActivationGate,
-    cal.trainingDiagnostics.medianActivationGate,
+    reproducedCal.trainingDiagnostics.medianActivationGate,
     1e-12,
     1e-12,
   );
@@ -107,7 +122,7 @@ export function verifyV05BaselineReproduction(
     mismatches,
     "calibration.trainingDiagnostics.p90ActivationGate",
     committedCal.trainingDiagnostics.p90ActivationGate,
-    cal.trainingDiagnostics.p90ActivationGate,
+    reproducedCal.trainingDiagnostics.p90ActivationGate,
     1e-12,
     1e-12,
   );
@@ -115,17 +130,13 @@ export function verifyV05BaselineReproduction(
     mismatches,
     "calibration.trainingDiagnostics.maxActivationGate",
     committedCal.trainingDiagnostics.maxActivationGate,
-    cal.trainingDiagnostics.maxActivationGate,
+    reproducedCal.trainingDiagnostics.maxActivationGate,
     1e-12,
     1e-12,
   );
 
   // Holdout distribution — same method as v05-holdout.write.test.ts
-  const holdoutStart = Math.floor(FULL_CORPUS_CONTRACT.chartCount * 0.8);
-  const holdoutIndices = Array.from(
-    { length: FULL_CORPUS_CONTRACT.chartCount - holdoutStart },
-    (_, i) => i + holdoutStart,
-  );
+  const { holdout: holdoutIndices } = splitChartIndices(FULL_CORPUS_CONTRACT.chartCount);
   const bases = buildAuditBirthInputs(FULL_CORPUS_CONTRACT);
   const observations: AnnualAxesAuditObservation[] = [];
   let totalAxes = 0;
@@ -187,6 +198,12 @@ export function verifyV05BaselineReproduction(
   const extremeScoreRate = totalAxes === 0 ? 0 : extremeAxes / totalAxes;
   const outsideNeutralBandRate =
     outsideVectorsTotal === 0 ? 0 : outsideVectors / outsideVectorsTotal;
+  const minDomainMedianTwelveYearRange = Math.min(
+    ...Object.values(report.longitudinalChange.medianPerDomainTwelveYearRange),
+  );
+  const minDomainAdjacentYearMedianAbsDelta = Math.min(
+    ...Object.values(report.longitudinalChange.medianAdjacentYearAbsoluteDelta),
+  );
   const hm = committedHoldout.holdoutMetrics;
 
   check(
@@ -202,6 +219,22 @@ export function verifyV05BaselineReproduction(
     "holdout.medianIntraYearAxisRange",
     hm.medianIntraYearAxisRange,
     report.intraYearAxisSpread.medianRange,
+    1e-9,
+    1e-9,
+  );
+  check(
+    mismatches,
+    "holdout.minDomainMedianTwelveYearRange",
+    hm.minDomainMedianTwelveYearRange,
+    minDomainMedianTwelveYearRange,
+    1e-9,
+    1e-9,
+  );
+  check(
+    mismatches,
+    "holdout.minDomainAdjacentYearMedianAbsDelta",
+    hm.minDomainAdjacentYearMedianAbsDelta,
+    minDomainAdjacentYearMedianAbsDelta,
     1e-9,
     1e-9,
   );
@@ -267,8 +300,49 @@ export function verifyV05BaselineReproduction(
     1e-12,
   );
 
-  // Also verify holdout report's copied calibration fields
-  check(mismatches, "holdoutReport.activationScale", committedHoldout.activationScale, cal.activationScale, 1e-12, 1e-12);
+  // Holdout report's copied calibration fields must match independently reproduced calibration.
+  check(
+    mismatches,
+    "holdoutReport.activationScale",
+    committedHoldout.activationScale,
+    reproducedCal.activationScale,
+    1e-12,
+    1e-12,
+  );
+  for (const domain of ANNUAL_AXIS_DOMAINS) {
+    check(
+      mismatches,
+      `holdoutReport.domainScales.${domain}`,
+      committedHoldout.domainScales[domain],
+      reproducedCal.domainScales[domain],
+      1e-12,
+      1e-12,
+    );
+  }
+  check(
+    mismatches,
+    "holdoutReport.trainingDiagnostics.medianActivationGate",
+    committedHoldout.trainingDiagnostics.medianActivationGate,
+    reproducedCal.trainingDiagnostics.medianActivationGate,
+    1e-12,
+    1e-12,
+  );
+  check(
+    mismatches,
+    "holdoutReport.trainingDiagnostics.p90ActivationGate",
+    committedHoldout.trainingDiagnostics.p90ActivationGate,
+    reproducedCal.trainingDiagnostics.p90ActivationGate,
+    1e-12,
+    1e-12,
+  );
+  check(
+    mismatches,
+    "holdoutReport.trainingDiagnostics.maxActivationGate",
+    committedHoldout.trainingDiagnostics.maxActivationGate,
+    reproducedCal.trainingDiagnostics.maxActivationGate,
+    1e-12,
+    1e-12,
+  );
 
   const checkedMetricCount =
     1 + // activationScale
@@ -276,9 +350,12 @@ export function verifyV05BaselineReproduction(
     ANNUAL_AXIS_DOMAINS.length * 2 + // domainScales + q75
     3 + // training diagnostics
     2 + // mean SD + median range
+    2 + // min domain range + min adjacent delta
     ANNUAL_AXIS_DOMAINS.length * 2 + // per-domain ranges + deltas
     8 + // rates / corr / extreme / tp4c / radar / outside
-    1; // holdout report activationScale
+    1 + // holdout report activationScale
+    ANNUAL_AXIS_DOMAINS.length + // holdout report domainScales
+    3; // holdout report training diagnostics
 
   return {
     reproduced: mismatches.length === 0,

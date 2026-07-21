@@ -240,7 +240,9 @@ describe("V0.5.1 full baseline reproduction", () => {
     const result = verifyV05BaselineReproduction(loaded.knowledge);
     expect(result.mismatches).toEqual([]);
     expect(result.reproduced).toBe(true);
-    expect(result.checkedMetricCount).toBeGreaterThanOrEqual(30);
+    expect(result.checkedMetricCount).toBeGreaterThanOrEqual(45);
+    // Must recompute calibration (not just compare loaded knowledge.calibration to itself).
+    expect(result.mismatches).toEqual([]);
   }, 600_000);
 
   it("changing any one committed metric produces an explicit mismatch", () => {

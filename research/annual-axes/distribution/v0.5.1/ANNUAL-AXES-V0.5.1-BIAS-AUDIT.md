@@ -4,7 +4,7 @@ auditIntegrityVersion: 2
 Engine: V0.5.0 (production baseline)
 Corpus: annual-axes-audit-full-v0.4
 Baseline reproduced: true
-Checked metrics: 40
+Checked metrics: 51
 Dimension count integrity: true
 
 ## Score distribution (global)
