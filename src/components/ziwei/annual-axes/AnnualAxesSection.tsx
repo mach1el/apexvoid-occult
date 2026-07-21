@@ -33,6 +33,9 @@ function engineBadgeLabel(result: AnnualAxesResult): string {
   if (result.school === "trung-chau") {
     return "Trung Châu · Experimental";
   }
+  if (result.versions.engineVersion === "0.7.0") {
+    return "Nam Phái V0.7 · Experimental";
+  }
   if (result.versions.engineVersion === "0.6.0") {
     return "Nam Phái V0.6 · Experimental";
   }

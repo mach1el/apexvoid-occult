@@ -95,42 +95,54 @@ export function isAnnualAxesV043Enabled(): boolean {
 
 /**
  * Feature flag for Annual Axes V0.6 (annual-dominant signed core).
- * Default OFF until a candidate passes all hard holdout gates.
- * Kill-switch: VITE_ZIWEI_ANNUAL_AXES_V06=false
- * Opt-in preview: ?ziweiAnnualAxesV06=1 (session)
- * Explicit rollback: ?ziweiAnnualAxesV06=0 (session) → V0.5/V0.4.2 chain
+ * Historical experimental only — removed from public runtime selection.
+ * Source/research artifacts remain. Opt-in env is ignored by public router.
  */
 export const ANNUAL_AXES_V06_FEATURE_FLAG = "ziweiAnnualAxesV06";
 
+/** @deprecated V0.6 is not publicly selectable; always returns false. */
 export function isAnnualAxesV06Enabled(): boolean {
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V06 === "false") {
+  return false;
+}
+
+/**
+ * Feature flag for Annual Axes V0.7 (robust-centered annual score).
+ * Default OFF until holdout + product gates approve production.
+ * Kill-switch: VITE_ZIWEI_ANNUAL_AXES_V07=false
+ * Opt-in preview: ?ziweiAnnualAxesV07=1 (session)
+ * Explicit rollback: ?ziweiAnnualAxesV07=0 (session) → V0.5/V0.4.2 chain
+ */
+export const ANNUAL_AXES_V07_FEATURE_FLAG = "ziweiAnnualAxesV07";
+
+export function isAnnualAxesV07Enabled(): boolean {
+  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07 === "false") {
     return false;
   }
-  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V06 === "true") {
-    // Build-time force-on is allowed only for experimental builds; still
-    // respects session rollback to 0.
+  if (import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07 === "true") {
+    // Build-time force-on still respects session rollback to 0.
   }
   if (typeof window === "undefined") {
-    return import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V06 === "true";
+    return import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07 === "true";
   }
   try {
     const params = new URLSearchParams(window.location.search);
-    const queryValue = params.get(ANNUAL_AXES_V06_FEATURE_FLAG);
+    const queryValue = params.get(ANNUAL_AXES_V07_FEATURE_FLAG);
     if (queryValue === "0" || queryValue === "1") {
-      window.sessionStorage.setItem(ANNUAL_AXES_V06_FEATURE_FLAG, queryValue);
+      window.sessionStorage.setItem(ANNUAL_AXES_V07_FEATURE_FLAG, queryValue);
     }
-    const stored = window.sessionStorage.getItem(ANNUAL_AXES_V06_FEATURE_FLAG);
+    const stored = window.sessionStorage.getItem(ANNUAL_AXES_V07_FEATURE_FLAG);
     if (stored === "0") return false;
     if (stored === "1") return true;
-    return import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V06 === "true";
+    return import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07 === "true";
   } catch {
     return false;
   }
 }
 
 /**
- * Feature flag for Annual Axes V0.5 (calibrated scoring core, Nam Phái production).
- * Default ON. Emergency kill-switch via VITE_ZIWEI_ANNUAL_AXES_V05=false, or
+ * Feature flag for Annual Axes V0.5 (calibrated scoring core, Nam Phái).
+ * Default ON as rollback target when V0.7 is disabled.
+ * Emergency kill-switch via VITE_ZIWEI_ANNUAL_AXES_V05=false, or
  * `?ziweiAnnualAxesV05=0` (persisted in sessionStorage) for a per-session
  * rollback to V0.4.2; `?ziweiAnnualAxesV05=1` persists a per-session opt-in
  * override when the build-time kill-switch is not false.

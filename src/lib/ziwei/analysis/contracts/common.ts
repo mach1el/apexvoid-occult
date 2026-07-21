@@ -2,14 +2,14 @@
 
 import {
   isAnnualAxesV05Enabled,
-  isAnnualAxesV06Enabled,
+  isAnnualAxesV07Enabled,
   isPalaceOverviewV1Enabled,
 } from "../feature-flags";
 import { loadAnnualAxesKnowledgeV0 } from "../knowledge/annual-axes";
 import { loadAnnualAxesKnowledgeV04NamPhai } from "../knowledge/annual-axes/v0.4";
 import { loadAnnualAxesKnowledgeV042NamPhai } from "../knowledge/annual-axes/v0.4.2";
 import { loadAnnualAxesKnowledgeV05NamPhai } from "../knowledge/annual-axes/v0.5";
-import { loadAnnualAxesKnowledgeV06NamPhai } from "../knowledge/annual-axes/v0.6";
+import { loadAnnualAxesKnowledgeV07NamPhai } from "../knowledge/annual-axes/v0.7";
 import { loadPalaceOverviewKnowledgeV1 } from "../knowledge";
 import type { ZiweiSchool } from "../facts";
 
@@ -91,11 +91,11 @@ function annualAxesStatusForNamPhaiV05(): ZiweiAnalysisStatus {
   return { status: "available", module: "annual-axes", version: "0.5.0" };
 }
 
-function annualAxesStatusForNamPhaiV06(): ZiweiAnalysisStatus {
-  const knowledge06 = loadAnnualAxesKnowledgeV06NamPhai();
-  if (!knowledge06.ok) {
+function annualAxesStatusForNamPhaiV07(): ZiweiAnalysisStatus {
+  const knowledge07 = loadAnnualAxesKnowledgeV07NamPhai();
+  if (!knowledge07.ok) {
     if (import.meta.env.DEV) {
-      console.warn("[annual-axes] invalid V0.6 knowledge", knowledge06.issues);
+      console.warn("[annual-axes] invalid V0.7 knowledge", knowledge07.issues);
     }
     return { status: "unavailable", module: "annual-axes", reason: "invalid-knowledge" };
   }
@@ -124,7 +124,7 @@ function annualAxesStatusForNamPhaiV06(): ZiweiAnalysisStatus {
     return { status: "unavailable", module: "annual-axes", reason: "invalid-knowledge" };
   }
 
-  return { status: "available", module: "annual-axes", version: "0.6.0" };
+  return { status: "available", module: "annual-axes", version: "0.7.0" };
 }
 
 function annualAxesStatusForNamPhaiV042Fallback(): ZiweiAnalysisStatus {
@@ -180,16 +180,14 @@ export function getAnalysisStatus(
       return annualAxesStatusForTrungChau();
     }
 
-    // V0.6 remains opt-in until a candidate is holdout-approved.
-    if (isAnnualAxesV06Enabled()) {
-      return annualAxesStatusForNamPhaiV06();
+    // Match analyzeAnnualAxes public routing (V0.6 removed from public selection).
+    if (!isAnnualAxesV05Enabled()) {
+      return annualAxesStatusForNamPhaiV042Fallback();
     }
-
-    if (isAnnualAxesV05Enabled()) {
-      return annualAxesStatusForNamPhaiV05();
+    if (isAnnualAxesV07Enabled()) {
+      return annualAxesStatusForNamPhaiV07();
     }
-
-    return annualAxesStatusForNamPhaiV042Fallback();
+    return annualAxesStatusForNamPhaiV05();
   }
 
   // major-fortune and monthly-flow intentionally remain "rebuilding" —
