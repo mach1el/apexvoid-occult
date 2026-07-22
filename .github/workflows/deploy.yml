@@ -104,5 +104,5 @@ jobs:
           {"name": "apexvoid-occult-frontend", "context": ".",        "dockerfile": "deploy/frontend.Dockerfile"}
         ]
     secrets:
-      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-      ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+      registry-token: ${{ secrets.DOCKERHUB_TOKEN }}
+      vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
