@@ -34,14 +34,6 @@
   color: var(--amber-soft, #f6e0a4);
 }
 
-.annual-axes-section__badge {
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.38));
-  padding: 0.12rem 0.4rem;
-}
-
 .annual-axes-section__year {
   font-variant-numeric: tabular-nums;
   opacity: 0.85;
@@ -114,7 +106,7 @@
   /* Same compact face as palace-radar / star-minor labels — fits full axis
    * names (Tình duyên, Giao hữu) without clipping the card edge. */
   font-family: var(--font-stars-minor, "Be Vietnam Pro", system-ui, sans-serif);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   letter-spacing: 0;
   paint-order: stroke;

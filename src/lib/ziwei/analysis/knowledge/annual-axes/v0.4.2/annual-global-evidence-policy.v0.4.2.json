@@ -1,6 +1,0 @@
-{
-  "schemaVersion": "0.4.2",
-  "policyId": "annual-global-evidence-policy-v0-4-2",
-  "defaultBehavior": "context-only",
-  "enabledGlobalSubjects": []
-}

@@ -23,7 +23,7 @@ describe.runIf(ENABLED)("annual-axes full distribution audit", () => {
       expect(report.resultCount).toBe(1200);
       const path = join(
         OUT_DIR,
-        `${report.profileId}-${report.school}-annual-axes-audit-full-v0.4.json`,
+        `${report.profileId}-${report.school}-annual-axes-audit-full-v0.8.json`,
       );
       expect(existsSync(path)).toBe(true);
       const loaded = JSON.parse(readFileSync(path, "utf8"));

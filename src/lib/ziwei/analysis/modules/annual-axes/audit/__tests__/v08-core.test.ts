@@ -316,23 +316,7 @@ describe("Annual Axes V0.8 palace-weighted core", () => {
       );
     });
 
-    it("V08=0 runs V0.7", () => {
-      window.history.replaceState({}, "", "/?ziweiAnnualAxesV08=0");
-      const chart = calculateNamPhai(REGRESSION);
-      expect(analyzeAnnualAxes(chart, { school: "nam-phai" }).versions.engineVersion).toBe(
-        "0.7.0",
-      );
-    });
-
-    it("V07=0 runs V0.5", () => {
-      window.history.replaceState({}, "", "/?ziweiAnnualAxesV08=0&ziweiAnnualAxesV07=0");
-      const chart = calculateNamPhai(REGRESSION);
-      expect(analyzeAnnualAxes(chart, { school: "nam-phai" }).versions.engineVersion).toBe(
-        "0.5.0",
-      );
-    });
-
-    it("V05=0 runs V0.4.2", () => {
+    it("legacy version flags do not leave V0.8", () => {
       window.history.replaceState(
         {},
         "",
@@ -340,7 +324,7 @@ describe("Annual Axes V0.8 palace-weighted core", () => {
       );
       const chart = calculateNamPhai(REGRESSION);
       expect(analyzeAnnualAxes(chart, { school: "nam-phai" }).versions.engineVersion).toBe(
-        "0.4.2",
+        "0.8.0",
       );
     });
 

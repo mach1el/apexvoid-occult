@@ -39,67 +39,10 @@ export function isPalaceOverviewV1Enabled(): boolean {
   );
 }
 
-/** @deprecated Kept for compatibility; Nam Phái V0.4 path used when V05=0. */
-export const ANNUAL_AXES_V04_FEATURE_FLAG = "ziweiAnnualAxesV04";
-export function isAnnualAxesV04Enabled(): boolean {
-  return readSessionFlag(
-    ANNUAL_AXES_V04_FEATURE_FLAG,
-    import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V04,
-    true,
-  );
-}
-
-/** @deprecated Removed from public routing. */
-export const ANNUAL_AXES_V043_FEATURE_FLAG = "ziweiAnnualAxesV043";
-export function isAnnualAxesV043Enabled(): boolean {
-  return false;
-}
-
 /**
- * Annual Axes V0.5 — default ON.
- * Rollback: ?ziweiAnnualAxesV05=0 → V0.4.2
+ * Annual Axes module visibility — default ON.
+ * Kill-switch: ?ziweiAnnualAxesV03=0
  */
-export const ANNUAL_AXES_V05_FEATURE_FLAG = "ziweiAnnualAxesV05";
-export function isAnnualAxesV05Enabled(): boolean {
-  return readSessionFlag(
-    ANNUAL_AXES_V05_FEATURE_FLAG,
-    import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V05,
-    true,
-  );
-}
-
-/** @deprecated V0.6 is not publicly selectable. */
-export const ANNUAL_AXES_V06_FEATURE_FLAG = "ziweiAnnualAxesV06";
-export function isAnnualAxesV06Enabled(): boolean {
-  return false;
-}
-
-/**
- * Annual Axes V0.7 — default ON (rollback target when V08=0).
- * Rollback: ?ziweiAnnualAxesV07=0 → V0.5
- */
-export const ANNUAL_AXES_V07_FEATURE_FLAG = "ziweiAnnualAxesV07";
-export function isAnnualAxesV07Enabled(): boolean {
-  return readSessionFlag(
-    ANNUAL_AXES_V07_FEATURE_FLAG,
-    import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V07,
-    true,
-  );
-}
-
-/**
- * Annual Axes V0.8 — default ON (production Nam Phái engine).
- * Rollback: ?ziweiAnnualAxesV08=0 → V0.7
- */
-export const ANNUAL_AXES_V08_FEATURE_FLAG = "ziweiAnnualAxesV08";
-export function isAnnualAxesV08Enabled(): boolean {
-  return readSessionFlag(
-    ANNUAL_AXES_V08_FEATURE_FLAG,
-    import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V08,
-    true,
-  );
-}
-
 export const ANNUAL_AXES_V03_FEATURE_FLAG = "ziweiAnnualAxesV03";
 export function isAnnualAxesV03Enabled(): boolean {
   return readSessionFlag(

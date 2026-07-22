@@ -102,7 +102,7 @@ export interface AnnualAxisEvidence {
   /** V0.4 — domain affinity weight applied to this evidence.
    * @deprecated V0.4.2 replaced affinity-as-eligibility with physical
    * palace ownership (`ownershipWeight` below) — no longer populated by
-   * `nam-phai-v04/collect-evidence.ts`. */
+   * evidence collection. */
   affinityWeight?: number;
   /** @deprecated see `affinityWeight`. */
   affinitySource?: "exact-star" | "star-family" | "transformation" | "moving-marker";
@@ -225,66 +225,6 @@ export interface NatalDomainResponseProfile {
   provenance: string[];
 }
 
-/** V0.5 calibrated core — deterministic score reconstruction trace. */
-export interface AnnualAxisScoreTraceV05 {
-  formulaVersion: "v0.5-calibrated-core";
-  annualActivationRaw: number;
-  activationGate: number;
-  natalGain: number;
-  spatialSigned: number;
-  latent: number;
-  domainScale: number;
-  absoluteScore: number;
-}
-
-/** V0.6 annual-dominant core — includes signed layer factors. */
-export interface AnnualAxisScoreTraceV06 {
-  formulaVersion: "v0.6-annual-dominant-core";
-  candidateId: string;
-  signedLayerFactors: {
-    annual: number;
-    natalActivated: number;
-    majorFortune: number;
-    global: number;
-  };
-  directSupportRawBeforeLayerFactor: number;
-  directPressureRawBeforeLayerFactor: number;
-  tp4cSupportRawBeforeLayerFactor: number;
-  tp4cPressureRawBeforeLayerFactor: number;
-  directSupportRawAfterLayerFactor: number;
-  directPressureRawAfterLayerFactor: number;
-  tp4cSupportRawAfterLayerFactor: number;
-  tp4cPressureRawAfterLayerFactor: number;
-  spatialSigned: number;
-  annualActivationRaw: number;
-  activationGate: number;
-  natalGain: number;
-  latent: number;
-  domainScale: number;
-  absoluteScore: number;
-}
-
-/** V0.7 robust-centered annual score — relative to training domain baseline. */
-export interface AnnualAxisScoreTraceV07 {
-  formulaVersion: "v0.7-robust-centered-annual-score";
-  signedLayerFactors: {
-    annual: number;
-    natalActivated: number;
-    majorFortune: number;
-    global: number;
-  };
-  spatialSignedRaw: number;
-  domainCenter: number;
-  centeredSpatial: number;
-  annualActivationRaw: number;
-  activationGate: number;
-  natalGain: number;
-  strictLatent: number;
-  domainScale: number;
-  scoreAmplitude: number;
-  absoluteScore: number;
-}
-
 /** V0.8 explicit Lưu Niên palace-weighted score. */
 export interface AnnualAxisMatchedStarFactV08 {
   starName: string;
@@ -326,9 +266,7 @@ export interface AnnualAxisScoreTraceV08 {
   missingInputs: string[];
 }
 
-/** V0.3 — head-centric routing exposure per domain. Undefined when the
- * domain result was produced by a non-head-centric school (currently
- * Trung Châu keeps the V0.2 path). */
+/** Optional head-centric routing exposure per domain (legacy explainability). */
 export interface AnnualDomainRouting {
   routing: number;
   headShare: number;
@@ -348,10 +286,8 @@ export type AnnualAxisResult =
       evidence: AnnualAxisEvidence[];
       topSupportDrivers: AnnualAxisEvidence[];
       topPressureDrivers: AnnualAxisEvidence[];
-      /** V0.3 Nam Phái head-centric routing. Undefined for the Trung Châu
-       * V0.2 path so the locked TC numeric fixture stays byte-identical. */
+      /** Optional routing / explainability fields (Trung Châu omits these). */
       routing?: AnnualDomainRouting;
-      /** V0.4 annual-delta explainability. */
       annualDelta?: number;
       routedStrength?: number;
       natalResponse?: NatalDomainResponseProfile;
@@ -361,20 +297,12 @@ export type AnnualAxisResult =
         directDomainImpact: AnnualChannelSummary;
         majorFortuneBackground: AnnualChannelSummary;
       };
-      /** V0.4.1 — Nam Phái evidence-collection instrumentation. */
       collectStats?: NamPhaiV041CollectStats;
-      /** V0.4.3 — spatial budget + dedupe explainability (optional). */
       spatialBudgetTrace?: AnnualSpatialBudgetTrace;
       dedupeTrace?: AnnualEvidenceDedupeTrace;
       activationGate?: number;
-      /** V0.5 calibrated core latent signal (optional). */
       latent?: number;
-      /** V0.5 / V0.6 / V0.7 / V0.8 calibrated core score trace (optional). */
-      scoreTrace?:
-        | AnnualAxisScoreTraceV05
-        | AnnualAxisScoreTraceV06
-        | AnnualAxisScoreTraceV07
-        | AnnualAxisScoreTraceV08;
+      scoreTrace?: AnnualAxisScoreTraceV08;
     }
   | {
       domain: AnnualAxisDomain;

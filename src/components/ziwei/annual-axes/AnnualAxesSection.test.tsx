@@ -52,7 +52,7 @@ describe("AnnualAxesSection — Trung Châu available result", () => {
     expect(container.querySelector('.annual-axes-section__focus')).toBeNull();
   });
 
-  it("does not show Nam Phái V0.5 badge when V0.5 query flag is present", () => {
+  it("does not show legacy engine badges", () => {
     window.history.replaceState({}, "", "/?ziweiAnnualAxesV05=1");
     const chart = calculateTrungChau(REGRESSION);
     const result = analyzeAnnualAxes(chart, { school: "trung-chau" });
@@ -60,6 +60,7 @@ describe("AnnualAxesSection — Trung Châu available result", () => {
       <AnnualAxesSection chart={chart} school="trung-chau" result={result} />,
     );
     expect(container.textContent ?? "").not.toContain("Nam Phái V0.5");
+    expect(container.textContent ?? "").not.toContain("Engine");
   });
 
   it("opens the detail panel when a radar point is clicked", () => {
@@ -91,7 +92,9 @@ describe("AnnualAxesSection — Nam Phái available result", () => {
     );
     expect(container.querySelectorAll('.annual-axes-radar__point')).toHaveLength(6);
     expect(container.querySelector('.annual-axes-section__focus')).toBeNull();
-    expect(container.textContent ?? "").toContain(`Engine ${result.versions.engineVersion}`);
+    expect(container.textContent ?? "").toContain(`Năm ${result.annualYear}`);
+    expect(container.textContent ?? "").not.toContain("Engine");
+    expect(container.textContent ?? "").not.toContain("Nam Phái V0.");
   });
 
   it("renders the exact core score without React-side rescaling", () => {
@@ -108,18 +111,20 @@ describe("AnnualAxesSection — Nam Phái available result", () => {
     if (wealth.status !== "available") return;
     expect(container.textContent ?? "").toContain(`Điểm ${wealth.score.toFixed(1)}`);
     expect(result.versions.engineVersion).toBe("0.8.0");
-    expect(container.textContent ?? "").toContain("Nam Phái V0.8");
+    expect(container.textContent ?? "").toContain(`Năm ${result.annualYear}`);
+    expect(container.textContent ?? "").not.toContain("Nam Phái V0.8");
   });
 
-  it("V08=0 rollback shows V0.7 engine badge", () => {
+  it("V0.8 scores without exposing engine badges", () => {
     window.history.replaceState({}, "", "/?ziweiAnnualAxesV08=0");
     const chart = calculateNamPhai(REGRESSION);
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
     const { container } = render(
       <AnnualAxesSection chart={chart} school="nam-phai" result={result} />,
     );
-    expect(result.versions.engineVersion).toBe("0.7.0");
-    expect(container.textContent ?? "").toContain("Engine 0.7.0");
+    expect(result.versions.engineVersion).toBe("0.8.0");
+    expect(container.textContent ?? "").toContain(`Năm ${result.annualYear}`);
+    expect(container.textContent ?? "").not.toContain("Engine");
   });
 });
 

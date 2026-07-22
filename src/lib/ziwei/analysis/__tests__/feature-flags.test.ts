@@ -2,10 +2,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import {
   isHuyenKhiPreviewV01Enabled,
   HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG,
-  isAnnualAxesV043Enabled,
-  isAnnualAxesV05Enabled,
-  isAnnualAxesV07Enabled,
-  isAnnualAxesV08Enabled,
+  isAnnualAxesV03Enabled,
 } from "../feature-flags";
 
 describe("annual-axes feature flag defaults", () => {
@@ -14,14 +11,8 @@ describe("annual-axes feature flag defaults", () => {
     window.history.replaceState({}, "", "/");
   });
 
-  it("V0.4.3 stays off", () => {
-    expect(isAnnualAxesV043Enabled()).toBe(false);
-  });
-
-  it("V0.5 / V0.7 / V0.8 default ON", () => {
-    expect(isAnnualAxesV05Enabled()).toBe(true);
-    expect(isAnnualAxesV07Enabled()).toBe(true);
-    expect(isAnnualAxesV08Enabled()).toBe(true);
+  it("module visibility defaults ON", () => {
+    expect(isAnnualAxesV03Enabled()).toBe(true);
   });
 });
 
