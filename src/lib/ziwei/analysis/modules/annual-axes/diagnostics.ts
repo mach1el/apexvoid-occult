@@ -14,9 +14,6 @@ export function dedupeAnnualAxesDiagnostics(diagnostics: AnnualAxesDiagnostics):
     unknownStars: dedupeSorted(diagnostics.unknownStars),
     unknownMutagens: dedupeSorted(diagnostics.unknownMutagens),
     forbiddenSchoolMarkers: dedupeSorted(diagnostics.forbiddenSchoolMarkers),
-    duplicatePhysicalFacts: dedupeSorted(diagnostics.duplicatePhysicalFacts),
-    disabledInteractionHits: dedupeSorted(diagnostics.disabledInteractionHits),
-    missingSourceIds: dedupeSorted(diagnostics.missingSourceIds),
     missingRequiredAnnualFacts: dedupeSorted(diagnostics.missingRequiredAnnualFacts),
     incompleteChartPalaces: dedupeSorted(diagnostics.incompleteChartPalaces),
     duplicateNatalPalaceNames: dedupeSorted(diagnostics.duplicateNatalPalaceNames),
@@ -29,10 +26,5 @@ export function dedupeAnnualAxesDiagnostics(diagnostics: AnnualAxesDiagnostics):
     invalidAnnualFocusPalace: dedupeSorted(diagnostics.invalidAnnualFocusPalace),
     missingAnnualFocusFrameNodes: dedupeSorted(diagnostics.missingAnnualFocusFrameNodes),
     unsupportedSchoolPolicy: dedupeSorted(diagnostics.unsupportedSchoolPolicy),
-    invalidAnnualHeadFrame: dedupeSorted(diagnostics.invalidAnnualHeadFrame),
-    routingOutOfRange: dedupeSorted(diagnostics.routingOutOfRange),
-    duplicatePhysicalFactBlend: dedupeSorted(diagnostics.duplicatePhysicalFactBlend),
-    natalEvidenceMissingTriggers: dedupeSorted(diagnostics.natalEvidenceMissingTriggers),
-    domainFrameOvercoverage: dedupeSorted(diagnostics.domainFrameOvercoverage),
   };
 }

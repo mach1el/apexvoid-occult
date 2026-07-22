@@ -53,8 +53,9 @@ describe("annual-axes Trung Châu numeric regression lock", () => {
 
     it(`preserves ${domain} score/band/axes/intensity/conflict`, () => {
       const axis = result.axes[domain];
+      expect(axis.engine).toBe("v0.2");
       expect(axis.status).toBe("available");
-      if (axis.status !== "available") throw new Error("unreachable");
+      if (axis.engine !== "v0.2" || axis.status !== "available") throw new Error("unreachable");
 
       expect(axis.score).toBe(expected.score);
       expect(axis.band).toBe(expected.band);
@@ -94,7 +95,8 @@ describe("annual-axes Trung Châu numeric regression lock", () => {
 
     it(`preserves ${domain} top-3 support/pressure driver IDs`, () => {
       const axis = result.axes[domain];
-      if (axis.status !== "available") throw new Error("unavailable");
+      expect(axis.engine).toBe("v0.2");
+      if (axis.engine !== "v0.2" || axis.status !== "available") throw new Error("unavailable");
       expect(axis.topSupportDrivers.map((e) => e.id)).toEqual(expected.topSupportDriverIds);
       expect(axis.topPressureDrivers.map((e) => e.id)).toEqual(expected.topPressureDriverIds);
     });

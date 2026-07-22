@@ -64,10 +64,8 @@ export type {
 export {
   isPalaceOverviewV1Enabled,
   PALACE_OVERVIEW_FEATURE_FLAG,
-  isAnnualAxesV03Enabled,
-  ANNUAL_AXES_V03_FEATURE_FLAG,
-  isAnnualAxesV02Enabled,
-  ANNUAL_AXES_V02_FEATURE_FLAG,
+  isAnnualAxesEnabled,
+  ANNUAL_AXES_FEATURE_FLAG,
   isHuyenKhiPreviewV01Enabled,
   HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG,
 } from "./feature-flags";

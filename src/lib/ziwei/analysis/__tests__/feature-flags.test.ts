@@ -2,7 +2,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import {
   isHuyenKhiPreviewV01Enabled,
   HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG,
-  isAnnualAxesV03Enabled,
+  isAnnualAxesEnabled,
 } from "../feature-flags";
 
 describe("annual-axes feature flag defaults", () => {
@@ -12,7 +12,7 @@ describe("annual-axes feature flag defaults", () => {
   });
 
   it("module visibility defaults ON", () => {
-    expect(isAnnualAxesV03Enabled()).toBe(true);
+    expect(isAnnualAxesEnabled()).toBe(true);
   });
 });
 

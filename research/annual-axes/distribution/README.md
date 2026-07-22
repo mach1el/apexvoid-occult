@@ -1,20 +1,36 @@
 # Annual Axes distribution research
 
-Engineering audit outputs for the V0.4 annual-delta corrective.
+Engineering audit outputs and V0.8 regression fixtures for Annual Axes.
 
-- `corpus-contract.json` — generation parameters (committed after first full audit).
-- `baseline-*-annual-axes-audit-full-v0.4.json` — aggregate metrics only (no raw charts).
-- `samples/` — tiny hand-checked excerpts if needed.
+## Production status
 
-Do not commit thousands of raw chart payloads.
+- **Nam Phái production**: V0.8 only (`v0.8-annual-palace-weighted-score`)
+- **Trung Châu**: isolated V0.2 path
+- **No rollback chain** to deleted pre-V0.8 Nam Phái engines
+- Distribution gates are **advisory**
+- Numeric model constants are **engineering policy**, not classical doctrine
+
+## Active V0.8 artifacts
+
+```text
+v0.8/ANNUAL-AXES-V0.8-DECISION.md
+v0.8/annual-axes-v0.8-holdout-scores.json
+v0.8/annual-axes-v0.8-ui-proof.json
+v0.8/annual-axes-v0.8-product-fixture.json
+corpus-contract.json
+```
+
+Pre-V0.8 research dumps (v0.4 / v0.5 / v0.7 / candidate reports) are deleted.
 
 ## Commands
 
 ```bash
 npm run test:annual-axes-distribution:fast
-npm run audit:annual-axes-distribution
+npm run test:annual-axes-v08
+npm run test:annual-axes-v08-holdout
+npm run test:annual-axes-v08-ui
+npm run generate:annual-axes-v08-fixtures   # ANNUAL_AXES_V08_GENERATE_FIXTURES=1
+npm run audit:annual-axes-distribution     # advisory full audit writer
 ```
 
-Profile id `annual-axes-current` scores via the live `analyzeAnnualAxes` entry
-(Nam Phái V0.3 head-centric path / Trung Châu V0.2 path). This is the
-pre-V0.4 baseline the corrective prompt requires before formula work.
+Do not commit thousands of raw chart payloads.

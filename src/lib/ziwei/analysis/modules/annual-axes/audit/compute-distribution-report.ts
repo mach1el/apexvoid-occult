@@ -55,7 +55,7 @@ function summarizeDomain(values: number[]): DomainScoreSummary {
 const NEAR_DUP_DISTANCE = 1.5;
 
 /**
- * Aggregate scored observations into the V0.4 distribution report contract.
+ * Aggregate scored observations into the advisory distribution report contract.
  */
 export function computeDistributionReport(
   profileId: string,
@@ -207,25 +207,6 @@ export function computeDistributionReport(
 
   const sortedRanges = [...ranges].sort((a, b) => a - b);
 
-  const numericCounts: number[] = [];
-  const contextOnlyCounts: number[] = [];
-  for (const obs of observations) {
-    if (!obs.collectStats) continue;
-    for (const domain of ANNUAL_AXIS_DOMAINS) {
-      const s = obs.collectStats[domain];
-      if (!s) continue;
-      numericCounts.push(s.numericFacts);
-      contextOnlyCounts.push(s.contextOnlyFacts);
-    }
-  }
-  const affinityCoverage =
-    numericCounts.length === 0
-      ? undefined
-      : {
-          meanNumericEvidenceCountPerDomainYear: mean(numericCounts),
-          medianContextOnlyCountPerDomainYear: median(contextOnlyCounts),
-        };
-
   return {
     profileId,
     school,
@@ -257,6 +238,5 @@ export function computeDistributionReport(
     },
     unavailableRate,
     partialRate,
-    affinityCoverage,
   };
 }

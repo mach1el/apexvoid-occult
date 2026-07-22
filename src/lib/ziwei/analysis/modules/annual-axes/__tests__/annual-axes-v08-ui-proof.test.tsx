@@ -64,10 +64,9 @@ describe("Annual Axes V0.8 UI proof (read-only)", () => {
     for (const domain of ANNUAL_AXIS_DOMAINS) {
       const axis = result.axes[domain];
       expect(["available", "partial-data", "unavailable"]).toContain(axis.status);
-      if (axis.status === "unavailable") continue;
+      if (axis.engine !== "v0.8" || axis.status === "unavailable") continue;
       const trace = axis.scoreTrace;
-      expect(trace?.formulaVersion).toBe("v0.8-annual-palace-weighted-score");
-      if (trace?.formulaVersion !== "v0.8-annual-palace-weighted-score") continue;
+      expect(trace.formulaVersion).toBe("v0.8-annual-palace-weighted-score");
       expect(trace.absoluteScore).toBe(axis.score);
       expect(axis.score).toBeGreaterThanOrEqual(10);
       expect(axis.score).toBeLessThanOrEqual(90);
@@ -78,7 +77,7 @@ describe("Annual Axes V0.8 UI proof (read-only)", () => {
     fireEvent.click(wealthPoint!);
     const wealth = result.axes.wealth;
     expect(wealth.status).not.toBe("unavailable");
-    if (wealth.status === "unavailable") return;
+    if (wealth.engine !== "v0.8" || wealth.status === "unavailable") return;
     expect(container.textContent ?? "").toContain(`Điểm ${wealth.score.toFixed(1)}`);
     expect(container.textContent ?? "").not.toMatch(/Độ tin cậy\s+\d+%/);
     expect(container.textContent ?? "").not.toContain("Hỗ trợ nổi bật");
@@ -86,7 +85,7 @@ describe("Annual Axes V0.8 UI proof (read-only)", () => {
     expect(container.textContent ?? "").not.toContain("Tín hiệu có trọng số");
     expect(container.textContent ?? "").not.toContain("Tín hiệu sau Thái Tuế");
     expect(container.textContent ?? "").not.toContain("Ánh xạ cung lưu niên");
-    if (wealth.scoreTrace?.formulaVersion === "v0.8-annual-palace-weighted-score") {
+    if (wealth.engine === "v0.8") {
       expect(container.textContent ?? "").toContain("Cung trọng tâm");
       expect(container.textContent ?? "").toContain("Cung phối hợp");
       if (wealth.scoreTrace.scoreState === "no-signal") {

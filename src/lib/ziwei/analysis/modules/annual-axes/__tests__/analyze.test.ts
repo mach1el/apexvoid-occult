@@ -31,6 +31,9 @@ describe("analyzeAnnualAxes — domain resolution (Trung Châu chart, real annua
     expect(Object.keys(result.axes).sort()).toEqual([...ANNUAL_AXIS_DOMAINS].sort());
     for (const domain of ANNUAL_AXIS_DOMAINS) {
       const axis = result.axes[domain];
+      if (axis.engine !== "v0.2") throw new Error("expected v0.2");
+      expect(axis.status).toBe("available");
+      if (axis.status !== "available" && axis.status !== "partial-data") continue;
       expect(axis.score).toBeGreaterThanOrEqual(0);
       expect(axis.score).toBeLessThanOrEqual(100);
       expect(["guarded", "balanced", "supportive", "strong"]).toContain(axis.band);
@@ -44,6 +47,8 @@ describe("analyzeAnnualAxes — domain resolution (Trung Châu chart, real annua
 
     for (const domain of ANNUAL_AXIS_DOMAINS) {
       const axis = result.axes[domain];
+      if (axis.engine !== "v0.2") throw new Error("expected v0.2");
+      if (axis.status === "unavailable") continue;
       const identities = axis.evidence.map(
         (e) => `${e.layer}|${e.category}|${e.physicalFactId}|${e.ruleId}|${e.targetPalaceIndex}`,
       );
@@ -58,7 +63,10 @@ describe("analyzeAnnualAxes — domain resolution (Trung Châu chart, real annua
     let total = 0;
     let sawDistinctAnchorAndTarget = false;
     for (const domain of ANNUAL_AXIS_DOMAINS) {
-      for (const e of result.axes[domain].evidence) {
+      const axis = result.axes[domain];
+      if (axis.engine !== "v0.2") throw new Error("expected v0.2");
+      if (axis.status === "unavailable") continue;
+      for (const e of axis.evidence) {
         total += 1;
         expect(e.physicalFactId).toBeTruthy();
         expect(e.ruleId).toBeTruthy();
@@ -143,14 +151,13 @@ describe("analyzeAnnualAxes — Nam Phái V0.8 production default", () => {
 
     for (const domain of availableDomains) {
       const axis = result.axes[domain];
-      if (axis.status !== "available") continue;
+      if (axis.engine !== "v0.8" || axis.status !== "available") continue;
       expect(axis.score).toBeGreaterThanOrEqual(0);
       expect(axis.score).toBeLessThanOrEqual(100);
-      expect(axis.annualDelta).toBeDefined();
-      expect(axis.scoreTrace?.formulaVersion).toBe("v0.8-annual-palace-weighted-score");
-      if (axis.scoreTrace?.formulaVersion === "v0.8-annual-palace-weighted-score") {
-        expect(axis.scoreTrace.absoluteScore).toBe(axis.score);
-      }
+      expect(axis.scoreTrace.formulaVersion).toBe("v0.8-annual-palace-weighted-score");
+      expect(axis.scoreTrace.absoluteScore).toBe(axis.score);
+      expect(axis.v08Evidence).toBeDefined();
+      expect(axis.topSupportDriversV08).toBeDefined();
     }
   });
 
@@ -173,7 +180,9 @@ describe("analyzeAnnualAxes — school-specific focal markers", () => {
     const result = analyzeAnnualAxes(chart, { school: "trung-chau" });
 
     for (const domain of ANNUAL_AXIS_DOMAINS) {
-      const smallLimitMarkers = result.axes[domain].evidence.filter(
+      const axis = result.axes[domain];
+      if (axis.engine !== "v0.2") throw new Error("expected v0.2");
+      const smallLimitMarkers = axis.evidence.filter(
         (e) => e.category === "focal-marker" && e.physicalFactId.includes("small-limit"),
       );
       expect(smallLimitMarkers).toHaveLength(0);
@@ -191,10 +200,14 @@ describe("analyzeAnnualAxes — temporal behavior", () => {
     });
 
     const flatten = (r: typeof a) =>
-      ANNUAL_AXIS_DOMAINS.map((d) => ({
-        score: r.axes[d].score,
-        evidenceIds: r.axes[d].evidence.map((e) => e.id).sort(),
-      }));
+      ANNUAL_AXIS_DOMAINS.map((d) => {
+        const axis = r.axes[d];
+        return {
+          score: axis.score,
+          evidenceIds:
+            axis.engine === "v0.2" ? axis.evidence.map((e) => e.id).sort() : [],
+        };
+      });
 
     expect(flatten(a)).not.toEqual(flatten(b));
   });

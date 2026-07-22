@@ -41,21 +41,16 @@ export function isPalaceOverviewV1Enabled(): boolean {
 
 /**
  * Annual Axes module visibility — default ON.
- * Kill-switch: ?ziweiAnnualAxesV03=0
+ * Kill-switch: ?ziweiAnnualAxes=0
  */
-export const ANNUAL_AXES_V03_FEATURE_FLAG = "ziweiAnnualAxesV03";
-export function isAnnualAxesV03Enabled(): boolean {
+export const ANNUAL_AXES_FEATURE_FLAG = "ziweiAnnualAxes";
+export function isAnnualAxesEnabled(): boolean {
   return readSessionFlag(
-    ANNUAL_AXES_V03_FEATURE_FLAG,
-    import.meta.env.VITE_ZIWEI_ANNUAL_AXES_V03,
+    ANNUAL_AXES_FEATURE_FLAG,
+    import.meta.env.VITE_ZIWEI_ANNUAL_AXES,
     true,
   );
 }
-
-/** @deprecated Use `ANNUAL_AXES_V03_FEATURE_FLAG` instead. */
-export const ANNUAL_AXES_V02_FEATURE_FLAG = ANNUAL_AXES_V03_FEATURE_FLAG;
-/** @deprecated Use `isAnnualAxesV03Enabled` instead. */
-export const isAnnualAxesV02Enabled = isAnnualAxesV03Enabled;
 
 export const HUYEN_KHI_PREVIEW_V01_FEATURE_FLAG = "ziweiHuyenKhiPreviewV01";
 

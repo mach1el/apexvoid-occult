@@ -124,7 +124,7 @@ describe("Annual Axes V0.8 UI score equality", () => {
     expect(axis.status).toBe("available");
     if (axis.status !== "available") return;
     expect(container.textContent ?? "").toContain(`Điểm ${axis.score.toFixed(1)}`);
-    if (axis.scoreTrace?.formulaVersion === "v0.8-annual-palace-weighted-score") {
+    if (axis.engine === "v0.8") {
       expect(container.textContent ?? "").toContain(axis.scoreTrace.primary.palaceName);
       expect(container.textContent ?? "").not.toMatch(/Độ tin cậy\s+\d+%/);
     }

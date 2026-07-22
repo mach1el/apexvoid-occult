@@ -37,7 +37,34 @@ Coverage exposes `resolvedWeight` / `totalWeight` / `missingPalaces`.
 
 ## Self-containment
 
-V0.8 loads only its own knowledge package (mapping, stars, aliases/families, point classes, score bands, distribution gates, source registry). It does **not** depend on V0.4 knowledge at runtime.
+V0.8 loads only its own knowledge package (mapping, stars, aliases/families, point classes, score bands, distribution gates, source registry, star capabilities). It does **not** depend on deleted V0.4 knowledge at runtime. Pre-V0.8 Nam Phái engines are removed; there is no rollback chain.
+
+## Known unsupported annual inputs
+
+The approved research formula references the following annual signals, but
+Calculation Core currently has no verified producer for them:
+
+- Lưu Đại Hao
+- Lưu Tiểu Hao
+- Lưu Phục Binh
+- Lưu Tuần
+- Lưu Triệt
+
+They are disabled in the production V0.8 registry and recorded as unsupported
+in the annual-star capability catalog.
+
+Unsupported does not mean the star is absent from the astrological chart.
+It means the current Calculation Core cannot yet calculate that exact annual
+identity with a verified placement rule.
+
+Enabling any of these rules requires all of:
+
+1. verified upstream producer in Calculation Core
+2. source/provenance for the placement rule
+3. capability status `supported` with non-empty producer
+4. real-chart emission regression across a deterministic corpus
+5. production registry rule
+6. holdout / UI / product fixture updates
 
 ## Provenance
 

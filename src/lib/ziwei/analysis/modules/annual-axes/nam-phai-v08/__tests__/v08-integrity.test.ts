@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { calculate as calculateNamPhai } from "@/lib/ziwei/engine-nam-phai";
 import type { BirthInput, ChartData, ChartStar } from "@/types/chart";
 import { analyzeAnnualAxesNamPhaiV08 } from "../analyze";
@@ -341,13 +343,13 @@ describe("V0.8 architecture contracts", () => {
     expect(result.versions.knowledgeVersion).toBe("0.8.0");
     expect(result.capabilities.domainAnchorCoordinate).toBe("annual-palace-name");
     for (const domain of Object.values(result.axes)) {
+      if (domain.engine !== "v0.8") throw new Error("expected v0.8");
       if (domain.status === "unavailable") continue;
-      expect(domain.evidence).toEqual([]);
-      expect(domain.topSupportDrivers).toEqual([]);
-      expect(domain.engine).toBe("v0.8");
-      for (const e of domain.v08Evidence ?? []) {
-        const mult = domain.scoreTrace?.isThaiTueHighlighted
-          ? (domain.scoreTrace.thaiTueMultiplier ?? 1)
+      expect("evidence" in domain).toBe(false);
+      expect("topSupportDrivers" in domain).toBe(false);
+      for (const e of domain.v08Evidence) {
+        const mult = domain.scoreTrace.isThaiTueHighlighted
+          ? domain.scoreTrace.thaiTueMultiplier
           : 1;
         expect(e.weightedContribution).toBeCloseTo(e.pointValue * e.palaceWeight * mult, 5);
       }
@@ -364,9 +366,9 @@ describe("V0.8 architecture contracts", () => {
     const result = analyzeAnnualAxesNamPhaiV08(enriched);
     const wealth = result.axes.wealth;
     expect(wealth.status === "available" || wealth.status === "partial-data").toBe(true);
-    if (wealth.status === "unavailable") return;
-    const support = wealth.topSupportDriversV08 ?? [];
-    const pressure = wealth.topPressureDriversV08 ?? [];
+    if (wealth.status === "unavailable" || wealth.engine !== "v0.8") return;
+    const support = wealth.topSupportDriversV08;
+    const pressure = wealth.topPressureDriversV08;
     if (support.length >= 2) {
       expect(Math.abs(support[0]!.weightedContribution)).toBeGreaterThanOrEqual(
         Math.abs(support[1]!.weightedContribution),
@@ -384,44 +386,43 @@ describe("V0.8 validator mutations", () => {
   it("rejects duplicate rule ids, invalid palace, weight, polarity, and alias collisions", () => {
     resetAnnualAxesKnowledgeV08NamPhaiCache();
     const base = structuredClone(knowledge);
-    const sourceIds = new Set(base.sourceRegistry.sources.map((s) => s.sourceId));
 
     const dup = structuredClone(base);
     dup.starRegistry.axes.wealth.positive.push({
       ...dup.starRegistry.axes.wealth.positive[0]!,
     });
-    expect(validateAnnualAxesKnowledgeV08NamPhai(dup, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(dup).ok).toBe(false);
 
     const badPalace = structuredClone(base);
     badPalace.domainMapping.domains.wealth.primary.palace = "Không Tồn Tại";
-    expect(validateAnnualAxesKnowledgeV08NamPhai(badPalace, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(badPalace).ok).toBe(false);
 
     const badWeight = structuredClone(base);
     badWeight.domainMapping.domains.wealth.primary.weight = -0.6;
-    expect(validateAnnualAxesKnowledgeV08NamPhai(badWeight, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(badWeight).ok).toBe(false);
 
     const badPolarity = structuredClone(base);
     badPolarity.starRegistry.axes.wealth.positive[0]!.pointClass = "annualTransformNegative";
-    expect(validateAnnualAxesKnowledgeV08NamPhai(badPolarity, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(badPolarity).ok).toBe(false);
 
     const natalOnlyLuu = structuredClone(base);
     natalOnlyLuu.starRegistry.axes.wealth.negative[0]!.allowedTemporalLayers = ["natal"];
-    expect(validateAnnualAxesKnowledgeV08NamPhai(natalOnlyLuu, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(natalOnlyLuu).ok).toBe(false);
 
     const aliasCollision = structuredClone(base);
     aliasCollision.starAliases.aliases.push(
       { alias: "Lưu Khôi", canonical: "Lưu Thiên Việt" },
     );
-    expect(validateAnnualAxesKnowledgeV08NamPhai(aliasCollision, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(aliasCollision).ok).toBe(false);
 
     const familyAsAlias = structuredClone(base);
     familyAsAlias.starAliases.aliases.push({
       alias: "Long Trì",
       canonical: "Phượng Các",
     });
-    expect(validateAnnualAxesKnowledgeV08NamPhai(familyAsAlias, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(familyAsAlias).ok).toBe(false);
 
-    const ok = validateAnnualAxesKnowledgeV08NamPhai(base, sourceIds);
+    const ok = validateAnnualAxesKnowledgeV08NamPhai(base);
     expect(ok.ok).toBe(true);
   });
 });
@@ -476,8 +477,7 @@ describe("V0.8 annual-star capability reachability", () => {
         status: "engineering-hypothesis",
       },
     });
-    const sourceIds = new Set(mutated.sourceRegistry.sources.map((s) => s.sourceId));
-    expect(validateAnnualAxesKnowledgeV08NamPhai(mutated, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(mutated).ok).toBe(false);
   });
 
   it("real charts emit every supported annual scoring star across a deterministic corpus", () => {
@@ -582,14 +582,12 @@ describe("V0.8 annual-only temporal validation", () => {
     { layers: [], ok: false },
   ])("layers $layers => ok=$ok", ({ layers, ok }) => {
     const mutated = mutateLayers(layers);
-    const sourceIds = new Set(mutated.sourceRegistry.sources.map((s) => s.sourceId));
-    expect(validateAnnualAxesKnowledgeV08NamPhai(mutated, sourceIds).ok).toBe(ok);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(mutated).ok).toBe(ok);
   });
 });
 
 describe("V0.8 alias temporal integrity + shared normalizer", () => {
   it("rejects natal↔annual alias crossings and accepts valid spelling aliases", () => {
-    const sourceIds = new Set(knowledge.sourceRegistry.sources.map((s) => s.sourceId));
     const rejectCases = [
       { alias: "Hóa Kỵ", canonical: "Lưu Hóa Kỵ" },
       { alias: "Lưu Hóa Kỵ", canonical: "Hóa Kỵ" },
@@ -599,7 +597,7 @@ describe("V0.8 alias temporal integrity + shared normalizer", () => {
     for (const entry of rejectCases) {
       const mutated = structuredClone(knowledge);
       mutated.starAliases.aliases.push(entry);
-      expect(validateAnnualAxesKnowledgeV08NamPhai(mutated, sourceIds).ok).toBe(false);
+      expect(validateAnnualAxesKnowledgeV08NamPhai(mutated).ok).toBe(false);
     }
 
     expect(exactCanonicalStarName("Hoá Kỵ")).toBe("Hóa Kỵ");
@@ -623,25 +621,65 @@ describe("V0.8 alias temporal integrity + shared normalizer", () => {
 
 describe("V0.8 provenance and source registry", () => {
   it("rejects missing provenance, unknown sources, duplicates, and classical/engineering contradiction", () => {
-    const sourceIds = new Set(knowledge.sourceRegistry.sources.map((s) => s.sourceId));
-
     const missingProv = structuredClone(knowledge);
     delete missingProv.starRegistry.axes.wealth.positive[0]!.provenance;
-    expect(validateAnnualAxesKnowledgeV08NamPhai(missingProv, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(missingProv).ok).toBe(false);
+
+    const missingStatus = structuredClone(knowledge);
+    // @ts-expect-error intentional missing status
+    delete missingStatus.starRegistry.axes.wealth.positive[0]!.provenance!.status;
+    expect(validateAnnualAxesKnowledgeV08NamPhai(missingStatus).ok).toBe(false);
+
+    const missingClaimStatus = structuredClone(knowledge);
+    // @ts-expect-error intentional missing status
+    delete missingClaimStatus.sourceRegistry.claims[0]!.status;
+    expect(validateAnnualAxesKnowledgeV08NamPhai(missingClaimStatus).ok).toBe(false);
 
     const emptyProv = structuredClone(knowledge);
     emptyProv.starRegistry.axes.wealth.positive[0]!.provenance = {
       sourceIds: [],
       status: "engineering-hypothesis",
     };
-    expect(validateAnnualAxesKnowledgeV08NamPhai(emptyProv, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(emptyProv).ok).toBe(false);
 
     const unknownSrc = structuredClone(knowledge);
     unknownSrc.starRegistry.axes.wealth.positive[0]!.provenance = {
       sourceIds: ["SRC-DOES-NOT-EXIST"],
       status: "engineering-hypothesis",
     };
-    expect(validateAnnualAxesKnowledgeV08NamPhai(unknownSrc, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(unknownSrc).ok).toBe(false);
+
+    const classicalRuleOnEng = structuredClone(knowledge);
+    classicalRuleOnEng.starRegistry.axes.wealth.positive[0]!.provenance = {
+      sourceIds: ["SRC-AA-ENG-008"],
+      status: "classical",
+    };
+    expect(validateAnnualAxesKnowledgeV08NamPhai(classicalRuleOnEng).ok).toBe(false);
+
+    const classicalRuleOnCore = structuredClone(knowledge);
+    classicalRuleOnCore.starRegistry.axes.wealth.positive[0]!.provenance = {
+      sourceIds: ["SRC-AA-CORE-001"],
+      status: "classical",
+    };
+    expect(validateAnnualAxesKnowledgeV08NamPhai(classicalRuleOnCore).ok).toBe(false);
+
+    const derivedNoRationale = structuredClone(knowledge);
+    derivedNoRationale.starRegistry.axes.wealth.positive[0]!.provenance = {
+      sourceIds: ["SRC-AA-ENG-008"],
+      status: "derived",
+    };
+    expect(validateAnnualAxesKnowledgeV08NamPhai(derivedNoRationale).ok).toBe(false);
+
+    const derivedOk = structuredClone(knowledge);
+    derivedOk.starRegistry.axes.wealth.positive[0]!.provenance = {
+      sourceIds: ["SRC-AA-ENG-008"],
+      status: "derived",
+      rationale: "Derived from engineering palace-weight policy.",
+    };
+    expect(validateAnnualAxesKnowledgeV08NamPhai(derivedOk).ok).toBe(true);
+
+    const engOk = structuredClone(knowledge);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(engOk).ok).toBe(true);
 
     const dupSource = structuredClone(knowledge);
     dupSource.sourceRegistry.sources.push({ ...dupSource.sourceRegistry.sources[0]! });
@@ -671,24 +709,146 @@ describe("V0.8 provenance and source registry", () => {
 });
 
 describe("V0.8 score-band validation", () => {
-  it("rejects overlap, gap, unordered bands, incomplete coverage, duplicate ids", () => {
-    const sourceIds = new Set(knowledge.sourceRegistry.sources.map((s) => s.sourceId));
+  it("ordered bands pass; swapped/overlap/gap/dup/unknown/missing bounds fail", () => {
+    expect(validateAnnualAxesKnowledgeV08NamPhai(structuredClone(knowledge)).ok).toBe(true);
+
+    const swapFirst = structuredClone(knowledge);
+    const b0 = swapFirst.scoreBands.bands[0]!;
+    swapFirst.scoreBands.bands[0] = swapFirst.scoreBands.bands[1]!;
+    swapFirst.scoreBands.bands[1] = b0;
+    expect(validateAnnualAxesKnowledgeV08NamPhai(swapFirst).ok).toBe(false);
+
+    const swapLast = structuredClone(knowledge);
+    const last = swapLast.scoreBands.bands.length - 1;
+    const tmp = swapLast.scoreBands.bands[last]!;
+    swapLast.scoreBands.bands[last] = swapLast.scoreBands.bands[last - 1]!;
+    swapLast.scoreBands.bands[last - 1] = tmp;
+    expect(validateAnnualAxesKnowledgeV08NamPhai(swapLast).ok).toBe(false);
 
     const overlap = structuredClone(knowledge);
     overlap.scoreBands.bands[1]!.minInclusive = 40;
-    expect(validateAnnualAxesKnowledgeV08NamPhai(overlap, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(overlap).ok).toBe(false);
 
     const gap = structuredClone(knowledge);
     gap.scoreBands.bands[1]!.minInclusive = 55;
-    expect(validateAnnualAxesKnowledgeV08NamPhai(gap, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(gap).ok).toBe(false);
 
     const dupId = structuredClone(knowledge);
     dupId.scoreBands.bands[2]!.id = "guarded";
-    expect(validateAnnualAxesKnowledgeV08NamPhai(dupId, sourceIds).ok).toBe(false);
+    expect(validateAnnualAxesKnowledgeV08NamPhai(dupId).ok).toBe(false);
 
-    const incomplete = structuredClone(knowledge);
-    incomplete.scoreBands.bands = incomplete.scoreBands.bands.slice(0, 2);
-    expect(validateAnnualAxesKnowledgeV08NamPhai(incomplete, sourceIds).ok).toBe(false);
+    const unknownId = structuredClone(knowledge);
+    unknownId.scoreBands.bands[0]!.id = "mystery";
+    expect(validateAnnualAxesKnowledgeV08NamPhai(unknownId).ok).toBe(false);
+
+    const missing10 = structuredClone(knowledge);
+    missing10.scoreBands.bands[0]!.minInclusive = 11;
+    expect(validateAnnualAxesKnowledgeV08NamPhai(missing10).ok).toBe(false);
+
+    const missing90 = structuredClone(knowledge);
+    const lastBand = missing90.scoreBands.bands[missing90.scoreBands.bands.length - 1]!;
+    lastBand.maxInclusive = 89;
+    delete lastBand.maxExclusive;
+    expect(validateAnnualAxesKnowledgeV08NamPhai(missing90).ok).toBe(false);
+  });
+});
+
+describe("V0.8 mapping logical uniqueness", () => {
+  it("rejects duplicate roles and duplicate logical palace inputs", () => {
+    const dupRole = structuredClone(knowledge);
+    dupRole.domainMapping.domains.wealth.cooperating[0]!.role = "primary";
+    dupRole.domainMapping.domains.wealth.primary.role = "primary";
+    expect(validateAnnualAxesKnowledgeV08NamPhai(dupRole).ok).toBe(false);
+
+    const samePalaceDiffRoles = structuredClone(knowledge);
+    samePalaceDiffRoles.domainMapping.domains.wealth.cooperating[0]!.palace = "Tài Bạch";
+    samePalaceDiffRoles.domainMapping.domains.wealth.cooperating[0]!.role = "coop-a";
+    expect(validateAnnualAxesKnowledgeV08NamPhai(samePalaceDiffRoles).ok).toBe(false);
+
+    const dupSmall = structuredClone(knowledge);
+    dupSmall.domainMapping.domains.health.cooperating.push({
+      type: "small-limit-palace",
+      weight: 0.1,
+      role: "small-limit-extra",
+    });
+    // Fix weights so weight-sum isn't the only failure mode.
+    dupSmall.domainMapping.domains.health.cooperating[0]!.weight = 0.1;
+    dupSmall.domainMapping.domains.health.cooperating[1]!.weight = 0.2;
+    expect(validateAnnualAxesKnowledgeV08NamPhai(dupSmall).ok).toBe(false);
+
+    expect(validateAnnualAxesKnowledgeV08NamPhai(structuredClone(knowledge)).ok).toBe(true);
+  });
+
+  it("runtime physical collision still combines weights", () => {
+    const chart = calculateNamPhai(REGRESSION);
+    const menh = resolveAnnualPalace(chart, "Mệnh");
+    if (!menh.ok) throw new Error(menh.reason);
+    const coinciding: ChartData = {
+      ...chart,
+      smallLimitPalace: chart.palaces.find((p) => p.index === menh.palace.palaceIndex) ?? null,
+      palaces: chart.palaces.map((p) => ({
+        ...p,
+        isSmallLimitPalace: p.index === menh.palace.palaceIndex,
+      })),
+    };
+    const scored = scoreV08Domain({ chart: coinciding, domain: "health", knowledge });
+    const shared = [scored.trace.primary, ...scored.trace.cooperating].filter(
+      (t) => t.palaceIndex === menh.palace.palaceIndex,
+    );
+    expect(shared.length).toBeGreaterThanOrEqual(2);
+    const combined = shared.reduce((s, t) => s + t.configuredWeight, 0);
+    expect(combined).toBeCloseTo(0.4, 5);
+  });
+});
+
+describe("V0.8 alias duplicate entries", () => {
+  it("rejects exact duplicate aliases and chains", () => {
+    const exactDup = structuredClone(knowledge);
+    exactDup.starAliases.aliases.push({
+      alias: "Lưu Khôi",
+      canonical: "Lưu Thiên Khôi",
+    });
+    expect(validateAnnualAxesKnowledgeV08NamPhai(exactDup).ok).toBe(false);
+
+    const chain = structuredClone(knowledge);
+    chain.starAliases.aliases.push({ alias: "Hóa Kỵ", canonical: "Hoá Kỵ" });
+    expect(validateAnnualAxesKnowledgeV08NamPhai(chain).ok).toBe(false);
+  });
+});
+
+describe("V0.8 capability invariants", () => {
+  it("enforces producer/source rules by supportStatus", () => {
+    const noProducer = structuredClone(knowledge);
+    const supported = noProducer.starCapabilities.capabilities.find(
+      (c) => c.supportStatus === "supported",
+    )!;
+    delete supported.producer;
+    expect(validateAnnualAxesKnowledgeV08NamPhai(noProducer).ok).toBe(false);
+
+    const unsupportedWithProducer = structuredClone(knowledge);
+    const unsupported = unsupportedWithProducer.starCapabilities.capabilities.find(
+      (c) => c.supportStatus === "unsupported",
+    )!;
+    unsupported.producer = "fake-producer";
+    expect(validateAnnualAxesKnowledgeV08NamPhai(unsupportedWithProducer).ok).toBe(false);
+
+    const emptySrc = structuredClone(knowledge);
+    emptySrc.starCapabilities.capabilities[0]!.sourceIds = [];
+    expect(validateAnnualAxesKnowledgeV08NamPhai(emptySrc).ok).toBe(false);
+
+    expect(validateAnnualAxesKnowledgeV08NamPhai(structuredClone(knowledge)).ok).toBe(true);
+  });
+});
+
+describe("V0.8 CI path coverage for fixtures", () => {
+  it("deploy workflow includes research V0.8 fixture paths", () => {
+    const yaml = readFileSync(
+      join(process.cwd(), ".github/workflows/deploy.yml"),
+      "utf8",
+    );
+    expect(yaml).toContain("research/annual-axes/distribution/v0.8/**");
+    expect(yaml).toContain("github.event.pull_request.base.sha");
+    expect(yaml).toContain("git show --check");
   });
 });
 

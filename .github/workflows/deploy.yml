@@ -16,6 +16,7 @@ on:
       - "package*.json"
       - "vite.config.ts"
       - ".github/workflows/deploy.yml"
+      - "research/annual-axes/distribution/v0.8/**"
   push:
     branches: [master]
     paths:
@@ -27,6 +28,7 @@ on:
       - "package*.json"
       - "vite.config.ts"
       - ".github/workflows/deploy.yml"
+      - "research/annual-axes/distribution/v0.8/**"
   workflow_dispatch:
 
 jobs:
@@ -34,6 +36,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -54,13 +58,26 @@ jobs:
         run: npm run test:annual-axes-v08-ui
       - name: Annual Axes distribution audit (advisory)
         run: npm run test:annual-axes-distribution:fast
-      - name: Check for conflict markers / whitespace errors
-        run: git diff --check
+      - name: Check PR patch for whitespace errors
+        if: github.event_name == 'pull_request'
+        run: |
+          git diff --check \
+            "${{ github.event.pull_request.base.sha }}...${{ github.sha }}"
+      - name: Check pushed commit for whitespace errors
+        if: github.event_name != 'pull_request'
+        run: git show --check --oneline --no-renames HEAD
       - name: Confirm V0.8 fixtures were not rewritten
         run: |
           if [ -n "$(git status --short -- research/annual-axes/distribution/v0.8/)" ]; then
             echo "V0.8 fixture files were modified by tests — fixtures must remain read-only"
             git status --short -- research/annual-axes/distribution/v0.8/
+            exit 1
+          fi
+      - name: Confirm working tree clean after tests
+        run: |
+          if [ -n "$(git status --short)" ]; then
+            echo "Working tree dirty after tests"
+            git status --short
             exit 1
           fi
       - name: Setup Python
@@ -87,5 +104,5 @@ jobs:
           {"name": "apexvoid-occult-frontend", "context": ".",        "dockerfile": "deploy/frontend.Dockerfile"}
         ]
     secrets:
-      registry-token: ${{ secrets.DOCKERHUB_TOKEN }}
-      vault-password: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      ANSIBLE_VAULT_PASSWORD: ${{ secrets.ANSIBLE_VAULT_PASSWORD }}

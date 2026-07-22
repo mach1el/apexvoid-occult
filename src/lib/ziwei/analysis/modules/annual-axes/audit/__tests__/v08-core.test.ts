@@ -198,11 +198,9 @@ describe("Annual Axes V0.8 palace-weighted core", () => {
     const result = analyzeAnnualAxesNamPhaiV08(chart);
     for (const domain of ANNUAL_AXIS_DOMAINS) {
       const axis = result.axes[domain];
-      expect(axis.status).toBe("available");
-      if (axis.status !== "available") continue;
+      if (axis.engine !== "v0.8" || axis.status !== "available") continue;
       const trace = axis.scoreTrace;
-      expect(trace?.formulaVersion).toBe("v0.8-annual-palace-weighted-score");
-      if (trace?.formulaVersion !== "v0.8-annual-palace-weighted-score") continue;
+      expect(trace.formulaVersion).toBe("v0.8-annual-palace-weighted-score");
 
       const rebuiltAxis =
         trace.primary.configuredWeight * trace.primary.palaceRaw +

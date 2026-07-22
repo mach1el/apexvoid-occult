@@ -138,6 +138,7 @@ describe("AnnualAxesSection — unavailable/partial paths", () => {
         ...base.axes,
         romance: {
           domain: "romance",
+          engine: "v0.2",
           status: "unavailable",
           score: null,
           band: null,

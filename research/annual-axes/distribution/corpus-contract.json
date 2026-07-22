@@ -1,5 +1,5 @@
 {
-  "contractId": "annual-axes-audit-full-v0.4",
+  "contractId": "annual-axes-audit-full-corpus",
   "seed": 20260719,
   "chartCount": 100,
   "yearsPerChart": 12,
@@ -7,7 +7,8 @@
   "timezone": "7",
   "flowBase": "luu-nien",
   "notes": [
-    "Minimum smoke corpus from V0.4 corrective prompt §2.",
+    "Deterministic smoke corpus sizing contract for advisory distribution audits.",
+    "Historical origin: V0.4 corrective prompt §2 sizing — engine is not V0.4.",
     "Deterministic; no personal birth data."
   ]
 }

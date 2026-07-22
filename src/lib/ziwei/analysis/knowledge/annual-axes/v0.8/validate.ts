@@ -121,6 +121,84 @@ const POSITIVE_GATE_SUFFIXES = ["Min", "Max"];
 
 const PALACE_ALLOWLIST = new Set<string>(V08_CANONICAL_PALACES);
 
+
+const CLASSICAL_COMPATIBLE_SOURCE_TYPES = new Set([
+  "classical_text",
+  "published_reference",
+  "school_manual",
+]);
+
+type SourceRecord = AnnualSourceRegistryV08["sources"][number];
+
+function sourceBlocksClassical(source: SourceRecord): boolean {
+  const prohibited = (source.prohibitedUsage ?? []).map((u) => u.toLowerCase());
+  return (
+    prohibited.some(
+      (u) =>
+        u.includes("classical") ||
+        u.includes("doctrine") ||
+        u.includes("authority") ||
+        u.includes("classical formula"),
+    ) ||
+    source.sourceType === "internal_architecture" ||
+    source.sourceType === "internal_calculation_contract"
+  );
+}
+
+function validateProvenanceSourceCompatibility(args: {
+  status: V08RuleProvenanceStatus;
+  sourceIds: string[];
+  sourcesById: Map<string, SourceRecord>;
+  path: string;
+  issues: AnnualKnowledgeV08ValidationIssue[];
+  rationale?: string;
+  locator?: string;
+}): void {
+  const { status, sourceIds, sourcesById, path, issues, rationale, locator } = args;
+  if (!PROVENANCE_STATUSES.has(status)) {
+    issues.push(issue(`${path}.status`, `unknown status ${status}`));
+    return;
+  }
+  if (!Array.isArray(sourceIds) || sourceIds.length === 0) {
+    issues.push(issue(`${path}.sourceIds`, "empty provenance sourceIds"));
+    return;
+  }
+  const resolved: SourceRecord[] = [];
+  for (const sourceId of sourceIds) {
+    const source = sourcesById.get(sourceId);
+    if (!source) {
+      issues.push(issue(`${path}.sourceIds.${sourceId}`, "unknown provenance source"));
+      continue;
+    }
+    resolved.push(source);
+  }
+  if (resolved.length === 0) return;
+
+  if (status === "classical") {
+    const hasCompatible = resolved.some(
+      (s) =>
+        CLASSICAL_COMPATIBLE_SOURCE_TYPES.has(s.sourceType) && !sourceBlocksClassical(s),
+    );
+    if (!hasCompatible) {
+      issues.push(
+        issue(
+          path,
+          "classical status requires at least one compatible classical/published/school source",
+        ),
+      );
+    }
+  }
+
+  if (status === "derived") {
+    const hasRationale = Boolean(rationale && rationale.trim()) || Boolean(locator && locator.trim());
+    if (!hasRationale) {
+      issues.push(
+        issue(path, "derived status requires rationale or locator explaining the derivation"),
+      );
+    }
+  }
+}
+
 const KNOWN_BAND_IDS = new Set(["guarded", "balanced", "supportive", "strong"]);
 
 const SOURCE_TYPE_ALLOWLIST = new Set([
@@ -205,27 +283,19 @@ function validateSourceRegistry(
     if (!claim.confidence || !String(claim.confidence).trim()) {
       issues.push(issue(`${path}.confidence`, "missing confidence"));
     }
-    if (claim.status && !CLAIM_STATUSES.has(claim.status)) {
+    if (!claim.status) {
+      issues.push(issue(`${path}.status`, "status required"));
+    } else if (!CLAIM_STATUSES.has(claim.status)) {
       issues.push(issue(`${path}.status`, `unknown status ${claim.status}`));
-    }
-
-    // Classical claims cannot rely exclusively on sources that prohibit doctrine/classical use.
-    if (claim.status === "classical" && claim.sourceId) {
-      const source = registry.sources.find((s) => s.sourceId === claim.sourceId);
-      if (source) {
-        const prohibited = (source.prohibitedUsage ?? []).map((u) => u.toLowerCase());
-        const blocksClassical =
-          prohibited.some((u) => u.includes("classical") || u.includes("doctrine")) ||
-          source.sourceType === "internal_architecture";
-        if (blocksClassical) {
-          issues.push(
-            issue(
-              path,
-              "classical claim cannot rely exclusively on a source that prohibits doctrine/classical authority",
-            ),
-          );
-        }
-      }
+    } else if (claim.sourceId && sourceIds.has(claim.sourceId)) {
+      const sourcesById = new Map(registry.sources.map((s) => [s.sourceId, s] as const));
+      validateProvenanceSourceCompatibility({
+        status: claim.status as V08RuleProvenanceStatus,
+        sourceIds: [claim.sourceId],
+        sourcesById,
+        path,
+        issues,
+      });
     }
   }
 
@@ -235,6 +305,7 @@ function validateSourceRegistry(
 function validateCapabilities(
   capabilities: AnnualStarCapabilitiesV08,
   resolvedSourceIds: Set<string>,
+  sourcesById: Map<string, SourceRecord>,
   issues: AnnualKnowledgeV08ValidationIssue[],
 ): Map<string, AnnualStarCapabilitiesV08["capabilities"][number]> {
   const byName = new Map<string, AnnualStarCapabilitiesV08["capabilities"][number]>();
@@ -263,16 +334,42 @@ function validateCapabilities(
     if (!cap.rationale || !String(cap.rationale).trim()) {
       issues.push(issue(`${path}.rationale`, "required"));
     }
-    if (cap.supportStatus === "supported" && !cap.producer) {
-      issues.push(issue(`${path}.producer`, "supported capability requires producer"));
+    if (cap.supportStatus === "supported") {
+      if (!cap.producer || !String(cap.producer).trim()) {
+        issues.push(
+          issue(`${path}.producer`, "supported capability requires non-empty producer"),
+        );
+      }
+    }
+    if (cap.supportStatus === "unsupported") {
+      if (cap.producer) {
+        issues.push(
+          issue(`${path}.producer`, "unsupported capability must not declare a producer"),
+        );
+      }
+      if (!/unsupported|no verified|cannot|not emit|never/i.test(cap.rationale ?? "")) {
+        issues.push(
+          issue(`${path}.rationale`, "unsupported rationale must state why unsupported"),
+        );
+      }
     }
     if (byName.has(exact)) {
       issues.push(issue(`${path}.exactStarName`, "duplicate capability star"));
     }
     byName.set(exact, cap);
-    for (const sourceId of cap.sourceIds ?? []) {
-      if (!resolvedSourceIds.has(sourceId)) {
-        issues.push(issue(`${path}.sourceIds.${sourceId}`, "unresolved source id"));
+
+    if (!Array.isArray(cap.sourceIds) || cap.sourceIds.length === 0) {
+      issues.push(issue(`${path}.sourceIds`, "empty capability sourceIds"));
+    } else {
+      const seenSrc = new Set<string>();
+      for (const sourceId of cap.sourceIds) {
+        if (seenSrc.has(sourceId)) {
+          issues.push(issue(`${path}.sourceIds`, "duplicate capability sourceIds"));
+        }
+        seenSrc.add(sourceId);
+        if (!resolvedSourceIds.has(sourceId) || !sourcesById.has(sourceId)) {
+          issues.push(issue(`${path}.sourceIds.${sourceId}`, "unresolved source id"));
+        }
       }
     }
   }
@@ -349,7 +446,11 @@ function validateMapping(
     const logicalKeys = new Set<string>();
     const primaryRole = primary.role ?? "primary";
     roleIds.add(primaryRole);
-    logicalKeys.add(`${primary.type}|${primary.palace ?? ""}|${primaryRole}`);
+    const primaryLogical =
+      primary.type === "small-limit-palace"
+        ? "small-limit-palace"
+        : `annual-palace|${primary.palace ?? ""}`;
+    logicalKeys.add(primaryLogical);
 
     const coopSum = entry.cooperating.reduce((s, c) => s + (c.weight ?? 0), 0);
     if (Math.abs(coopSum - 0.4) > 1e-9) {
@@ -400,7 +501,10 @@ function validateMapping(
         );
       }
       roleIds.add(role);
-      const logical = `${coop.type}|${coop.palace ?? ""}|${role}`;
+      const logical =
+        coop.type === "small-limit-palace"
+          ? "small-limit-palace"
+          : `annual-palace|${coop.palace ?? ""}`;
       if (logicalKeys.has(logical)) {
         issues.push(
           issue(
@@ -497,7 +601,7 @@ function validateRule(
   polarity: "positive" | "negative",
   seenRuleIds: Set<string>,
   capabilities: Map<string, AnnualStarCapabilitiesV08["capabilities"][number]>,
-  resolvedSourceIds: Set<string>,
+  sourcesById: Map<string, SourceRecord>,
   familyIds: Set<string>,
   issues: AnnualKnowledgeV08ValidationIssue[],
 ): void {
@@ -572,25 +676,25 @@ function validateRule(
 
   if (!rule.provenance) {
     issues.push(issue(`${path}.provenance`, "provenance required"));
+  } else if (!rule.provenance.status) {
+    issues.push(issue(`${path}.provenance.status`, "status required"));
   } else {
-    if (!Array.isArray(rule.provenance.sourceIds) || rule.provenance.sourceIds.length === 0) {
-      issues.push(issue(`${path}.provenance.sourceIds`, "empty provenance sourceIds"));
-    } else {
-      for (const sourceId of rule.provenance.sourceIds) {
-        if (!resolvedSourceIds.has(sourceId)) {
-          issues.push(issue(`${path}.provenance.sourceIds.${sourceId}`, "unresolved source id"));
-        }
-      }
-    }
-    if (!PROVENANCE_STATUSES.has(rule.provenance.status)) {
-      issues.push(issue(`${path}.provenance.status`, "invalid provenance status"));
-    }
+    validateProvenanceSourceCompatibility({
+      status: rule.provenance.status,
+      sourceIds: rule.provenance.sourceIds ?? [],
+      sourcesById,
+      path: `${path}.provenance`,
+      issues,
+      rationale: rule.provenance.rationale,
+      locator: rule.provenance.locator,
+    });
   }
 }
 
 function validateRegistry(
   registry: AnnualStarRegistryV08,
   resolvedSourceIds: Set<string>,
+  sourcesById: Map<string, SourceRecord>,
   capabilities: Map<string, AnnualStarCapabilitiesV08["capabilities"][number]>,
   familyIds: Set<string>,
   issues: AnnualKnowledgeV08ValidationIssue[],
@@ -611,6 +715,7 @@ function validateRegistry(
     }
   }
   const seenRuleIds = new Set<string>();
+  const productionAnnualStars = new Set<string>();
   for (const domain of DOMAINS) {
     const axis = registry.axes[domain];
     if (!axis) {
@@ -624,10 +729,12 @@ function validateRegistry(
         "positive",
         seenRuleIds,
         capabilities,
-        resolvedSourceIds,
+        sourcesById,
         familyIds,
         issues,
       );
+      const exact = exactCanonicalStarName(rule.starName);
+      if (isAnnualOnlyStarName(exact)) productionAnnualStars.add(exact);
     }
     for (const rule of axis.negative) {
       validateRule(
@@ -636,12 +743,29 @@ function validateRegistry(
         "negative",
         seenRuleIds,
         capabilities,
-        resolvedSourceIds,
+        sourcesById,
         familyIds,
         issues,
       );
+      const exact = exactCanonicalStarName(rule.starName);
+      if (isAnnualOnlyStarName(exact)) productionAnnualStars.add(exact);
     }
   }
+
+  for (const [exact, cap] of capabilities) {
+    if (
+      (cap.supportStatus === "unsupported" || cap.supportStatus === "research-only") &&
+      productionAnnualStars.has(exact)
+    ) {
+      issues.push(
+        issue(
+          `starCapabilities.${exact}`,
+          `${cap.supportStatus} capability must not back a production scoring rule`,
+        ),
+      );
+    }
+  }
+
   for (const sourceId of registry.sourceIds) {
     if (!resolvedSourceIds.has(sourceId)) {
       issues.push(issue(`starRegistry.sourceIds.${sourceId}`, "unresolved source id"));
@@ -685,7 +809,7 @@ function validateAliases(
     }
   }
 
-  // Pass 1 — uniqueness
+  // Pass 1 — uniqueness (exact duplicate aliases rejected even for same target)
   for (const [i, entry] of aliases.aliases.entries()) {
     const aliasBoot = bootstrapNormalizeStarName(entry.alias);
     const canonical = exactCanonicalStarName(entry.canonical);
@@ -693,8 +817,8 @@ function validateAliases(
       issues.push(issue(`starAliases.aliases[${i}]`, "alias and canonical required"));
       continue;
     }
-    if (aliasToCanonical.has(aliasBoot) && aliasToCanonical.get(aliasBoot) !== canonical) {
-      issues.push(issue(`starAliases.aliases[${i}]`, "alias points to multiple canonical stars"));
+    if (aliasToCanonical.has(aliasBoot)) {
+      issues.push(issue(`starAliases.aliases[${i}]`, "duplicate alias entry"));
     }
     aliasToCanonical.set(aliasBoot, canonical);
   }
@@ -819,19 +943,32 @@ function validateScoreBands(
     });
   }
 
-  intervals.sort((a, b) => a.min - b.min || a.index - b.index);
-  for (let i = 1; i < intervals.length; i++) {
-    if (intervals[i]!.min < intervals[i - 1]!.min) {
-      issues.push(issue("scoreBands.bands", "bands must be ordered by minInclusive"));
+  // Validate original array order before sorting for coverage analysis.
+  for (let i = 1; i < bands.bands.length; i++) {
+    const prev = bands.bands[i - 1]!;
+    const curr = bands.bands[i]!;
+    if (
+      isFiniteNumber(prev.minInclusive) &&
+      isFiniteNumber(curr.minInclusive) &&
+      curr.minInclusive < prev.minInclusive
+    ) {
+      issues.push(
+        issue(`scoreBands.bands[${i}]`, "bands must be ordered by minInclusive"),
+      );
     }
   }
+
+  // Copy for overlap/coverage analysis — do not mutate loaded knowledge.
+  const sortedIntervals = [...intervals].sort(
+    (a, b) => a.min - b.min || a.index - b.index,
+  );
 
   // Discrete coverage of scores with precision 1 over [10, 90].
   const SCORE_MIN = 10;
   const SCORE_MAX = 90;
   const PRECISION = 10; // tenths
   const covered = new Set<number>();
-  for (const interval of intervals) {
+  for (const interval of sortedIntervals) {
     for (let t = Math.round(SCORE_MIN * PRECISION); t <= Math.round(SCORE_MAX * PRECISION); t++) {
       const score = t / PRECISION;
       const inMin = score >= interval.min;
@@ -845,6 +982,12 @@ function validateScoreBands(
         covered.add(t);
       }
     }
+  }
+  if (!covered.has(Math.round(SCORE_MIN * PRECISION))) {
+    issues.push(issue("scoreBands.bands", "missing 10 boundary"));
+  }
+  if (!covered.has(Math.round(SCORE_MAX * PRECISION))) {
+    issues.push(issue("scoreBands.bands", "missing 90 boundary"));
   }
   for (let t = Math.round(SCORE_MIN * PRECISION); t <= Math.round(SCORE_MAX * PRECISION); t++) {
     if (!covered.has(t)) {
@@ -899,24 +1042,21 @@ function validateGates(
 
 export function validateAnnualAxesKnowledgeV08NamPhai(
   knowledge: AnnualAxesKnowledgeV08NamPhai,
-  resolvedSourceIds?: Set<string>,
 ): { ok: true } | { ok: false; issues: AnnualKnowledgeV08ValidationIssue[] } {
   const issues: AnnualKnowledgeV08ValidationIssue[] = [];
   if (knowledge.knowledgeVersion !== V08_KNOWLEDGE_VERSION) {
     issues.push(issue("knowledgeVersion", `must be ${V08_KNOWLEDGE_VERSION}`));
   }
 
-  const sourceIds =
-    resolvedSourceIds ??
-    validateSourceRegistry(knowledge.sourceRegistry, issues);
-  if (resolvedSourceIds) {
-    // Still validate registry structure when caller supplies ids.
-    validateSourceRegistry(knowledge.sourceRegistry, issues);
-  }
+  const sourceIds = validateSourceRegistry(knowledge.sourceRegistry, issues);
+  const sourcesById = new Map(
+    knowledge.sourceRegistry.sources.map((s) => [s.sourceId, s] as const),
+  );
 
   const capabilities = validateCapabilities(
     knowledge.starCapabilities,
     sourceIds,
+    sourcesById,
     issues,
   );
   const familyIds = validateAliases(knowledge.starAliases, sourceIds, issues);
@@ -925,6 +1065,7 @@ export function validateAnnualAxesKnowledgeV08NamPhai(
   validateRegistry(
     knowledge.starRegistry,
     sourceIds,
+    sourcesById,
     capabilities,
     familyIds,
     issues,

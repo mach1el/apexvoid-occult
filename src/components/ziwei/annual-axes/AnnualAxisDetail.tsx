@@ -91,11 +91,7 @@ export interface AnnualAxisDetailProps {
  */
 export function AnnualAxisDetail({ domain, axis, onClose }: AnnualAxisDetailProps) {
   const label = ANNUAL_AXIS_LABEL_VI[domain];
-  const isV08 =
-    (axis.status === "available" ||
-      axis.status === "partial-data" ||
-      axis.status === "unavailable") &&
-    axis.scoreTrace?.formulaVersion === "v0.8-annual-palace-weighted-score";
+  const isV08 = axis.engine === "v0.8";
 
   return (
     <div className="annual-axis-detail" role="region" aria-label={`Chi tiết ${label}`}>
@@ -217,7 +213,8 @@ export function AnnualAxisDetail({ domain, axis, onClose }: AnnualAxisDetailProp
             </ul>
           </div>
         </>
-      ) : axis.status === "available" || axis.status === "partial-data" ? (
+      ) : axis.engine === "v0.2" &&
+        (axis.status === "available" || axis.status === "partial-data") ? (
         <>
           <p className="annual-axis-detail__band">
             {ANNUAL_AXIS_BAND_LABEL_VI[axis.band]} · Điểm {axis.score.toFixed(1)}

@@ -117,7 +117,8 @@ export const FULL_CORPUS_CONTRACT: AuditCorpusContract = {
   timezone: "7",
   flowBase: "luu-nien",
   notes: [
-    "Minimum smoke corpus from V0.4 corrective prompt §2.",
+    "Deterministic full corpus sizing for advisory distribution audits.",
+    "Historical sizing origin: V0.4 corrective prompt §2 — engine is not V0.4.",
     "Deterministic; no personal birth data.",
   ],
 };

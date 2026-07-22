@@ -154,7 +154,7 @@ export interface AnnualSourceRegistryV08 {
     sourceId: string;
     summary: string;
     confidence: string;
-    status?: string;
+    status: V08RuleProvenanceStatus;
   }>;
 }
 

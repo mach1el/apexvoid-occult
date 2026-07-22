@@ -20,7 +20,6 @@ import {
   type AnnualAxesDiagnostics,
   type AnnualAxisScoreTraceV08,
   type AnnualAxisV08Evidence,
-  emptyAnnualAxes,
 } from "../types";
 import { ANNUAL_AXIS_DOMAINS } from "../../../contracts/annual-axes";
 import { scoreV08Domain } from "./score-domain";
@@ -36,12 +35,11 @@ function unavailableAxisResult(
 ): AnnualAxisResult {
   return {
     domain,
+    engine: "v0.8",
     status: "unavailable",
     score: null,
     band: null,
-    evidence: [],
     reasonCodes,
-    engine: "v0.8",
   };
 }
 
@@ -167,12 +165,11 @@ export function analyzeAnnualAxesNamPhaiV08(chart: ChartData): AnnualAxesResult 
       }
       axes[domain] = {
         domain,
+        engine: "v0.8",
         status: "unavailable",
         score: null,
         band: null,
-        evidence: [],
         reasonCodes: scored.missingReasonCodes,
-        engine: "v0.8",
         coverage: scored.coverage,
         scoreTrace: scored.trace as AnnualAxisScoreTraceV08,
         v08Evidence: [],
@@ -187,32 +184,11 @@ export function analyzeAnnualAxesNamPhaiV08(chart: ChartData): AnnualAxesResult 
 
     axes[domain] = {
       domain,
+      engine: "v0.8",
       status,
       score: scored.score,
       band: resolveBand(scored.score, knowledge08.scoreBands.bands),
-      rawAxes: {
-        ...emptyAnnualAxes(),
-        support: scored.matchedFacts
-          .filter((f) => f.polarity === "positive")
-          .reduce((s, f) => s + Math.abs(f.points), 0),
-        pressure: scored.matchedFacts
-          .filter((f) => f.polarity === "negative")
-          .reduce((s, f) => s + Math.abs(f.points), 0),
-      },
-      normalizedAxes: {
-        support: scored.supportNorm,
-        pressure: scored.pressureNorm,
-        stability: 0,
-        activation: scored.isThaiTueHighlighted ? 1 : 0,
-      },
-      intensity: scored.intensity,
-      conflict: scored.conflict,
-      evidence: [],
-      topSupportDrivers: [],
-      topPressureDrivers: [],
-      annualDelta: Math.round((scored.score - 50) * 10) / 10,
       scoreTrace: scored.trace as AnnualAxisScoreTraceV08,
-      engine: "v0.8",
       coverage: scored.coverage,
       v08Evidence,
       topSupportDriversV08: topWeightedDrivers(scored.matchedFacts, "positive"),

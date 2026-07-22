@@ -44,6 +44,7 @@ function topDrivers(
 function unavailableAxisResult(domain: AnnualAxisDomain, reasonCodes: string[]): AnnualAxisResult {
   return {
     domain,
+    engine: "v0.2",
     status: "unavailable",
     score: null,
     band: null,
@@ -265,6 +266,7 @@ export function analyzeAnnualAxes(chart: ChartData, options: { school: ZiweiScho
 
     axes[domain] = {
       domain,
+      engine: "v0.2",
       status: "available",
       score: normalized.score,
       band: normalized.band,
