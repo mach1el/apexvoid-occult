@@ -8,30 +8,80 @@
     "does dignity affect Tứ Hóa contribution?",
     "does dignity affect palace-specific interpretation?"
   ],
+  "starCategoryDecisions": [
+    {
+      "policyRecordId": "POL-AAV09-DIGNITY-NATAL-MAIN",
+      "category": "natal-main-stars-in-annual-mapped-palaces",
+      "dignityPolicy": "conditional",
+      "affectsPositiveContributionEligibility": "conditional",
+      "affectsNegativeContributionEligibility": "conditional",
+      "affectsContributionMagnitude": "not applicable — no numeric multiplier authorized",
+      "interpretationOnly": false,
+      "confidence": "medium",
+      "claimIds": ["CLM-AAV09-015"],
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956"],
+      "researchDecision": "miếu/hãm language in school-manual star essays conditions expression; V0.8 binary requiresDignity gate is compatible as an engineering approximation",
+      "runtimeCompatibility": "no production change; no numeric multipliers",
+      "candidateEligibility": "may inform future candidate gating hypotheses; not required for SHAPE-AAV09-THIEN-MA-MOVEMENT",
+      "knownContradictions": []
+    },
+    {
+      "policyRecordId": "POL-AAV09-DIGNITY-ANNUAL-AUX",
+      "category": "annual-auxiliary-stars",
+      "dignityPolicy": "optional modifier",
+      "affectsPositiveContributionEligibility": "optional modifier",
+      "affectsNegativeContributionEligibility": "optional modifier",
+      "affectsContributionMagnitude": "not applicable — no numeric multiplier authorized",
+      "interpretationOnly": false,
+      "confidence": "medium",
+      "claimIds": ["CLM-AAV09-015", "CLM-AAV09-019"],
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956"],
+      "researchDecision": "Lưu Thiên Mã §4.4 conditions favorable/unfavorable co-presence; general annual auxiliaires may use optional dignity/condition gates in later candidates",
+      "runtimeCompatibility": "no production change",
+      "candidateEligibility": "optional engineering parameter for Thiên Mã candidate",
+      "knownContradictions": []
+    },
+    {
+      "policyRecordId": "POL-AAV09-DIGNITY-ANNUAL-TU-HOA",
+      "category": "annual-tu-hoa",
+      "dignityPolicy": "insufficient evidence",
+      "affectsPositiveContributionEligibility": "insufficient evidence",
+      "affectsNegativeContributionEligibility": "insufficient evidence",
+      "affectsContributionMagnitude": "not applicable",
+      "interpretationOnly": true,
+      "confidence": "low",
+      "claimIds": ["CLM-AAV09-015", "CLM-AAV09-017"],
+      "sourceIds": ["SRC-AA-ENG-008", "SRC-AA-V09-TAN-BIEN-1956"],
+      "researchDecision": "no school-manual locator in this pass authorizes a new annual Tứ Hóa dignity gate beyond current V0.8 engineering behavior",
+      "runtimeCompatibility": "retain V0.8 behavior",
+      "candidateEligibility": "not enabled by this foundation",
+      "knownContradictions": []
+    }
+  ],
   "findings": {
     "requiredDignitySet": {
-      "description": "V0.8's `requiresDignity` rule field (V08StarRule) is optional; when present, it gates whether a rule matches based on `star.brightness` (dignityOk() in match-stars.ts). This pack found no full enumeration of which specific rules currently set it, beyond what is visible per-rule in rule-coverage.v0.8.json.",
-      "status": "engineering-hypothesis",
-      "confidence": "low"
+      "description": "V0.8 requiresDignity remains an optional binary gate. School-manual miếu/hãm supports conditional treatment for natal mains; not a mandate to expand the required set in this PR.",
+      "status": "derived",
+      "confidence": "medium"
     },
     "optionalDignityMultiplier": {
-      "description": "No numeric dignity multiplier exists in V0.8 — dignity is a binary gate (matches or doesn't), not a magnitude scaler. `dignifiedStaticPositive` is a distinct point class (value 2) rather than a multiplier applied to `staticPositive` (value 1); it is configured per-rule, not derived by multiplying.",
+      "description": "No numeric dignity multiplier is authorized. V0.8 dignifiedStaticPositive is a distinct point class, not a multiplier.",
+      "status": "engineering-hypothesis",
+      "confidence": "high"
+    },
+    "noDignityDependency": {
+      "description": "Many V0.8 rules omit requiresDignity; that remains valid engineering default for rules without source-backed conditions.",
       "status": "engineering-hypothesis",
       "confidence": "medium"
     },
-    "noDignityDependency": {
-      "description": "Most rules in the registry do not set `requiresDignity` at all and are unconditional on dignity.",
-      "status": "engineering-hypothesis",
-      "confidence": "low"
-    },
     "schoolSpecificDisagreement": {
-      "description": "Not evaluated — this pack has no Trung Châu dignity policy to compare against, and no classical/school-manual source to establish whether Nam Phái's binary dignity gate matches or diverges from other schools' treatment.",
-      "status": "unsupported",
+      "description": "Modern Trung Châu-leaning commentary discusses miếu/hãm for lưu niên, but this pack does not treat that as Nam Phái authority (SRC-AA-V09-MODERN-KABALA-LUU prohibited for candidate eligibility).",
+      "status": "derived",
       "confidence": "low"
     }
   },
   "numericMultipliersIntroduced": false,
   "claimIds": ["CLM-AAV09-015"],
-  "sourceIds": ["SRC-AA-ENG-008"],
-  "readinessNote": "RESEARCH_INCOMPLETE for dignity policy as a whole — no source-backed evidence was found to justify any V0.9 change, and per task instruction this pack introduces no numeric dignity multipliers."
+  "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956", "SRC-AA-ENG-008"],
+  "readinessNote": "Dignity policy adjudicated for foundation purposes; no numeric multipliers; does not block SHAPE-AAV09-THIEN-MA-MOVEMENT."
 }

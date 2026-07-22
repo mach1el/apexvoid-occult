@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "0.9.0",
+  "readinessId": "annual-axes-v0.9-foundation-readiness",
+  "baseMasterSha": "cd6b75bb0cec2e2da4dd59490687bc698bce99a8",
+  "readinessState": "READY_FOR_V0_9_CANDIDATE",
+  "readinessRationale": [
+    "At least one verified compatible Nam Phái school-manual source exists (SRC-AA-V09-TAN-BIEN-1956) with checkable section/scan-page locators.",
+    "All 12 emitted-but-unreferenced annual stars have explicit adjudications in star-domain-policy.",
+    "At least one coherent candidate shape is source-backed (SHAPE-AAV09-THIEN-MA-MOVEMENT) using only Calculation Core-supported identity Lưu Thiên Mã.",
+    "Blocking contradiction CONTRA-AAV09-001 is adjudicated context-dependent and excluded from the candidate shape.",
+    "Five Core-blocked stars remain fail-closed and are not required by the candidate shape."
+  ],
+  "openContradictions": ["CONTRA-AAV09-001"],
+  "candidateShapes": [
+    {
+      "candidateShapeId": "SHAPE-AAV09-THIEN-MA-MOVEMENT",
+      "name": "Lưu Thiên Mã movement activation (bounded)",
+      "includedStars": ["Lưu Thiên Mã"],
+      "excludedStars": [
+        "Lưu Đào Hoa",
+        "Lưu Hồng Loan",
+        "Lưu Hỷ Thần",
+        "Lưu Kiếp Sát",
+        "Lưu Long Đức",
+        "Lưu Nguyệt Đức",
+        "Lưu Phúc Đức",
+        "Lưu Thiên Đức",
+        "Lưu Thiên Hỷ",
+        "Lưu Văn Khúc",
+        "Lưu Văn Xương"
+      ],
+      "claimIds": ["CLM-AAV09-019", "CLM-AAV09-007", "CLM-AAV09-015"],
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956", "SRC-AA-CORE-001"],
+      "policyRecordIds": ["POL-AAV09-STAR-LUU-THIEN-MA"],
+      "qualitativePolarity": "positive-activation-movement-change",
+      "domainScope": ["career", "social", "palace-context"],
+      "activationConditions": [
+        "annual year-branch placement of Lưu Thiên Mã (Calculation Core + Tân Biên §4.4)",
+        "effect linked to the palace occupied during Tiểu hạn year",
+        "favorable co-presence with Lộc noted in §4.4; Tuần/Triệt án ngữ unfavorable (interpretive/conditional, not a numeric multiplier in this foundation)"
+      ],
+      "blockingContradictionsResolved": true,
+      "excludedUnresolvedPolicies": [
+        "Lưu Đào Hoa fixed polarity (CONTRA-AAV09-001 context-dependent)",
+        "numeric scoring for the other 11 unreferenced Core-emitted stars",
+        "Tiểu Hạn multi-domain numeric remapping",
+        "natal contribution numeric reweight",
+        "dignity numeric multipliers"
+      ],
+      "engineeringParametersPending": [
+        "point class / magnitude for Lưu Thiên Mã",
+        "which Annual Axes domains bind the star (career vs social vs palace-role mapping)",
+        "whether dignity/void conditions gate matching"
+      ],
+      "expectedEffect": "Adds a small annual-layer activation signal for movement/change years; modest help toward intra-year spread, not a full fix for the nine failed gates.",
+      "knownRisks": [
+        "Limited star set may under-move distribution metrics",
+        "Over-binding to a single domain may misrepresent palace-context doctrine",
+        "Partial source access (OCR sections) — human re-check of physical edition still valuable"
+      ],
+      "requiredControlAndHoldoutGates": [
+        "CONTROL-V08 unchanged baseline",
+        "full 28-gate distribution contract",
+        "product + holdout fixtures non-regression for V0.8 production path"
+      ]
+    }
+  ],
+  "productionNonRegression": {
+    "namPhaiEngineVersion": "0.8.0",
+    "namPhaiFormulaVersion": "v0.8-annual-palace-weighted-score",
+    "trungChauEngineVersion": "0.2.0",
+    "v09CandidateSnapshotImmutable": true
+  }
+}

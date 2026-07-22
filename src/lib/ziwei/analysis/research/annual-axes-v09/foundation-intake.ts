@@ -25,6 +25,7 @@ export interface FoundationIntakeResult {
 
 const REQUIRED_RELATIVE_PATHS = [
   "V0.9-FOUNDATION-DECISION.md",
+  "readiness.v0.9.json",
   "audit/full-distribution-report.v0.8.json",
   "audit/gate-evaluation.v0.8.json",
   "audit/rule-coverage.v0.8.json",
@@ -34,6 +35,7 @@ const REQUIRED_RELATIVE_PATHS = [
   "sources/source-registry.v0.9.json",
   "sources/claim-registry.v0.9.json",
   "sources/contradiction-log.md",
+  "sources/contradiction-registry.v0.9.json",
   "policy/school-policy-matrix.v0.9.json",
   "policy/domain-palace-policy.v0.9.json",
   "policy/star-domain-policy.v0.9.json",
@@ -44,14 +46,37 @@ const REQUIRED_RELATIVE_PATHS = [
   "prompts/v0.9-candidate-handoff-prompt.md",
 ] as const;
 
+const READINESS_STATES = new Set<FoundationReadinessState>([
+  "READY_FOR_V0_9_CANDIDATE",
+  "RESEARCH_INCOMPLETE",
+  "V0_8_SHOULD_REMAIN_UNCHANGED",
+  "CALCULATION_CORE_BLOCKED",
+]);
+
 const READINESS_RE =
   /READY_FOR_V0_9_CANDIDATE|RESEARCH_INCOMPLETE|V0_8_SHOULD_REMAIN_UNCHANGED|CALCULATION_CORE_BLOCKED/;
 
 export function readFoundationReadiness(
   decisionMarkdown: string,
 ): FoundationReadinessState | null {
+  // Prefer the Final readiness state section to avoid earlier narrative mentions.
+  const finalSection = decisionMarkdown.match(
+    /##\s*M\.\s*Final readiness state[\s\S]*?```\s*\n?\s*(READY_FOR_V0_9_CANDIDATE|RESEARCH_INCOMPLETE|V0_8_SHOULD_REMAIN_UNCHANGED|CALCULATION_CORE_BLOCKED)\s*\n?```/,
+  );
+  if (finalSection?.[1]) return finalSection[1] as FoundationReadinessState;
   const match = decisionMarkdown.match(READINESS_RE);
   return match ? (match[0] as FoundationReadinessState) : null;
+}
+
+export function readFoundationReadinessFromJson(
+  readinessJson: unknown,
+): FoundationReadinessState | null {
+  if (!readinessJson || typeof readinessJson !== "object") return null;
+  const state = (readinessJson as { readinessState?: unknown }).readinessState;
+  if (typeof state !== "string") return null;
+  return READINESS_STATES.has(state as FoundationReadinessState)
+    ? (state as FoundationReadinessState)
+    : null;
 }
 
 export function intakeFoundation(root = FOUNDATION_ROOT): FoundationIntakeResult {
@@ -85,11 +110,27 @@ export function intakeFoundation(root = FOUNDATION_ROOT): FoundationIntakeResult
     }
   }
 
-  const decisionMarkdown = readFileSync(join(root, "V0.9-FOUNDATION-DECISION.md"), "utf8");
-  const readiness = readFoundationReadiness(decisionMarkdown);
-  if (!readiness) {
-    issues.push("V0.9-FOUNDATION-DECISION.md has no recognized readiness state");
+  let readiness: FoundationReadinessState | null = null;
+  try {
+    const readinessJson = JSON.parse(readFileSync(join(root, "readiness.v0.9.json"), "utf8"));
+    readiness = readFoundationReadinessFromJson(readinessJson);
+    if (!readiness) {
+      issues.push("readiness.v0.9.json has no recognized readinessState");
+    }
+  } catch (err) {
+    issues.push(`readiness.v0.9.json: malformed JSON (${String(err)})`);
   }
+
+  const decisionMarkdown = readFileSync(join(root, "V0.9-FOUNDATION-DECISION.md"), "utf8");
+  const markdownReadiness = readFoundationReadiness(decisionMarkdown);
+  if (!markdownReadiness) {
+    issues.push("V0.9-FOUNDATION-DECISION.md has no recognized readiness state");
+  } else if (readiness && markdownReadiness !== readiness) {
+    issues.push(
+      `readiness.v0.9.json (${readiness}) disagrees with V0.9-FOUNDATION-DECISION.md (${markdownReadiness})`,
+    );
+  }
+  if (!readiness) readiness = markdownReadiness;
 
   if (issues.length > 0 || !readiness) {
     return {

@@ -25,8 +25,8 @@
       "sourceIds": ["SRC-AA-CORE-001"],
       "locators": ["research/annual-axes/v0.9-foundation/audit/full-distribution-report.v0.8.json#palaceClampRate,axisClampRate"],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No production change; flags the clamp bounds as a candidate for review only if V0.9 adds meaningful new point mass (see CLM-AAV09-004).",
-      "notes": "Directly measured by this audit, not inferred."
+      "runtimeImplication": "No production change; flags the clamp bounds as a candidate for review only if V0.9 adds meaningful new point mass.",
+      "notes": "Directly measured by the V0.8 foundation audit."
     },
     {
       "claimId": "CLM-AAV09-003",
@@ -38,8 +38,8 @@
       "sourceIds": ["SRC-AA-CORE-001"],
       "locators": ["research/annual-axes/v0.9-foundation/audit/contribution-mass.v0.8.json#perTemporalLayer"],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No production change; direct root-cause evidence for the 9 failed distribution-spread gates (see audit-findings.md Finding 1-2). Candidate for V0.9 temporal-identity or point-policy review.",
-      "notes": "Directly measured by this audit."
+      "runtimeImplication": "No production change; root-cause evidence for failed distribution-spread gates. Numeric natal reweighting remains a future engineering candidate parameter, not doctrine.",
+      "notes": "Audit observation only — not doctrinal evidence by itself. See also CLM-AAV09-023."
     },
     {
       "claimId": "CLM-AAV09-004",
@@ -51,47 +51,50 @@
       "sourceIds": ["SRC-AA-CORE-001"],
       "locators": ["research/annual-axes/v0.9-foundation/audit/capability-coverage.v0.8.json"],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No production change; establishes that adding scoring rules for these 12 stars is NOT blocked by Calculation Core capability. Each star still needs an individually source-backed domain+polarity assignment before any rule is added (see CLM-AAV09-005 through 007).",
-      "notes": "Directly measured by this audit."
+      "runtimeImplication": "Adding scoring rules for these 12 stars is not blocked by Calculation Core capability. Each star still requires individual adjudication (see star-domain-policy and CLM-AAV09-019–030).",
+      "notes": "Directly measured by the V0.8 foundation audit."
     },
     {
       "claimId": "CLM-AAV09-005",
       "topic": "star-domain",
-      "statement": "Lưu Đào Hoa should carry positive romance-domain polarity, reflecting the general Đào Hoa (peach blossom) association with romantic attraction/opportunity.",
-      "school": "mixed",
+      "statement": "Lưu Đào Hoa should carry fixed positive romance-domain polarity for numeric Annual Axes scoring.",
+      "school": "nam-phai",
       "status": "disputed",
       "confidence": "low",
       "sourceIds": ["SRC-AA-V09-UNVERIFIED-002"],
-      "locators": [],
-      "contradictingClaimIds": ["CLM-AAV09-006"],
-      "runtimeImplication": "Must not enable a production rule from this claim alone; both sides of the dispute require a verified source before adjudication.",
-      "notes": "General domain knowledge only; no verified source."
+      "locators": ["SRC-AA-V09-UNVERIFIED-002#general-peach-blossom-positive-reading"],
+      "contradictingClaimIds": ["CLM-AAV09-006", "CLM-AAV09-022"],
+      "runtimeImplication": "Must not enable a production or candidate numeric rule from this claim alone; CONTRA-AAV09-001 adjudicates context-dependent.",
+      "notes": "Retained as one pole of the historical contradiction. Tân Biên §3.36 does not support fixed positive numeric polarity."
     },
     {
       "claimId": "CLM-AAV09-006",
       "topic": "star-domain",
-      "statement": "Lưu Đào Hoa should carry negative or mixed romance-domain polarity in some school traditions, reflecting a romantic-scandal/instability connotation rather than pure attraction.",
-      "school": "mixed",
+      "statement": "Lưu Đào Hoa should carry fixed negative romance-domain polarity for numeric Annual Axes scoring.",
+      "school": "nam-phai",
       "status": "disputed",
       "confidence": "low",
       "sourceIds": ["SRC-AA-V09-UNVERIFIED-002"],
-      "locators": [],
-      "contradictingClaimIds": ["CLM-AAV09-005"],
-      "runtimeImplication": "Must not enable a production rule from this claim alone; both sides of the dispute require a verified source before adjudication.",
-      "notes": "General domain knowledge only; no verified source. Genuine, well-known doctrinal ambiguity — not manufactured for this pack."
+      "locators": ["SRC-AA-V09-UNVERIFIED-002#general-peach-blossom-scandal-reading"],
+      "contradictingClaimIds": ["CLM-AAV09-005", "CLM-AAV09-022"],
+      "runtimeImplication": "Must not enable a production or candidate numeric rule from this claim alone; CONTRA-AAV09-001 adjudicates context-dependent.",
+      "notes": "Retained as the opposing pole. Tân Biên §3.36 describes mixed/conditional character rather than fixed negative polarity."
     },
     {
       "claimId": "CLM-AAV09-007",
       "topic": "star-domain",
-      "statement": "Lưu Hồng Loan, Lưu Hỷ Thần, Lưu Kiếp Sát, Lưu Long Đức, Lưu Nguyệt Đức, Lưu Phúc Đức, Lưu Thiên Đức, Lưu Thiên Hỷ, Lưu Thiên Mã, Lưu Văn Khúc, and Lưu Văn Xương are each individually candidate-eligible for a V0.9 scoring rule, but none currently has a school-scoped, source-backed domain+polarity assignment strong enough to move past engineering-hypothesis.",
-      "school": "mixed",
-      "status": "engineering-hypothesis",
-      "confidence": "low",
-      "sourceIds": ["SRC-AA-V09-UNVERIFIED-002"],
-      "locators": [],
+      "statement": "Of the twelve Core-emitted-but-unreferenced annual stars, only Lưu Thiên Mã is listed in Tân Biên §4 as an explicit annual Lưu động star with annual placement and qualitative effect; the other eleven lack school-manual annual Lưu động listing and are not candidate-eligible for numeric Annual Axes scoring from this foundation pass.",
+      "school": "nam-phai",
+      "status": "derived",
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956", "SRC-AA-CORE-001"],
+      "locators": [
+        "SRC-AA-V09-TAN-BIEN-1956§4 intro Lưu động list (Thái Tuế, Tang Môn, Bạch Hổ, Thiên Khốc, Thiên Hư, Lộc Tồn, Kình Dương, Đà La, Thiên Mã)",
+        "research/annual-axes/v0.9-foundation/audit/capability-coverage.v0.8.json"
+      ],
       "contradictingClaimIds": [],
-      "runtimeImplication": "Do not enable production rules for any of these 11 stars until each receives an individually-adjudicated, source-backed domain+polarity assignment. See policy/star-domain-policy.v0.9.json for the per-star breakdown.",
-      "notes": "Deliberately consolidated rather than split into 11 near-identical low-confidence claims; per-star detail lives in the policy file, not duplicated here."
+      "runtimeImplication": "Future candidates may include Lưu Thiên Mã only from this set unless additional annual Lưu doctrine is verified for other identities.",
+      "notes": "Replaces the prior low-confidence engineering hypothesis that all eleven non-Đào-Hoa stars were individually candidate-eligible."
     },
     {
       "claimId": "CLM-AAV09-008",
@@ -168,46 +171,50 @@
       "sourceIds": ["SRC-AA-ENG-008"],
       "locators": ["src/lib/ziwei/analysis/knowledge/annual-axes/v0.8/annual-point-classes.nam-phai.v0.8.json#thaiTueMultiplier"],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No production change; documents existing V0.8 behavior as non-doctrinal. Carried forward from SRC-AA-ENG-008 CLM-AA-ENG-803.",
+      "runtimeImplication": "No production change; documents existing V0.8 behavior as non-doctrinal.",
       "notes": null
     },
     {
       "claimId": "CLM-AAV09-014",
       "topic": "thai-tue",
-      "statement": "Across the full corpus, the Thái Tuế ×1.25 multiplier applies in 21.18% of domain-observations, but never once co-occurs with an axis-level clamp — the multiplier has not yet been observed to interact with the clamp boundary under real chart data.",
+      "statement": "Across the full corpus, the Thái Tuế ×1.25 multiplier applies in 21.18% of domain-observations, but never once co-occurs with an axis-level clamp.",
       "school": "nam-phai",
       "status": "derived",
       "confidence": "high",
       "sourceIds": ["SRC-AA-CORE-001"],
       "locators": ["research/annual-axes/v0.9-foundation/audit/full-distribution-report.v0.8.json#thaiTueApplicationRate,axisClampRate"],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No production change; informs whether the clamp bound needs revisiting only if V0.9 changes point magnitudes (see CLM-AAV09-002).",
-      "notes": "Directly measured by this audit."
+      "runtimeImplication": "No production change.",
+      "notes": "Directly measured by the V0.8 foundation audit."
     },
     {
       "claimId": "CLM-AAV09-015",
       "topic": "dignity",
-      "statement": "The `dignifiedStaticPositive` point class and `requiresDignity` rule field exist in the V0.8 schema, but this pack found no source-backed evidence establishing which dignity states should govern main-star, annual-star, or Tứ Hóa contribution beyond current production usage.",
+      "statement": "Nam Phái school-manual doctrine treats miếu/hãm (and related đắc/hãm language) as conditional modifiers of star expression for natal main stars and for several auxiliaries; annual Lưu Thiên Mã doctrine additionally conditions favorable reading on meeting Lộc and unfavorable reading on Tuần/Triệt án ngữ. No source in this pack authorizes a numeric dignity multiplier for Annual Axes.",
       "school": "nam-phai",
-      "status": "engineering-hypothesis",
-      "confidence": "low",
-      "sourceIds": ["SRC-AA-ENG-008"],
-      "locators": [],
+      "status": "derived",
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956", "SRC-AA-ENG-008"],
+      "locators": [
+        "SRC-AA-V09-TAN-BIEN-1956§3 miếu/hãm essays for main and auxiliary stars",
+        "SRC-AA-V09-TAN-BIEN-1956§4.4 Lưu Thiên Mã conditional co-presence (Lộc favorable; Tuần/Triệt unfavorable)",
+        "src/lib/ziwei/analysis/knowledge/annual-axes/v0.8 (requiresDignity binary gate; no multiplier)"
+      ],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No V0.9 dignity change is justified by this pack alone; RESEARCH_INCOMPLETE for this topic.",
-      "notes": null
+      "runtimeImplication": "Policy foundation only: natal mains = conditional; annual auxiliaries = conditional/optional modifier; annual Tứ Hóa = insufficient evidence for new dignity gate beyond current V0.8; no numeric multipliers in this PR.",
+      "notes": "Replaces the prior unresolved engineering-only dignity claim."
     },
     {
       "claimId": "CLM-AAV09-016",
       "topic": "domain-palace",
-      "statement": "The current domain-palace mapping's shared cooperating palaces (e.g. Phúc Đức feeding both family and wealth) are engineering hypotheses with no classical source found in this pack, but the full-corpus audit's low maximum inter-axis correlation (0.325, well under the 0.88 gate ceiling) shows this sharing is not currently producing redundant/duplicate axes.",
+      "statement": "The current domain-palace mapping's shared cooperating palaces (e.g. Phúc Đức feeding both family and wealth) are engineering hypotheses with no classical source found in this pack, but the full-corpus audit's low maximum inter-axis correlation (0.325) shows this sharing is not currently producing redundant axes.",
       "school": "nam-phai",
       "status": "derived",
       "confidence": "medium",
       "sourceIds": ["SRC-AA-ENG-008", "SRC-AA-CORE-001"],
       "locators": ["research/annual-axes/v0.9-foundation/audit/full-distribution-report.v0.8.json#maximumAbsoluteInterAxisCorrelation"],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No production change; rules out shared-palace mapping as the explanation for the low intra-year spread findings (that root cause is CLM-AAV09-003 instead).",
+      "runtimeImplication": "No production change; rules out shared-palace mapping as the explanation for low intra-year spread.",
       "notes": null
     },
     {
@@ -218,22 +225,123 @@
       "status": "engineering-hypothesis",
       "confidence": "medium",
       "sourceIds": ["SRC-AA-ENG-008"],
-      "locators": [],
+      "locators": ["src/lib/ziwei/analysis/knowledge/annual-axes/v0.8/annual-star-registry.nam-phai.v0.8.json"],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No production change; documents existing V0.8 behavior. Carried forward from SRC-AA-ENG-008 CLM-AA-ENG-804.",
+      "runtimeImplication": "No production change; documents existing V0.8 behavior.",
       "notes": null
     },
     {
       "claimId": "CLM-AAV09-018",
       "topic": "cooperating-palace",
-      "statement": "Only the health domain currently incorporates Tiểu Hạn (small-limit) as a cooperating input (weight 0.2); the other five domains do not, and this pack found no source-backed rationale for why Tiểu Hạn relevance would be health-specific rather than general.",
+      "statement": "Tiểu Hạn (cung nhập hạn / tiểu hạn một năm) is a general annual frame for reading the year: Bản Mệnh relates to the entered hạn palace, and annual Lưu động stars are read in that yearly context. Restricting Tiểu Hạn numeric cooperation to the health domain alone is an engineering simplification, not school-manual doctrine.",
+      "school": "nam-phai",
+      "status": "derived",
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956", "SRC-AA-ENG-008"],
+      "locators": [
+        "SRC-AA-V09-TAN-BIEN-1956§2.3 Liên hệ giữa Bản Mệnh và cung nhập hạn (Tiểu hạn một năm)",
+        "SRC-AA-V09-TAN-BIEN-1956§4 intro (lưu niên tiểu hạn + Lưu động)",
+        "src/lib/ziwei/analysis/knowledge/annual-axes/v0.8/annual-domain-mapping.nam-phai.v0.8.json#health"
+      ],
+      "contradictingClaimIds": [],
+      "runtimeImplication": "No production mapping change in this PR. Candidate evaluation may test general-frame or domain-specific Tiểu Hạn mappings as engineering parameters.",
+      "notes": "Decision: general annual context supported. Health-only V0.8 mapping remains engineering until a later candidate chooses parameters."
+    },
+    {
+      "claimId": "CLM-AAV09-019",
+      "topic": "star-domain",
+      "statement": "Lưu Thiên Mã is an explicit Nam Phái annual Lưu động star: placed from the year branch, shares Thiên Mã character (movement/change), and activates movement or change related to the palace where it sits during the Tiểu hạn year.",
+      "school": "nam-phai",
+      "status": "classical",
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956", "SRC-AA-CORE-001"],
+      "locators": [
+        "SRC-AA-V09-TAN-BIEN-1956§4 intro (Thiên Mã in explicit Lưu động list)",
+        "SRC-AA-V09-TAN-BIEN-1956§4.4 Lưu Thiên Mã placement table and palace-linked movement paraphrase",
+        "src/lib/ziwei/analysis/knowledge/annual-axes/v0.8/annual-star-capabilities.nam-phai.v0.8.json#Lưu Thiên Mã"
+      ],
+      "contradictingClaimIds": [],
+      "runtimeImplication": "Candidate-eligible for a bounded V0.9 numeric experiment on career/social (and palace-context) movement activation. Numeric point values remain engineering hypotheses.",
+      "notes": "Partial source access; locators are section+scan-page based, not invented page fiction."
+    },
+    {
+      "claimId": "CLM-AAV09-020",
+      "topic": "star-domain",
+      "statement": "Natal qualitative essays in Tân Biên §3 describe Văn Xương/Văn Khúc (literary), Hồng Loan/Thiên Hỷ/Hỷ Thần (joy/romance), Thiên Đức/Nguyệt Đức/Long Đức/Phúc Đức (virtue/protection), and Kiếp Sát (calamity), but §4 does not list corresponding annual Lưu identities among the explicit Lưu động stars.",
+      "school": "nam-phai",
+      "status": "derived",
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956"],
+      "locators": [
+        "SRC-AA-V09-TAN-BIEN-1956§3.17 Văn Xương/Văn Khúc",
+        "SRC-AA-V09-TAN-BIEN-1956§3.36–3.37 Hồng Loan/Đào Hoa/Thiên Hỷ",
+        "SRC-AA-V09-TAN-BIEN-1956§3.48 Thiên Đức/Nguyệt Đức",
+        "SRC-AA-V09-TAN-BIEN-1956§3.53 Kiếp Sát",
+        "SRC-AA-V09-TAN-BIEN-1956§3.63 Long Đức/Phúc Đức",
+        "SRC-AA-V09-TAN-BIEN-1956§3.70 Hỷ Thần",
+        "SRC-AA-V09-TAN-BIEN-1956§4 intro Lưu động list"
+      ],
+      "contradictingClaimIds": [],
+      "runtimeImplication": "Those eleven Core-emitted annual identities remain interpretive-only for Annual Axes scoring pending verified annual Lưu doctrine beyond Core emission.",
+      "notes": "Does not deny Core emission; denies school-manual annual scoring authorization."
+    },
+    {
+      "claimId": "CLM-AAV09-021",
+      "topic": "domain-palace",
+      "statement": "Social (Nô Bộc 0.6 + Thiên Di 0.4) and romance (Phu Thê 0.6 + Tử Tức 0.4) two-palace asymmetries relative to the three-contributor pattern used elsewhere are engineering simplifications; this pass found no Nam Phái school-manual requirement to add Huynh Đệ, Mệnh, or Phúc Đức as numeric cooperating palaces for those domains.",
       "school": "nam-phai",
       "status": "engineering-hypothesis",
-      "confidence": "low",
-      "sourceIds": ["SRC-AA-ENG-008"],
-      "locators": ["src/lib/ziwei/analysis/knowledge/annual-axes/v0.8/annual-domain-mapping.nam-phai.v0.8.json"],
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-ENG-008", "SRC-AA-V09-TAN-BIEN-1956"],
+      "locators": [
+        "src/lib/ziwei/analysis/knowledge/annual-axes/v0.8/annual-domain-mapping.nam-phai.v0.8.json#social,romance",
+        "SRC-AA-V09-TAN-BIEN-1956 (no verified numeric domain-weight table located)"
+      ],
       "contradictingClaimIds": [],
-      "runtimeImplication": "No production change; RESEARCH_INCOMPLETE for whether Tiểu Hạn should cooperate in additional domains.",
+      "runtimeImplication": "No production mapping change. Acceptable engineering simplification until a source-backed remapping appears.",
+      "notes": "Reviewed potential cooperating palaces; none included without source support."
+    },
+    {
+      "claimId": "CLM-AAV09-022",
+      "topic": "star-domain",
+      "statement": "Đào Hoa (and by shared essay Hồng Loan) is described with mixed/context-dependent character: attraction, romance, and joy language together with flirtation/scandal risk under certain combinations — not a fixed positive or fixed negative fortune polarity.",
+      "school": "nam-phai",
+      "status": "derived",
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956"],
+      "locators": ["SRC-AA-V09-TAN-BIEN-1956§3.36 Đào Hoa / Hồng Loan essay (paraphrase only)"],
+      "contradictingClaimIds": ["CLM-AAV09-005", "CLM-AAV09-006"],
+      "runtimeImplication": "Lưu Đào Hoa remains excluded from fixed-polarity numeric candidates; interpretive-only / context-dependent.",
+      "notes": "Adjudicates CONTRA-AAV09-001 as context-dependent. Exact scandal conditions in the essay are combination-dependent; this pack does not invent a full activation matrix."
+    },
+    {
+      "claimId": "CLM-AAV09-023",
+      "topic": "temporal-identity",
+      "statement": "When reading annual hạn, Nam Phái school-manual practice requires attending both fixed (natal) stars already present in the palace and annual Lưu động stars — natal stars are palace content activated by the annual frame, not merely decorative background.",
+      "school": "nam-phai",
+      "status": "derived",
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956"],
+      "locators": ["SRC-AA-V09-TAN-BIEN-1956§4 intro (sao tĩnh/cố định already in cung vs sao Lưu động)"],
+      "contradictingClaimIds": [],
+      "runtimeImplication": "Qualitative policy supports natal participation in annual palace reading. Numeric natal weight reduction remains a future engineering candidate parameter (see CLM-AAV09-003 audit observation).",
+      "notes": "Separates source-backed qualitative policy from audit mass ratios and from future numeric hypotheses."
+    },
+    {
+      "claimId": "CLM-AAV09-024",
+      "topic": "star-domain",
+      "statement": "Lưu Đào Hoa annual identity is emitted by Calculation Core but is not listed in Tân Biên §4 Lưu động stars; combined with context-dependent natal Đào Hoa character, it is not candidate-eligible for fixed-polarity numeric scoring.",
+      "school": "nam-phai",
+      "status": "derived",
+      "confidence": "medium",
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956", "SRC-AA-CORE-001"],
+      "locators": [
+        "SRC-AA-V09-TAN-BIEN-1956§4 intro Lưu động list",
+        "SRC-AA-V09-TAN-BIEN-1956§3.36",
+        "src/lib/ziwei/analysis/knowledge/annual-axes/v0.8/annual-star-capabilities.nam-phai.v0.8.json#Lưu Đào Hoa"
+      ],
+      "contradictingClaimIds": [],
+      "runtimeImplication": "Research decision: remain-disputed / interpretive-only for numeric axes; exclude from candidate shapes.",
       "notes": null
     }
   ]

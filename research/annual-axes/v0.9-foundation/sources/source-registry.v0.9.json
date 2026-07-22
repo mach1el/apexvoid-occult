@@ -30,28 +30,66 @@
         "capability-coverage producer verification (emission scanning)"
       ],
       "prohibitedUsage": ["doctrine authority", "numeric scoring authority"],
-      "notes": "Reused verbatim from the production V0.8 knowledge package. Authoritative for what Calculation Core actually emits, verified directly by the full-corpus star-emission scan in this V0.9 audit (capability-coverage.v0.8.json)."
+      "notes": "Authoritative for what Calculation Core actually emits, verified by the full-corpus star-emission scan (capability-coverage.v0.8.json)."
+    },
+    {
+      "sourceId": "SRC-AA-V09-TAN-BIEN-1956",
+      "title": "Tử Vi Đẩu Số Tân Biên",
+      "author": "Vân Đằng Thái Thứ Lang",
+      "edition": "NXB Tín Đức Thư Xã, Sài Gòn; scanned reprint bearing 1956 example charts (Bính Thân 1956)",
+      "publicationYear": 1956,
+      "language": "vi",
+      "sourceType": "school-manual",
+      "schoolScope": "nam-phai",
+      "locator": "Phần luận vận hạn §2.3 Liên hệ Bản Mệnh và cung nhập hạn (Tiểu hạn một năm); §3.17 Văn Xương/Văn Khúc; §3.30 Thiên Mã; §3.36 Đào Hoa/Hồng Loan; §3.37 Thiên Hỷ; §3.48 Thiên Đức/Nguyệt Đức; §3.53 Kiếp Sát; §3.63 Long Đức/Phúc Đức; §3.70 Hỷ Thần; §4 NHẬN ĐỊNH ẢNH HƯỞNG CỦA NHỮNG SAO LƯU ĐỘNG (scan pages ~267–269) including §4.1–§4.4; §8.26 Đào Hoa / §8.27 Thiên Mã natal placement tables",
+      "accessStatus": "partial",
+      "allowedUsage": [
+        "Nam Phái school-manual doctrine for explicit annual Lưu động stars listed in §4",
+        "natal qualitative polarity/character for §3 star essays (paraphrase only)",
+        "Tiểu Hạn as general annual frame (§2.3, §4 intro)",
+        "classical or derived claim authority when paired with exact section locators above"
+      ],
+      "prohibitedUsage": [
+        "copying long copyrighted passages into the repository",
+        "inventing page numbers beyond the checked scan markers (~267–274)",
+        "asserting annual scoring rules for stars not listed in §4 as Lưu động",
+        "production numeric point values (none are stated as Annual Axes scores)"
+      ],
+      "notes": "Partial access via publicly available OCR of identifiable sections with author/title page markers and scan page numbers. Bibliographic identity matches the mid-1950s Tín Đức Thư Xã Nam Phái school manual. Not a full physical-library page-by-page audit of every chapter. Short paraphrases only; no large excerpts committed."
+    },
+    {
+      "sourceId": "SRC-AA-V09-BIB-TAN-BIEN",
+      "title": "Bibliographic identity cross-check for Tử Vi Đẩu Số Tân Biên (Vân Đằng Thái Thứ Lang)",
+      "author": "catalog metadata (multiple Vietnamese booksellers/catalogs)",
+      "edition": "commonly cited as NXB Tín Đức Thư Xã ~1956, ~277 pages",
+      "publicationYear": 1956,
+      "language": "vi",
+      "sourceType": "published-reference",
+      "schoolScope": "nam-phai",
+      "locator": "bibliographic catalog entries identifying author Vân Đằng Thái Thứ Lang, title Tử Vi Đẩu Số Tân Biên, mid-1950s Sài Gòn imprint; cross-checked against in-scan colophon/page markers in SRC-AA-V09-TAN-BIEN-1956",
+      "accessStatus": "partial",
+      "allowedUsage": ["edition/author identity corroboration for SRC-AA-V09-TAN-BIEN-1956"],
+      "prohibitedUsage": ["doctrine authority", "star polarity claims", "production rule authority"],
+      "notes": "Supports bibliographic identity only. Does not independently supply doctrinal locators."
     },
     {
       "sourceId": "SRC-AA-V09-UNVERIFIED-001",
-      "title": "Tử Vi Đẩu Số Tân Biên",
+      "title": "Tử Vi Đẩu Số Tân Biên (pre-verification placeholder retained for audit trail)",
       "author": "Vân Đằng Thái Thứ Lang",
       "publicationYear": 1970,
       "language": "vi",
       "sourceType": "unverified-summary",
       "schoolScope": "nam-phai",
-      "locator": "Unknown — no verified edition/page on hand; cited only from general domain familiarity with this widely-referenced Vietnamese Tử Vi text, not from a checked copy.",
+      "locator": "Superseded — see SRC-AA-V09-TAN-BIEN-1956 for partial section-verified access. This entry retains the prior unavailable state for historical audit trail.",
       "accessStatus": "unavailable",
-      "allowedUsage": [
-        "research-only background for engineering-hypothesis/disputed claims",
-        "naming a widely-known school reference point for later human verification"
-      ],
+      "allowedUsage": ["historical audit trail only"],
       "prohibitedUsage": [
         "classical-status claims",
         "production rule authority",
-        "citing a specific page/chapter/edition without independent verification"
+        "candidate eligibility authority",
+        "citing a specific page/chapter/edition without using SRC-AA-V09-TAN-BIEN-1956"
       ],
-      "notes": "This same title appears in research/major-fortune/sources/source-registry.json (SRC-MF-001) tagged sourceType classical_text with locator 'Unknown'. This V0.9 pack deliberately tags it lower-confidence (unverified-summary, not classical-text) per explicit instruction for this task — no verified copy was available to check locators against. See sources/source-review-log.md."
+      "notes": "Retained so prior foundation snapshots remain interpretable. New claims must cite SRC-AA-V09-TAN-BIEN-1956, not this placeholder."
     },
     {
       "sourceId": "SRC-AA-V09-UNVERIFIED-002",
@@ -61,9 +99,9 @@
       "schoolScope": "mixed",
       "locator": "Unknown — general domain-knowledge synthesis, not a single citable text; practice varies materially by teacher/school lineage.",
       "accessStatus": "unavailable",
-      "allowedUsage": ["research-only background for star-domain-policy candidate rules"],
-      "prohibitedUsage": ["classical-status claims", "production rule authority", "school-specific attribution without a named text"],
-      "notes": "Used only to frame candidate star-domain hypotheses (e.g. Lưu Đào Hoa → romance polarity) as engineering-hypothesis/disputed, never as classical."
+      "allowedUsage": ["research-only background; historical disputed-claim framing"],
+      "prohibitedUsage": ["classical-status claims", "production rule authority", "candidate eligibility authority"],
+      "notes": "May not authorize candidate-eligible or classical claims alone."
     },
     {
       "sourceId": "SRC-AA-V09-UNVERIFIED-003",
@@ -71,11 +109,11 @@
       "language": "vi",
       "sourceType": "unverified-summary",
       "schoolScope": "mixed",
-      "locator": "Unknown — general domain-knowledge synthesis; the natal Bác Sĩ cycle itself is well-established, but its *annual* placement/reinterpretation is exactly the disputed point this pack researches.",
+      "locator": "Unknown — general domain-knowledge synthesis; the natal Bác Sĩ cycle itself is well-established, but its annual placement/reinterpretation remains the disputed point.",
       "accessStatus": "unavailable",
       "allowedUsage": ["research-only background for unsupported-star-policy adjudication of Lưu Đại Hao / Lưu Tiểu Hao / Lưu Phục Binh"],
       "prohibitedUsage": ["classical-status claims", "production rule authority", "asserting a specific annual placement formula"],
-      "notes": "Confirms the natal cycle exists and is well-known; does NOT supply a verified annual placement rule, which is the actual blocker per SRC-AA-CORE-001."
+      "notes": "Confirms the natal cycle exists; does NOT supply a verified annual placement rule."
     },
     {
       "sourceId": "SRC-AA-V09-UNVERIFIED-004",
@@ -87,7 +125,33 @@
       "accessStatus": "unavailable",
       "allowedUsage": ["research-only background for unsupported-star-policy adjudication of Lưu Tuần / Lưu Triệt"],
       "prohibitedUsage": ["classical-status claims", "production rule authority", "asserting a specific annual placement formula"],
-      "notes": "Natal Tuần/Triệt void markers are well-established; an annual re-derivation of them is exactly the disputed, unverified point."
+      "notes": "Natal Tuần/Triệt are well-established; annual re-derivation remains unverified."
+    },
+    {
+      "sourceId": "SRC-AA-V09-MODERN-LYSO-SCHOOLS",
+      "title": "Nam Phái vs Trung Châu school-difference overview (lyso.vn)",
+      "author": "lyso.vn editorial (modern web article)",
+      "language": "vi",
+      "sourceType": "modern-commentary",
+      "schoolScope": "mixed",
+      "locator": "Article section contrasting Nam Phái and Trung Châu interpretive emphases (web publication; URL recorded in source-review-log.md)",
+      "accessStatus": "partial",
+      "allowedUsage": ["school-scope research lead only"],
+      "prohibitedUsage": ["classical-status claims", "production rule authority", "candidate eligibility authority"],
+      "notes": "Useful for reminding that school scope differs; not used as doctrine authority for star polarity."
+    },
+    {
+      "sourceId": "SRC-AA-V09-MODERN-KABALA-LUU",
+      "title": "Kabala Tử Vi chapters discussing lưu niên / miếu-hãm (modern commentary)",
+      "author": "Kabala Tử Vi site authors",
+      "language": "vi",
+      "sourceType": "modern-commentary",
+      "schoolScope": "mixed",
+      "locator": "Public web chapters discussing lưu niên stars and dignity (miếu/hãm); URL set recorded in source-review-log.md",
+      "accessStatus": "partial",
+      "allowedUsage": ["research lead for dignity/activation vocabulary; cross-school comparison only"],
+      "prohibitedUsage": ["Nam Phái classical authority", "production rule authority", "candidate eligibility authority alone"],
+      "notes": "Trung Châu-leaning modern commentary. Mentions Văn Xương/Khúc, Thiên Mã, Hồng Loan/Thiên Hỷ and dignity language, but cannot alone authorize Nam Phái candidate rules."
     },
     {
       "sourceId": "SRC-AA-V09-XREF-MAJOR-FORTUNE",
@@ -98,8 +162,8 @@
       "locator": "research/major-fortune/",
       "accessStatus": "verified",
       "allowedUsage": ["convention reference for this pack's file layout, ADR format, and schema-validation test pattern"],
-      "prohibitedUsage": ["doctrine authority for annual axes content", "reusing its classical_text confidence tagging without independent verification"],
-      "notes": "Structural precedent only. Its SRC-MF-001 entry cites the same Vân Đằng Thái Thứ Lang text at classical_text confidence; this pack intentionally does not carry that confidence level forward (see SRC-AA-V09-UNVERIFIED-001)."
+      "prohibitedUsage": ["doctrine authority for annual axes content", "reusing classical_text confidence without independent verification"],
+      "notes": "Structural precedent only. Its SRC-MF-001 tagging is superseded for this pack by SRC-AA-V09-TAN-BIEN-1956 partial verification."
     }
   ]
 }

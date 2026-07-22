@@ -1,7 +1,13 @@
 {
   "schemaVersion": "0.9.0",
   "policyId": "annual-axes-v0.9-unsupported-star-policy",
-  "allowedDecisions": ["supported-for-future-core", "research-only", "interpretive-only", "unsupported", "disputed"],
+  "allowedDecisions": [
+    "supported-for-future-core",
+    "research-only",
+    "interpretive-only",
+    "unsupported",
+    "disputed"
+  ],
   "requiredForSupportedForFutureCore": [
     "verified placement rule",
     "source locator",
@@ -20,7 +26,9 @@
       "numericOrInterpretiveOnly": "neither is currently justified — no annual identity to interpret or score",
       "decision": "unsupported",
       "decisionRationale": "Fails all 5 supported-for-future-core preconditions. Matches current production status exactly (annual-star-capabilities.nam-phai.v0.8.json, confirmed zero corpus emissions in capability-coverage.v0.8.json).",
-      "claimIds": ["CLM-AAV09-008"],
+      "claimIds": [
+        "CLM-AAV09-008"
+      ],
       "confidence": "medium"
     },
     {
@@ -33,7 +41,9 @@
       "numericOrInterpretiveOnly": "neither currently justified",
       "decision": "unsupported",
       "decisionRationale": "Fails all 5 preconditions; matches current production status.",
-      "claimIds": ["CLM-AAV09-009"],
+      "claimIds": [
+        "CLM-AAV09-009"
+      ],
       "confidence": "medium"
     },
     {
@@ -46,7 +56,9 @@
       "numericOrInterpretiveOnly": "neither currently justified",
       "decision": "unsupported",
       "decisionRationale": "Fails all 5 preconditions; matches current production status.",
-      "claimIds": ["CLM-AAV09-010"],
+      "claimIds": [
+        "CLM-AAV09-010"
+      ],
       "confidence": "medium"
     },
     {
@@ -59,7 +71,9 @@
       "numericOrInterpretiveOnly": "neither currently justified",
       "decision": "unsupported",
       "decisionRationale": "Fails all 5 preconditions; matches current production status (addVoidStars only constructs natal identities).",
-      "claimIds": ["CLM-AAV09-011"],
+      "claimIds": [
+        "CLM-AAV09-011"
+      ],
       "confidence": "medium"
     },
     {
@@ -72,9 +86,28 @@
       "numericOrInterpretiveOnly": "neither currently justified",
       "decision": "unsupported",
       "decisionRationale": "Fails all 5 preconditions; matches current production status.",
-      "claimIds": ["CLM-AAV09-012"],
+      "claimIds": [
+        "CLM-AAV09-012"
+      ],
       "confidence": "medium"
     }
   ],
-  "summary": "All five unsupported annual stars remain 'unsupported' — none qualifies for 'research-only', 'interpretive-only', 'supported-for-future-core', or 'disputed' because no source in this pack documents even a candidate annual placement mechanism (disputed requires two competing documented positions; here there are zero). This is the cleanest, most confident finding in the entire research pack: the current V0.8 production exclusion of these five stars is correct and this pack found no reason to revisit it."
+  "summary": "All five unsupported annual stars remain 'unsupported' / fail-closed for production. This research-completion pass found no verified annual placement rule with locator + deterministic Core inputs. Even if future research finds doctrinal support, status may become future-core-supported-by-research without implementing producers in a research PR.",
+  "productionNonProduction": true,
+  "claimIds": [
+    "CLM-AAV09-008",
+    "CLM-AAV09-009",
+    "CLM-AAV09-010",
+    "CLM-AAV09-011",
+    "CLM-AAV09-012"
+  ],
+  "sourceIds": [
+    "SRC-AA-CORE-001",
+    "SRC-AA-V09-UNVERIFIED-003",
+    "SRC-AA-V09-UNVERIFIED-004"
+  ],
+  "researchDecision": "remain unsupported / fail-closed",
+  "runtimeCompatibility": "no production rules; no candidate shapes may require these identities",
+  "candidateEligibility": false,
+  "knownContradictions": []
 }

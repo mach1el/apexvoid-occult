@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "0.9.0",
+  "registryId": "annual-axes-v0.9-contradiction-registry",
+  "contradictions": [
+    {
+      "contradictionId": "CONTRA-AAV09-001",
+      "topic": "Lưu Đào Hoa romance-domain polarity",
+      "claimIds": ["CLM-AAV09-005", "CLM-AAV09-006", "CLM-AAV09-022"],
+      "sourceIds": ["SRC-AA-V09-TAN-BIEN-1956", "SRC-AA-V09-UNVERIFIED-002"],
+      "schoolScope": "nam-phai",
+      "exactDisagreement": "CLM-AAV09-005 asserts fixed positive numeric romance polarity; CLM-AAV09-006 asserts fixed negative numeric romance polarity; CLM-AAV09-022 (Tân Biên §3.36 paraphrase) asserts mixed/context-dependent character without fixed fortune polarity.",
+      "adjudication": "context-dependent",
+      "rationale": "Partial review of Tân Biên §3.36 describes Đào Hoa with attraction/romance language and scandal/instability risk under combinations — neither fixed positive nor fixed negative. §4 does not list Đào Hoa among explicit annual Lưu động stars, so annual numeric scoring lacks school-manual authorization even before polarity is fixed.",
+      "runtimeConsequence": "No Lưu Đào Hoa fixed-polarity scoring rule may enter a V0.9 candidate shape. Interpretive-only / remain-disputed for numeric axes. Candidate shapes must exclude this identity.",
+      "remainingUncertainty": "Exact combination matrix (which co-present stars, palaces, or Tứ Hóa flips reading) is not fully extracted into a machine policy in this pass; only the refusal of fixed polarity is adjudicated."
+    }
+  ]
+}

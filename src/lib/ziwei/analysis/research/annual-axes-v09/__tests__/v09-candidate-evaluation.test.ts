@@ -120,13 +120,14 @@ describe("annual-axes v0.9 candidate evaluation — isolation", () => {
 });
 
 describe("annual-axes v0.9 candidate evaluation — decision", () => {
-  it("emits exactly one blocked decision with null selection", () => {
-    const result = runV09CandidateDecision({ writeArtifacts: true });
-    expect(result.foundation.readiness).toBe("RESEARCH_INCOMPLETE");
+  it("foundation READY permits evaluation; historical snapshot stays RESEARCH_REVISION_REQUIRED", () => {
+    // Research-completion PR must not rewrite the immutable prior candidate round.
+    const result = runV09CandidateDecision({ writeArtifacts: false });
+    expect(result.foundation.readiness).toBe("READY_FOR_V0_9_CANDIDATE");
+    expect(result.foundation.permitsCandidateEvaluation).toBe(true);
     expect(result.control.ok).toBe(true);
     expect(result.selection.selectedCandidateId).toBeNull();
     expect(result.productionDecision.selectedCandidateId).toBeNull();
-    expect(result.productionDecision.decision).toBe("RESEARCH_REVISION_REQUIRED");
     expect(result.productionDecision.controlVersion.engineVersion).toBe("0.8.0");
 
     const decisionPath = join(
@@ -137,6 +138,7 @@ describe("annual-axes v0.9 candidate evaluation — decision", () => {
     const decision = JSON.parse(readFileSync(decisionPath, "utf8"));
     expect(decision.decision).toBe("RESEARCH_REVISION_REQUIRED");
     expect(decision.selectedCandidateId).toBeNull();
+    expect(decision.evidence.foundationDecision).toBe("RESEARCH_INCOMPLETE");
 
     const handoff = join(
       process.cwd(),
@@ -146,9 +148,9 @@ describe("annual-axes v0.9 candidate evaluation — decision", () => {
     expect(readFileSync(handoff, "utf8")).toMatch(/RESEARCH_REVISION_REQUIRED/);
   });
 
-  it("decision run is deterministic", () => {
-    const a = runV09CandidateDecision({ writeArtifacts: true });
-    const b = runV09CandidateDecision({ writeArtifacts: true });
+  it("decision run is deterministic without rewriting historical artifacts", () => {
+    const a = runV09CandidateDecision({ writeArtifacts: false });
+    const b = runV09CandidateDecision({ writeArtifacts: false });
     expect(a.productionDecision).toEqual(b.productionDecision);
     expect(a.selection).toEqual(b.selection);
     expect(a.freezeHashes).toEqual(b.freezeHashes);

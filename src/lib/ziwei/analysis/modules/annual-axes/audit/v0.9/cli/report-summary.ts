@@ -41,13 +41,20 @@ function main(): void {
   process.stdout.write(`No-signal rate: ${(noSignalAnalysis.noSignalRate * 100).toFixed(2)}%\n`);
   process.stdout.write(`Balanced-signal rate: ${(noSignalAnalysis.balancedSignalRate * 100).toFixed(2)}%\n`);
 
-  const decisionPath = join(PACK_ROOT, "V0.9-FOUNDATION-DECISION.md");
-  if (existsSync(decisionPath)) {
-    const decisionDoc = readFileSync(decisionPath, "utf8");
-    const match = decisionDoc.match(
-      /READY_FOR_V0_9_CANDIDATE|RESEARCH_INCOMPLETE|V0_8_SHOULD_REMAIN_UNCHANGED|CALCULATION_CORE_BLOCKED/,
-    );
-    process.stdout.write(`\nFinal readiness state: ${match ? match[0] : "not found in decision doc"}\n`);
+  const readinessPath = join(PACK_ROOT, "readiness.v0.9.json");
+  if (existsSync(readinessPath)) {
+    const readiness = JSON.parse(readFileSync(readinessPath, "utf8"));
+    process.stdout.write(`\nFinal readiness state: ${readiness.readinessState}\n`);
+    process.stdout.write(`Candidate shapes: ${(readiness.candidateShapes ?? []).length}\n`);
+  } else {
+    const decisionPath = join(PACK_ROOT, "V0.9-FOUNDATION-DECISION.md");
+    if (existsSync(decisionPath)) {
+      const decisionDoc = readFileSync(decisionPath, "utf8");
+      const match = decisionDoc.match(
+        /READY_FOR_V0_9_CANDIDATE|RESEARCH_INCOMPLETE|V0_8_SHOULD_REMAIN_UNCHANGED|CALCULATION_CORE_BLOCKED/,
+      );
+      process.stdout.write(`\nFinal readiness state: ${match ? match[0] : "not found in decision doc"}\n`);
+    }
   }
 }
 

@@ -87,7 +87,16 @@ export function cliProduct(): void {
 }
 
 export function cliDecision(): void {
-  const result = runV09CandidateDecision({ writeArtifacts: true });
+  const foundation = intakeFoundation();
+  const pack = loadCandidatePack();
+  const experimentalPresent = pack.candidates.some((c) => c.candidateType === "experimental");
+  // When foundation is READY but no experimental candidates are registered yet,
+  // do not rewrite the immutable historical blocked-round snapshot.
+  const writeArtifacts =
+    process.env.V09_CANDIDATES_FORCE_WRITE === "1" ||
+    !foundation.permitsCandidateEvaluation ||
+    experimentalPresent;
+  const result = runV09CandidateDecision({ writeArtifacts });
   printJson({
     command: "decision",
     foundationReadiness: result.foundation.readiness,
@@ -95,6 +104,7 @@ export function cliDecision(): void {
     selectionStatus: result.selection.selectionStatus,
     selectedCandidateId: result.selection.selectedCandidateId,
     decision: result.productionDecision.decision,
+    wroteArtifacts: writeArtifacts,
   });
   if (!result.control.ok || result.foundation.readiness === "FOUNDATION_INVALID") {
     process.exitCode = 1;

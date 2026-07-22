@@ -1,52 +1,56 @@
-# Source Review Log — Annual Axes V0.9 Foundation
+# Source Review Log — Annual Axes V0.9 Foundation (research completion)
 
-## Sourcing constraint (stated up front)
+## Search target
 
-This pack was built without access to a verified library of classical Tử Vi
-Đẩu Số texts (no checked page/edition/locator for any classical or
-school-manual source). Per explicit direction for this task, claims may still
-draw on general domain knowledge of Zi Wei Dou Shu / Tử Vi doctrine, but every
-such claim is tagged `sourceType: "unverified-summary"` and `confidence: "low"`
-in `source-registry.v0.9.json` / `claim-registry.v0.9.json`, and flagged as
-needing human verification before being used for anything beyond
-research-only status.
+Nam Phái school-manual / classical sources with checkable locators for:
 
-**Consequence:** `source-registry.v0.9.json` contains **zero** sources of type
-`classical-text`, `school-manual`, or `published-reference`. It follows that
-`claim-registry.v0.9.json` contains **zero** claims with `status: "classical"`
-— there is no compatible source to back one. This is the single biggest driver
-of the `RESEARCH_INCOMPLETE` verdict for doctrine-dependent topics in
-`V0.9-FOUNDATION-DECISION.md`.
+1. Annual Lưu động star identities and polarity
+2. Lưu Đào Hoa polarity contradiction
+3. Dignity (miếu/hãm) policy for natal vs annual layers
+4. Tiểu Hạn scope relative to Annual Axes domains
+5. Domain-palace asymmetry and natal contribution in hạn reading
 
-## Deliberate divergence from `research/major-fortune/`
+## Sources found and verification performed
 
-`research/major-fortune/sources/source-registry.json` (`SRC-MF-001`) cites
-*Tử Vi Đẩu Số Tân Biên* (Vân Đằng Thái Thứ Lang) at `sourceType: classical_text`
-with `locator: "Unknown"`. This pack cites the same title
-(`SRC-AA-V09-UNVERIFIED-001`) at `sourceType: unverified-summary` instead —
-deliberately lower confidence than the existing in-repo precedent, because no
-copy was independently checked for this task. This is a conscious choice, not
-an oversight: it is more conservative than an existing accepted pattern in this
-repository, and a future pass with a verified copy should reconcile the two.
+### SRC-AA-V09-TAN-BIEN-1956 — *Tử Vi Đẩu Số Tân Biên* (Vân Đằng Thái Thứ Lang)
 
-## Sources reviewed
+| Field | Result |
+| --- | --- |
+| Source found | Yes — mid-1950s Nam Phái school manual |
+| Verification | Partial OCR/section review of identifiable chapters with author/title markers and scan pages ~267–274; bibliographic identity cross-checked via SRC-AA-V09-BIB-TAN-BIEN |
+| Usable sections | §2.3 Tiểu hạn / cung nhập hạn; §3 star essays (Xương/Khúc, Thiên Mã, Đào/Hồng, Thiên Hỷ, Đức stars, Kiếp Sát, Long/Phúc Đức, Hỷ Thần); §4 Lưu động (explicit list + §4.1–§4.4); §8 placement tables |
+| Unusable sections | Full book not independently page-audited; large copyrighted passages not copied; sections outside the listed locators not claimed |
+| School compatibility | nam-phai |
+| Claims supported | CLM-AAV09-015, 018, 019, 020, 022, 023, 007, 024 (and related policy records) |
+| Claims not supported | Fixed numeric Annual Axes point values; annual scoring for stars absent from §4 Lưu động list |
+| Remaining uncertainty | Partial access — physical library re-check still valuable; combination matrices for Đào Hoa not fully encoded |
 
-| Source | Type | Access | Disposition |
-|---|---|---|---|
-| SRC-AA-ENG-008 | internal-engineering-policy | verified | Reused verbatim from production V0.8 knowledge; carries forward its existing engineering-hypothesis claims. |
-| SRC-AA-CORE-001 | internal-calculation-contract | verified | Reused verbatim; cross-checked directly against this audit's own star-emission scan (capability-coverage.v0.8.json) rather than taken on faith. |
-| SRC-AA-V09-UNVERIFIED-001 | unverified-summary | unavailable | Named for traceability; no locator claims made. |
-| SRC-AA-V09-UNVERIFIED-002 | unverified-summary | unavailable | General annual auxiliary-star doctrine; backs only `disputed`/`engineering-hypothesis` star-domain claims. |
-| SRC-AA-V09-UNVERIFIED-003 | unverified-summary | unavailable | Confirms the *natal* Bác Sĩ cycle is well-established; does not supply the missing *annual* placement formula for Đại Hao/Tiểu Hao/Phục Binh. |
-| SRC-AA-V09-UNVERIFIED-004 | unverified-summary | unavailable | Same pattern for Tuần/Triệt. |
-| SRC-AA-V09-XREF-MAJOR-FORTUNE | internal-engineering-policy | verified | Structural convention reference only. |
+### SRC-AA-V09-BIB-TAN-BIEN
 
-## What would unblock a stronger verdict
+Bibliographic identity only. Does not authorize doctrine.
 
-A future pass that adds at least one `classical-text` or `school-manual`
-source with a genuinely checked locator (specific edition, page/chapter) for
-Nam Phái annual-star doctrine would let some of the `engineering-hypothesis`/
-`disputed` claims in `claim-registry.v0.9.json` (especially CLM-AAV09-005/006
-on Lưu Đào Hoa polarity, and CLM-AAV09-007's 11 candidate stars) move toward
-`classical` or `derived` status, which is a precondition for
-`READY_FOR_V0_9_CANDIDATE` on those specific rules.
+### SRC-AA-V09-MODERN-LYSO-SCHOOLS / SRC-AA-V09-MODERN-KABALA-LUU
+
+Modern commentary / research leads. **Prohibited** for classical claims and candidate eligibility alone.
+
+### Retained unverified summaries (001–004)
+
+Historical / background only. Cannot authorize candidate eligibility or classical claims alone.
+
+### Internal engineering / Calculation Core (SRC-AA-ENG-008, SRC-AA-CORE-001)
+
+Verified for production behavior and emissions. **Never** doctrine authority.
+
+## Sources rejected as authority
+
+| Source class | Reason |
+| --- | --- |
+| Anonymous SEO / forum tables | No edition/locator; prohibited as classical authority |
+| AI-generated summaries | Not used |
+| Name-meaning inference alone | Explicitly prohibited by research contract |
+
+## Outcome vs prior foundation pass
+
+Prior pack: zero school-manual sources → `RESEARCH_INCOMPLETE`.
+
+This pass: one partially verified Nam Phái school manual with checkable section/scan-page locators → bounded `READY_FOR_V0_9_CANDIDATE` via Lưu Thiên Mã only.
