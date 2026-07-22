@@ -97,7 +97,7 @@ export function writeAuditReports(opts: {
   const reports: AnnualAxesDistributionReport[] = [];
   for (const school of ["nam-phai", "trung-chau"] as const) {
     const profileId =
-      school === "nam-phai" ? "annual-axes-v0.4" : "annual-axes-current";
+      school === "nam-phai" ? "annual-axes-v0.8" : "annual-axes-current";
     const report = runAudit(school, contract, profileId);
     reports.push(report);
     const name = `${profileId}-${school}-${contract.contractId}.json`;

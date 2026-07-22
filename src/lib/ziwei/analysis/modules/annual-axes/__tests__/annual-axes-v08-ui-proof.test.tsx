@@ -25,7 +25,7 @@ describe("Annual Axes V0.8 UI proof", () => {
     window.history.replaceState({}, "", "/");
   });
 
-  it("default DOM shows Engine 0.8.0 without confidence percentage", () => {
+  it("default DOM shows year without engine badge or confidence percentage", () => {
     const chart = calculateNamPhai(REGRESSION);
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
     expect(result.versions.engineVersion).toBe("0.8.0");
@@ -33,8 +33,9 @@ describe("Annual Axes V0.8 UI proof", () => {
     const { container } = render(
       <AnnualAxesSection chart={chart} school="nam-phai" result={result} />,
     );
-    expect(container.textContent ?? "").toContain("Nam Phái V0.8");
-    expect(container.textContent ?? "").toContain("Engine 0.8.0");
+    expect(container.textContent ?? "").toContain(`Năm ${result.annualYear}`);
+    expect(container.textContent ?? "").not.toContain("Nam Phái V0.8");
+    expect(container.textContent ?? "").not.toContain("Engine 0.8.0");
     expect(container.textContent ?? "").not.toContain("Độ tin cậy");
     expect(container.textContent ?? "").not.toContain("domainCenter");
     expect(container.textContent ?? "").not.toContain("robustScale");
@@ -61,7 +62,14 @@ describe("Annual Axes V0.8 UI proof", () => {
     if (wealth.status !== "available") return;
     expect(container.textContent ?? "").toContain(`Điểm ${wealth.score.toFixed(1)}`);
     expect(container.textContent ?? "").not.toMatch(/Độ tin cậy\s+\d+%/);
+    expect(container.textContent ?? "").not.toContain("Hỗ trợ nổi bật");
+    expect(container.textContent ?? "").not.toContain("Áp lực nổi bật");
+    expect(container.textContent ?? "").not.toContain("Tín hiệu có trọng số");
+    expect(container.textContent ?? "").not.toContain("Tín hiệu sau Thái Tuế");
+    expect(container.textContent ?? "").not.toContain("Ánh xạ cung lưu niên");
     if (wealth.scoreTrace?.formulaVersion === "v0.8-annual-palace-weighted-score") {
+      expect(container.textContent ?? "").toContain("Cung trọng tâm");
+      expect(container.textContent ?? "").toContain("Cung phối hợp");
       if (wealth.scoreTrace.scoreState === "no-signal") {
         expect(container.textContent ?? "").not.toContain("Cân bằng");
       }

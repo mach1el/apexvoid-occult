@@ -87,4 +87,4 @@ export interface AuditCorpusContract {
 export type AnnualAxesAuditProfileId =
   | "annual-axes-v0.2-baseline"
   | "annual-axes-current"
-  | "annual-axes-v0.4";
+  | "annual-axes-v0.8";

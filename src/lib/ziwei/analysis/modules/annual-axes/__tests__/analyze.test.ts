@@ -154,11 +154,11 @@ describe("analyzeAnnualAxes — Nam Phái V0.8 production default", () => {
     }
   });
 
-  it("honors V08=0 rollback to V0.7", () => {
+  it("ignores legacy rollback query flags", () => {
     window.history.replaceState({}, "", "/?ziweiAnnualAxesV08=0");
     const chart = calculateNamPhai(REGRESSION);
     const result = analyzeAnnualAxes(chart, { school: "nam-phai" });
-    expect(result.versions.engineVersion).toBe("0.7.0");
+    expect(result.versions.engineVersion).toBe("0.8.0");
   });
 });
 

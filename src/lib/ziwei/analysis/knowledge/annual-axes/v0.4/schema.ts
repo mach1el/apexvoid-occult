@@ -1,12 +1,9 @@
 /**
  * Type surface for Annual Axes V0.4 (annual-delta) Nam Phái knowledge.
+ * Band thresholds here are still shared by the V0.8 production scorer.
  */
 
 import type { AnnualAxisDomainId } from "../schema";
-import type {
-  AnnualAxisDefinitionsCatalogV03NamPhai,
-  AnnualHeadPolicyCatalogV03,
-} from "../v0.3/schema";
 
 export type AnnualAxisDomain = AnnualAxisDomainId;
 export type AnnualAxisHeadRole = "focus" | "opposite" | "trine" | "outside";
@@ -16,8 +13,67 @@ export type AnnualChannelId =
   | "directDomainImpact"
   | "majorFortuneBackground";
 
-export type AnnualHeadPolicyCatalogV04 = AnnualHeadPolicyCatalogV03;
-export type AnnualAxisDefinitionsCatalogV04NamPhai = AnnualAxisDefinitionsCatalogV03NamPhai;
+interface AnnualHeadPolicyProfileNamPhai {
+  primaryAnnualHead: {
+    preferredChartField: string;
+    calculationFact: string;
+    legacyRuntimeFlag: string;
+    mustNotUseAsPrimary: string[];
+    missingBehavior: string;
+  };
+  secondaryCoordinates: Array<{
+    id: string;
+    chartField: string;
+    role: string;
+  }>;
+}
+
+interface AnnualHeadPolicyProfileTrungChau {
+  primaryAnnualHead: {
+    calculationFact: string;
+    mustNotUseAsPrimary: string[];
+    missingBehavior: string;
+  };
+  numericCompatibility: string;
+}
+
+export interface AnnualHeadPolicyCatalogV04 {
+  schemaVersion: string;
+  catalogId: string;
+  status: string;
+  terminology: {
+    productLabelVi: string;
+    technicalId: string;
+    notes?: string;
+  };
+  profiles: {
+    "nam-phai": AnnualHeadPolicyProfileNamPhai;
+    "trung-chau": AnnualHeadPolicyProfileTrungChau;
+  };
+  noCrossSchoolFallback: boolean;
+}
+
+export interface AnnualAxisDefinitionsCatalogV04NamPhai {
+  schemaVersion: string;
+  catalogId: string;
+  status: string;
+  requiresCalibration: boolean;
+  coordinate: "natal-palace-name";
+  domains: Array<{
+    domain: AnnualAxisDomainId;
+    labelVi: string;
+    anchors: Array<{ palaceName: string; weight: number }>;
+  }>;
+  validationRules: {
+    anchorWeightsMustSumTo: number;
+    allTwelveNatalPalaceNamesMustResolveUniquely: boolean;
+    indexFallbackAllowed: boolean;
+  };
+  compatibility: {
+    trungChauUsesThisCatalog: boolean;
+    trungChauCatalog: string;
+  };
+}
 
 export interface AnnualChannelProfileV04 {
   schemaVersion: string;

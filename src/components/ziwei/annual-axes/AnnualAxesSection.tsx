@@ -21,32 +21,16 @@ export interface AnnualAxesSectionProps {
   result?: AnnualAxesResult;
 }
 
-function engineBadgeLabel(result: AnnualAxesResult): string {
-  if (result.school === "trung-chau") {
-    return "Trung Châu";
-  }
-  if (result.versions.engineVersion === "0.8.0") {
-    return "Nam Phái V0.8";
-  }
-  if (result.versions.engineVersion === "0.7.0") {
-    return "Nam Phái V0.7";
-  }
-  if (result.versions.engineVersion === "0.5.0") {
-    return "Nam Phái V0.5";
-  }
-  return "Nam Phái";
-}
-
 function scoreStateDescription(axis: Extract<AnnualAxisResult, { status: "available" }>): string | null {
   const trace = axis.scoreTrace;
   if (trace?.formulaVersion !== "v0.8-annual-palace-weighted-score") return null;
   switch (trace.scoreState) {
     case "no-signal":
-      return "Chưa có tín hiệu lưu niên nổi bật trong các cung được ánh xạ.";
+      return "Chưa có tín hiệu";
     case "balanced-signal":
-      return "Cát tinh và hung tinh đang cân bằng theo ánh xạ V0.8.";
+      return "Cân bằng tín hiệu";
     case "partial-data":
-      return "Thiếu một phần dữ liệu cung lưu niên; điểm được tính từ dữ liệu hiện có.";
+      return "Thiếu một phần dữ liệu";
     case "scored":
       return null;
   }
@@ -76,7 +60,6 @@ export function AnnualAxesSection({ chart, school, result }: AnnualAxesSectionPr
     setSelectedDomain((cur) => (cur === domain ? null : (domain as AnnualAxisDomain)));
   }
 
-  const badgeLabel = engineBadgeLabel(computed);
   const v08Trace =
     activeAxis?.status === "available" &&
     activeAxis.scoreTrace?.formulaVersion === "v0.8-annual-palace-weighted-score"
@@ -87,11 +70,7 @@ export function AnnualAxesSection({ chart, school, result }: AnnualAxesSectionPr
     <section className="annual-axes-section" data-module="annual-axes" aria-label="Sáu trục khí vận năm">
       <header className="annual-axes-section__head">
         <h3 className="annual-axes-section__title">Sáu trục khí vận năm</h3>
-        <span className="annual-axes-section__badge">{badgeLabel}</span>
         <span className="annual-axes-section__year">Năm {computed.annualYear}</span>
-        <span className="annual-axes-section__engine">
-          Engine {computed.versions.engineVersion}
-        </span>
       </header>
 
       <div className="annual-axes-section__body">
@@ -124,12 +103,12 @@ export function AnnualAxesSection({ chart, school, result }: AnnualAxesSectionPr
                     </>
                   )}
                   <br />
-                  Cung trọng tâm {v08Trace.primary.palaceName}
+                  Cung trọng tâm: {v08Trace.primary.palaceName}
                   <br />
-                  Cung phối hợp{" "}
+                  Cung phối hợp:{" "}
                   {v08Trace.cooperating.map((c) => c.palaceName).join(", ") || "—"}
                   <br />
-                  Lưu Thái Tuế nổi bật: {v08Trace.isThaiTueHighlighted ? "Có" : "Không"}
+                  Lưu Thái Tuế: {v08Trace.isThaiTueHighlighted ? "Có" : "Không"}
                 </>
               ) : (
                 <>

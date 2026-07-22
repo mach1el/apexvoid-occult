@@ -26,14 +26,6 @@ import {
   type AnnualFocusSummary,
 } from "./types";
 import { analyzeAnnualAxesNamPhaiV08 } from "./nam-phai-v08/analyze";
-import { analyzeAnnualAxesNamPhaiV07 } from "./nam-phai-v07/analyze";
-import { analyzeAnnualAxesNamPhaiV05 } from "./nam-phai-v05/analyze";
-import { analyzeAnnualAxesNamPhaiV04 } from "./nam-phai-v04/analyze";
-import {
-  isAnnualAxesV05Enabled,
-  isAnnualAxesV07Enabled,
-  isAnnualAxesV08Enabled,
-} from "../../feature-flags";
 
 const CONTRACT_VERSION = "0.2.0";
 const ENGINE_VERSION = "0.2.0";
@@ -142,26 +134,14 @@ function hasAnnualStructure(chart: ChartData, school: ZiweiSchool): boolean {
  * Public entry point — deterministic annual axes scoring for one chart +
  * school + annual year. Never mutates `chart` or the loaded knowledge.
  *
- * Nam Phái follows the V0.4 annual-delta model (`annualHeadPalace` as
- * router + triggered evidence + domain affinity). Trung Châu continues
- * to run the V0.2 pipeline byte-identically — the two knowledge/scoring
- * paths diverge here to protect the locked Trung Châu numeric regression
- * fixture. UI exposure remains gated by `isAnnualAxesV04Enabled()`.
+ * Nam Phái runs the V0.8 Lưu Niên palace-weighted core. Trung Châu
+ * continues on the V0.2 pipeline byte-identically.
  */
 export function analyzeAnnualAxes(chart: ChartData, options: { school: ZiweiSchool }): AnnualAxesResult {
   const { school } = options;
 
   if (school === "nam-phai") {
-    if (!isAnnualAxesV05Enabled()) {
-      return analyzeAnnualAxesNamPhaiV04(chart);
-    }
-    if (!isAnnualAxesV07Enabled()) {
-      return analyzeAnnualAxesNamPhaiV05(chart);
-    }
-    if (isAnnualAxesV08Enabled()) {
-      return analyzeAnnualAxesNamPhaiV08(chart);
-    }
-    return analyzeAnnualAxesNamPhaiV07(chart);
+    return analyzeAnnualAxesNamPhaiV08(chart);
   }
 
   const diagnostics = emptyAnnualAxesDiagnostics();
@@ -236,9 +216,7 @@ export function analyzeAnnualAxes(chart: ChartData, options: { school: ZiweiScho
     );
   }
 
-  // The Nam Phái branch has already been dispatched to the V0.4
-  // annual-delta analyzer above; from here on we are the Trung Châu path
-  // only and never emit small-limit focal evidence (school profile forbids it).
+  // Trung Châu path only — never emit small-limit focal evidence.
   const suppressSmallLimitFocal = false;
 
   const axes = {} as Record<AnnualAxisDomain, AnnualAxisResult>;

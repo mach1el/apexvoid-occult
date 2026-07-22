@@ -95,7 +95,7 @@ export function expandAnnualYears(
 }
 
 export const FAST_CORPUS_CONTRACT: AuditCorpusContract = {
-  contractId: "annual-axes-audit-fast-v0.4",
+  contractId: "annual-axes-audit-fast-v0.8",
   seed: 20260719,
   chartCount: 8,
   yearsPerChart: 3,
@@ -109,7 +109,7 @@ export const FAST_CORPUS_CONTRACT: AuditCorpusContract = {
 };
 
 export const FULL_CORPUS_CONTRACT: AuditCorpusContract = {
-  contractId: "annual-axes-audit-full-v0.4",
+  contractId: "annual-axes-audit-full-v0.8",
   seed: 20260719,
   chartCount: 100,
   yearsPerChart: 12,
