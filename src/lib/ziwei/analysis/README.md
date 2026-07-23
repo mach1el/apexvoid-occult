@@ -27,7 +27,7 @@ Analysis Modules:
 |--------|--------|
 | palace-overview | V1 experimental (`ziweiPalaceOverviewV1`, default OFF) |
 | annual-axes | available |
-| major-fortune | available V0.3.1 (`ziweiMajorFortuneV03Ordinal`, default ON) |
+| major-fortune | available V0.3.2 (`ziweiMajorFortuneV03Ordinal`, default ON) |
 | monthly-flow | rebuilding |
 
 ## Share rules

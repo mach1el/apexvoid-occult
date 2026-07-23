@@ -29,12 +29,12 @@ describe("Major Fortune V0.3 production status + flag", () => {
     vi.unstubAllEnvs();
   });
 
-  it("defaults enabled and returns available 0.3.1", () => {
+  it("defaults enabled and returns available 0.3.2", () => {
     expect(isMajorFortuneV03OrdinalEnabled()).toBe(true);
     expect(getAnalysisStatus("major-fortune")).toEqual({
       status: "available",
       module: "major-fortune",
-      version: "0.3.1",
+      version: "0.3.2",
     });
   });
 

@@ -11,6 +11,13 @@ export interface AdaptMajorFortuneOrdinalOptions {
   school: ZiweiSchool;
   /** Metadata only — never affects numerics. */
   yearInCycle?: number;
+  /** Explicit cycle focus for timeline analysis. Does not mutate ChartData. */
+  cycleOverride?: {
+    cycleIndex: number;
+    startAge: number;
+    endAge: number;
+    activePalaceIndex: number;
+  };
 }
 
 export interface MajorFortuneOrdinalCycleMetadata {
@@ -80,7 +87,7 @@ export interface MajorFortuneOrdinalV03Display {
 export interface MajorFortuneOrdinalV03Analysis {
   model: "v0.3-ordinal";
   experimental: false;
-  version: "0.3.1";
+  version: "0.3.2";
   school: ZiweiSchool;
   adapterStatus: MajorFortuneOrdinalAdapterStatus;
   cycle: MajorFortuneOrdinalCycleMetadata | null;

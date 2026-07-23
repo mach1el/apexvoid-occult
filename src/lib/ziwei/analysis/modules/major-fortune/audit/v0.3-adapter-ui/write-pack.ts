@@ -39,7 +39,7 @@ export function writeMajorFortuneV03AdapterUiPack(): {
   }
 
   const routing = getAnalysisStatus("major-fortune");
-  if (routing.status !== "available" || routing.version !== "0.3.1") {
+  if (routing.status !== "available" || routing.version !== "0.3.2") {
     hardGateFailures.push("production-routing-unexpected");
   }
 
@@ -193,7 +193,7 @@ export function writeMajorFortuneV03AdapterUiPack(): {
       "",
       "## Production safety",
       "",
-      "- `getAnalysisStatus(\"major-fortune\")` → `available` / `0.3.1` when enabled + knowledge valid",
+      "- `getAnalysisStatus(\"major-fortune\")` → `available` / `0.3.2` when enabled + knowledge valid",
       "- V0.1 / V0.2 / V0.3 ordinal formula unchanged",
       "- Monthly Flow remains rebuilding",
       "",

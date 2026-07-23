@@ -52,7 +52,7 @@ function main(): void {
   }
 
   const routing = getAnalysisStatus("major-fortune");
-  if (routing.status !== "available" || routing.version !== "0.3.1") {
+  if (routing.status !== "available" || routing.version !== "0.3.2") {
     issues.push("production-routing-unexpected");
   }
 

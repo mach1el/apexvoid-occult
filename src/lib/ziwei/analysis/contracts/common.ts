@@ -101,7 +101,7 @@ export function getAnalysisStatus(
       }
       return { status: "unavailable", module, reason: "invalid-knowledge" };
     }
-    return { status: "available", module, version: "0.3.1" };
+    return { status: "available", module, version: "0.3.2" };
   }
 
   // monthly-flow intentionally remains "rebuilding".

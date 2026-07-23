@@ -28,7 +28,7 @@ describe("ZiweiAnalysisRebuilding", () => {
     expect(container.querySelector("[data-status='available']")).not.toBeNull();
   });
 
-  it("reports major-fortune as available at V0.3.1 production", () => {
+  it("reports major-fortune as available at V0.3.2 production", () => {
     const { container } = render(<ZiweiAnalysisRebuilding module="major-fortune" />);
     expect(container.querySelector("[data-status='available']")).not.toBeNull();
   });

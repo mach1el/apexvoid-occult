@@ -70,11 +70,11 @@ describe("Major Fortune V0.2 source locator — positive pack", () => {
     60_000,
   );
 
-  it("Major Fortune production routing is available 0.3.1; V0.1 frozen control unchanged", () => {
+  it("Major Fortune production routing is available 0.3.2; V0.1 frozen control unchanged", () => {
     expect(getAnalysisStatus("major-fortune")).toEqual({
       status: "available",
       module: "major-fortune",
-      version: "0.3.1",
+      version: "0.3.2",
     });
     expect(compareV01AgainstFrozen().v01FrozenControlEquivalent).toBe(true);
   });

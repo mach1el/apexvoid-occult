@@ -32,3 +32,9 @@ export {
   type MajorFortuneProductionResult,
   type MajorFortuneOrdinalV03Analysis,
 } from "./v0.3-ordinal-adapter";
+/** V0.3 lifetime timeline (multi-cycle visualization analysis). */
+export {
+  analyzeMajorFortuneTimelineV03,
+  type MajorFortuneTimelinePoint,
+  type MajorFortuneTimelineResult,
+} from "./v0.3-ordinal-timeline";

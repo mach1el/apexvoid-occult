@@ -68,8 +68,8 @@ function enrichCycle(
 ): MajorFortuneOrdinalCycleMetadata | null {
   if (!cycle) return null;
   const palace =
-    chart.majorFortunePalace ??
     chart.palaces.find((p) => p.index === cycle.activePalaceIndex) ??
+    chart.majorFortunePalace ??
     null;
   return {
     ...cycle,
@@ -87,7 +87,10 @@ export function adaptChartToMajorFortuneOrdinalInput(
   chart: ChartData,
   options: AdaptMajorFortuneOrdinalOptions,
 ): MajorFortuneOrdinalAdapterResult {
-  const build = adaptCore(chart, { school: options.school });
+  const build = adaptCore(chart, {
+    school: options.school,
+    cycleOverride: options.cycleOverride,
+  });
   const cycle = enrichCycle(chart, build.cycle);
   const pillarPartial = Boolean(
     build.pillarContexts &&
@@ -167,7 +170,7 @@ export function analyzeMajorFortuneOrdinalV03(
   return {
     model: "v0.3-ordinal",
     experimental: false,
-    version: "0.3.1",
+    version: "0.3.2",
     school: options.school,
     adapterStatus,
     cycle,

@@ -3,8 +3,10 @@ import type { ZiweiSchool } from "../../../../facts";
 import type {
   MajorFortuneAdapterDiagnostics,
   MajorFortuneAdapterResolvedContext,
+  MajorFortuneCycleOverride,
 } from "./types";
 import adapterPolicy from "./policy/adapter-policy.v0.3.json";
+import { resolveMajorFortuneMutagensForStem } from "../../../../../calculation/resolve-major-fortune-mutagens";
 
 const PRINCIPAL = new Set(adapterPolicy.principalStarNames as string[]);
 
@@ -49,6 +51,7 @@ function detectForbiddenFields(chart: ChartData, diagnostics: MajorFortuneAdapte
 export function resolveAdapterContext(
   chart: ChartData,
   school: ZiweiSchool,
+  cycleOverride?: MajorFortuneCycleOverride,
 ): { context: MajorFortuneAdapterResolvedContext | null; diagnostics: MajorFortuneAdapterDiagnostics } {
   const diagnostics = emptyDiagnostics();
   detectForbiddenFields(chart, diagnostics);
@@ -57,17 +60,28 @@ export function resolveAdapterContext(
     diagnostics.disabledFamilies.push(`${disabled.signalFamilyId}:${disabled.reason}`);
   }
 
-  const activePalace = chart.majorFortunePalace;
+  const activePalace = cycleOverride
+    ? (chart.palaces.find((p) => p.index === cycleOverride.activePalaceIndex) ?? null)
+    : (chart.majorFortunePalace ?? null);
+
   if (!activePalace) {
-    diagnostics.noActiveMajorFortune.push("chart:no-active-major-fortune-palace");
+    diagnostics.noActiveMajorFortune.push(
+      cycleOverride
+        ? `cycle-override:palace-not-found:${cycleOverride.activePalaceIndex}`
+        : "chart:no-active-major-fortune-palace",
+    );
     return { context: null, diagnostics };
   }
 
-  const cycleIndex = activePalace.majorFortune?.order;
-  const startAge = activePalace.majorFortune?.start;
-  const endAge = activePalace.majorFortune?.end;
+  const cycleIndex = cycleOverride?.cycleIndex ?? activePalace.majorFortune?.order;
+  const startAge = cycleOverride?.startAge ?? activePalace.majorFortune?.start;
+  const endAge = cycleOverride?.endAge ?? activePalace.majorFortune?.end;
   if (cycleIndex === undefined || startAge === undefined || endAge === undefined) {
-    diagnostics.noActiveMajorFortune.push("majorFortunePalace.majorFortune incomplete");
+    diagnostics.noActiveMajorFortune.push(
+      cycleOverride
+        ? "cycle-override incomplete"
+        : "majorFortunePalace.majorFortune incomplete",
+    );
     return { context: null, diagnostics };
   }
 
@@ -86,15 +100,31 @@ export function resolveAdapterContext(
   );
 
   const presentNatalStarNames = new Set(natalStarsInActivePalace.map((s) => s.name));
+  const fortuneStem = activePalace.stem ?? null;
 
-  const majorMutagens = chart.majorMutagens ?? [];
-  if (school === "nam-phai" && majorMutagens.length > 0) {
+  // Timeline overrides must resolve cycle-specific mutagens from Calculation Core
+  // (never reuse the live chart.majorMutagens). The default single-cycle path keeps
+  // chart.majorMutagens for backward compatibility with Core output / test fixtures.
+  let majorMutagens: typeof chart.majorMutagens = [];
+  if (school === "trung-chau") {
+    if (cycleOverride) {
+      majorMutagens = fortuneStem
+        ? resolveMajorFortuneMutagensForStem(school, fortuneStem, chart.palaces)
+        : [];
+    } else if (chart.majorMutagens && chart.majorMutagens.length > 0) {
+      majorMutagens = chart.majorMutagens;
+    } else if (fortuneStem) {
+      majorMutagens = resolveMajorFortuneMutagensForStem(school, fortuneStem, chart.palaces);
+    }
+  }
+
+  if (school === "nam-phai" && (chart.majorMutagens?.length ?? 0) > 0) {
     diagnostics.namPhaiTransformationBlocked.push(
       "majorMutagens present but Nam Phái transformations unavailable until Calculation Core supports them",
     );
   }
 
-  const transformations = school === "trung-chau" ? majorMutagens : [];
+  const transformations = school === "trung-chau" ? (majorMutagens ?? []) : [];
 
   return {
     context: {
@@ -107,7 +137,7 @@ export function resolveAdapterContext(
       },
       activePalace,
       activePalaceBranch: activePalace.branch,
-      fortuneStem: activePalace.stem ?? null,
+      fortuneStem,
       menhElement,
       menhPalace,
       natalStarsInActivePalace,

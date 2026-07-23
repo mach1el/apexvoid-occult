@@ -89,10 +89,10 @@ function main(): void {
   }
 
   const status = getAnalysisStatus("major-fortune");
-  if (status.status !== "available" || status.version !== "0.3.1") {
+  if (status.status !== "available" || status.version !== "0.3.2") {
     issues.push({
       code: "production-routing",
-      message: `expected available/0.3.1, got ${JSON.stringify(status)}`,
+      message: `expected available/0.3.2, got ${JSON.stringify(status)}`,
     });
   }
 

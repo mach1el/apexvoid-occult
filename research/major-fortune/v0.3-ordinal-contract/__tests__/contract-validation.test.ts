@@ -26,13 +26,13 @@ describe("major-fortune v0.3 ordinal research pack", () => {
     expect(decision.v02HistoricalDecisionsUnchanged.eligibleShapeFragments).toBe(0);
   });
 
-  it("loads knowledge and exposes production major-fortune available 0.3.1", () => {
+  it("loads knowledge and exposes production major-fortune available 0.3.2", () => {
     const loaded = loadMajorFortuneOrdinalKnowledge();
     expect(loaded.ok).toBe(true);
     expect(getAnalysisStatus("major-fortune")).toEqual({
       status: "available",
       module: "major-fortune",
-      version: "0.3.1",
+      version: "0.3.2",
     });
   });
 });

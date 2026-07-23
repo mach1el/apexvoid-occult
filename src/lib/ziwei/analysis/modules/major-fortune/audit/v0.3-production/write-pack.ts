@@ -51,8 +51,8 @@ function collectProductionFailures(
   }
 
   const routing = metrics.overall.productionRouting;
-  if (routing.status !== "available" || routing.version !== "0.3.1") {
-    failures.push("production-status-not-available-0.3.1");
+  if (routing.status !== "available" || routing.version !== "0.3.2") {
+    failures.push("production-status-not-available-0.3.2");
   }
   if (!isMajorFortuneV03OrdinalEnabled()) {
     failures.push("feature-flag-default-disabled");
@@ -112,8 +112,8 @@ export function writeMajorFortuneV03ProductionPack(
   writeJson(join(policy, "branch-element-map.v0.3.json"), branchElementMap);
   writeJson(join(policy, "adapter-policy-delta.v0.3.1.json"), {
     adapterVersion: "0.3.1",
-    uiIntegrationVersion: "0.3.1",
-    productionModuleVersion: "0.3.1",
+    uiIntegrationVersion: "0.3.2",
+    productionModuleVersion: "0.3.2",
     formulaContractVersion: "0.3.0",
     note: "Adapter/frame and production-integration correction; ordinal formula unchanged.",
     transformationFrame: "direct-active-major-fortune-palace-only",
@@ -310,8 +310,8 @@ export function writeMajorFortuneV03ProductionPack(
     productionStatus: getAnalysisStatus("major-fortune"),
     monthlyFlowStatus: getAnalysisStatus("monthly-flow"),
     adapterVersion: "0.3.1",
-    uiIntegrationVersion: "0.3.1",
-    productionModuleVersion: "0.3.1",
+    uiIntegrationVersion: "0.3.2",
+    productionModuleVersion: "0.3.2",
     vietnameseBandLabels: true,
     scoringCoverageDisplayed: true,
     namPhaiShowsThreeOfFourPillars: true,
@@ -373,8 +373,8 @@ export function writeMajorFortuneV03ProductionPack(
     numericAuthority: "engineering-defined",
     productionStatus: "production",
     adapterVersion: m.adapterVersion,
-    uiIntegrationVersion: "0.3.1",
-    productionModuleVersion: "0.3.1",
+    uiIntegrationVersion: "0.3.2",
+    productionModuleVersion: "0.3.2",
     formulaContractVersion: "0.3.0",
     corpusId: m.corpusId,
     v03ContractHash: m.v03ContractHash,
@@ -407,8 +407,8 @@ export function writeMajorFortuneV03ProductionPack(
       "",
       "- formula contract: `0.3.0` (unchanged)",
       "- adapterVersion: `0.3.1`",
-      "- UI/integration: `0.3.1`",
-      "- production module: `0.3.1`",
+      "- UI/integration: `0.3.2`",
+      "- production module: `0.3.2`",
       "",
       "## Hard gates",
       "",
@@ -440,7 +440,7 @@ export function writeMajorFortuneV03ProductionPack(
       "",
       "- Feature flag `ziweiMajorFortuneV03Ordinal` default ON",
       "- Kill-switch `VITE_ZIWEI_MAJOR_FORTUNE_V03_ORDINAL=false`",
-      "- `getAnalysisStatus(\"major-fortune\")` → `available` / `0.3.1`",
+      "- `getAnalysisStatus(\"major-fortune\")` → `available` / `0.3.2`",
       "- Monthly Flow remains rebuilding",
       "",
       "## No further phase",

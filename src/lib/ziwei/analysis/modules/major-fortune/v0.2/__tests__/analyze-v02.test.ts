@@ -122,7 +122,7 @@ describe("analyzeMajorFortuneV02 — core contract", () => {
     expect(getAnalysisStatus("major-fortune")).toEqual({
       status: "available",
       module: "major-fortune",
-      version: "0.3.1",
+      version: "0.3.2",
     });
     expect(getAnalysisStatus("monthly-flow")).toEqual({
       status: "unavailable",

@@ -17,6 +17,7 @@ import { emitNhanHoa } from "./emit-nhan-hoa";
 import { emitTuHoaSatTinh } from "./emit-tu-hoa";
 import { validateAdapterEvidence } from "./validate-evidence";
 import type {
+  MajorFortuneCycleOverride,
   MajorFortuneOrdinalAdapterAnalysisResult,
   MajorFortuneOrdinalAdapterBuildResult,
 } from "./types";
@@ -30,15 +31,25 @@ function emptyPillarContexts(): Record<MajorFortuneOrdinalPillarId, MajorFortune
   };
 }
 
+export interface AdaptMajorFortuneOrdinalCoreOptions {
+  school: ZiweiSchool;
+  /** Explicit cycle focus for timeline analysis. Does not mutate ChartData. */
+  cycleOverride?: MajorFortuneCycleOverride;
+}
+
 /**
  * Adapt ChartData → normalized Major Fortune V0.3 ordinal evaluation input.
  * Does not invoke the ordinal evaluator.
  */
 export function adaptChartToMajorFortuneOrdinalInput(
   chart: ChartData,
-  options: { school: ZiweiSchool },
+  options: AdaptMajorFortuneOrdinalCoreOptions,
 ): MajorFortuneOrdinalAdapterBuildResult {
-  const { context, diagnostics } = resolveAdapterContext(chart, options.school);
+  const { context, diagnostics } = resolveAdapterContext(
+    chart,
+    options.school,
+    options.cycleOverride,
+  );
 
   if (!context) {
     return {
@@ -80,7 +91,6 @@ export function adaptChartToMajorFortuneOrdinalInput(
     "tu-hoa-sat-tinh": tu.context,
   };
 
-  // Ensure all pillars present
   for (const id of MAJOR_FORTUNE_ORDINAL_PILLAR_IDS) {
     if (!pillarContexts[id]) {
       pillarContexts[id] = { availability: "unavailable", reasonCodes: ["missing-emitter"] };
@@ -103,13 +113,16 @@ export function adaptChartToMajorFortuneOrdinalInput(
 }
 
 /**
- * Research-only end-to-end analysis: ChartData → adapter → pure ordinal evaluator.
+ * End-to-end analysis: ChartData → adapter → pure ordinal evaluator.
  */
 export function analyzeMajorFortuneOrdinalV03(
   chart: ChartData,
-  options: { school: ZiweiSchool; yearInCycle?: number },
+  options: AdaptMajorFortuneOrdinalCoreOptions & { yearInCycle?: number },
 ): MajorFortuneOrdinalAdapterAnalysisResult {
-  const build = adaptChartToMajorFortuneOrdinalInput(chart, { school: options.school });
+  const build = adaptChartToMajorFortuneOrdinalInput(chart, {
+    school: options.school,
+    cycleOverride: options.cycleOverride,
+  });
   if (!build.evaluationInput) {
     return {
       module: "major-fortune",

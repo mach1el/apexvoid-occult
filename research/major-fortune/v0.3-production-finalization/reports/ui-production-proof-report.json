@@ -7,7 +7,7 @@
   "productionStatus": {
     "status": "available",
     "module": "major-fortune",
-    "version": "0.3.1"
+    "version": "0.3.2"
   },
   "monthlyFlowStatus": {
     "status": "unavailable",
@@ -15,8 +15,8 @@
     "reason": "rebuilding"
   },
   "adapterVersion": "0.3.1",
-  "uiIntegrationVersion": "0.3.1",
-  "productionModuleVersion": "0.3.1",
+  "uiIntegrationVersion": "0.3.2",
+  "productionModuleVersion": "0.3.2",
   "vietnameseBandLabels": true,
   "scoringCoverageDisplayed": true,
   "namPhaiShowsThreeOfFourPillars": true

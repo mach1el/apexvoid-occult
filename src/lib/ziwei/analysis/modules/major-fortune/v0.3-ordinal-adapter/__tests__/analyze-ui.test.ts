@@ -32,7 +32,7 @@ describe("Major Fortune V0.3 ordinal-adapter UI wrapper", () => {
     const chart = calculateNamPhai(REGRESSION);
     const analysis = analyzeMajorFortuneOrdinalV03(chart, { school: "nam-phai" });
     expect(analysis.experimental).toBe(false);
-    expect(analysis.version).toBe("0.3.1");
+    expect(analysis.version).toBe("0.3.2");
     expect(analysis.model).toBe("v0.3-ordinal");
     expect(analysis.adapterStatus).toBe("partial");
     expect(analysis.result?.status).toBe("partial");
@@ -103,7 +103,7 @@ describe("Major Fortune V0.3 ordinal-adapter UI wrapper", () => {
     expect(getAnalysisStatus("major-fortune")).toEqual({
       status: "available",
       module: "major-fortune",
-      version: "0.3.1",
+      version: "0.3.2",
     });
     expect(majorFortuneOrdinalAdapterFamilyMatrix.disabled.some((d) => d.signalFamilyId === "hinh-ho-set")).toBe(
       true,

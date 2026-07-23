@@ -28,7 +28,7 @@ function decide(metrics: MajorFortuneV03AdapterAuditMetrics): {
   if (!metrics.overall.v03ContractValid) failures.push("v03-contract-invalid");
   if (
     metrics.overall.productionRouting.status !== "available" ||
-    metrics.overall.productionRouting.version !== "0.3.1"
+    metrics.overall.productionRouting.version !== "0.3.2"
   ) {
     failures.push("production-routing-unexpected");
   }
@@ -357,7 +357,7 @@ export function writeMajorFortuneV03AdapterAudit(
       "- V0.1 unchanged",
       "- V0.2 unchanged",
       "- V0.3 ordinal formula contract unchanged",
-      "- `getAnalysisStatus(\"major-fortune\")` → `available` / `0.3.1` when enabled",
+      "- `getAnalysisStatus(\"major-fortune\")` → `available` / `0.3.2` when enabled",
       "- Production UI + feature-flag kill-switch live in the production-finalization pack",
       "",
       "## Next step",

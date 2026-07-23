@@ -600,7 +600,7 @@ export function runMajorFortuneV03AdapterAudit(
   }
 
   const routing = getAnalysisStatus("major-fortune");
-  if (routing.status !== "available" || routing.version !== "0.3.1") {
+  if (routing.status !== "available" || routing.version !== "0.3.2") {
     hardGateFailures.push("production-routing-unexpected");
   }
 

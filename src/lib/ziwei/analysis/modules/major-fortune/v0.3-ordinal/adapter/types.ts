@@ -17,6 +17,14 @@ export interface MajorFortuneAdapterCycle {
   activePalaceIndex: number;
 }
 
+/** Explicit cycle focus for timeline / multi-cycle analysis — never mutates ChartData. */
+export interface MajorFortuneCycleOverride {
+  cycleIndex: number;
+  startAge: number;
+  endAge: number;
+  activePalaceIndex: number;
+}
+
 export interface MajorFortuneAdapterResolvedContext {
   school: MajorFortuneAdapterSchool;
   cycle: MajorFortuneAdapterCycle;
