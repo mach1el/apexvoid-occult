@@ -58,7 +58,14 @@
     "research:huyen-khi:validate-rule-seed-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/validate-rule-seed.ts",
     "research:huyen-khi:report-rule-seed-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/report-rule-seed.ts",
     "research:huyen-khi:export-review-workbook-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/export-review-workbook.ts",
-    "research:huyen-khi:review-rule-seed-fixture-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/review-rule-seed-fixture.ts"
+    "research:huyen-khi:review-rule-seed-fixture-v02": "npx tsx src/lib/ziwei/research/huyen-khi/rule-seed-v0-2/cli/review-rule-seed-fixture.ts",
+    "research:major-fortune-v02:validate": "npx tsx src/lib/ziwei/analysis/modules/major-fortune/audit/v0.2/cli/validate-research-pack.ts",
+    "research:major-fortune-v02:audit-fast": "vitest run src/lib/ziwei/analysis/modules/major-fortune/audit/v0.2 src/lib/ziwei/analysis/modules/major-fortune/v0.2/__tests__ src/lib/ziwei/analysis/knowledge/major-fortune-scoring/v0.2/__tests__ research/major-fortune/v0.2-foundation/__tests__",
+    "research:major-fortune-v02:audit-full": "MAJOR_FORTUNE_V02_FULL_AUDIT=1 vitest run src/lib/ziwei/analysis/modules/major-fortune/audit/v0.2/__tests__/full-audit.write.test.ts",
+    "research:major-fortune-v02:rule-coverage": "npx tsx src/lib/ziwei/analysis/modules/major-fortune/audit/v0.2/cli/report-rule-coverage.ts",
+    "research:major-fortune-v02:report": "npx tsx src/lib/ziwei/analysis/modules/major-fortune/audit/v0.2/cli/report-summary.ts",
+    "test:major-fortune-v01": "vitest run src/lib/ziwei/analysis/modules/major-fortune/__tests__",
+    "test:major-fortune-v02": "vitest run src/lib/ziwei/analysis/modules/major-fortune/v0.2/__tests__ src/lib/ziwei/analysis/knowledge/major-fortune-scoring/v0.2/__tests__ src/lib/ziwei/analysis/modules/major-fortune/audit/v0.2/__tests__ research/major-fortune/v0.2-foundation/__tests__"
   },
   "dependencies": {
     "html-to-image": "1.11.13",

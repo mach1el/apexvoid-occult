@@ -1,0 +1,312 @@
+{
+  "corpusId": "major-fortune-v0.2-audit-corpus",
+  "seed": 20260723,
+  "chartCount": 100,
+  "cycleObservationCount": 2332,
+  "includeAllAvailableMajorFortuneCycles": true,
+  "schools": [
+    "nam-phai",
+    "trung-chau"
+  ],
+  "train": {
+    "observationCount": 1868,
+    "chartCount": 80,
+    "score": {
+      "min": 50,
+      "max": 50,
+      "mean": 50,
+      "median": 50,
+      "quantiles": {
+        "p10": 50,
+        "p25": 50,
+        "p75": 50,
+        "p90": 50
+      },
+      "saturation0": 0,
+      "saturation50": 1868,
+      "saturation100": 0,
+      "nanOrInfinity": 0
+    },
+    "bandDistribution": {
+      "binh-on": 1868
+    },
+    "scoreStateDistribution": {
+      "partial-data": 1868
+    }
+  },
+  "holdout": {
+    "observationCount": 464,
+    "chartCount": 20,
+    "score": {
+      "min": 50,
+      "max": 50,
+      "mean": 50,
+      "median": 50,
+      "quantiles": {
+        "p10": 50,
+        "p25": 50,
+        "p75": 50,
+        "p90": 50
+      },
+      "saturation0": 0,
+      "saturation50": 464,
+      "saturation100": 0,
+      "nanOrInfinity": 0
+    },
+    "bandDistribution": {
+      "binh-on": 464
+    },
+    "scoreStateDistribution": {
+      "partial-data": 464
+    }
+  },
+  "score": {
+    "min": 50,
+    "max": 50,
+    "mean": 50,
+    "median": 50,
+    "quantiles": {
+      "p10": 50,
+      "p25": 50,
+      "p75": 50,
+      "p90": 50
+    },
+    "saturation0": 0,
+    "saturation50": 2332,
+    "saturation100": 0,
+    "nanOrInfinity": 0
+  },
+  "bandDistribution": {
+    "binh-on": 2332
+  },
+  "scoreStateDistribution": {
+    "partial-data": 2332
+  },
+  "pillarClipRate": {
+    "thien-thoi": 0,
+    "dia-loi": 0,
+    "nhan-hoa": 0,
+    "tu-hoa-sat-tinh": 0
+  },
+  "pillarRaw": {
+    "thien-thoi": {
+      "min": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "dia-loi": {
+      "min": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "nhan-hoa": {
+      "min": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "tu-hoa-sat-tinh": {
+      "min": 0,
+      "max": 0,
+      "mean": 0
+    }
+  },
+  "pillarCapped": {
+    "thien-thoi": {
+      "min": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "dia-loi": {
+      "min": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "nhan-hoa": {
+      "min": 0,
+      "max": 0,
+      "mean": 0
+    },
+    "tu-hoa-sat-tinh": {
+      "min": 0,
+      "max": 0,
+      "mean": 0
+    }
+  },
+  "ruleCoverage": {
+    "matchedStructuralRuleIds": [
+      "MFV02-BM-hinh-ho-nam-phai",
+      "MFV02-BM-hinh-ho-trung-chau",
+      "MFV02-BM-khoi-viet-nam-phai",
+      "MFV02-BM-khoi-viet-trung-chau",
+      "MFV02-BM-khong-kiep-nam-phai",
+      "MFV02-BM-khong-kiep-trung-chau",
+      "MFV02-BM-kinh-da-nam-phai",
+      "MFV02-BM-kinh-da-trung-chau",
+      "MFV02-BM-linh-hoa-nam-phai",
+      "MFV02-BM-linh-hoa-trung-chau",
+      "MFV02-BM-loc-ton-nam-phai",
+      "MFV02-BM-loc-ton-trung-chau",
+      "MFV02-BM-ta-huu-nam-phai",
+      "MFV02-BM-ta-huu-trung-chau",
+      "MFV02-EL-natal-controls-palace-nam-phai",
+      "MFV02-EL-natal-controls-palace-trung-chau",
+      "MFV02-EL-natal-generates-palace-nam-phai",
+      "MFV02-EL-natal-generates-palace-trung-chau",
+      "MFV02-EL-palace-controls-natal-nam-phai",
+      "MFV02-EL-palace-controls-natal-trung-chau",
+      "MFV02-EL-palace-generates-natal-nam-phai",
+      "MFV02-EL-palace-generates-natal-trung-chau",
+      "MFV02-EL-same-element-nam-phai",
+      "MFV02-EL-same-element-trung-chau",
+      "MFV02-NP-dien-tat-huynh-nam-phai",
+      "MFV02-NP-dien-tat-huynh-trung-chau",
+      "MFV02-NP-menh-tai-quan-nam-phai",
+      "MFV02-NP-menh-tai-quan-trung-chau",
+      "MFV02-NP-phu-tu-no-nam-phai",
+      "MFV02-NP-phu-tu-no-trung-chau",
+      "MFV02-NP-phuc-di-phu-nam-phai",
+      "MFV02-NP-phuc-di-phu-trung-chau",
+      "MFV02-PD-conflicting-brightness-nam-phai",
+      "MFV02-PD-conflicting-brightness-trung-chau",
+      "MFV02-PD-one-principal-nam-phai",
+      "MFV02-PD-one-principal-trung-chau",
+      "MFV02-PD-two-principals-nam-phai",
+      "MFV02-PD-two-principals-trung-chau",
+      "MFV02-PD-vo-chinh-dieu-nam-phai",
+      "MFV02-PD-vo-chinh-dieu-trung-chau",
+      "MFV02-SP-tu-vi-thien-phu-nam-phai",
+      "MFV02-SP-tu-vi-thien-phu-trung-chau",
+      "MFV02-XF-nam-phai-forbidden",
+      "MFV02-XF-trung-chau-exact"
+    ],
+    "executableContributionRuleIds": [],
+    "bySchool": {
+      "nam-phai": [
+        "MFV02-BM-hinh-ho-nam-phai",
+        "MFV02-BM-khoi-viet-nam-phai",
+        "MFV02-BM-khong-kiep-nam-phai",
+        "MFV02-BM-kinh-da-nam-phai",
+        "MFV02-BM-linh-hoa-nam-phai",
+        "MFV02-BM-loc-ton-nam-phai",
+        "MFV02-BM-ta-huu-nam-phai",
+        "MFV02-EL-natal-controls-palace-nam-phai",
+        "MFV02-EL-natal-generates-palace-nam-phai",
+        "MFV02-EL-palace-controls-natal-nam-phai",
+        "MFV02-EL-palace-generates-natal-nam-phai",
+        "MFV02-EL-same-element-nam-phai",
+        "MFV02-NP-dien-tat-huynh-nam-phai",
+        "MFV02-NP-menh-tai-quan-nam-phai",
+        "MFV02-NP-phu-tu-no-nam-phai",
+        "MFV02-NP-phuc-di-phu-nam-phai",
+        "MFV02-PD-conflicting-brightness-nam-phai",
+        "MFV02-PD-one-principal-nam-phai",
+        "MFV02-PD-two-principals-nam-phai",
+        "MFV02-PD-vo-chinh-dieu-nam-phai",
+        "MFV02-SP-tu-vi-thien-phu-nam-phai",
+        "MFV02-XF-nam-phai-forbidden"
+      ],
+      "trung-chau": [
+        "MFV02-BM-hinh-ho-trung-chau",
+        "MFV02-BM-khoi-viet-trung-chau",
+        "MFV02-BM-khong-kiep-trung-chau",
+        "MFV02-BM-kinh-da-trung-chau",
+        "MFV02-BM-linh-hoa-trung-chau",
+        "MFV02-BM-loc-ton-trung-chau",
+        "MFV02-BM-ta-huu-trung-chau",
+        "MFV02-EL-natal-controls-palace-trung-chau",
+        "MFV02-EL-natal-generates-palace-trung-chau",
+        "MFV02-EL-palace-controls-natal-trung-chau",
+        "MFV02-EL-palace-generates-natal-trung-chau",
+        "MFV02-EL-same-element-trung-chau",
+        "MFV02-NP-dien-tat-huynh-trung-chau",
+        "MFV02-NP-menh-tai-quan-trung-chau",
+        "MFV02-NP-phu-tu-no-trung-chau",
+        "MFV02-NP-phuc-di-phu-trung-chau",
+        "MFV02-PD-conflicting-brightness-trung-chau",
+        "MFV02-PD-one-principal-trung-chau",
+        "MFV02-PD-two-principals-trung-chau",
+        "MFV02-PD-vo-chinh-dieu-trung-chau",
+        "MFV02-SP-tu-vi-thien-phu-trung-chau",
+        "MFV02-XF-trung-chau-exact"
+      ]
+    }
+  },
+  "claimCoverage": [
+    "CLM-MFV02-003",
+    "CLM-MFV02-005",
+    "CLM-MFV02-006",
+    "CLM-MFV02-008",
+    "CLM-MFV02-009",
+    "CLM-MFV02-010",
+    "CLM-MFV02-011"
+  ],
+  "sourceCoverage": [
+    "SRC-MF-V02-CAP-001",
+    "SRC-MF-V02-INTAKE-001"
+  ],
+  "contributionMassByPillar": {
+    "thien-thoi": {
+      "positive": 0,
+      "negative": 0
+    },
+    "dia-loi": {
+      "positive": 0,
+      "negative": 0
+    },
+    "nhan-hoa": {
+      "positive": 0,
+      "negative": 0
+    },
+    "tu-hoa-sat-tinh": {
+      "positive": 0,
+      "negative": 0
+    }
+  },
+  "missingInputRatesBySchool": {
+    "nam-phai": 0,
+    "trung-chau": 0
+  },
+  "calculationCoreBlockerFrequencies": {
+    "MFV02-XF-nam-phai-forbidden": 1166
+  },
+  "mutualExclusionCoverage": [],
+  "activePalaceCoverage": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "cycleIndexCoverage": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "scoreStateConsistencyFailures": 0,
+  "namPhaiPartialRate": 1,
+  "trungChauTransformationStructuralHits": 1166,
+  "duplicatePhysicalFactRate": 0,
+  "annualYearIndependenceFailures": 0,
+  "deterministicRerunFailures": 0,
+  "scoreBoundsFailures": 0,
+  "cappedDeltaOutOfBoundsFailures": 0,
+  "v01Deterministic": true,
+  "v01FrozenControlEquivalent": true,
+  "hardGateFailures": []
+}

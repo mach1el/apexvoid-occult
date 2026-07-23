@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Major Fortune V0.2 Audit Corpus Contract",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "corpusId",
+    "seed",
+    "chartCount",
+    "trainCount",
+    "holdoutCount",
+    "includeAllAvailableMajorFortuneCycles",
+    "productFixturesOutsideCalibration"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "string" },
+    "corpusId": { "type": "string" },
+    "seed": { "type": "integer" },
+    "chartCount": { "type": "integer", "minimum": 1 },
+    "trainCount": { "type": "integer", "minimum": 1 },
+    "holdoutCount": { "type": "integer", "minimum": 1 },
+    "schools": { "type": "array", "items": { "type": "string" } },
+    "includeAllAvailableMajorFortuneCycles": { "type": "boolean" },
+    "productFixturesOutsideCalibration": { "type": "boolean" },
+    "researchGatesNote": { "type": "string" }
+  }
+}
