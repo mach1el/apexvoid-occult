@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "0.3.0",
+  "decisionId": "major-fortune-v0.3-evidence-adapter-audit-decision",
+  "readinessDecision": "EVIDENCE_ADAPTER_READY_FOR_CANDIDATE_EVALUATION",
+  "modelNature": "engineering-heuristic",
+  "classicalDoctrineVerified": false,
+  "numericAuthority": "engineering-defined",
+  "productionStatus": "research-only",
+  "adapterVersion": "0.3.0-adapter-r1",
+  "corpusId": "major-fortune-v0.2-audit-corpus",
+  "v03ContractHash": "ab40ba34d55f784cbcbe926f444b39f07984bf02127b2452b706e91af312b8e7",
+  "hardGateFailures": [],
+  "enabledSignalFamilies": [
+    "element-relation",
+    "principal-star-dignity",
+    "support-pressure-auxiliary-sets",
+    "major-fortune-transformations"
+  ],
+  "disabledSignalFamilies": [
+    {
+      "signalFamilyId": "severe-pressure-evidence",
+      "reason": "Pressure star sets are owned by Nhân Hòa; re-emitting into Tứ Hóa would violate cross-pillar ownership."
+    },
+    {
+      "signalFamilyId": "hinh-ho-set",
+      "reason": "Hình–Hổ lacks an unambiguous canonical set definition in repository-owned catalogs for Round 1."
+    }
+  ],
+  "includesUi": false,
+  "includesFeatureFlag": false,
+  "includesProductionRouting": false,
+  "v01Unchanged": true,
+  "v02Unchanged": true,
+  "v03OrdinalContractUnchanged": true,
+  "notes": "Structural hard gates passed. Narrow score distribution alone does not force revision."
+}

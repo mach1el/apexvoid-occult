@@ -1,0 +1,18 @@
+{
+  "bySchool": {
+    "nam-phai": {
+      "coverageHistogram": {
+        "1.00": 1166
+      },
+      "partialRate": 1,
+      "unavailableRate": 0
+    },
+    "trung-chau": {
+      "coverageHistogram": {
+        "1.00": 1166
+      },
+      "partialRate": 0,
+      "unavailableRate": 0
+    }
+  }
+}

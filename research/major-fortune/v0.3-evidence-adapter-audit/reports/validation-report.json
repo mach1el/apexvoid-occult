@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "hardGateFailures": [],
+  "v03ContractValid": true,
+  "productionRouting": {
+    "status": "unavailable",
+    "module": "major-fortune",
+    "reason": "rebuilding"
+  },
+  "enabledFamilyActivation": {
+    "element-relation": 2332,
+    "principal-star-dignity": 2516,
+    "support-pressure-auxiliary-sets": 264,
+    "major-fortune-transformations": 4664
+  },
+  "checks": {
+    "allScoresInBounds": true,
+    "allLevelsOrdinal": true,
+    "noMissingProvenance": true,
+    "noCrossPillarOwnership": true,
+    "temporalIndependence": true,
+    "deterministic": true,
+    "namPhaiXfBlocked": true
+  }
+}

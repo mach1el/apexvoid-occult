@@ -20,3 +20,8 @@ export { resolveMajorFortuneContext, type ResolvedMajorFortuneContext } from "./
 export { analyzeMajorFortuneV02 } from "./v0.2";
 /** V0.3 ordinal engineering-heuristic contract — research-only; no production route. */
 export { evaluateMajorFortuneOrdinal } from "./v0.3-ordinal";
+/** V0.3 ChartData → ordinal evidence adapter — research-only. */
+export {
+  adaptChartToMajorFortuneOrdinalInput,
+  analyzeMajorFortuneOrdinalV03,
+} from "./v0.3-ordinal/adapter";

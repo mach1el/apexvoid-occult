@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "issues": [],
+  "productionRouting": {
+    "status": "unavailable",
+    "module": "major-fortune",
+    "reason": "rebuilding"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "corpusId": "major-fortune-v0.2-audit-corpus",
+  "seed": 20260723,
+  "chartCount": 100,
+  "trainCount": 80,
+  "holdoutCount": 20,
+  "cycleObservationCount": 2332,
+  "adapterVersion": "0.3.0-adapter-r1",
+  "v03ContractHash": "ab40ba34d55f784cbcbe926f444b39f07984bf02127b2452b706e91af312b8e7",
+  "includeAllAvailableMajorFortuneCycles": true,
+  "schools": [
+    "nam-phai",
+    "trung-chau"
+  ],
+  "note": "Reuses frozen Major Fortune V0.2 audit corpus identity; no holdout tuning in this phase."
+}

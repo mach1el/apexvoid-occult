@@ -1,0 +1,23 @@
+{
+  "bySchool": {
+    "nam-phai": {
+      "acceptedEvidenceByFamily": {
+        "element-relation": 1166,
+        "principal-star-dignity": 1258,
+        "support-pressure-auxiliary-sets": 136
+      },
+      "rejectedEvidenceReasons": {},
+      "missingProvenanceCount": 0
+    },
+    "trung-chau": {
+      "acceptedEvidenceByFamily": {
+        "element-relation": 1166,
+        "principal-star-dignity": 1258,
+        "major-fortune-transformations": 4664,
+        "support-pressure-auxiliary-sets": 128
+      },
+      "rejectedEvidenceReasons": {},
+      "missingProvenanceCount": 0
+    }
+  }
+}

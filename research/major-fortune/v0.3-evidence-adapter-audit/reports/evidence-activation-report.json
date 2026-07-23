@@ -1,0 +1,68 @@
+{
+  "enabledFamilies": [
+    "element-relation",
+    "principal-star-dignity",
+    "support-pressure-auxiliary-sets",
+    "major-fortune-transformations"
+  ],
+  "disabledFamilies": [
+    "severe-pressure-evidence:Pressure star sets are owned by Nhân Hòa; re-emitting into Tứ Hóa would violate cross-pillar ownership.",
+    "hinh-ho-set:Hình–Hổ lacks an unambiguous canonical set definition in repository-owned catalogs for Round 1."
+  ],
+  "overallActivation": {
+    "element-relation": 2332,
+    "principal-star-dignity": 2516,
+    "support-pressure-auxiliary-sets": 264,
+    "major-fortune-transformations": 4664
+  },
+  "bySchool": {
+    "nam-phai": {
+      "familyActivation": {
+        "element-relation": 1166,
+        "principal-star-dignity": 1258,
+        "support-pressure-auxiliary-sets": 136
+      },
+      "acceptedEvidenceByFamily": {
+        "element-relation": 1166,
+        "principal-star-dignity": 1258,
+        "support-pressure-auxiliary-sets": 136
+      },
+      "supportMassByFamily": {
+        "principal-star-dignity": 871,
+        "element-relation": 927,
+        "support-pressure-auxiliary-sets": 111
+      },
+      "pressureMassByFamily": {
+        "element-relation": 711,
+        "principal-star-dignity": 387,
+        "support-pressure-auxiliary-sets": 25
+      }
+    },
+    "trung-chau": {
+      "familyActivation": {
+        "element-relation": 1166,
+        "principal-star-dignity": 1258,
+        "major-fortune-transformations": 4664,
+        "support-pressure-auxiliary-sets": 128
+      },
+      "acceptedEvidenceByFamily": {
+        "element-relation": 1166,
+        "principal-star-dignity": 1258,
+        "major-fortune-transformations": 4664,
+        "support-pressure-auxiliary-sets": 128
+      },
+      "supportMassByFamily": {
+        "principal-star-dignity": 871,
+        "major-fortune-transformations": 3498,
+        "element-relation": 927,
+        "support-pressure-auxiliary-sets": 111
+      },
+      "pressureMassByFamily": {
+        "element-relation": 711,
+        "major-fortune-transformations": 2332,
+        "principal-star-dignity": 387,
+        "support-pressure-auxiliary-sets": 17
+      }
+    }
+  }
+}

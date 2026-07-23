@@ -1,0 +1,13 @@
+{
+  "bySchool": {
+    "nam-phai": {
+      "annualMonthlyInfluenceFailures": 0,
+      "determinismFailures": 0
+    },
+    "trung-chau": {
+      "annualMonthlyInfluenceFailures": 0,
+      "determinismFailures": 0
+    }
+  },
+  "note": "Annual/monthly fields may appear in diagnostics but must not affect evidence or score."
+}
