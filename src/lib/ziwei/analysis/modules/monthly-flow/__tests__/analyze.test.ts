@@ -124,7 +124,7 @@ describe("analyzeMonthlyFlow — Trung Châu regression", () => {
 });
 
 describe("analyzeMonthlyFlow — Nam Phái school", () => {
-  it("preserves static school capabilities even when overlay unavailable", () => {
+  it("reports six-axis overlay supported via approved natal-domain resolver", () => {
     const chart = calculateNamPhai(REGRESSION_BIRTH);
     const result = analyzeMonthlyFlow(chart, {
       school: "nam-phai",
@@ -132,10 +132,10 @@ describe("analyzeMonthlyFlow — Nam Phái school", () => {
     });
     expect(result.capabilities.supportsMonthlyFocus).toBe(true);
     expect(result.capabilities.supportsMonthlyTransformations).toBe(true);
-    expect(result.capabilities.supportsSixAxisOverlayFromCurrentChart).toBe(false);
+    expect(result.capabilities.supportsSixAxisOverlayFromCurrentChart).toBe(true);
   });
 
-  it("without explicit annual-domain map, six-axis overlay stays unavailable", () => {
+  it("without explicit annual-domain map, chart annualPalaceName path stays unavailable", () => {
     const chart = calculateNamPhai(REGRESSION_BIRTH);
     const result = analyzeMonthlyFlow(chart, {
       school: "nam-phai",
@@ -150,7 +150,7 @@ describe("analyzeMonthlyFlow — Nam Phái school", () => {
     expect(result.diagnostics.incompleteAnnualDomainLabels.length).toBeGreaterThan(0);
   });
 
-  it("with temporary explicit annual-domain map, axes can score — not production Nam Phái support", () => {
+  it("with approved adapter map, axes can score for Nam Phái", () => {
     const chart = calculateNamPhai(REGRESSION_BIRTH);
     const explicitAnnualDomainMap = new Map<number, AnnualAxisDomain>([
       [0, "health"],
@@ -172,9 +172,7 @@ describe("analyzeMonthlyFlow — Nam Phái school", () => {
       explicitAnnualDomainMap,
     });
     expect(result.months.length).toBeGreaterThan(0);
-    // Escape-hatch only: a bare index→domain map is not a shipping Nam Phái
-    // six-axis adapter (no anchor weights / provenance).
-    expect(result.capabilities.supportsSixAxisOverlayFromCurrentChart).toBe(false);
+    expect(result.capabilities.supportsSixAxisOverlayFromCurrentChart).toBe(true);
     const anyAvailable = result.months.some((m) =>
       ANNUAL_AXIS_DOMAINS.some((d) => m.axes[d].status === "available"),
     );

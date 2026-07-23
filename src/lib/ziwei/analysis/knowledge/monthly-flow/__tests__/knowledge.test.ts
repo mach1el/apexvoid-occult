@@ -82,12 +82,15 @@ describe("monthly-flow scoring knowledge V0", () => {
     ).toBe(false);
   });
 
-  it("keeps Nam Phái six-axis overlay unavailable from ChartData", () => {
+  it("enables Nam Phái six-axis overlay via approved natal-domain resolver", () => {
     const loaded = loadMonthlyFlowScoringKnowledgeV0();
     if (!loaded.ok) throw new Error("failed to load");
     expect(
       loaded.knowledge.schoolCapabilities.profiles["nam-phai"].supportsSixAxisOverlayFromCurrentChart,
-    ).toBe(false);
+    ).toBe(true);
+    expect(
+      loaded.knowledge.schoolCapabilities.profiles["nam-phai"].sixAxisRequirement,
+    ).toMatch(/natal-domain/i);
   });
 
   it("covers experimental coefficients with a formula_design source", () => {

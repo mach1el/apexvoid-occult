@@ -1,5 +1,23 @@
 export type * from "./types";
 export { analyzeMonthlyFlow, resolveYearStatus } from "./analyze";
+export { createMonthlyCalculationProvider } from "./create-monthly-calculation-provider";
+export {
+  resolveMonthlyFlowAnnualDomains,
+  derivePrimaryDomainByPalaceIndex,
+  type MonthlyFlowAnnualDomainAdapterResult,
+  type MonthlyFlowAnnualDomainAdapterDiagnostics,
+} from "./resolve-monthly-flow-annual-domains";
+export {
+  analyzeMonthlyFlowProduction,
+  buildMonthlyFlowMonthSummaries,
+  buildMonthlyFlowMonthSummary,
+  resolveDefaultSelectedMonthKey,
+  MONTHLY_FLOW_INTEGRATION_VERSION,
+  MONTHLY_FLOW_CONTRACT_VERSION,
+  type MonthlyFlowProductionAnalysis,
+  type MonthlyFlowProductionDiagnostics,
+  type MonthlyFlowMonthSummary,
+} from "./v0.1-production";
 export { isEligibleNatalPhysicalStar } from "./collect-star-evidence";
 export {
   emptyMonthlyFlowMonthDiagnostics,

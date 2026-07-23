@@ -1,0 +1,419 @@
+.mf-flow {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.8rem 0.9rem 0.95rem;
+  color: var(--ash, #d4ccdf);
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.38));
+  border-radius: 20px;
+  background: linear-gradient(152deg, rgba(22, 28, 48, 0.84), rgba(8, 12, 24, 0.78));
+  box-shadow:
+    0 28px 64px -34px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+.mf-flow__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem 0.75rem;
+}
+
+.mf-flow__head-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.55rem;
+}
+
+.mf-flow__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.mf-flow__badge {
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.38));
+  padding: 0.1rem 0.38rem;
+  border-radius: 999px;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.mf-flow__school-chip,
+.mf-flow__year {
+  font-size: 0.72rem;
+  opacity: 0.82;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.mf-flow__viewing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.55rem;
+  font-size: 0.82rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(140, 196, 255, 0.28);
+  background: rgba(140, 196, 255, 0.06);
+}
+
+.mf-flow__back-current {
+  appearance: none;
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.45));
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--amber-soft, #f6e0a4);
+  border-radius: 999px;
+  padding: 0.18rem 0.55rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.mf-flow__back-current:hover,
+.mf-flow__back-current:focus-visible {
+  outline: 2px solid var(--amber-soft, #f6e0a4);
+  outline-offset: 2px;
+}
+
+.mf-flow__unavailable {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 0.9rem;
+}
+
+.mf-flow__selection {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.mf-flow__score-block {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+}
+
+.mf-flow__score-label {
+  font-size: 0.82rem;
+  opacity: 0.88;
+}
+
+.mf-flow__score-value {
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--jade, #3ecf8e);
+  line-height: 1;
+}
+
+.mf-flow__meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.35rem;
+  font-size: 0.78rem;
+  opacity: 0.88;
+}
+
+.mf-flow__meta-item {
+  padding: 0.12rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mf-flow-six-axis {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.mf-flow-six-axis__row {
+  padding: 0.45rem 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mf-flow-six-axis__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.mf-flow-six-axis__label {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.mf-flow-six-axis__score {
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--jade, #3ecf8e);
+}
+
+.mf-flow-six-axis__track {
+  margin-top: 0.35rem;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.mf-flow-six-axis__fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(62, 207, 142, 0.55), var(--jade, #3ecf8e));
+}
+
+.mf-flow-six-axis__fill.is-partial {
+  opacity: 0.65;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(62, 207, 142, 0.45),
+    rgba(62, 207, 142, 0.45) 4px,
+    rgba(62, 207, 142, 0.2) 4px,
+    rgba(62, 207, 142, 0.2) 8px
+  );
+}
+
+.mf-flow-six-axis__fill.is-unavailable {
+  width: 0 !important;
+}
+
+.mf-flow-six-axis__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.45rem;
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  opacity: 0.82;
+}
+
+.mf-flow-six-axis__band {
+  font-weight: 600;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.mf-flow-six-axis__drivers {
+  margin-top: 0.3rem;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  opacity: 0.88;
+}
+
+.mf-flow-six-axis__driver {
+  margin: 0.12rem 0 0;
+}
+
+.mf-flow-six-axis__driver-kind {
+  opacity: 0.85;
+}
+
+.mf-flow__details {
+  font-size: 0.82rem;
+}
+
+.mf-flow__details summary {
+  cursor: pointer;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.mf-flow__evidence-grid {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.45rem;
+}
+
+.mf-flow__evidence-domain h5 {
+  margin: 0 0 0.2rem;
+  font-size: 0.82rem;
+  color: var(--amber-soft, #f6e0a4);
+}
+
+.mf-flow__evidence-domain p {
+  margin: 0.12rem 0 0;
+  line-height: 1.35;
+}
+
+.mf-flow__disclaimer {
+  margin: 0;
+  font-size: 0.74rem;
+  line-height: 1.4;
+  opacity: 0.72;
+}
+
+/* —— Monthly timeline chart —— */
+.mf-flow-timeline {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.mf-flow-timeline--empty {
+  opacity: 0.9;
+  font-size: 0.9rem;
+  padding: 0.6rem 0;
+}
+
+.mf-flow-timeline__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.75rem;
+  font-size: 0.74rem;
+  opacity: 0.9;
+}
+
+.mf-flow-timeline__swatch {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 2px;
+  margin-right: 0.22rem;
+  vertical-align: -0.05rem;
+}
+
+.mf-flow-timeline__swatch--composite {
+  background: var(--jade, #3ecf8e);
+}
+
+.mf-flow-timeline__swatch--current {
+  width: 0.12rem;
+  height: 0.8rem;
+  border-radius: 1px;
+  background: var(--amber-soft, #f6e0a4);
+}
+
+.mf-flow-timeline__scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.15rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.mf-flow-timeline__svg {
+  display: block;
+  width: max(100%, var(--mf-flow-timeline-min-width, 320px));
+  height: auto;
+  min-height: 190px;
+}
+
+.mf-flow-timeline__grid-line {
+  stroke: var(--line-soft, rgba(104, 88, 148, 0.28));
+  stroke-width: 1;
+  stroke-dasharray: 3 5;
+}
+
+.mf-flow-timeline__axis-label {
+  fill: var(--ash, #d4ccdf);
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.mf-flow-timeline__bar-composite {
+  fill: var(--jade, #3ecf8e);
+  opacity: 0.92;
+}
+
+.mf-flow-timeline__bar-composite.is-partial {
+  opacity: 0.72;
+  stroke: rgba(62, 207, 142, 0.55);
+  stroke-width: 1;
+}
+
+.mf-flow-timeline__bar-composite.is-selected {
+  filter: brightness(1.12);
+  stroke: rgba(246, 224, 164, 0.75);
+  stroke-width: 1.5;
+}
+
+.mf-flow-timeline__bar-placeholder {
+  fill: rgba(180, 176, 196, 0.18);
+}
+
+.mf-flow-timeline__hit-area {
+  fill: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+.mf-flow-timeline__hit-area:focus-visible {
+  stroke: var(--amber-soft, #f6e0a4);
+  stroke-width: 1.5;
+}
+
+.mf-flow-timeline__current-line {
+  stroke: var(--amber-soft, #f6e0a4);
+  stroke-width: 1.5;
+  pointer-events: none;
+}
+
+.mf-flow-timeline__current-pill {
+  fill: rgba(18, 24, 40, 0.92);
+  stroke: var(--amber-soft, #f6e0a4);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.mf-flow-timeline__current-pill-text {
+  fill: var(--amber-soft, #f6e0a4);
+  font-size: 11px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.mf-flow-timeline__month-pill {
+  fill: rgba(246, 224, 164, 0.16);
+  stroke: rgba(246, 224, 164, 0.45);
+  stroke-width: 1;
+}
+
+.mf-flow-timeline__month-label {
+  fill: var(--ash, #d4ccdf);
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.mf-flow-timeline__month-label.is-selected {
+  opacity: 1;
+  font-weight: 650;
+}
+
+.mf-flow-timeline__month-label.is-current {
+  fill: var(--amber-soft, #f6e0a4);
+  font-weight: 650;
+}
+
+.mf-flow-timeline__tooltip {
+  font-size: 0.76rem;
+  line-height: 1.4;
+  padding: 0.4rem 0.55rem;
+  border-radius: 10px;
+  border: 1px solid var(--line-soft, rgba(104, 88, 148, 0.4));
+  background: rgba(12, 10, 24, 0.92);
+}
+
+@media (max-width: 640px) {
+  .mf-flow {
+    border-radius: 16px;
+    padding: 0.7rem;
+  }
+
+  .mf-flow__score-value {
+    font-size: 1.35rem;
+  }
+}

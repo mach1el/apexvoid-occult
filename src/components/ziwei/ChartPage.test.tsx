@@ -46,15 +46,13 @@ describe("ChartPage profile form", () => {
     expect(container.querySelector(".shell > .chart-section")).not.toBeNull();
     expect(container.querySelector(".shell > .chat-section")).not.toBeNull();
     expect(container.querySelector(".shell > .trend-section")).not.toBeNull();
-    // palace-overview, annual-axes, and major-fortune are default-on now: with the
-    // auto-calculated default chart already present on mount, they render real UI.
-    // Only monthly-flow still shows the rebuilding placeholder.
+    // palace-overview, annual-axes, major-fortune, and monthly-flow are default-on now:
+    // with the auto-calculated default chart already present on mount, they render real UI.
     expect(
-      screen.getAllByText(/Module vận khí đang được tái cấu trúc/i).length,
-    ).toBe(1);
-    expect(container.querySelectorAll("[data-status='unavailable']")).toHaveLength(
-      1,
-    );
+      screen.queryAllByText(/Module vận khí đang được tái cấu trúc/i).length,
+    ).toBe(0);
+    expect(container.querySelectorAll("[data-status='unavailable']")).toHaveLength(0);
+    expect(screen.getByText("Lưu Nguyệt")).toBeInTheDocument();
     expect(screen.getByText("Cấu trúc 12 cung")).toBeInTheDocument();
     expect(screen.getByText(/Sáu trục khí vận năm/)).toBeInTheDocument();
     expect(screen.getByText("Đại Vận")).toBeInTheDocument();

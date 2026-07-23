@@ -145,10 +145,24 @@ export function validateMonthlyFlowScoringKnowledge(
     knowledge.interactionRules.records,
   );
 
-  if (knowledge.schoolCapabilities.profiles["nam-phai"].supportsSixAxisOverlayFromCurrentChart) {
+  if (!knowledge.schoolCapabilities.profiles["nam-phai"].supportsSixAxisOverlayFromCurrentChart) {
     issues.push({
       path: "schoolCapabilities.profiles.nam-phai",
-      message: "Nam Phái must not support six-axis overlay from current ChartData in V0",
+      message:
+        "Nam Phái must support six-axis overlay via the approved Annual Axes natal-domain resolver",
+    });
+  }
+
+  const namPhaiRequirement =
+    knowledge.schoolCapabilities.profiles["nam-phai"].sixAxisRequirement;
+  if (
+    typeof namPhaiRequirement !== "string" ||
+    !namPhaiRequirement.toLowerCase().includes("natal-domain")
+  ) {
+    issues.push({
+      path: "schoolCapabilities.profiles.nam-phai.sixAxisRequirement",
+      message:
+        "Nam Phái sixAxisRequirement must reference the approved Annual Axes natal-domain resolver",
     });
   }
 

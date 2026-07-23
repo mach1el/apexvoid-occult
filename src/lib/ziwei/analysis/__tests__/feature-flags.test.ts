@@ -5,6 +5,8 @@ import {
   isAnnualAxesEnabled,
   isMajorFortuneV03OrdinalEnabled,
   MAJOR_FORTUNE_V03_ORDINAL_FEATURE_FLAG,
+  isMonthlyFlowV01Enabled,
+  MONTHLY_FLOW_V01_FEATURE_FLAG,
 } from "../feature-flags";
 
 describe("annual-axes feature flag defaults", () => {
@@ -101,5 +103,30 @@ describe("isMajorFortuneV03OrdinalEnabled", () => {
     vi.stubEnv("VITE_ZIWEI_MAJOR_FORTUNE_V03_ORDINAL", "false");
     window.history.replaceState({}, "", `/?${MAJOR_FORTUNE_V03_ORDINAL_FEATURE_FLAG}=1`);
     expect(isMajorFortuneV03OrdinalEnabled()).toBe(false);
+  });
+});
+
+describe("isMonthlyFlowV01Enabled", () => {
+  beforeEach(() => {
+    window.sessionStorage.clear();
+    window.history.replaceState({}, "", "/");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("defaults on", () => {
+    expect(isMonthlyFlowV01Enabled()).toBe(true);
+  });
+
+  it("env false disables", () => {
+    vi.stubEnv("VITE_ZIWEI_MONTHLY_FLOW_V01", "false");
+    expect(isMonthlyFlowV01Enabled()).toBe(false);
+  });
+
+  it("query 0 disables for session", () => {
+    window.history.replaceState({}, "", `/?${MONTHLY_FLOW_V01_FEATURE_FLAG}=0`);
+    expect(isMonthlyFlowV01Enabled()).toBe(false);
   });
 });

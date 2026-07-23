@@ -77,14 +77,12 @@ function validateComplete(
 
 /**
  * Build the palace-index → annual-domain map. Two acceptable sources:
- *  1. `explicitAnnualDomainMap` — a temporary escape hatch for charts that
- *     lack `annualPalaceName` (Nam Phái today). A plain
- *     `ReadonlyMap<number, AnnualAxisDomain>` is **not** a production-ready
- *     Nam Phái six-axis adapter: it does not encode anchor weights,
- *     multi-anchor domains, or school-approved label provenance. Do not
- *     treat presence of this map as shipping Nam Phái six-axis support.
+ *  1. `explicitAnnualDomainMap` — production callers should supply the map
+ *     from `resolveMonthlyFlowAnnualDomains` (approved Annual Axes school
+ *     resolver + primary-domain derivation). Ad-hoc maps are for tests only.
  *  2. The chart itself when every one of the twelve palaces carries a
- *     unique `annualPalaceName`. Never falls back to natal `palace.name`.
+ *     unique `annualPalaceName` (Trung Châu). Never falls back to natal
+ *     `palace.name`.
  *
  * On missing/duplicate/ambiguous labels the function returns null and
  * records diagnostics — every axis then goes unavailable rather than a

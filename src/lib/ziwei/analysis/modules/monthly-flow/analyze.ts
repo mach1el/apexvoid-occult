@@ -49,7 +49,7 @@ import type {
 } from "./types";
 
 const CONTRACT_VERSION = "0.1.0";
-const ENGINE_VERSION = "0.1.0";
+const ENGINE_VERSION = "0.1.1";
 const TOP_DRIVER_COUNT = 3;
 
 type MonthlyKnowledge = DeepReadonly<MonthlyFlowScoringKnowledgeV0> | MonthlyFlowScoringKnowledgeV0;
@@ -361,12 +361,10 @@ export function analyzeMonthlyFlow(
     yearInCycle?: number;
     explicitLeapContexts?: readonly ExplicitLeapMonthContext[];
     /**
-     * Temporary escape hatch for Nam Phái charts that lack
-     * `annualPalaceName`. A plain `ReadonlyMap<number, AnnualAxisDomain>`
-     * is **not** a production-ready Nam Phái six-axis adapter — it does
-     * not encode anchor weights, multi-anchor domains, or school-approved
-     * label provenance. Do not treat this parameter as shipping Nam Phái
-     * six-axis support.
+     * Primary-domain compatibility map from
+     * `resolveMonthlyFlowAnnualDomains` (approved school-aware Annual Axes
+     * resolver). Production callers must obtain this via the adapter — do
+     * not invent ad-hoc palace→domain maps.
      */
     explicitAnnualDomainMap?: ReadonlyMap<number, AnnualAxisDomain>;
   },

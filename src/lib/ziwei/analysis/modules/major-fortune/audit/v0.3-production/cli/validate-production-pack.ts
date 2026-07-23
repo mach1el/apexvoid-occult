@@ -46,7 +46,7 @@ function main(): void {
     issues.push("production-routing-unexpected");
   }
   const monthly = getAnalysisStatus("monthly-flow");
-  if (monthly.status !== "unavailable" || monthly.reason !== "rebuilding") {
+  if (monthly.status !== "available" || monthly.version !== "0.1.1") {
     issues.push("monthly-flow-routing-changed");
   }
 

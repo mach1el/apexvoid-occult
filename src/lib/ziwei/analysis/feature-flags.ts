@@ -86,3 +86,18 @@ export function isMajorFortuneV03OrdinalEnabled(): boolean {
     true,
   );
 }
+
+/**
+ * Monthly Flow V0.1 production — default ON.
+ * Kill-switch: VITE_ZIWEI_MONTHLY_FLOW_V01=false
+ * or ?ziweiMonthlyFlowV01=0 (session).
+ */
+export const MONTHLY_FLOW_V01_FEATURE_FLAG = "ziweiMonthlyFlowV01";
+
+export function isMonthlyFlowV01Enabled(): boolean {
+  return readSessionFlag(
+    MONTHLY_FLOW_V01_FEATURE_FLAG,
+    import.meta.env?.VITE_ZIWEI_MONTHLY_FLOW_V01,
+    true,
+  );
+}

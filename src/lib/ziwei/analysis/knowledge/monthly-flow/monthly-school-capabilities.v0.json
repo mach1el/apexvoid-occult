@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "0.1.0",
+  "schemaVersion": "0.1.1",
   "catalogId": "monthly-flow-school-capabilities-v0",
   "status": "experimental",
   "profiles": {
@@ -7,8 +7,8 @@
       "supportsMonthlyFocus": true,
       "supportsCalendarStemBranch": true,
       "supportsMonthlyTransformations": true,
-      "supportsSixAxisOverlayFromCurrentChart": false,
-      "sixAxisRequirement": "explicit complete annual-domain map from approved adapter",
+      "supportsSixAxisOverlayFromCurrentChart": true,
+      "sixAxisRequirement": "approved Annual Axes natal-domain resolver",
       "monthlyTransformationProviderRequirement": "Nam Phái Calculation Core provider",
       "supportsLeapMonth": "explicit_resolved_context_only"
     },

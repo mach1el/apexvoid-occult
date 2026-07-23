@@ -2,12 +2,15 @@
 
 import {
   isMajorFortuneV03OrdinalEnabled,
+  isMonthlyFlowV01Enabled,
   isPalaceOverviewV1Enabled,
 } from "../feature-flags";
 import { loadAnnualAxesKnowledgeV0 } from "../knowledge/annual-axes";
 import { loadAnnualAxesKnowledgeV08NamPhai } from "../knowledge/annual-axes/v0.8";
 import { loadPalaceOverviewKnowledgeV1 } from "../knowledge";
 import { loadMajorFortuneOrdinalKnowledge } from "../knowledge/major-fortune-scoring/v0.3-ordinal";
+import { loadMonthlyFlowScoringKnowledgeV0 } from "../knowledge/monthly-flow";
+import { createMonthlyCalculationProvider } from "../modules/monthly-flow/create-monthly-calculation-provider";
 import type { ZiweiSchool } from "../facts";
 
 export type ZiweiAnalysisModule =
@@ -104,7 +107,36 @@ export function getAnalysisStatus(
     return { status: "available", module, version: "0.3.2" };
   }
 
-  // monthly-flow intentionally remains "rebuilding".
+  if (module === "monthly-flow") {
+    if (!isMonthlyFlowV01Enabled()) {
+      return { status: "unavailable", module, reason: "rebuilding" };
+    }
+
+    const monthlyKnowledge = loadMonthlyFlowScoringKnowledgeV0();
+    if (!monthlyKnowledge.ok) {
+      if (import.meta.env?.DEV) {
+        console.warn("[monthly-flow] invalid knowledge", monthlyKnowledge.issues);
+      }
+      return { status: "unavailable", module, reason: "invalid-knowledge" };
+    }
+
+    const annualKnowledge = loadAnnualAxesKnowledgeV0();
+    if (!annualKnowledge.ok) {
+      if (import.meta.env?.DEV) {
+        console.warn("[monthly-flow] invalid annual-axes knowledge", annualKnowledge.issues);
+      }
+      return { status: "unavailable", module, reason: "invalid-knowledge" };
+    }
+
+    const school = options?.school ?? "nam-phai";
+    const provider = createMonthlyCalculationProvider(school);
+    if (!provider || provider.school !== school) {
+      return { status: "unavailable", module, reason: "invalid-knowledge" };
+    }
+
+    return { status: "available", module, version: "0.1.1" };
+  }
+
   return { status: "unavailable", module, reason: "rebuilding" };
 }
 

@@ -30,6 +30,7 @@ import { PalaceOverviewRadar } from "./analysis/PalaceOverviewRadar";
 import { AnnualAxesSection } from "./annual-axes/AnnualAxesSection";
 import { HuyenKhiResearchPreview } from "./huyen-khi/HuyenKhiResearchPreview";
 import { MajorFortuneSection } from "./major-fortune/MajorFortuneSection";
+import { MonthlyFlowSection } from "./monthly-flow/MonthlyFlowSection";
 import {
   getAnalysisStatus,
   isHuyenKhiPreviewV01Enabled,
@@ -289,6 +290,11 @@ export function ChartPage() {
 
   const majorFortuneStatus = useMemo(
     () => getAnalysisStatus("major-fortune", { school }),
+    [school, locationSearch],
+  );
+
+  const monthlyFlowStatus = useMemo(
+    () => getAnalysisStatus("monthly-flow", { school }),
     [school, locationSearch],
   );
 
@@ -763,7 +769,14 @@ export function ChartPage() {
                   status={majorFortuneStatus}
                 />
               )}
-              <ZiweiAnalysisRebuilding module="monthly-flow" />
+              {chartData && monthlyFlowStatus.status === "available" ? (
+                <MonthlyFlowSection chart={chartData} school={school} />
+              ) : (
+                <ZiweiAnalysisRebuilding
+                  module="monthly-flow"
+                  status={monthlyFlowStatus}
+                />
+              )}
             </div>
           </section>
         </main>
