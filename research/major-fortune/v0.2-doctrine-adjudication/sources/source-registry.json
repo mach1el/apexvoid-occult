@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "0.2.1",
+  "registryId": "major-fortune-v0.2-doctrine-source-registry",
+  "extends": [
+    "research/major-fortune/v0.2-foundation/sources/source-registry.json",
+    "research/major-fortune/sources/source-registry.json"
+  ],
+  "governanceNote": "Historical source records are retained by reference. Unknown locators are not upgraded to verified doctrine.",
+  "sources": [
+    {
+      "sourceId": "SRC-MF-V02-INTAKE-001",
+      "title": "Major Fortune V0.2 four-pillar mission brief (internal research intake)",
+      "authorEditorTranslator": "internal mission brief",
+      "editionPublication": "2026-07-23 agent mission",
+      "schoolAlignment": [
+        "mixed"
+      ],
+      "sourceType": "internal_research_intake",
+      "qualityTier": "unverified",
+      "pageOrInternalLocator": "agent mission brief 2026-07-23 Major Fortune V0.2 four-pillar foundation",
+      "accessStatus": "internal",
+      "allowedUsage": [
+        "candidate_formula_design",
+        "layer2_engineering_hypothesis_seed"
+      ],
+      "prohibitedUsage": [
+        "production_claim",
+        "school_policy_override",
+        "classical_attribution",
+        "verified_doctrine_authority"
+      ],
+      "notes": "Unverified intake. Must not become classical authority because contents appear plausible."
+    },
+    {
+      "sourceId": "SRC-MF-V02-CAP-001",
+      "title": "Major Fortune V0.1 school capabilities (experimental)",
+      "authorEditorTranslator": "apexvoid-occult engineering",
+      "editionPublication": "major-fortune-school-capabilities.v0.json / v0.2 school-capabilities",
+      "schoolAlignment": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "sourceType": "internal-engineering-policy",
+      "qualityTier": "engineering",
+      "pageOrInternalLocator": "src/lib/ziwei/analysis/knowledge/major-fortune-scoring/v0.2/school-capabilities.v0.2.json",
+      "accessStatus": "verified",
+      "allowedUsage": [
+        "document school capability gates",
+        "Nam Phái transformation exclusion",
+        "forbidden annual/monthly inputs"
+      ],
+      "prohibitedUsage": [
+        "classical attribution",
+        "production numeric authority for V0.2 deltas"
+      ],
+      "notes": "Authoritative for engineering capability gates only."
+    },
+    {
+      "sourceId": "SRC-MF-V02-CORE-BRANCH-001",
+      "title": "Branch–element mapping owned for V0.2 knowledge",
+      "authorEditorTranslator": "apexvoid-occult calculation contract",
+      "editionPublication": "seeded from calendar sexagenary",
+      "schoolAlignment": [
+        "mixed"
+      ],
+      "sourceType": "internal-calculation-contract",
+      "qualityTier": "engineering",
+      "pageOrInternalLocator": "src/lib/ziwei/analysis/knowledge/major-fortune-scoring/v0.2/branch-element-map.v0.2.json",
+      "accessStatus": "verified",
+      "allowedUsage": [
+        "palace element lookup for element-relation pillar"
+      ],
+      "prohibitedUsage": [
+        "classical attribution",
+        "doctrine authority for polarity or rawDelta magnitudes"
+      ],
+      "notes": "Engineering map only."
+    },
+    {
+      "sourceId": "SRC-MF-V02-ADJ-GOV-001",
+      "title": "Major Fortune V0.2 three-layer scoring governance correction",
+      "authorEditorTranslator": "apexvoid research governance",
+      "editionPublication": "v0.2-doctrine-adjudication mission 2026-07-23",
+      "schoolAlignment": [
+        "mixed"
+      ],
+      "sourceType": "internal-research-governance",
+      "qualityTier": "engineering",
+      "pageOrInternalLocator": "research/major-fortune/v0.2-doctrine-adjudication/V0.2-DOCTRINE-DECISION.md#three-layer",
+      "accessStatus": "internal",
+      "allowedUsage": [
+        "separate doctrinal evidence from engineering parameterization",
+        "forbid classical attribution of numeric rawDelta"
+      ],
+      "prohibitedUsage": [
+        "classical doctrine for star effects",
+        "authorize unverified intake as classical"
+      ],
+      "notes": "Classical sources need not contain literal +10/-15. Numerics are Layer 2 engineering candidates."
+    },
+    {
+      "sourceId": "SRC-MF-CLASSICAL-TAN-BIEN-001",
+      "title": "Tử Vi Đẩu Số Tân Biên",
+      "authorEditorTranslator": "Vân Đằng Thái Thứ Lang",
+      "editionPublication": "Classical Text / Pre-1975",
+      "schoolAlignment": [
+        "nam-phai"
+      ],
+      "sourceType": "classical_text",
+      "qualityTier": "primary",
+      "pageOrInternalLocator": "Unknown",
+      "accessStatus": "incomplete",
+      "allowedUsage": [
+        "calculation_core_reference_when_locator_known"
+      ],
+      "prohibitedUsage": [
+        "verified_doctrine_upgrade_without_locator",
+        "semantic_override",
+        "authorize_v0.2_numeric_polarity"
+      ],
+      "notes": "Historical record retained from research/major-fortune/sources. pageOrInternalLocator Unknown — NOT upgraded to verified doctrine."
+    },
+    {
+      "sourceId": "SRC-MF-V02-ADJ-FOUNDATION-PACK-001",
+      "title": "Major Fortune V0.2 foundation research pack (PR #120)",
+      "authorEditorTranslator": "apexvoid research",
+      "editionPublication": "research/major-fortune/v0.2-foundation @ 39cb5bf",
+      "schoolAlignment": [
+        "mixed"
+      ],
+      "sourceType": "internal-research-pack",
+      "qualityTier": "engineering",
+      "pageOrInternalLocator": "research/major-fortune/v0.2-foundation/",
+      "accessStatus": "verified",
+      "allowedUsage": [
+        "reference foundation decision RESEARCH_INCOMPLETE",
+        "reference structural scaffolding"
+      ],
+      "prohibitedUsage": [
+        "classical attribution",
+        "treat foundation as production approval"
+      ],
+      "notes": "Repository research pack proves engineering scaffolding, not classical doctrine."
+    }
+  ]
+}

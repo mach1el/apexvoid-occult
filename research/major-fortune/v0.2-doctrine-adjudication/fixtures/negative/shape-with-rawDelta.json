@@ -1,0 +1,8 @@
+{
+  "shapeId": "SHAPE-BAD",
+  "authorizationStatus": "not-authorized",
+  "rawDelta": 10,
+  "includedRuleFamilies": [
+    "element-relation"
+  ]
+}

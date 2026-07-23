@@ -1,0 +1,19 @@
+{
+  "shapeId": "SHAPE-BAD2",
+  "authorizationStatus": "authorized",
+  "eligibleSchools": [
+    "nam-phai"
+  ],
+  "includedRuleFamilies": [
+    "thai-tue"
+  ],
+  "excludedRuleFamilies": [],
+  "blockedRuleFamilies": [],
+  "requiredCalculationCoreCapabilities": [],
+  "signConstraints": {},
+  "relativeOrderingConstraints": [],
+  "allowedEngineeringCandidateRanges": {},
+  "pillarBudgetConstraints": {},
+  "unresolvedAssumptions": [],
+  "invalidationConditions": []
+}

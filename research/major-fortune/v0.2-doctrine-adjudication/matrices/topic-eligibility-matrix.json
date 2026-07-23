@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "0.2.1",
+  "matrixId": "major-fortune-v0.2-topic-eligibility",
+  "topics": [
+    {
+      "topicId": "element-relation",
+      "eligibility": "research-blocked",
+      "pillarId": "thien-thoi",
+      "schools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-EL-EXIST",
+        "CLM-MFV02-ADJ-EL-POLARITY",
+        "CLM-MFV02-ADJ-EL-MUTEX",
+        "CLM-MFV02-ADJ-EL-MAP"
+      ]
+    },
+    {
+      "topicId": "thai-tue",
+      "eligibility": "excluded-from-v0.2",
+      "pillarId": null,
+      "schools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-TT-ANNUAL-FORBIDDEN",
+        "CLM-MFV02-ADJ-TT-NATAL-UNPROVEN"
+      ]
+    },
+    {
+      "topicId": "natal-palace-groups",
+      "eligibility": "research-blocked",
+      "pillarId": "dia-loi",
+      "schools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-NPG-EXIST",
+        "CLM-MFV02-ADJ-NPG-NOT-DOCTRINE"
+      ]
+    },
+    {
+      "topicId": "principal-star-dignity",
+      "eligibility": "research-blocked",
+      "pillarId": "nhan-hoa",
+      "schools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-PD-EXIST",
+        "CLM-MFV02-ADJ-PD-NUMERIC",
+        "CLM-MFV02-ADJ-PD-TAM-KHONG"
+      ]
+    },
+    {
+      "topicId": "star-pattern-compatibility",
+      "eligibility": "research-blocked",
+      "pillarId": "nhan-hoa",
+      "schools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-SP-EXIST",
+        "CLM-MFV02-ADJ-SP-POLARITY",
+        "CLM-MFV02-ADJ-SP-MIXED-NEUTRAL"
+      ]
+    },
+    {
+      "topicId": "major-fortune-transformations-trung-chau",
+      "eligibility": "research-blocked",
+      "pillarId": "tu-hoa-sat-tinh",
+      "schools": [
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-XF-TC-SCOPE",
+        "CLM-MFV02-ADJ-XF-TC-POLARITY"
+      ]
+    },
+    {
+      "topicId": "major-fortune-transformations-nam-phai",
+      "eligibility": "blocked-by-calculation-core",
+      "pillarId": "tu-hoa-sat-tinh",
+      "schools": [
+        "nam-phai"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-XF-NP-CORE"
+      ]
+    },
+    {
+      "topicId": "benefic-malefic-sets",
+      "eligibility": "research-blocked",
+      "pillarId": "tu-hoa-sat-tinh",
+      "schools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-BM-EXIST",
+        "CLM-MFV02-ADJ-BM-SETS-UNVERIFIED"
+      ]
+    },
+    {
+      "topicId": "tuan-triet",
+      "eligibility": "research-blocked",
+      "pillarId": "thien-thoi",
+      "schools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-VOID-EXIST"
+      ]
+    },
+    {
+      "topicId": "natal-resilience",
+      "eligibility": "metadata-only",
+      "pillarId": null,
+      "schools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "claimIds": [
+        "CLM-MFV02-ADJ-RESILIENCE-META"
+      ]
+    }
+  ]
+}

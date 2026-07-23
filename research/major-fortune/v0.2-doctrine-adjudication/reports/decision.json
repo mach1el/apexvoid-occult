@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "0.2.1",
+  "decisionId": "major-fortune-v0.2-doctrine-decision",
+  "baseMasterSha": "39cb5bfc64d0f35afd38ba5ae9bbf7dcf8596144",
+  "readinessDecision": "RESEARCH_INCOMPLETE",
+  "authorizedShapeIds": [],
+  "provisionalShapeIds": [
+    "SHAPE-MFV02-SHARED-STRUCTURAL-CORE",
+    "SHAPE-MFV02-TRUNG-CHAU-XF-STRUCTURAL",
+    "SHAPE-MFV02-NAM-PHAI-NO-XF"
+  ],
+  "numericCandidatesEvaluated": false,
+  "v01Unchanged": true,
+  "productionRoutingUnchanged": true,
+  "productionRoutingExpected": {
+    "status": "unavailable",
+    "module": "major-fortune",
+    "reason": "rebuilding"
+  },
+  "candidateEligibleRuleFamilies": [],
+  "researchBlockedRuleFamilies": [
+    "element-relation",
+    "natal-palace-groups",
+    "principal-star-dignity",
+    "star-pattern-compatibility",
+    "major-fortune-transformations-trung-chau",
+    "benefic-malefic-sets",
+    "tuan-triet",
+    "tam-khong"
+  ],
+  "excludedRuleFamilies": [
+    "thai-tue"
+  ],
+  "blockedByCalculationCoreFamilies": [
+    "major-fortune-transformations-nam-phai"
+  ],
+  "metadataOnlyFamilies": [
+    "natal-resilience"
+  ],
+  "openContradictionIds": [
+    "CTR-MFV02-ADJ-003"
+  ],
+  "notes": "No coherent authorized candidate shape; Layer-1 locators required."
+}

@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "0.2.1",
+  "logId": "major-fortune-v0.2-doctrine-contradiction-log",
+  "extends": [
+    "research/major-fortune/v0.2-foundation/contradictions/contradiction-log.json"
+  ],
+  "contradictions": [
+    {
+      "contradictionId": "CTR-MFV02-ADJ-001",
+      "claimIds": [
+        "CLM-MFV02-ADJ-TT-ANNUAL-FORBIDDEN",
+        "CLM-MFV02-ADJ-TT-NATAL-UNPROVEN"
+      ],
+      "summary": "Intake mentioned Thái Tuế group scoring while independence forbids annual taiTuePalace; natal decade-stable ring unproven.",
+      "adjudication": "excluded-from-v0.2",
+      "runtimeImplication": "Entire Thái Tuế topic excluded; no hidden annualYear dependency.",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-V02-CAP-001"
+      ],
+      "status": "resolved"
+    },
+    {
+      "contradictionId": "CTR-MFV02-ADJ-002",
+      "claimIds": [
+        "CLM-MFV02-ADJ-XF-TC-SCOPE",
+        "CLM-MFV02-ADJ-XF-NP-CORE"
+      ],
+      "summary": "Four-pillar model includes Tứ Hóa pillar while Nam Phái Core cannot supply MF transformations.",
+      "adjudication": "school-gated-core-block",
+      "runtimeImplication": "Nam Phái XF blocked-by-calculation-core; candidate readiness must not require Nam Phái XF.",
+      "sourceIds": [
+        "SRC-MF-V02-CAP-001"
+      ],
+      "status": "resolved"
+    },
+    {
+      "contradictionId": "CTR-MFV02-ADJ-003",
+      "claimIds": [
+        "CLM-MFV02-ADJ-EL-POLARITY",
+        "CLM-MFV02-ADJ-BM-SETS-UNVERIFIED",
+        "CLM-MFV02-ADJ-LAYER-SEPARATION"
+      ],
+      "summary": "Intake hypothesizes polarities but is prohibited from classical attribution; classical Tan Bien locator Unknown.",
+      "adjudication": "open-blocks-ready",
+      "runtimeImplication": "READY_FOR_V0_2_CANDIDATE denied until Layer-1 locators or explicit human-approved governance bar.",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-CLASSICAL-TAN-BIEN-001",
+        "SRC-MF-V02-ADJ-GOV-001"
+      ],
+      "status": "open"
+    }
+  ]
+}

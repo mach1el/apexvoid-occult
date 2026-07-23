@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "0.2.1",
+  "registryId": "major-fortune-v0.2-core-blocker-registry",
+  "blockers": [
+    {
+      "blockerId": "CORE-MFV02-NAM-PHAI-XF",
+      "school": "nam-phai",
+      "requiredProducerFields": [
+        "fortuneStem",
+        "mutagen",
+        "exactTargetStar",
+        "exactTargetPalace"
+      ],
+      "affectedRuleFamilies": [
+        "major-fortune-transformations-nam-phai"
+      ],
+      "eligibility": "blocked-by-calculation-core",
+      "notes": "Do not fabricate; separate Core PR."
+    },
+    {
+      "blockerId": "CORE-MFV02-VOID-IDENTITY",
+      "school": "mixed",
+      "requiredProducerFields": [
+        "tuanIdentity",
+        "trietIdentity",
+        "affectedPalaceOrFrame"
+      ],
+      "affectedRuleFamilies": [
+        "tuan-triet"
+      ],
+      "eligibility": "research-blocked",
+      "notes": "Also needs pre-void evidence definition and thresholds."
+    },
+    {
+      "blockerId": "CORE-MFV02-NATAL-THAI-TUE-RING",
+      "school": "mixed",
+      "requiredProducerFields": [
+        "decadeStableThaiTueRingIndependentOfAnnualYear"
+      ],
+      "affectedRuleFamilies": [
+        "thai-tue"
+      ],
+      "eligibility": "excluded-from-v0.2",
+      "notes": "Until proven, topic excluded."
+    }
+  ]
+}

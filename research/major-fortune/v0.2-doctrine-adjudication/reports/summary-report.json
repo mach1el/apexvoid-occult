@@ -1,0 +1,66 @@
+{
+  "reportId": "major-fortune-v0.2-doctrine-summary",
+  "readinessDecision": "RESEARCH_INCOMPLETE",
+  "topics": {
+    "element-relation": "research-blocked",
+    "thai-tue": "excluded-from-v0.2",
+    "natal-palace-groups": "research-blocked",
+    "principal-star-dignity": "research-blocked",
+    "star-pattern-compatibility": "research-blocked",
+    "major-fortune-transformations-trung-chau": "research-blocked",
+    "major-fortune-transformations-nam-phai": "blocked-by-calculation-core",
+    "benefic-malefic-sets": "research-blocked",
+    "tuan-triet": "research-blocked",
+    "natal-resilience": "metadata-only"
+  },
+  "shapes": [
+    {
+      "shapeId": "SHAPE-MFV02-SHARED-STRUCTURAL-CORE",
+      "authorizationStatus": "not-authorized"
+    },
+    {
+      "shapeId": "SHAPE-MFV02-TRUNG-CHAU-XF-STRUCTURAL",
+      "authorizationStatus": "not-authorized"
+    },
+    {
+      "shapeId": "SHAPE-MFV02-NAM-PHAI-NO-XF",
+      "authorizationStatus": "not-authorized"
+    }
+  ],
+  "authorizedShapeFrozen": false,
+  "numericCandidatesEvaluated": false,
+  "locatorCoverage": {
+    "known": 5,
+    "unknown": 1,
+    "byTier": {
+      "unverified": 1,
+      "engineering": 4,
+      "primary": 1
+    }
+  },
+  "openContradictions": [
+    "CTR-MFV02-ADJ-003"
+  ],
+  "candidateEligibleRuleFamilies": [],
+  "researchBlockedRuleFamilies": [
+    "element-relation",
+    "natal-palace-groups",
+    "principal-star-dignity",
+    "star-pattern-compatibility",
+    "major-fortune-transformations-trung-chau",
+    "benefic-malefic-sets",
+    "tuan-triet",
+    "tam-khong"
+  ],
+  "excludedRuleFamilies": [
+    "thai-tue"
+  ],
+  "blockedByCalculationCoreFamilies": [
+    "major-fortune-transformations-nam-phai"
+  ],
+  "metadataOnlyFamilies": [
+    "natal-resilience"
+  ],
+  "v01Unchanged": true,
+  "productionRoutingUnchanged": true
+}

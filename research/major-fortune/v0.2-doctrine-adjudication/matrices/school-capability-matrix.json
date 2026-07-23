@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "0.2.1",
+  "matrixId": "major-fortune-v0.2-school-capability-matrix",
+  "sourceIds": [
+    "SRC-MF-V02-CAP-001"
+  ],
+  "schools": {
+    "nam-phai": {
+      "supportsOverallFrame": true,
+      "supportsTwelveDomainOverlay": false,
+      "supportsMajorFortuneTransformations": false,
+      "transformationPolicy": "blocked-by-calculation-core",
+      "forbiddenInputs": [
+        "annualStars",
+        "annualMutagens",
+        "taiTuePalace",
+        "smallLimitPalace",
+        "annualHeadPalace",
+        "isLuuNienDaiVan",
+        "monthlyPalaces",
+        "flowMonths"
+      ],
+      "failClosed": true
+    },
+    "trung-chau": {
+      "supportsOverallFrame": true,
+      "supportsTwelveDomainOverlay": true,
+      "supportsMajorFortuneTransformations": true,
+      "transformationPolicy": "structural-tuple-gate-numeric-research-blocked",
+      "forbiddenInputs": [
+        "annualStars",
+        "annualMutagens",
+        "taiTuePalace",
+        "smallLimitPalace",
+        "annualHeadPalace",
+        "isLuuNienDaiVan",
+        "monthlyPalaces",
+        "flowMonths"
+      ],
+      "failClosed": true
+    }
+  }
+}

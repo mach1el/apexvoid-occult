@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "registryId",
+    "claims"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "registryId": {
+      "type": "string"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "claimId",
+          "topic",
+          "statement",
+          "school",
+          "sourceIds",
+          "locators",
+          "confidence",
+          "status",
+          "runtimeImplication",
+          "candidateEligibility"
+        ],
+        "properties": {
+          "claimId": {
+            "type": "string",
+            "pattern": "^CLM-"
+          },
+          "topic": {
+            "type": "string"
+          },
+          "statement": {
+            "type": "string"
+          },
+          "school": {
+            "enum": [
+              "nam-phai",
+              "trung-chau",
+              "mixed"
+            ]
+          },
+          "sourceIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "locators": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "confidence": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "polarity": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "requiredFacts": {
+            "type": "array"
+          },
+          "runtimeImplication": {
+            "type": "string"
+          },
+          "contradictions": {
+            "type": "array"
+          },
+          "candidateEligibility": {
+            "enum": [
+              "candidate-eligible",
+              "research-blocked",
+              "blocked-by-calculation-core",
+              "excluded-from-v0.2",
+              "metadata-only"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

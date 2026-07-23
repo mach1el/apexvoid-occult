@@ -1,0 +1,234 @@
+{
+  "schemaVersion": "0.2.1",
+  "registryId": "major-fortune-v0.2-candidate-shape-registry",
+  "exactRawDeltaForbidden": true,
+  "shapes": [
+    {
+      "shapeId": "SHAPE-MFV02-SHARED-STRUCTURAL-CORE",
+      "authorizationStatus": "not-authorized",
+      "eligibleSchools": [
+        "nam-phai",
+        "trung-chau"
+      ],
+      "includedRuleFamilies": [],
+      "excludedRuleFamilies": [
+        "thai-tue",
+        "tuan-triet",
+        "tam-khong",
+        "benefic-malefic-sets",
+        "star-pattern-compatibility",
+        "principal-star-dignity",
+        "natal-palace-groups",
+        "element-relation",
+        "major-fortune-transformations"
+      ],
+      "blockedRuleFamilies": [],
+      "requiredCalculationCoreCapabilities": [
+        "activeMajorFortunePalace",
+        "menhElement",
+        "palaceBranch"
+      ],
+      "signConstraints": {
+        "rawDeltaSign": "unset-until-layer1"
+      },
+      "relativeOrderingConstraints": [],
+      "allowedEngineeringCandidateRanges": {
+        "thien-thoi": {
+          "cap": 30,
+          "allowedCandidateAbsRange": [
+            1,
+            30
+          ],
+          "notes": "envelope only"
+        },
+        "dia-loi": {
+          "cap": 25,
+          "allowedCandidateAbsRange": [
+            1,
+            25
+          ],
+          "notes": "envelope only"
+        },
+        "nhan-hoa": {
+          "cap": 20,
+          "allowedCandidateAbsRange": [
+            1,
+            20
+          ],
+          "notes": "envelope only"
+        },
+        "tu-hoa-sat-tinh": {
+          "cap": 25,
+          "allowedCandidateAbsRange": [
+            1,
+            25
+          ],
+          "notes": "envelope only"
+        }
+      },
+      "pillarBudgetConstraints": {
+        "thien-thoi": 30,
+        "dia-loi": 25,
+        "nhan-hoa": 20,
+        "tu-hoa-sat-tinh": 25
+      },
+      "unresolvedAssumptions": [
+        "Layer-1 polarity locators missing for all scoring families"
+      ],
+      "invalidationConditions": [
+        "any annual/monthly fact enters score",
+        "classical attribution of rawDelta",
+        "Nam Phái XF fabrication"
+      ],
+      "notes": "Empty included families — documents that no scoring family is yet doctrine-authorized."
+    },
+    {
+      "shapeId": "SHAPE-MFV02-TRUNG-CHAU-XF-STRUCTURAL",
+      "authorizationStatus": "not-authorized",
+      "eligibleSchools": [
+        "trung-chau"
+      ],
+      "includedRuleFamilies": [],
+      "excludedRuleFamilies": [
+        "thai-tue",
+        "tuan-triet",
+        "tam-khong",
+        "major-fortune-transformations-nam-phai"
+      ],
+      "blockedRuleFamilies": [],
+      "requiredCalculationCoreCapabilities": [
+        "fortuneStem",
+        "majorMutagens",
+        "exactTargetStar",
+        "exactTargetPalace"
+      ],
+      "signConstraints": {
+        "rawDeltaSign": "unset-until-layer1"
+      },
+      "relativeOrderingConstraints": [
+        "transformation-requires-full-tuple"
+      ],
+      "allowedEngineeringCandidateRanges": {
+        "thien-thoi": {
+          "cap": 30,
+          "allowedCandidateAbsRange": [
+            1,
+            30
+          ],
+          "notes": "envelope only"
+        },
+        "dia-loi": {
+          "cap": 25,
+          "allowedCandidateAbsRange": [
+            1,
+            25
+          ],
+          "notes": "envelope only"
+        },
+        "nhan-hoa": {
+          "cap": 20,
+          "allowedCandidateAbsRange": [
+            1,
+            20
+          ],
+          "notes": "envelope only"
+        },
+        "tu-hoa-sat-tinh": {
+          "cap": 25,
+          "allowedCandidateAbsRange": [
+            1,
+            25
+          ],
+          "notes": "envelope only"
+        }
+      },
+      "pillarBudgetConstraints": {
+        "thien-thoi": 30,
+        "dia-loi": 25,
+        "nhan-hoa": 20,
+        "tu-hoa-sat-tinh": 25
+      },
+      "unresolvedAssumptions": [
+        "XF polarity and stacking not Layer-1 verified"
+      ],
+      "invalidationConditions": [
+        "missing transformation tuple",
+        "annual facts"
+      ],
+      "notes": "Provisional Trung Châu enrichment path; not authorized."
+    },
+    {
+      "shapeId": "SHAPE-MFV02-NAM-PHAI-NO-XF",
+      "authorizationStatus": "not-authorized",
+      "eligibleSchools": [
+        "nam-phai"
+      ],
+      "includedRuleFamilies": [],
+      "excludedRuleFamilies": [
+        "major-fortune-transformations",
+        "thai-tue",
+        "tuan-triet",
+        "tam-khong"
+      ],
+      "blockedRuleFamilies": [
+        "major-fortune-transformations-nam-phai"
+      ],
+      "requiredCalculationCoreCapabilities": [
+        "activeMajorFortunePalace"
+      ],
+      "signConstraints": {
+        "rawDeltaSign": "unset-until-layer1"
+      },
+      "relativeOrderingConstraints": [],
+      "allowedEngineeringCandidateRanges": {
+        "thien-thoi": {
+          "cap": 30,
+          "allowedCandidateAbsRange": [
+            1,
+            30
+          ],
+          "notes": "envelope only"
+        },
+        "dia-loi": {
+          "cap": 25,
+          "allowedCandidateAbsRange": [
+            1,
+            25
+          ],
+          "notes": "envelope only"
+        },
+        "nhan-hoa": {
+          "cap": 20,
+          "allowedCandidateAbsRange": [
+            1,
+            20
+          ],
+          "notes": "envelope only"
+        },
+        "tu-hoa-sat-tinh": {
+          "cap": 25,
+          "allowedCandidateAbsRange": [
+            1,
+            25
+          ],
+          "notes": "envelope only"
+        }
+      },
+      "pillarBudgetConstraints": {
+        "thien-thoi": 30,
+        "dia-loi": 25,
+        "nhan-hoa": 20,
+        "tu-hoa-sat-tinh": 25
+      },
+      "unresolvedAssumptions": [
+        "shared structural families still research-blocked"
+      ],
+      "invalidationConditions": [
+        "any annual/monthly fact enters score",
+        "requires Nam Phái XF for readiness",
+        "fabricated transformations"
+      ],
+      "notes": "Explicitly excludes XF; readiness must not depend on Nam Phái Core XF."
+    }
+  ]
+}

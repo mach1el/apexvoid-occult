@@ -1,0 +1,527 @@
+{
+  "schemaVersion": "0.2.1",
+  "registryId": "major-fortune-v0.2-doctrine-claim-registry",
+  "extends": [
+    "research/major-fortune/v0.2-foundation/claims/claim-registry.json"
+  ],
+  "claims": [
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "metadata-only",
+      "confidence": "high",
+      "locators": [
+        "V0.2-DOCTRINE-DECISION.md#three-layer"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-LAYER-SEPARATION",
+      "topic": "governance",
+      "statement": "Scoring knowledge separates Layer-1 doctrine, Layer-2 engineering parameterization, and Layer-3 empirical evaluation.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-ADJ-GOV-001"
+      ],
+      "status": "governance",
+      "runtimeImplication": "Validators must reject classical attribution of rawDelta."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "metadata-only",
+      "confidence": "high",
+      "locators": [
+        "V0.2-DOCTRINE-DECISION.md#three-layer"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-NO-LITERAL-RAWDELTA-REQUIRED",
+      "topic": "governance",
+      "statement": "Classical sources are not required to contain literal numeric magnitudes such as +10 or -15 to authorize Layer-1 existence/polarity.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-ADJ-GOV-001"
+      ],
+      "status": "governance",
+      "runtimeImplication": "Foundation handoff must not demand classical literal rawDelta."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [
+        "activeMajorFortunePalace",
+        "cycleIdentity"
+      ],
+      "contradictions": [],
+      "candidateEligibility": "candidate-eligible",
+      "confidence": "high",
+      "locators": [
+        "school-capabilities.v0.2.json#forbiddenInputs"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-NO-ANNUAL",
+      "topic": "independence",
+      "statement": "No annualYear-dependent or monthly fact may enter Major Fortune V0.2 numeric scoring.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-CAP-001",
+        "SRC-MF-V02-ADJ-GOV-001"
+      ],
+      "status": "derived",
+      "runtimeImplication": "Hard fail-closed on annual/monthly inputs."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [
+        "activePalaceBranch",
+        "menhElement"
+      ],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "low",
+      "locators": [
+        "mission:element-relation"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-EL-EXIST",
+      "topic": "element-relation",
+      "statement": "A five-way relation between active Major Fortune palace branch element and natal menhElement may exist as a structural matcher family.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "engineering-hypothesis",
+      "runtimeImplication": "Structural matcher may remain; no executable delta."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [
+        "activePalaceBranch"
+      ],
+      "contradictions": [],
+      "candidateEligibility": "metadata-only",
+      "confidence": "high",
+      "locators": [
+        "branch-element-map.v0.2.json"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-EL-MAP",
+      "topic": "element-relation",
+      "statement": "Branch→element lookup for the active palace is provided by the V0.2 branch-element engineering map.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-CORE-BRANCH-001"
+      ],
+      "status": "engineering-verified",
+      "runtimeImplication": "Engineering fact producer only."
+    },
+    {
+      "polarity": "context-dependent",
+      "requiredFacts": [],
+      "contradictions": [
+        "CTR-MFV02-ADJ-003"
+      ],
+      "candidateEligibility": "research-blocked",
+      "confidence": "low",
+      "locators": [
+        "mission:element-relation"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-EL-POLARITY",
+      "topic": "element-relation",
+      "statement": "Generation/control orientation and same-element reinforcing-vs-positive polarity for Thiên Thời scoring are not verified by located classical doctrine.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-V02-ADJ-GOV-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "Keep topic research-blocked for candidate inclusion."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "medium",
+      "locators": [
+        "mission:element-relation"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-EL-MUTEX",
+      "topic": "element-relation",
+      "statement": "At most one of the five element relations may match per observation (mutual exclusion).",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "engineering-hypothesis",
+      "runtimeImplication": "Mutex group element-relation; engineering until doctrine verified."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "excluded-from-v0.2",
+      "confidence": "high",
+      "locators": [
+        "forbiddenInputs:taiTuePalace"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-TT-ANNUAL-FORBIDDEN",
+      "topic": "thai-tue",
+      "statement": "Annual taiTuePalace is forbidden from decade Major Fortune numerics.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-CAP-001"
+      ],
+      "status": "derived",
+      "runtimeImplication": "Block annual Thái Tuế matcher."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [
+        "CTR-MFV02-ADJ-001"
+      ],
+      "candidateEligibility": "excluded-from-v0.2",
+      "confidence": "high",
+      "locators": [
+        "CTR-MFV02-001",
+        "V0.2-FOUNDATION-DECISION.md"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-TT-NATAL-UNPROVEN",
+      "topic": "thai-tue",
+      "statement": "No decade-stable natal Thái Tuế ring identity independent of annualYear has been proven for V0.2.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-V02-ADJ-FOUNDATION-PACK-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "Exclude entire Thái Tuế topic from V0.2."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [
+        "activeNatalPalaceName"
+      ],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "medium",
+      "locators": [
+        "natal-palace-groups.v0.2.json"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-NPG-EXIST",
+      "topic": "natal-palace-group",
+      "statement": "Four groups Mệnh–Tài–Quan, Phúc–Di–Phụ, Phụ–Tử–Nô, Điền–Tật–Huynh partition twelve natal palaces without overlap as an engineering grouping.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-V02-ADJ-FOUNDATION-PACK-001"
+      ],
+      "status": "engineering-hypothesis",
+      "runtimeImplication": "Coverage uniqueness is engineering-valid; numeric rule blocked."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "high",
+      "locators": [
+        "Unknown"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-NPG-NOT-DOCTRINE",
+      "topic": "natal-palace-group",
+      "statement": "The four-group partition is not verified as classical sourced doctrine for direct numeric Major Fortune scoring.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-CLASSICAL-TAN-BIEN-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "Do not promote to candidate-eligible without locators."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "medium",
+      "locators": [
+        "mission:principal-star-dignity"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-PD-EXIST",
+      "topic": "principal-dignity",
+      "statement": "Deterministic classifier cases (one/two principals, vô chính diệu, missing/conflicting brightness) may exist for data handling.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "engineering-hypothesis",
+      "runtimeImplication": "Classifier ≠ numeric effect authorization."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "low",
+      "locators": [
+        "mission:principal-star-dignity"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-PD-NUMERIC",
+      "topic": "principal-dignity",
+      "statement": "Numeric effects for principal-dignity cases are not Layer-1 verified.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "Keep rawDelta null."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "high",
+      "locators": [
+        "mission:tam-khong"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-PD-TAM-KHONG",
+      "topic": "principal-dignity",
+      "statement": "Đắc Tam Không exception lacks atomic sourced policy (stars, frame, threshold, school, interactions).",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "Remain research-blocked."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [
+        "natalMenhPrincipals",
+        "activePalacePrincipals"
+      ],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "medium",
+      "locators": [
+        "star-pattern-compatibility-policy.json",
+        "star-pattern-compatibility.ts"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-SP-EXIST",
+      "topic": "star-pattern",
+      "statement": "Pairwise compatibility context natal Mệnh pattern ↔ active Major Fortune palace pattern may be resolved from an explicit catalog.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-V02-ADJ-FOUNDATION-PACK-001"
+      ],
+      "status": "engineering-hypothesis",
+      "runtimeImplication": "Structural pairwise context only."
+    },
+    {
+      "polarity": "context-dependent",
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "low",
+      "locators": [
+        "mission:star-pattern-compatibility"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-SP-POLARITY",
+      "topic": "star-pattern",
+      "statement": "Same-pattern vs cross-pattern does not have verified intrinsic positive/negative polarity for V0.2 scoring.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "No numeric contribution from compatibility alone."
+    },
+    {
+      "polarity": "neutral",
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "high",
+      "locators": [
+        "unsupportedOrMixedBehavior:neutral-no-rule"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-SP-MIXED-NEUTRAL",
+      "topic": "star-pattern",
+      "statement": "Unsupported or mixed patterns must remain neutral/no-rule.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "engineering-hypothesis",
+      "runtimeImplication": "Fail closed to no-rule."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [
+        "fortuneStem",
+        "mutagen",
+        "targetStar",
+        "targetPalace"
+      ],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "high",
+      "locators": [
+        "supportsMajorFortuneTransformations:true",
+        "mission:major-fortune-transformations"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-XF-TC-SCOPE",
+      "topic": "transformation",
+      "statement": "Trung Châu may structurally match Major Fortune transformations only when Core provides fortune stem, mutagen, exact target star, and exact target palace.",
+      "school": "trung-chau",
+      "sourceIds": [
+        "SRC-MF-V02-CAP-001",
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "derived",
+      "runtimeImplication": "Structural gate only; numeric blocked."
+    },
+    {
+      "polarity": "context-dependent",
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "low",
+      "locators": [
+        "mission:major-fortune-transformations"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-XF-TC-POLARITY",
+      "topic": "transformation",
+      "statement": "Transformation mutagen polarity and stacking magnitudes for Trung Châu are not Layer-1 verified.",
+      "school": "trung-chau",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "No executable XF delta."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [
+        "CTR-MFV02-ADJ-002"
+      ],
+      "candidateEligibility": "blocked-by-calculation-core",
+      "confidence": "high",
+      "locators": [
+        "supportsMajorFortuneTransformations:false"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-XF-NP-CORE",
+      "topic": "transformation",
+      "statement": "Nam Phái does not expose Major Fortune transformations in Calculation Core; V0.2 policy is blocked-by-calculation-core without fabrication.",
+      "school": "nam-phai",
+      "sourceIds": [
+        "SRC-MF-V02-CAP-001"
+      ],
+      "status": "derived",
+      "runtimeImplication": "Forbidden contributions; Core PR separate; readiness must not require Nam Phái XF."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "medium",
+      "locators": [
+        "mission:benefics-and-malefics"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-BM-EXIST",
+      "topic": "benefic-malefic",
+      "statement": "Benefic/malefic catalogs must use exact canonical star names with explicit all/any/threshold semantics; generic labels do not authorize sets.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "engineering-hypothesis",
+      "runtimeImplication": "Exact-name matching only; all sets remain research-blocked."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "high",
+      "locators": [
+        "Unknown",
+        "benefic-malefic-policy.json"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-BM-SETS-UNVERIFIED",
+      "topic": "benefic-malefic",
+      "statement": "Each listed benefic/malefic set (khong-kiep, kinh-da, linh-hoa, hinh-ho, khoi-viet, ta-huu, loc-ton) lacks classical locator evidence for V0.2 numeric polarity.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-CLASSICAL-TAN-BIEN-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "Exclude all BM sets from authorized shapes."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "research-blocked",
+      "confidence": "high",
+      "locators": [
+        "mission:tuan-triet"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-VOID-EXIST",
+      "topic": "void-treatment",
+      "statement": "Tuần/Triệt void treatment cannot be authorized without sourced void identity, frame, pre-void evidence definition, ordering, and bounded engineering envelope.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001"
+      ],
+      "status": "unsupported",
+      "runtimeImplication": "No void numeric adjustment."
+    },
+    {
+      "polarity": null,
+      "requiredFacts": [],
+      "contradictions": [],
+      "candidateEligibility": "metadata-only",
+      "confidence": "high",
+      "locators": [
+        "mission:natal-resilience",
+        "natal-resilience-policy.json"
+      ],
+      "notes": null,
+      "claimId": "CLM-MFV02-ADJ-RESILIENCE-META",
+      "topic": "natal-resilience",
+      "statement": "Natal resilience may emit metadata states only with numericEffect null; no hidden floor, ceiling, multiplier, or rescue adjustment.",
+      "school": "mixed",
+      "sourceIds": [
+        "SRC-MF-V02-INTAKE-001",
+        "SRC-MF-V02-ADJ-GOV-001"
+      ],
+      "status": "derived",
+      "runtimeImplication": "Emit metadata; never score."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "logId",
+    "contradictions"
+  ],
+  "properties": {
+    "contradictions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "contradictionId",
+          "claimIds",
+          "summary",
+          "adjudication",
+          "runtimeImplication",
+          "sourceIds",
+          "status"
+        ],
+        "properties": {
+          "contradictionId": {
+            "type": "string",
+            "pattern": "^CTR-"
+          },
+          "claimIds": {
+            "type": "array",
+            "minItems": 1
+          },
+          "status": {
+            "enum": [
+              "open",
+              "resolved"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

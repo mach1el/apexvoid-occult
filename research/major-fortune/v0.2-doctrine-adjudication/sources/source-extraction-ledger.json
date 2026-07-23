@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "0.2.1",
+  "ledgerId": "major-fortune-v0.2-doctrine-extraction-ledger",
+  "entries": [
+    {
+      "extractionId": "EXT-MFV02-ADJ-001",
+      "sourceId": "SRC-MF-V02-INTAKE-001",
+      "extractedClaimIds": [
+        "CLM-MFV02-ADJ-EL-EXIST",
+        "CLM-MFV02-ADJ-EL-POLARITY",
+        "CLM-MFV02-ADJ-NPG-EXIST",
+        "CLM-MFV02-ADJ-PD-EXIST",
+        "CLM-MFV02-ADJ-SP-EXIST",
+        "CLM-MFV02-ADJ-BM-EXIST",
+        "CLM-MFV02-ADJ-VOID-EXIST"
+      ],
+      "locatorUsed": "mission topic sections",
+      "extractionStatus": "hypothesis-only",
+      "notes": "Intake yields hypothesized rule families; not verified doctrine."
+    },
+    {
+      "extractionId": "EXT-MFV02-ADJ-002",
+      "sourceId": "SRC-MF-V02-CAP-001",
+      "extractedClaimIds": [
+        "CLM-MFV02-ADJ-XF-TC-SCOPE",
+        "CLM-MFV02-ADJ-XF-NP-CORE",
+        "CLM-MFV02-ADJ-NO-ANNUAL"
+      ],
+      "locatorUsed": "school-capabilities.v0.2.json profiles",
+      "extractionStatus": "engineering-verified",
+      "notes": "School capability gates only."
+    },
+    {
+      "extractionId": "EXT-MFV02-ADJ-003",
+      "sourceId": "SRC-MF-V02-CORE-BRANCH-001",
+      "extractedClaimIds": [
+        "CLM-MFV02-ADJ-EL-MAP"
+      ],
+      "locatorUsed": "branch-element-map.v0.2.json",
+      "extractionStatus": "engineering-verified",
+      "notes": "Branch→element lookup only; no polarity."
+    },
+    {
+      "extractionId": "EXT-MFV02-ADJ-004",
+      "sourceId": "SRC-MF-CLASSICAL-TAN-BIEN-001",
+      "extractedClaimIds": [],
+      "locatorUsed": "Unknown",
+      "extractionStatus": "blocked-missing-locator",
+      "notes": "No verified doctrine extraction permitted without page locator."
+    },
+    {
+      "extractionId": "EXT-MFV02-ADJ-005",
+      "sourceId": "SRC-MF-V02-ADJ-GOV-001",
+      "extractedClaimIds": [
+        "CLM-MFV02-ADJ-LAYER-SEPARATION",
+        "CLM-MFV02-ADJ-NO-LITERAL-RAWDELTA-REQUIRED"
+      ],
+      "locatorUsed": "V0.2-DOCTRINE-DECISION.md",
+      "extractionStatus": "governance",
+      "notes": "Three-layer model."
+    }
+  ]
+}

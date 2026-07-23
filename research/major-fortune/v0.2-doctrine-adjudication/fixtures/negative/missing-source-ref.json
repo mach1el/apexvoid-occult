@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "0.2.1",
+  "registryId": "bad",
+  "claims": [
+    {
+      "claimId": "CLM-BAD",
+      "topic": "x",
+      "statement": "x",
+      "school": "nam-phai",
+      "sourceIds": [
+        "SRC-DOES-NOT-EXIST"
+      ],
+      "locators": [
+        "x"
+      ],
+      "confidence": "low",
+      "status": "unsupported",
+      "runtimeImplication": "x",
+      "candidateEligibility": "research-blocked",
+      "requiredFacts": [],
+      "contradictions": [],
+      "polarity": null,
+      "notes": null
+    }
+  ]
+}

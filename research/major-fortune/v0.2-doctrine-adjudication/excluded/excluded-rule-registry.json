@@ -1,0 +1,56 @@
+{
+  "schemaVersion": "0.2.1",
+  "registryId": "major-fortune-v0.2-excluded-rule-registry",
+  "excluded": [
+    {
+      "familyId": "thai-tue",
+      "reason": "annual forbidden; natal ring unproven",
+      "eligibility": "excluded-from-v0.2"
+    },
+    {
+      "familyId": "tuan-triet",
+      "reason": "void policy incomplete",
+      "eligibility": "research-blocked"
+    },
+    {
+      "familyId": "tam-khong",
+      "reason": "atomic policy missing",
+      "eligibility": "research-blocked"
+    },
+    {
+      "familyId": "benefic-malefic-sets",
+      "reason": "no classical locator per set",
+      "eligibility": "research-blocked"
+    },
+    {
+      "familyId": "element-relation",
+      "reason": "polarity unverified",
+      "eligibility": "research-blocked"
+    },
+    {
+      "familyId": "natal-palace-groups",
+      "reason": "engineering grouping not doctrine-authorized numeric rule",
+      "eligibility": "research-blocked"
+    },
+    {
+      "familyId": "principal-star-dignity",
+      "reason": "numeric effects unverified",
+      "eligibility": "research-blocked"
+    },
+    {
+      "familyId": "star-pattern-compatibility",
+      "reason": "polarity unverified; mixed neutral",
+      "eligibility": "research-blocked"
+    },
+    {
+      "familyId": "major-fortune-transformations-trung-chau",
+      "reason": "polarity/stacking unverified",
+      "eligibility": "research-blocked"
+    },
+    {
+      "familyId": "major-fortune-transformations-nam-phai",
+      "reason": "Core cannot produce XF",
+      "eligibility": "blocked-by-calculation-core"
+    }
+  ]
+}

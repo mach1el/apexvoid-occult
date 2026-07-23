@@ -1,0 +1,100 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "registryId",
+    "sources"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string"
+    },
+    "registryId": {
+      "type": "string"
+    },
+    "extends": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "governanceNote": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "sourceId",
+          "title",
+          "sourceType",
+          "qualityTier",
+          "pageOrInternalLocator",
+          "accessStatus",
+          "allowedUsage",
+          "prohibitedUsage"
+        ],
+        "properties": {
+          "sourceId": {
+            "type": "string",
+            "pattern": "^SRC-"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authorEditorTranslator": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "editionPublication": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "schoolAlignment": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sourceType": {
+            "type": "string"
+          },
+          "qualityTier": {
+            "type": "string"
+          },
+          "pageOrInternalLocator": {
+            "type": "string"
+          },
+          "accessStatus": {
+            "type": "string"
+          },
+          "allowedUsage": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "prohibitedUsage": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

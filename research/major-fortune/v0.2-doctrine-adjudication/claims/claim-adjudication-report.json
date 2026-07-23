@@ -1,0 +1,135 @@
+{
+  "schemaVersion": "0.2.1",
+  "reportId": "major-fortune-v0.2-claim-adjudication-report",
+  "method": "atomic-claim separation of existence / polarity / magnitude; intake cannot authorize classical polarity",
+  "summary": {
+    "claimCount": 24,
+    "candidateEligible": 1,
+    "researchBlocked": 16,
+    "blockedByCore": 1,
+    "excluded": 2,
+    "metadataOnly": 4
+  },
+  "adjudications": [
+    {
+      "claimId": "CLM-MFV02-ADJ-LAYER-SEPARATION",
+      "decision": "metadata-only",
+      "rationale": "Validators must reject classical attribution of rawDelta."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-NO-LITERAL-RAWDELTA-REQUIRED",
+      "decision": "metadata-only",
+      "rationale": "Foundation handoff must not demand classical literal rawDelta."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-NO-ANNUAL",
+      "decision": "candidate-eligible",
+      "rationale": "Hard fail-closed on annual/monthly inputs."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-EL-EXIST",
+      "decision": "research-blocked",
+      "rationale": "Structural matcher may remain; no executable delta."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-EL-MAP",
+      "decision": "metadata-only",
+      "rationale": "Engineering fact producer only."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-EL-POLARITY",
+      "decision": "research-blocked",
+      "rationale": "Keep topic research-blocked for candidate inclusion."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-EL-MUTEX",
+      "decision": "research-blocked",
+      "rationale": "Mutex group element-relation; engineering until doctrine verified."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-TT-ANNUAL-FORBIDDEN",
+      "decision": "excluded-from-v0.2",
+      "rationale": "Block annual Thái Tuế matcher."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-TT-NATAL-UNPROVEN",
+      "decision": "excluded-from-v0.2",
+      "rationale": "Exclude entire Thái Tuế topic from V0.2."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-NPG-EXIST",
+      "decision": "research-blocked",
+      "rationale": "Coverage uniqueness is engineering-valid; numeric rule blocked."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-NPG-NOT-DOCTRINE",
+      "decision": "research-blocked",
+      "rationale": "Do not promote to candidate-eligible without locators."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-PD-EXIST",
+      "decision": "research-blocked",
+      "rationale": "Classifier ≠ numeric effect authorization."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-PD-NUMERIC",
+      "decision": "research-blocked",
+      "rationale": "Keep rawDelta null."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-PD-TAM-KHONG",
+      "decision": "research-blocked",
+      "rationale": "Remain research-blocked."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-SP-EXIST",
+      "decision": "research-blocked",
+      "rationale": "Structural pairwise context only."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-SP-POLARITY",
+      "decision": "research-blocked",
+      "rationale": "No numeric contribution from compatibility alone."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-SP-MIXED-NEUTRAL",
+      "decision": "research-blocked",
+      "rationale": "Fail closed to no-rule."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-XF-TC-SCOPE",
+      "decision": "research-blocked",
+      "rationale": "Structural gate only; numeric blocked."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-XF-TC-POLARITY",
+      "decision": "research-blocked",
+      "rationale": "No executable XF delta."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-XF-NP-CORE",
+      "decision": "blocked-by-calculation-core",
+      "rationale": "Forbidden contributions; Core PR separate; readiness must not require Nam Phái XF."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-BM-EXIST",
+      "decision": "research-blocked",
+      "rationale": "Exact-name matching only; all sets remain research-blocked."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-BM-SETS-UNVERIFIED",
+      "decision": "research-blocked",
+      "rationale": "Exclude all BM sets from authorized shapes."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-VOID-EXIST",
+      "decision": "research-blocked",
+      "rationale": "No void numeric adjustment."
+    },
+    {
+      "claimId": "CLM-MFV02-ADJ-RESILIENCE-META",
+      "decision": "metadata-only",
+      "rationale": "Emit metadata; never score."
+    }
+  ]
+}
