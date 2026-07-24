@@ -12,7 +12,7 @@ function resolveFrameRelationship(focusIndex: number, targetIndex: number): "dir
 
 export interface ResolveTransformationInput {
   chart: ChartData;
-  canonicalTransformations: ResolvedMonthlyTransformation[];
+  canonicalTransformations: readonly ResolvedMonthlyTransformation[];
   focusPalaceIndex: number;
   isPartial: boolean;
 }

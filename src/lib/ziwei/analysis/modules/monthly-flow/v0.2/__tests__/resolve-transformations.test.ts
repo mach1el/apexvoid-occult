@@ -59,7 +59,7 @@ describe("resolveTransformations V0.2.1", () => {
       { index: 0, stars: ["Cự Môn"] }
     ]);
     // Add Hóa Kỵ to palace 0 manually with source natal
-    chart.palaces[0]!.stars.push({ name: "Hóa Kỵ", type: "Phụ Tinh", source: "natal" } as any);
+    chart.palaces[0]!.stars!.push({ name: "Hóa Kỵ", type: "Phụ Tinh", source: "natal" } as any);
 
     const canonicalTransformations = [ 
       { mutagen: "Kỵ" as const, starName: "Cự Môn", canonicalStarName: "Cự Môn", targetPalaceIndex: 0, targetNatalPalaceName: "Mệnh" } 
