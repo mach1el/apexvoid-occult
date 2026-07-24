@@ -13,13 +13,33 @@ function mockChart(palaces: Array<{ index: number, stars: string[], element: str
         return {
           index: i,
           element: p.element,
+          stem: p.element === "Thủy" ? "Nhâm" : undefined,
+          branch: "Tuất",
+          flowMonths: [{ month: i === 6 ? 1 : (i > 6 ? i - 5 : i + 7), palace: { index: i } as any }],
           stars: p.stars.map(s => ({ name: s, layer: s.includes("Khôi") ? "Phụ Tinh" : "Chính Tinh", brightness: "Miếu" } as Star))
         } as unknown as Palace;
       }
-      return { index: i, element: "Kim", stars: [] } as unknown as Palace;
+      return { index: i, element: "Kim", stars: [], flowMonths: [{ month: i === 6 ? 1 : (i > 6 ? i - 5 : i + 7), palace: { index: i } as any }] } as unknown as Palace;
     })
   } as unknown as ChartData;
 }
+
+const mockProvider: any = {
+  school: "nam-phai",
+  tuHoaTargets: () => [],
+  stemBranchForLunarMonth: (annualStem: string, month: number) => ({ stem: "Giáp", branch: "Tý" })
+};
+
+const mockDiagnostics: any = {
+  invalidMonthNumber: [],
+  missingFocusPalace: [],
+  missingCalendarStemBranch: [],
+  duplicateMonthKeys: [],
+  ambiguousTransformationTargets: [],
+  unresolvedTransformationTargets: [],
+  missingMonthlyEntries: [],
+  providerSchoolMismatch: []
+};
 
 describe("buildV02Result", () => {
   it("returns unavailable when annualBaseline is missing", () => {
@@ -28,7 +48,12 @@ describe("buildV02Result", () => {
       annualBaseline: null,
       annualYear: 2026,
       annualStem: "Bính",
-      annualBranch: "Ngọ"
+      annualBranch: "Ngọ",
+      provider: mockProvider,
+      diagnostics: mockDiagnostics,
+      annualHeadPalace: 0,
+      smallLimitPalace: null,
+      taiTuePalace: null
     };
 
     const result = buildV02Result(input);
@@ -46,7 +71,12 @@ describe("buildV02Result", () => {
       annualBaseline: { score: 70, sourceModule: "mock", sourceContractVersion: "1", sourceEngineVersion: "1" },
       annualYear: 2026,
       annualStem: "Bính",
-      annualBranch: "Ngọ" // Index 6
+      annualBranch: "Ngọ", // Index 6
+      provider: mockProvider,
+      diagnostics: mockDiagnostics,
+      annualHeadPalace: 0,
+      smallLimitPalace: null,
+      taiTuePalace: null
     };
 
     const result = buildV02Result(input);
@@ -72,13 +102,6 @@ describe("buildV02Result", () => {
     expect(month1.breakdown.palace.capped).toBe(25);
     expect(month1.breakdown.palace.amplified).toBe(37.5);
     expect(month1.overallMonthlyScore).toBe(100);
-
-    // Check Domain Projections for Month 1
-    // family = floor(30 * 0.8) = 24 -> 100 + 24 = 100 (clamp)
-    // social = floor(30 * 0.9) = 27 -> 100 + 27 = 100
-    // Actually base final is 100, clamped domain is 100
-    const familyProj = month1.domainProjections.find(d => d.domain === "family")!;
-    expect(familyProj.domainSpecificDelta).toBe(24);
-    expect(familyProj.domainProjectionScore).toBe(100);
+    expect(month1.domainProjections).toHaveLength(0); // V0.2.1 removed domain heuristics
   });
 });

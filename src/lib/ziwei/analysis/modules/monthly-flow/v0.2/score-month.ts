@@ -2,35 +2,21 @@ import type {
   MonthlyTransformationContribution, 
   MonthlyJiCollisionKind,
   MonthlyScoreBreakdown,
-  DauQuanAmplification
+  DauQuanAmplification,
+  MonthlyFlowV021Input
 } from "./types";
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-export interface ScoreMonthInput {
-  annualBaseline: number;
-  isDauQuanMonth: boolean;
-  palaceRawDelta: number;
-  transformations: MonthlyTransformationContribution[];
-  collisionKind: MonthlyJiCollisionKind | null;
-}
-
 export function aggregateTransformations(
   contributions: MonthlyTransformationContribution[],
-  collisionKind: MonthlyJiCollisionKind | null
+  collisionKind: MonthlyJiCollisionKind | null,
+  isPartial: boolean
 ) {
-  if (collisionKind === "same-star-natal-monthly" || collisionKind === "same-star-annual-monthly") {
-    return {
-      dominantContributionId: null,
-      dominantDelta: 0,
-      secondaryRawSum: 0,
-      secondaryAppliedDelta: 0,
-      finalDelta: -50
-    };
-  }
-
+  // In V0.2.1, we detect and report collision candidates, but we DO NOT apply the special -50 replacement in production-candidate output.
+  // The collision component might be marked unavailable (handled via isPartial), but the finalDelta is just based on contributions.
   if (contributions.length === 0) {
     return {
       dominantContributionId: null,
@@ -59,7 +45,12 @@ export function aggregateTransformations(
   const secondaryApplied = 0.5 * secondarySum;
   
   const rawDelta = dominant.contribution + secondaryApplied;
-  const finalDelta = clamp(rawDelta, -35, 35);
+  let finalDelta = clamp(rawDelta, -35, 35);
+  
+  if (isPartial) {
+    // If transformations are partial (e.g. collision or missing facts), finalDelta could be zeroed out or retained without penalty. 
+    // We'll retain the standard aggregation but the caller will see status="partial".
+  }
 
   return {
     dominantContributionId: `${dominant.mutagen}-${dominant.starName}`,
@@ -70,19 +61,27 @@ export function aggregateTransformations(
   };
 }
 
-export function scoreMonth(input: ScoreMonthInput): MonthlyScoreBreakdown {
+export function scoreMonth(input: MonthlyFlowV021Input): MonthlyScoreBreakdown {
+  if (input.annualBaseline.score < 0 || input.annualBaseline.score > 100) {
+    throw new Error("Annual baseline out of range");
+  }
+
   const cappedPalace = clamp(input.palaceRawDelta, -25, 25);
   const dauQuanMultiplier = input.isDauQuanMonth ? 1.5 : 1;
   const amplifiedPalace = cappedPalace * dauQuanMultiplier;
 
-  const transAgg = aggregateTransformations(input.transformations, input.collisionKind);
+  const transAgg = aggregateTransformations(
+    input.transformationContext.contributions, 
+    input.transformationContext.collisionKind,
+    input.transformationContext.isPartial
+  );
 
   const localActivation = amplifiedPalace + transAgg.finalDelta;
-  const rawMonthlyScore = input.annualBaseline + localActivation;
+  const rawMonthlyScore = input.annualBaseline.score + localActivation;
 
   const ANNUAL_ENVELOPE_RADIUS = 30;
-  const floor = Math.max(0, input.annualBaseline - ANNUAL_ENVELOPE_RADIUS);
-  const ceiling = Math.min(100, input.annualBaseline + ANNUAL_ENVELOPE_RADIUS);
+  const floor = Math.max(0, input.annualBaseline.score - ANNUAL_ENVELOPE_RADIUS);
+  const ceiling = Math.min(100, input.annualBaseline.score + ANNUAL_ENVELOPE_RADIUS);
 
   let finalMonthlyScore = rawMonthlyScore;
   let clippedByAnnualFloor = false;
@@ -102,9 +101,12 @@ export function scoreMonth(input: ScoreMonthInput): MonthlyScoreBreakdown {
     clippedByAbsoluteRange = true;
     finalMonthlyScore = clamp(finalMonthlyScore, 0, 100);
   }
+  
+  // Precision policy: One decimal place at the result boundary
+  finalMonthlyScore = Math.round(finalMonthlyScore * 10) / 10;
 
   return {
-    annualBaseline: input.annualBaseline,
+    annualBaseline: input.annualBaseline.score,
     palace: {
       raw: input.palaceRawDelta,
       capped: cappedPalace,
@@ -112,12 +114,12 @@ export function scoreMonth(input: ScoreMonthInput): MonthlyScoreBreakdown {
       amplified: amplifiedPalace
     },
     transformations: {
-      contributions: input.transformations,
+      contributions: input.transformationContext.contributions,
       dominantContributionId: transAgg.dominantContributionId,
       dominantDelta: transAgg.dominantDelta,
       secondaryRawSum: transAgg.secondaryRawSum,
       secondaryAppliedDelta: transAgg.secondaryAppliedDelta,
-      collisionKind: input.collisionKind,
+      collisionKind: input.transformationContext.collisionKind,
       finalDelta: transAgg.finalDelta
     },
     localActivation,

@@ -7,7 +7,12 @@ function mockStar(name: string, layer: string, brightness?: string): Star {
 }
 
 function mockPalace(stars: Star[], element?: string): Palace {
-  return { stars, element } as unknown as Palace;
+  // Canh Tuất -> Thoa Xuyến Kim, Nhâm Tuất -> Đại Hải Thủy
+  let stem = undefined;
+  let branch = "Tuất";
+  if (element === "Kim") stem = "Canh";
+  else if (element === "Thủy") stem = "Nhâm";
+  return { stars, stem, branch } as unknown as Palace;
 }
 
 describe("Palace Evaluator V0.2", () => {
@@ -62,6 +67,6 @@ describe("Palace Evaluator V0.2", () => {
     const palace = mockPalace([mockStar("Tử Vi", "Chính Tinh", "Bình")]);
     const result = evaluatePalace(palace, undefined);
     expect(result.elementRelationDelta).toBe(0);
-    expect(result.diagnostics.elementRelationStatus).toBe("partial");
+    expect(result.diagnostics.elementRelationStatus).toBe("unavailable");
   });
 });

@@ -14,7 +14,7 @@ function mockChart(palaces: Array<{ index: number, stars: string[] }>): ChartDat
   } as unknown as ChartData;
 }
 
-describe("resolveTransformations V0.2", () => {
+describe("resolveTransformations V0.2.1", () => {
   it("Resolves weights according to expert policies", () => {
     // Focus = 0
     // Tử Vi (Lộc) at 0 -> direct-focus (1.0)
@@ -29,14 +29,14 @@ describe("resolveTransformations V0.2", () => {
       { index: 2, stars: ["Thái Dương"] },
     ]);
 
-    const targets = [
-      { mutagen: "Lộc", starName: "Tử Vi" },
-      { mutagen: "Quyền", starName: "Phá Quân" },
-      { mutagen: "Khoa", starName: "Vũ Khúc" },
-      { mutagen: "Kỵ", starName: "Thái Dương" },
+    const canonicalTransformations = [
+      { mutagen: "Lộc" as const, starName: "Tử Vi", canonicalStarName: "Tử Vi", targetPalaceIndex: 0, targetNatalPalaceName: "Mệnh" },
+      { mutagen: "Quyền" as const, starName: "Phá Quân", canonicalStarName: "Phá Quân", targetPalaceIndex: 6, targetNatalPalaceName: "Thiên Di" },
+      { mutagen: "Khoa" as const, starName: "Vũ Khúc", canonicalStarName: "Vũ Khúc", targetPalaceIndex: 4, targetNatalPalaceName: "Tài Bạch" },
+      { mutagen: "Kỵ" as const, starName: "Thái Dương", canonicalStarName: "Thái Dương", targetPalaceIndex: 2, targetNatalPalaceName: "Phu Thê" },
     ];
 
-    const result = resolveTransformations({ chart, targets, focusPalaceIndex: 0 });
+    const result = resolveTransformations({ chart, canonicalTransformations, focusPalaceIndex: 0, isPartial: false });
 
     expect(result.contributions).toHaveLength(3); // Thái Dương is outside, so it should be ignored (or pushed with 0 weight)
     
@@ -53,17 +53,20 @@ describe("resolveTransformations V0.2", () => {
     expect(khoa?.contribution).toBe(15 * 0.65); // 9.75
   });
 
-  it("Excludes duplicate physical stars", () => {
-    // Two Cự Môn in different palaces (invalid state, but we test the diagnostic)
+  it("Detects same-palace collision (V0.2.1 simplified)", () => {
+    // If target has Natal Hóa Kỵ on the same palace
     const chart = mockChart([
-      { index: 0, stars: ["Cự Môn"] },
-      { index: 5, stars: ["Cự Môn"] },
+      { index: 0, stars: ["Cự Môn"] }
     ]);
+    // Add Hóa Kỵ to palace 0 manually with source natal
+    chart.palaces[0]!.stars.push({ name: "Hóa Kỵ", type: "Phụ Tinh", source: "natal" } as any);
 
-    const targets = [ { mutagen: "Kỵ", starName: "Cự Môn" } ];
-    const result = resolveTransformations({ chart, targets, focusPalaceIndex: 0 });
+    const canonicalTransformations = [ 
+      { mutagen: "Kỵ" as const, starName: "Cự Môn", canonicalStarName: "Cự Môn", targetPalaceIndex: 0, targetNatalPalaceName: "Mệnh" } 
+    ];
     
-    expect(result.contributions).toHaveLength(0); // Should skip and report diagnostic
-    expect(result.diagnostics.partialReasons).toContain("duplicate-physical-target-Cự Môn");
+    const result = resolveTransformations({ chart, canonicalTransformations, focusPalaceIndex: 0, isPartial: false });
+    
+    expect(result.collisionKind).toBe("same-palace-natal-monthly");
   });
 });

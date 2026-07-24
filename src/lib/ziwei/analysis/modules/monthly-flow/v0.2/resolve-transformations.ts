@@ -1,5 +1,6 @@
-import type { ChartData, ChartPalace as Palace, ChartStar as Star } from "@/types/chart";
+import type { ChartData } from "@/types/chart";
 import type { MonthlyTransformationContribution, MonthlyJiCollisionKind } from "./types";
+import type { ResolvedMonthlyTransformation } from "../types";
 
 function resolveFrameRelationship(focusIndex: number, targetIndex: number): "direct-focus" | "opposite" | "trine" | "outside" {
   const diff = (targetIndex - focusIndex + 12) % 12;
@@ -11,8 +12,9 @@ function resolveFrameRelationship(focusIndex: number, targetIndex: number): "dir
 
 export interface ResolveTransformationInput {
   chart: ChartData;
-  targets: Array<{ mutagen: string; starName: string }>;
+  canonicalTransformations: ResolvedMonthlyTransformation[];
   focusPalaceIndex: number;
+  isPartial: boolean;
 }
 
 export interface ResolvedTransformationOutput {
@@ -28,58 +30,45 @@ export function resolveTransformations(input: ResolveTransformationInput): Resol
   const diagnostics = { partialReasons: [] as string[] };
   let collisionKind: MonthlyJiCollisionKind | null = null;
 
+  if (input.isPartial) {
+    diagnostics.partialReasons.push("canonical-transformations-partial");
+  }
+
   // Weights & Base Deltas (Expert Authorized)
   const roleWeights = { "direct-focus": 1.0, "opposite": 0.8, "trine": 0.65, "outside": 0.0 };
   const baseDeltas = { "Lộc": 25, "Quyền": 15, "Khoa": 15, "Kỵ": -25 } as Record<string, number>;
 
-  for (const target of input.targets) {
-    // 1. Find physical natal star
-    // Tứ hóa phải ứng lên các sao vật lý thật. Cần dò tìm sao này trong 12 cung.
-    let foundPalaceIndex = -1;
-    let foundStar: Star | null = null;
-    let isDuplicate = false;
-
-    for (const palace of input.chart.palaces) {
-      // Loại trừ các sao Lưu, marker Hóa (vì ta đang tìm physical star)
-      const stars = palace.stars ?? [];
-      const star = stars.find(s =>
-        s.name === target.starName &&
-        !s.name.startsWith("Lưu ") &&
-        !s.name.startsWith("Hóa ")
-      );
-      if (star) {
-        if (foundPalaceIndex !== -1) {
-          // Trùng nhiều cung -> diagnostic partial
-          isDuplicate = true;
-          diagnostics.partialReasons.push(`duplicate-physical-target-${target.starName}`);
-        } else {
-          foundPalaceIndex = palace.index;
-          foundStar = star;
-        }
-      }
-    }
-
-    if (isDuplicate || foundPalaceIndex === -1 || !foundStar) {
-      if (foundPalaceIndex === -1 && !isDuplicate) {
-        diagnostics.partialReasons.push(`target-not-found-${target.starName}`);
-      }
-      continue;
-    }
-
-    // 2. Resolve relationship
-    const rel = resolveFrameRelationship(input.focusPalaceIndex, foundPalaceIndex);
+  for (const target of input.canonicalTransformations) {
+    const rel = resolveFrameRelationship(input.focusPalaceIndex, target.targetPalaceIndex);
     const weight = roleWeights[rel];
 
     if (weight > 0) {
       const baseDelta = baseDeltas[target.mutagen] ?? 0;
       contributions.push({
         mutagen: target.mutagen,
-        starName: target.starName,
+        starName: target.canonicalStarName,
         role: rel,
         baseMutagenDelta: baseDelta,
         roleWeight: weight,
         contribution: baseDelta * weight
       });
+    }
+  }
+
+  // Collision detection (detect candidates but we do not apply special -50)
+  const ky = input.canonicalTransformations.find(t => t.mutagen === "Kỵ");
+  if (ky) {
+    const targetPalace = input.chart.palaces.find(p => p.index === ky.targetPalaceIndex);
+    if (targetPalace && targetPalace.stars) {
+      const hasNatalKy = targetPalace.stars.some(s => s.name === "Hóa Kỵ" && s.source === "natal");
+      const hasAnnualKy = targetPalace.stars.some(s => (s.name === "Hóa Kỵ" || s.name === "Lưu Hóa Kỵ") && s.source === "annual");
+      
+      if (hasNatalKy) {
+        // Just an approximation. Proper facts should check if it's the SAME physical star.
+        collisionKind = "same-palace-natal-monthly";
+      } else if (hasAnnualKy) {
+        collisionKind = "same-palace-annual-monthly";
+      }
     }
   }
 

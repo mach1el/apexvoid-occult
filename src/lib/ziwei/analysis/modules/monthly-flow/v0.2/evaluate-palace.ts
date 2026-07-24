@@ -1,4 +1,6 @@
 import type { ChartPalace as Palace } from "@/types/chart";
+import { getNayinByStemBranch } from "@/lib/bazi/nayin";
+import { isEligibleNatalPhysicalStar } from "../collect-star-evidence";
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -15,7 +17,7 @@ export interface EvaluatedPalace {
 
   diagnostics: {
     mainStarQualityStatus: "resolved" | "partial";
-    elementRelationStatus: "resolved" | "partial";
+    elementRelationStatus: "resolved" | "partial" | "unavailable";
     partialReasons: string[];
   };
 }
@@ -33,9 +35,8 @@ export function evaluatePalace(
   const stars = palace.stars ?? [];
 
   // 1. Main Star Quality
-  // Some charts use `layer: "Chính Tinh"`, some might use `type` depending on the adapter.
-  // In `ChartStar`, layer usually denotes "Chính Tinh", "Phụ Tinh".
-  const mainStars = stars.filter((s: any) => s.type === "Chính Tinh" || s.layer === "Chính Tinh");
+  // Reuse canonical `isEligibleNatalPhysicalStar` and `layer === "major"` (Chính Tinh).
+  const mainStars = stars.filter(s => isEligibleNatalPhysicalStar(s) && (s.layer === "major" || s.layer === "Chính Tinh"));
   let mainStarQualityDelta = 0;
 
   if (mainStars.length === 0) {
@@ -87,10 +88,20 @@ export function evaluatePalace(
     "Thổ": { "Kim": 5, "Thổ": 5, "Thủy": -5, "Mộc": -5, "Hỏa": 0 },
   };
 
-  const palaceElement = (palace as any).element;
+  let palaceElement: string | null = null;
+  if (palace.stem && palace.branch) {
+    const nayin = getNayinByStemBranch(palace.stem, palace.branch);
+    if (nayin && nayin !== "Unknown") {
+      const parts = nayin.split(" ");
+      let rawElement = parts[parts.length - 1] ?? null;
+      if (rawElement === "Thuỷ") rawElement = "Thủy";
+      if (rawElement === "Hoả") rawElement = "Hỏa";
+      palaceElement = rawElement;
+    }
+  }
 
   if (!chartElement || !palaceElement) {
-    diagnostics.elementRelationStatus = "partial";
+    diagnostics.elementRelationStatus = "unavailable";
     diagnostics.partialReasons.push("element-relation-data-unavailable");
   } else {
     // Hành Cung (palace.element) sinh/khắc Bản Mệnh (chartElement)

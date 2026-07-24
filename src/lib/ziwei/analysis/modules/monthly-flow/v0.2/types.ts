@@ -72,12 +72,18 @@ export interface MonthlyDomainProjection {
 }
 
 export interface MonthlyFlowV02MonthResult {
-  monthIndex: number;
+  monthIndex: number; // Month index (1-12)
   lunarMonth: number;
   isLeapMonth: boolean;
   calendarStem: string;
   calendarBranch: string;
   focusPalaceIndex: number;
+  
+  provenance: {
+    annualHeadPalace: number;
+    smallLimitPalace: number | null;
+    taiTuePalace: number | null;
+  };
 
   overallMonthlyScore: number;
   overallBand: MonthlyFlowBand;
@@ -86,7 +92,7 @@ export interface MonthlyFlowV02MonthResult {
 }
 
 export interface MonthlyFlowV02Result {
-  status: "resolved" | "unavailable";
+  status: "resolved" | "unavailable" | "partial";
   reason?: string;
   annualScoreSource?: AnnualBaselineInput;
   annualYear: number;
@@ -100,4 +106,33 @@ export interface AnnualBaselineInput {
   sourceModule: string;
   sourceContractVersion: string;
   sourceEngineVersion: string;
+}
+
+export interface MonthlyAnnualContext {
+  annualHeadPalace: number;
+  smallLimitPalace: number | null;
+  taiTuePalace: number | null;
+}
+
+export interface MonthlyFocusPalaceFacts {
+  focusPalaceIndex: number;
+  lunarMonth: number;
+  isLeapMonth: boolean;
+  calendarStem: string;
+  calendarBranch: string;
+}
+
+export interface MonthlyTransformationContext {
+  contributions: MonthlyTransformationContribution[];
+  collisionKind: MonthlyJiCollisionKind | null;
+  isPartial: boolean;
+}
+
+export interface MonthlyFlowV021Input {
+  annualBaseline: AnnualBaselineInput;
+  focusPalaceFacts: MonthlyFocusPalaceFacts;
+  annualContext: MonthlyAnnualContext;
+  transformationContext: MonthlyTransformationContext;
+  isDauQuanMonth: boolean;
+  palaceRawDelta: number;
 }

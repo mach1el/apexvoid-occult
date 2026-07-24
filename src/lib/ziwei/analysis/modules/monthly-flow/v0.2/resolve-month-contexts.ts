@@ -1,7 +1,6 @@
 import type { ChartData, ChartPalace as Palace } from "@/types/chart";
-import { stemBranchForLunarMonth, tuHoaTargets } from "@/lib/ziwei/engine-nam-phai";
+import { tuHoaTargets } from "@/lib/ziwei/engine-nam-phai";
 
-const CYCLE_BRANCHES = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tị", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
 import type {
   MonthlyFlowV02MonthResult,
   MonthlyFlowV02Result,
@@ -9,19 +8,14 @@ import type {
   MonthlyTransformationContribution,
   MonthlyJiCollisionKind,
   MonthlyDomainProjection,
-  MonthlyFlowBand
+  MonthlyFlowBand,
+  MonthlyFlowV021Input
 } from "./types";
 import { scoreMonth } from "./score-month";
 import { evaluatePalace } from "./evaluate-palace";
 import { resolveTransformations } from "./resolve-transformations";
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(Math.max(value, min), max);
-}
-
-function modulo(n: number, m: number): number {
-  return ((n % m) + m) % m;
-}
+import { resolveMonthContexts } from "../resolve-month-contexts";
+import type { MonthlyCalculationProvider, MonthlyFlowYearDiagnostics } from "../types";
 
 export interface ResolveMonthlyFlowV02Input {
   chart: ChartData;
@@ -29,6 +23,11 @@ export interface ResolveMonthlyFlowV02Input {
   annualYear: number;
   annualStem: string;
   annualBranch: string;
+  provider: MonthlyCalculationProvider; // injected
+  diagnostics: MonthlyFlowYearDiagnostics; // injected
+  annualHeadPalace: number; // provenance
+  smallLimitPalace: number | null; // provenance
+  taiTuePalace: number | null; // provenance
 }
 
 function getBand(score: number): MonthlyFlowBand {
@@ -51,74 +50,88 @@ export function buildV02Result(input: ResolveMonthlyFlowV02Input): MonthlyFlowV0
     };
   }
   
-  const annualBranchIndex = CYCLE_BRANCHES.indexOf(input.annualBranch);
-  
-  // Need to extract birth details. ChartData usually has meta or we extract from existing setup
-  // We'll mock extracting these from chart for now since this is V0.2 scaffolding.
-  const birthMonth = (input.chart as any).lunarMonth ?? 1;
-  const birthHourIndex = (input.chart as any).hourIndex ?? 0;
+  // 1. Resolve Canonical Coordinates
+  const canonicalContexts = resolveMonthContexts({
+    chart: input.chart,
+    school: "nam-phai",
+    provider: input.provider,
+    diagnostics: input.diagnostics
+  });
 
-  // Công thức: start - (month - 1) + hour
-  // start = annualBranchIndex
-  const dauQuanIndex = modulo(annualBranchIndex - (birthMonth - 1) + birthHourIndex, 12);
-  
+  if (canonicalContexts.rejected || canonicalContexts.contexts.length < 12) {
+    return {
+      status: "partial",
+      reason: "canonical-context-rejected",
+      annualScoreSource: input.annualBaseline,
+      annualYear: input.annualYear,
+      annualStem: input.annualStem,
+      annualBranch: input.annualBranch,
+      months: []
+    };
+  }
+
   const months: MonthlyFlowV02MonthResult[] = [];
 
-  for (let month = 1; month <= 12; month++) {
-    const isDauQuanMonth = (month === 1);
+  for (const ctx of canonicalContexts.contexts) {
+    const focusPalaceIndex = ctx.identity.focusPalaceIndex;
+    const isDauQuanMonth = (ctx.identity.lunarMonth === 1);
     
-    // Cung khởi tháng 1 (Đẩu Quân) đếm thuận mỗi tháng một cung
-    const focusPalaceIndex = modulo(dauQuanIndex + (month - 1), 12);
-    
-    // Ngũ Hổ Độn
-    const calendar = stemBranchForLunarMonth(input.annualStem, month);
-
     // Evaluate Palace
-    const targetPalace = input.chart.palaces[focusPalaceIndex];
+    const targetPalace = input.chart.palaces.find(p => p.index === focusPalaceIndex);
     const evaluated = targetPalace ? evaluatePalace(targetPalace, input.chart.menhElement) : null;
     const palaceRawDelta = evaluated ? evaluated.palaceRawDelta : 0;
     
-    // Tứ Hóa Event Triggers
-    const targets = tuHoaTargets(calendar.stem);
+    // Tứ Hóa Event Triggers (using canonical facts)
     const resolvedT = resolveTransformations({
       chart: input.chart,
-      targets,
-      focusPalaceIndex
+      canonicalTransformations: ctx.transformations,
+      focusPalaceIndex,
+      isPartial: ctx.transformationsPartial
     });
     
-    const breakdown = scoreMonth({
-      annualBaseline: input.annualBaseline.score,
+    const v021Input: MonthlyFlowV021Input = {
+      annualBaseline: input.annualBaseline,
+      focusPalaceFacts: {
+        focusPalaceIndex: ctx.identity.focusPalaceIndex,
+        lunarMonth: ctx.identity.lunarMonth,
+        isLeapMonth: ctx.identity.isLeapMonth,
+        calendarStem: ctx.identity.calendarStem,
+        calendarBranch: ctx.identity.calendarBranch
+      },
+      annualContext: {
+        annualHeadPalace: input.annualHeadPalace,
+        smallLimitPalace: input.smallLimitPalace,
+        taiTuePalace: input.taiTuePalace
+      },
+      transformationContext: {
+        contributions: resolvedT.contributions,
+        collisionKind: resolvedT.collisionKind,
+        isPartial: ctx.transformationsPartial
+      },
       isDauQuanMonth,
-      palaceRawDelta,
-      transformations: resolvedT.contributions,
-      collisionKind: resolvedT.collisionKind
-    });
+      palaceRawDelta
+    };
+
+    const breakdown = scoreMonth(v021Input);
     const finalScore = breakdown.finalMonthlyScore;
 
-    const DOMAINS: Array<{ name: MonthlyDomainProjection["domain"]; delta: number }> = [
-      { name: "family", delta: Math.floor(palaceRawDelta * 0.8) },
-      { name: "wealth", delta: Math.floor(palaceRawDelta * 1.2) },
-      { name: "career", delta: Math.floor(palaceRawDelta * 1.1) },
-      { name: "social", delta: Math.floor(palaceRawDelta * 0.9) },
-      { name: "romance", delta: Math.floor(palaceRawDelta * 0.7) }
-    ];
-
-    const domainProjections: MonthlyDomainProjection[] = DOMAINS.map(d => ({
-      domain: d.name,
-      overallMonthlyScore: finalScore,
-      domainSpecificDelta: d.delta,
-      domainProjectionScore: clamp(finalScore + d.delta, 0, 100)
-    }));
+    // V0.2.1: Domain heuristics removed
+    const domainProjections: MonthlyDomainProjection[] = [];
 
     months.push({
-      monthIndex: month,
-      lunarMonth: month,
-      isLeapMonth: false, // Leap policy is pending
-      calendarStem: calendar.stem,
-      calendarBranch: calendar.branch,
+      monthIndex: ctx.identity.lunarMonth, // Regular month mapping
+      lunarMonth: ctx.identity.lunarMonth,
+      isLeapMonth: ctx.identity.isLeapMonth,
+      calendarStem: ctx.identity.calendarStem,
+      calendarBranch: ctx.identity.calendarBranch,
       focusPalaceIndex,
-      overallMonthlyScore: breakdown.finalMonthlyScore,
-      overallBand: getBand(breakdown.finalMonthlyScore),
+      provenance: {
+        annualHeadPalace: input.annualHeadPalace,
+        smallLimitPalace: input.smallLimitPalace,
+        taiTuePalace: input.taiTuePalace
+      },
+      overallMonthlyScore: finalScore,
+      overallBand: getBand(finalScore),
       breakdown,
       domainProjections
     });
