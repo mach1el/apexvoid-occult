@@ -1,0 +1,8 @@
+{
+  "policyId": "POLICY-TRANSFORMATION-STACKING",
+  "status": "pending-expert-review",
+  "candidates": {
+    "same-star-natal-monthly": -50,
+    "same-star-annual-monthly": -50
+  }
+}
