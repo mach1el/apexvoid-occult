@@ -21,7 +21,7 @@ describe("V0.2.2 Integrity Hard Gates", () => {
       flowBase: "month"
     });
 
-    const diagnostics = {
+    const diagnostics: any = {
       invalidMonthNumber: [],
       missingFocusPalace: [],
       missingCalendarStemBranch: [],

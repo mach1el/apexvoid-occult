@@ -5,7 +5,7 @@ import type {
   MonthlyTransformationContext
 } from "./types";
 import type { ResolvedMonthlyTransformation } from "../types";
-import { canonicalStarName } from "@/lib/ziwei/analysis/modules/major-fortune/utils"; // I'll check if this exists or just write a simple canonical mapping. Actually, I can just use a simple string matching since canonical names are passed.
+// import removed
 
 function resolveFrameRelationship(focusIndex: number, targetIndex: number): "direct-focus" | "opposite" | "trine" | "outside" {
   const diff = (targetIndex - focusIndex + 12) % 12;

@@ -11,11 +11,22 @@ function makeInput(
   return {
     annualBaseline: { score: annualBaseline, sourceModule: "test", sourceContractVersion: "1", sourceEngineVersion: "1" },
     focusPalaceFacts: { focusPalaceIndex: 0, lunarMonth: 1, isLeapMonth: false, calendarStem: "Giáp", calendarBranch: "Tý" },
-    annualContext: { annualHeadPalace: 0, smallLimitPalace: null, taiTuePalace: null },
+    annualContext: { 
+      annualHeadPalaceIndex: 0, 
+      smallLimitPalaceIndex: null, 
+      taiTuePalaceIndex: null,
+      annualHeadStatus: "resolved",
+      smallLimitStatus: "resolved",
+      taiTueStatus: "resolved"
+    },
     transformationContext: {
       contributions: transformations,
-      collisionKind,
-      isPartial: false
+      collisionCandidates: collisionKind ? [{ kind: collisionKind, targetStar: "Test", targetPalaceIndex: 0 } as any] : [],
+      resolutionStatus: "resolved",
+      unresolvedTargets: [],
+      ambiguousTargets: [],
+      collisionPolicyStatus: collisionKind ? "pending-expert-review" : "not-applicable",
+      finalAppliedDelta: 0
     },
     isDauQuanMonth: false,
     palaceRawDelta
