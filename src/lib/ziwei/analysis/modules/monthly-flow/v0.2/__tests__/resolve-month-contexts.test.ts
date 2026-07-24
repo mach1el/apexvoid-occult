@@ -16,7 +16,7 @@ function mockChart(palaces: Array<{ index: number, stars: string[], element: str
           stem: p.element === "Thủy" ? "Nhâm" : undefined,
           branch: "Tuất",
           flowMonths: [{ month: i === 6 ? 1 : (i > 6 ? i - 5 : i + 7), palace: { index: i } as any }],
-          stars: p.stars.map(s => ({ name: s, layer: s.includes("Khôi") ? "Phụ Tinh" : "Chính Tinh", brightness: "Miếu" } as Star))
+          stars: p.stars.map(s => ({ name: s, layer: s.includes("Khôi") ? "Phụ Tinh" : "Chính Tinh", brightness: "Miếu", source: "natal" } as Star))
         } as unknown as Palace;
       }
       return { index: i, element: "Kim", stars: [], flowMonths: [{ month: i === 6 ? 1 : (i > 6 ? i - 5 : i + 7), palace: { index: i } as any }] } as unknown as Palace;
@@ -58,7 +58,7 @@ describe("buildV02Result", () => {
 
     const result = buildV02Result(input);
     expect(result.status).toBe("unavailable");
-    expect(result.reason).toBe("annual-baseline-unavailable");
+    expect(result.reasonCodes).toContain("annual-baseline-unavailable");
     expect(result.months).toHaveLength(0);
   });
 
@@ -74,19 +74,21 @@ describe("buildV02Result", () => {
       annualBranch: "Ngọ", // Index 6
       provider: mockProvider,
       diagnostics: mockDiagnostics,
-      annualHeadPalace: 0,
+      annualHeadPalace: 0, // This is not null, so provenance is resolved
       smallLimitPalace: null,
       taiTuePalace: null
     };
 
     const result = buildV02Result(input);
-    expect(result.status).toBe("resolved");
+    // Since element is mocked to Thủy (Nhâm Tuất = Thủy), and we have natal stars, it shouldn't be partial, UNLESS some policy is marked partial by default.
+    // In evaluate-palace.ts, `elementRelation.status = "partial"` is applied when everything is available (since policy is pending review).
+    // So monthStatus will be "partial", yearStatus will be "partial".
+    expect(result.status).toBe("partial");
     expect(result.months).toHaveLength(12);
 
     // Check Month 1 (index 6 in chart)
-    const month1 = result.months[0];
+    const month1 = result.months.find(m => m.monthIndex === 1);
     if (!month1) throw new Error("Month1 not generated");
-    expect(month1.monthIndex).toBe(1);
     expect(month1.focusPalaceIndex).toBe(6);
 
     // Palace Evaluator integration check for Month 1

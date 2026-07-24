@@ -14,7 +14,7 @@ function mockChart(palaces: Array<{ index: number, stars: string[] }>): ChartDat
   } as unknown as ChartData;
 }
 
-describe("resolveTransformations V0.2.1", () => {
+describe("resolveTransformations V0.2.2", () => {
   it("Resolves weights according to expert policies", () => {
     // Focus = 0
     // Tử Vi (Lộc) at 0 -> direct-focus (1.0)
@@ -36,7 +36,13 @@ describe("resolveTransformations V0.2.1", () => {
       { mutagen: "Kỵ" as const, starName: "Thái Dương", canonicalStarName: "Thái Dương", targetPalaceIndex: 2, targetNatalPalaceName: "Phu Thê" },
     ];
 
-    const result = resolveTransformations({ chart, canonicalTransformations, focusPalaceIndex: 0, isPartial: false });
+    const result = resolveTransformations({ 
+      chart, 
+      canonicalTransformations, 
+      focusPalaceIndex: 0, 
+      unresolvedTargets: [], 
+      ambiguousTargets: [] 
+    });
 
     expect(result.contributions).toHaveLength(3); // Thái Dương is outside, so it should be ignored (or pushed with 0 weight)
     
@@ -53,20 +59,27 @@ describe("resolveTransformations V0.2.1", () => {
     expect(khoa?.contribution).toBe(15 * 0.65); // 9.75
   });
 
-  it("Detects same-palace collision (V0.2.1 simplified)", () => {
+  it("Detects same-palace collision (V0.2.2)", () => {
     // If target has Natal Hóa Kỵ on the same palace
     const chart = mockChart([
       { index: 0, stars: ["Cự Môn"] }
     ]);
-    // Add Hóa Kỵ to palace 0 manually with source natal
-    chart.palaces[0]!.stars!.push({ name: "Hóa Kỵ", type: "Phụ Tinh", source: "natal" } as any);
+    // Add Hóa Kỵ to palace 0 manually with source natal-mutagen
+    chart.palaces[0]!.stars!.push({ mutagen: "Kỵ", name: "Hóa Kỵ", type: "Phụ Tinh", source: "natal-mutagen", targetStar: "Thiên Cơ" } as any);
 
     const canonicalTransformations = [ 
       { mutagen: "Kỵ" as const, starName: "Cự Môn", canonicalStarName: "Cự Môn", targetPalaceIndex: 0, targetNatalPalaceName: "Mệnh" } 
     ];
     
-    const result = resolveTransformations({ chart, canonicalTransformations, focusPalaceIndex: 0, isPartial: false });
+    const result = resolveTransformations({ 
+      chart, 
+      canonicalTransformations, 
+      focusPalaceIndex: 0,
+      unresolvedTargets: [],
+      ambiguousTargets: []
+    });
     
-    expect(result.collisionKind).toBe("same-palace-natal-monthly");
+    expect(result.collisionCandidates).toHaveLength(1);
+    expect(result.collisionCandidates[0]!.kind).toBe("same-palace-natal-monthly");
   });
 });

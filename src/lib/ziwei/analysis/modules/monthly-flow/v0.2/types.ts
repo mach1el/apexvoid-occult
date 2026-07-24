@@ -5,12 +5,46 @@ export type MonthlyFlowBand =
   | "obstructed"
   | "alert";
 
-export type MonthlyJiCollisionKind =
-  | "same-star-natal-monthly"
-  | "same-star-annual-monthly"
-  | "same-palace-natal-monthly"
-  | "same-palace-annual-monthly"
-  | "same-frame-only";
+export type MonthlyFlowResolutionStatus = "resolved" | "partial" | "unavailable";
+
+export type MonthlyFlowV02ReasonCode =
+  | "annual-baseline-unavailable"
+  | "annual-baseline-invalid"
+  | "canonical-context-unavailable"
+  | "focus-palace-unavailable"
+  | "palace-main-star-policy-partial"
+  | "palace-element-policy-partial"
+  | "palace-element-policy-unavailable"
+  | "monthly-transformations-partial"
+  | "monthly-transformation-target-unresolved"
+  | "monthly-transformation-target-ambiguous"
+  | "ji-collision-policy-pending"
+  | "annual-head-unavailable"
+  | "invalid-provenance";
+
+export type MonthlyJiCollisionCandidate =
+  | {
+      kind: "same-star-natal-monthly";
+      targetStar: string;
+      targetPalaceIndex: number;
+    }
+  | {
+      kind: "same-star-annual-monthly";
+      targetStar: string;
+      targetPalaceIndex: number;
+    }
+  | {
+      kind: "same-palace-natal-monthly";
+      monthlyTargetStar: string;
+      existingTargetStar: string;
+      targetPalaceIndex: number;
+    }
+  | {
+      kind: "same-palace-annual-monthly";
+      monthlyTargetStar: string;
+      existingTargetStar: string;
+      targetPalaceIndex: number;
+    };
 
 export interface MonthlyTransformationContribution {
   mutagen: string;
@@ -44,7 +78,9 @@ export interface MonthlyScoreBreakdown {
     dominantDelta: number;
     secondaryRawSum: number;
     secondaryAppliedDelta: number;
-    collisionKind: MonthlyJiCollisionKind | null;
+    authorizedAppliedDelta: number;
+    collisionCandidates: MonthlyJiCollisionCandidate[];
+    collisionPolicyApplied: false;
     finalDelta: number;
   };
 
@@ -61,7 +97,6 @@ export interface MonthlyScoreBreakdown {
 
   clippedByAnnualFloor: boolean;
   clippedByAnnualCeiling: boolean;
-  clippedByAbsoluteRange: boolean;
 }
 
 export interface MonthlyDomainProjection {
@@ -71,7 +106,16 @@ export interface MonthlyDomainProjection {
   domainProjectionScore: number;
 }
 
+export interface MonthlyFlowV02MonthDiagnostics {
+  unresolvedTransformationTargets: string[];
+  ambiguousTransformationTargets: string[];
+}
+
 export interface MonthlyFlowV02MonthResult {
+  status: MonthlyFlowResolutionStatus;
+  reasonCodes: MonthlyFlowV02ReasonCode[];
+  diagnostics: MonthlyFlowV02MonthDiagnostics;
+
   monthIndex: number; // Month index (1-12)
   lunarMonth: number;
   isLeapMonth: boolean;
@@ -80,7 +124,7 @@ export interface MonthlyFlowV02MonthResult {
   focusPalaceIndex: number;
   
   provenance: {
-    annualHeadPalace: number;
+    annualHeadPalace: number | null;
     smallLimitPalace: number | null;
     taiTuePalace: number | null;
   };
@@ -92,8 +136,8 @@ export interface MonthlyFlowV02MonthResult {
 }
 
 export interface MonthlyFlowV02Result {
-  status: "resolved" | "unavailable" | "partial";
-  reason?: string;
+  status: MonthlyFlowResolutionStatus;
+  reasonCodes: MonthlyFlowV02ReasonCode[];
   annualScoreSource?: AnnualBaselineInput;
   annualYear: number;
   annualStem: string;
@@ -108,10 +152,19 @@ export interface AnnualBaselineInput {
   sourceEngineVersion: string;
 }
 
+export interface AnnualBaselineValidationResult {
+  status: "resolved" | "unavailable";
+  reasonCodes: MonthlyFlowV02ReasonCode[];
+}
+
 export interface MonthlyAnnualContext {
-  annualHeadPalace: number;
-  smallLimitPalace: number | null;
-  taiTuePalace: number | null;
+  annualHeadPalaceIndex: number | null;
+  smallLimitPalaceIndex: number | null;
+  taiTuePalaceIndex: number | null;
+
+  annualHeadStatus: "resolved" | "unavailable";
+  smallLimitStatus: "resolved" | "unavailable";
+  taiTueStatus: "resolved" | "unavailable";
 }
 
 export interface MonthlyFocusPalaceFacts {
@@ -124,8 +177,12 @@ export interface MonthlyFocusPalaceFacts {
 
 export interface MonthlyTransformationContext {
   contributions: MonthlyTransformationContribution[];
-  collisionKind: MonthlyJiCollisionKind | null;
-  isPartial: boolean;
+  resolutionStatus: MonthlyFlowResolutionStatus;
+  unresolvedTargets: string[];
+  ambiguousTargets: string[];
+  collisionCandidates: MonthlyJiCollisionCandidate[];
+  collisionPolicyStatus: "not-applicable" | "pending-expert-review" | "resolved";
+  finalAppliedDelta: number;
 }
 
 export interface MonthlyFlowV021Input {
@@ -135,4 +192,32 @@ export interface MonthlyFlowV021Input {
   transformationContext: MonthlyTransformationContext;
   isDauQuanMonth: boolean;
   palaceRawDelta: number;
+}
+
+export interface PalaceComponentResult {
+  status: MonthlyFlowResolutionStatus;
+  delta: number | null;
+  evidence: string[];
+  reasonCodes: MonthlyFlowV02ReasonCode[];
+}
+
+export interface EvaluatedPalace {
+  components: {
+    mainStarQuality: PalaceComponentResult;
+    majorSupport: PalaceComponentResult;
+    secondarySupport: PalaceComponentResult;
+    majorPressure: PalaceComponentResult;
+    voidMarker: PalaceComponentResult;
+    elementRelation: PalaceComponentResult;
+  };
+  rawDelta: number;
+  status: MonthlyFlowResolutionStatus;
+  reasonCodes: MonthlyFlowV02ReasonCode[];
+}
+
+export interface PalaceElementResolution {
+  status: "resolved" | "unavailable";
+  element: "Kim" | "Mộc" | "Thủy" | "Hỏa" | "Thổ" | null;
+  method: "nayin-palace-stem-branch";
+  sourceId: string | null;
 }
