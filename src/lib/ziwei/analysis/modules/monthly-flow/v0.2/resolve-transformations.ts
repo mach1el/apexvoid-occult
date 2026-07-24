@@ -1,4 +1,4 @@
-import type { ChartData, Palace, Star } from "@/types/chart";
+import type { ChartData, ChartPalace as Palace, ChartStar as Star } from "@/types/chart";
 import type { MonthlyTransformationContribution, MonthlyJiCollisionKind } from "./types";
 
 function resolveFrameRelationship(focusIndex: number, targetIndex: number): "direct-focus" | "opposite" | "trine" | "outside" {
@@ -41,7 +41,8 @@ export function resolveTransformations(input: ResolveTransformationInput): Resol
 
     for (const palace of input.chart.palaces) {
       // Loại trừ các sao Lưu, marker Hóa (vì ta đang tìm physical star)
-      const star = palace.stars.find(s => 
+      const stars = palace.stars ?? [];
+      const star = stars.find(s => 
         s.name === target.starName && 
         !s.name.startsWith("Lưu ") &&
         !s.name.startsWith("Hóa ")

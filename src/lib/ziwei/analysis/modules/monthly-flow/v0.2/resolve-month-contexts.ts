@@ -1,4 +1,4 @@
-import type { ChartData, Palace } from "@/types/chart";
+import type { ChartData, ChartPalace as Palace } from "@/types/chart";
 import { stemBranchForLunarMonth, tuHoaTargets } from "@/lib/ziwei/engine-nam-phai";
 
 const CYCLE_BRANCHES = ["Tý", "Sửu", "Dần", "Mão", "Thìn", "Tị", "Ngọ", "Mùi", "Thân", "Dậu", "Tuất", "Hợi"];
@@ -75,7 +75,7 @@ export function buildV02Result(input: ResolveMonthlyFlowV02Input): MonthlyFlowV0
 
     // Evaluate Palace
     const targetPalace = input.chart.palaces[focusPalaceIndex];
-    const evaluated = targetPalace ? evaluatePalace(targetPalace, input.chart.element) : null;
+    const evaluated = targetPalace ? evaluatePalace(targetPalace, input.chart.menhElement) : null;
     const palaceRawDelta = evaluated ? evaluated.palaceRawDelta : 0;
     
     // Tứ Hóa Event Triggers

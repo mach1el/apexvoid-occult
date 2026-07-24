@@ -1,9 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { evaluatePalace } from "../evaluate-palace";
-import type { Palace, Star } from "@/types/chart";
+import type { ChartPalace as Palace, ChartStar as Star } from "@/types/chart";
 
-function mockStar(name: string, type: string, quality?: string): Star {
-  return { name, type, quality } as unknown as Star;
+function mockStar(name: string, layer: string, brightness?: string): Star {
+  return { name, layer, brightness } as unknown as Star;
 }
 
 function mockPalace(stars: Star[], element?: string): Palace {

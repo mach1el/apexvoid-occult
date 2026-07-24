@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
 import { buildV02Result, ResolveMonthlyFlowV02Input } from "../resolve-month-contexts";
-import type { ChartData, Palace, Star } from "@/types/chart";
+import type { ChartData, ChartPalace as Palace, ChartStar as Star } from "@/types/chart";
 
 function mockChart(palaces: Array<{ index: number, stars: string[], element: string }>, element: string): ChartData {
   return {
-    element,
-    lunarMonth: 1,
+    menhElement: element,
+    lunar: { day: 1, month: 1, year: 2026 },
     hourIndex: 0,
     palaces: Array.from({ length: 12 }).map((_, i) => {
       const p = palaces.find(x => x.index === i);
@@ -13,8 +13,8 @@ function mockChart(palaces: Array<{ index: number, stars: string[], element: str
         return { 
           index: i, 
           element: p.element,
-          stars: p.stars.map(s => ({ name: s, type: s.includes("Khôi") ? "Phụ Tinh" : "Chính Tinh", quality: "Miếu" } as Star)) 
-        } as Palace;
+          stars: p.stars.map(s => ({ name: s, layer: s.includes("Khôi") ? "Phụ Tinh" : "Chính Tinh", brightness: "Miếu" } as Star)) 
+        } as unknown as Palace;
       }
       return { index: i, element: "Kim", stars: [] } as unknown as Palace;
     })
@@ -55,6 +55,7 @@ describe("buildV02Result", () => {
 
     // Check Month 1 (index 6 in chart)
     const month1 = result.months[0];
+    if (!month1) throw new Error("Month1 not generated");
     expect(month1.monthIndex).toBe(1);
     expect(month1.focusPalaceIndex).toBe(6);
     

@@ -1,4 +1,4 @@
-import type { Palace } from "@/types/chart";
+import type { ChartPalace as Palace } from "@/types/chart";
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
@@ -24,14 +24,18 @@ export function evaluatePalace(
   palace: Palace, 
   chartElement: string | null | undefined
 ): EvaluatedPalace {
-  const diagnostics = {
-    mainStarQualityStatus: "resolved" as const,
-    elementRelationStatus: "resolved" as const,
-    partialReasons: [] as string[]
+  const diagnostics: EvaluatedPalace["diagnostics"] = {
+    mainStarQualityStatus: "resolved",
+    elementRelationStatus: "resolved",
+    partialReasons: []
   };
 
+  const stars = palace.stars ?? [];
+
   // 1. Main Star Quality
-  const mainStars = palace.stars.filter(s => s.type === "Chính Tinh");
+  // Some charts use `layer: "Chính Tinh"`, some might use `type` depending on the adapter.
+  // In `ChartStar`, layer usually denotes "Chính Tinh", "Phụ Tinh".
+  const mainStars = stars.filter((s: any) => s.type === "Chính Tinh" || s.layer === "Chính Tinh");
   let mainStarQualityDelta = 0;
 
   if (mainStars.length === 0) {
@@ -42,9 +46,9 @@ export function evaluatePalace(
   } else {
     let sumDelta = 0;
     for (const star of mainStars) {
-      if (["Miếu", "Vượng", "Đắc"].includes(star.quality ?? "")) {
+      if (["Miếu", "Vượng", "Đắc"].includes(star.brightness ?? "")) {
         sumDelta += 10;
-      } else if (star.quality === "Hãm") {
+      } else if (star.brightness === "Hãm") {
         sumDelta -= 10;
       }
     }
@@ -52,23 +56,23 @@ export function evaluatePalace(
   }
 
   // 2. Buckets
-  const hasMajorSupport = palace.stars.some(s => 
+  const hasMajorSupport = stars.some((s: any) => 
     ["Thiên Khôi", "Thiên Việt", "Tả Phụ", "Hữu Bật", "Lộc Tồn", "Đào Hoa", "Hồng Loan"].includes(s.name)
   );
   const majorSupportDelta = hasMajorSupport ? 15 : 0;
 
-  const hasSecondarySupport = palace.stars.some(s => 
+  const hasSecondarySupport = stars.some((s: any) => 
     ["Ân Quang", "Thiên Quý", "Giải Thần", "Lưu Hóa Khoa", "Hóa Khoa"].includes(s.name)
   );
   const secondarySupportDelta = hasSecondarySupport ? 10 : 0;
 
-  const hasMajorPressure = palace.stars.some(s => 
+  const hasMajorPressure = stars.some((s: any) => 
     ["Địa Không", "Địa Kiếp", "Kình Dương", "Đà La", "Thiên Hình", "Bạch Hổ", "Tang Môn", "Điếu Khách"].includes(s.name)
   );
   const majorPressureDelta = hasMajorPressure ? -15 : 0;
 
   // 3. Void Markers (Tuần/Triệt)
-  const hasVoid = palace.stars.some(s => ["Tuần", "Triệt", "Tuần Không", "Triệt Lộ"].includes(s.name));
+  const hasVoid = stars.some((s: any) => ["Tuần", "Triệt", "Tuần Không", "Triệt Lộ"].includes(s.name));
   const voidMarkerDelta = hasVoid ? -10 : 0;
 
   // 4. Element Relation
@@ -83,12 +87,14 @@ export function evaluatePalace(
     "Thổ": { "Kim": 5, "Thổ": 5, "Thủy": -5, "Mộc": -5, "Hỏa": 0 },
   };
 
-  if (!chartElement || !palace.element) {
+  const palaceElement = (palace as any).element;
+
+  if (!chartElement || !palaceElement) {
     diagnostics.elementRelationStatus = "partial";
     diagnostics.partialReasons.push("element-relation-data-unavailable");
   } else {
     // Hành Cung (palace.element) sinh/khắc Bản Mệnh (chartElement)
-    const map = sinhKhac[palace.element];
+    const map = sinhKhac[palaceElement];
     if (map && map[chartElement] !== undefined) {
       elementRelationDelta = map[chartElement]!;
     } else {

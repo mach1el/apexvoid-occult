@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { resolveTransformations } from "../resolve-transformations";
-import type { ChartData, Palace, Star } from "@/types/chart";
+import type { ChartData, ChartPalace as Palace, ChartStar as Star } from "@/types/chart";
 
 function mockChart(palaces: Array<{ index: number, stars: string[] }>): ChartData {
   return {
